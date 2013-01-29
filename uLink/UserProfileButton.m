@@ -61,7 +61,7 @@
     // grab the user's image from the user cache
     UIImage *profileImage = [UDataCache imageExists:self.user.userId cacheModel:IMAGE_CACHE_USER_THUMBS];
     if (profileImage == nil || [profileImage isKindOfClass:[NSNull class]]) {
-        if (self.user.userImgURL != nil ) {
+        if(![self.user.userImgURL isKindOfClass:[NSNull class]] && self.user.userImgURL != nil && ![self.user.userImgURL isEqualToString:@""]) {
             // set the key in the cache to let other processes know that this key is in work
             [UDataCache.userImageThumbs setValue:[NSNull null] forKey:self.user.userId];
             // lazy load the image from the web

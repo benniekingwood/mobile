@@ -49,7 +49,7 @@
     // grab the event image from the event cache
     UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
     if (eventImage == nil) {
-        if(self.event.imageURL != nil) {
+        if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""]) {
             // set the key in the cache to let other processes know that this key is in work
             [UDataCache.eventImageThumbs setValue:[NSNull null]  forKey:self.event.eventId];
             

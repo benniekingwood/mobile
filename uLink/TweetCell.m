@@ -74,7 +74,7 @@
         // grab the user image from the cache, or load from their API.
         UIImage *twitterImage = [UDataCache imageExists:self.tweet.twitterUsername cacheModel:IMAGE_CACHE_TWEET_PROFILE];
         if (twitterImage == nil) {
-            if(self.tweet.twitterImageURL != nil) {
+            if(![self.tweet.twitterImageURL isKindOfClass:[NSNull class]] && self.tweet.twitterImageURL != nil && ![self.tweet.twitterImageURL isEqualToString:@""]) {
                 // set the key in the cache to let other processes know that this key is in work
                 [UDataCache.tweetUserImages setValue:[NSNull null]  forKey:self.tweet.twitterUsername];
                 

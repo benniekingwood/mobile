@@ -108,17 +108,14 @@
         }
         
         [activityIndicator showActivityIndicator:self.view];
-             
+        NSString *requestData = [@"data[School][name]=" stringByAppendingString:self.schoolNameTextField.text];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SCHOOLS_SUGGESTION]]];
+        [req setHTTPMethod:HTTP_POST];
+        [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
         // how we stop refresh from freezing the main UI thread
         dispatch_queue_t suggestionQueue = dispatch_queue_create(DISPATCH_SUGGESTION, NULL);
         dispatch_async(suggestionQueue, ^{
-            // do our long running process here
-            //[NSThread sleepForTimeInterval:5];
-
-            NSString *requestData = [@"data[School][name]=" stringByAppendingString:self.schoolNameTextField.text];
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SCHOOLS_SUGGESTION]]];
-            [req setHTTPMethod:HTTP_POST];
-            [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
+     
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
             

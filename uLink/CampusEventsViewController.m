@@ -123,7 +123,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
             // grab the event image from the event cache
             UIImage *eventImage = [UDataCache imageExists:featuredEvent.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
             if (eventImage == nil) {
-                if(featuredEvent.imageURL != nil) {
+                if(![featuredEvent.imageURL isKindOfClass:[NSNull class]] && featuredEvent.imageURL != nil && ![featuredEvent.imageURL isEqualToString:@""]) {
                 // set the key in the cache to let other processes know that this key is in work
                 [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:featuredEvent.eventId];
                 NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:featuredEvent.imageURL]];

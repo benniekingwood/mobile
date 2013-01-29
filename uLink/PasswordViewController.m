@@ -242,16 +242,16 @@
         }
         [activityIndicator showActivityIndicator:self.view];
         self.navigationItem.rightBarButtonItem.enabled = FALSE;
+        NSString *requestData = [@"data[User][oldpass]=" stringByAppendingString:self.currentPasswordTextField.text];
+        requestData = [requestData stringByAppendingString:[@"&data[User][newpass]=" stringByAppendingString:self.theNewPasswordTextField.text]];
+        requestData = [requestData stringByAppendingString:[@"&data[User][newconfirmpass]=" stringByAppendingString:self.verifyPasswordTextField.text]];
+        requestData = [requestData stringByAppendingString:[@"&data[User][id]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_USERS_UPDATE_PASSWORD]]];
+        [req setHTTPMethod:HTTP_POST];
+        [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
         // how we stop refresh from freezing the main UI thread
         dispatch_queue_t passwordQueue = dispatch_queue_create(DISPATCH_UPDATE_PASSWORD, NULL);
         dispatch_async(passwordQueue, ^{
-            NSString *requestData = [@"data[User][oldpass]=" stringByAppendingString:self.currentPasswordTextField.text];
-            requestData = [requestData stringByAppendingString:[@"&data[User][newpass]=" stringByAppendingString:self.theNewPasswordTextField.text]];
-            requestData = [requestData stringByAppendingString:[@"&data[User][newconfirmpass]=" stringByAppendingString:self.verifyPasswordTextField.text]];
-            requestData = [requestData stringByAppendingString:[@"&data[User][id]=" stringByAppendingString:UDataCache.sessionUser.userId]];
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_USERS_UPDATE_PASSWORD]]];
-            [req setHTTPMethod:HTTP_POST];
-            [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{

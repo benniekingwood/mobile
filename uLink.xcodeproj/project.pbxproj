@@ -603,7 +603,6 @@
 		0D46337B164B30D400284893 = {
 			isa = PBXGroup;
 			children = (
-				0DDD915916A9097B002F2E25 /* ImageIO.framework */,
 				0D463390164B30D400284893 /* uLink */,
 				0D4633BF164B30D500284893 /* uLinkTests */,
 				0D463389164B30D400284893 /* Frameworks */,
@@ -623,6 +622,7 @@
 		0D463389164B30D400284893 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0DDD915916A9097B002F2E25 /* ImageIO.framework */,
 				0DDD915D16A9169E002F2E25 /* SDWebImage.framework */,
 				0D519A6516A2554E00A791F8 /* SystemConfiguration.framework */,
 				0DDCFAC2169B7DAF00CA5048 /* OpenGLES.framework */,
@@ -1520,7 +1520,8 @@
 		0D4633CC164B30D500284893 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bennie Kingwood (2U59TM3C4Q)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: BlaancoSolutions, LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BlaancoSolutions, LLC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uLink\"",
@@ -1539,7 +1540,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "363A85AD-3EFA-4567-90A6-BA4F88648998";
+				PROVISIONING_PROFILE = "69A01B89-CB4D-4F7C-A401-AE94BDDD3DDD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "69A01B89-CB4D-4F7C-A401-AE94BDDD3DDD";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

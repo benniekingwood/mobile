@@ -109,7 +109,7 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    NSLog(@"applicationDidEnterBackground");
+    //NSLog(@"applicationDidEnterBackground");
     // TODO: if there are rehyrdations going, we need to kill those process and decrement the active
     // processes to zero
 }
@@ -117,7 +117,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-     NSLog(@"applicationWillEnterForeground");
+    // NSLog(@"applicationWillEnterForeground");
     BOOL networkActive = FALSE;
     // check for network connectivity
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
@@ -126,7 +126,7 @@
     
     // if there is network connectivity, we can continue
     if(UDataCache.sessionUser != nil && networkActive) {
-        NSLog(@"rehyrdating caches");
+        //NSLog(@"rehyrdating caches");
         // pop to main tab bar view controller
         MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
         [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
@@ -142,7 +142,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"applicationDidBecomeActive");
+   // NSLog(@"applicationDidBecomeActive");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     BOOL networkActive = FALSE;
     // check for network connectivity
@@ -155,7 +155,7 @@
     
    if (UDataCache.sessionUser == nil && networkActive) {
         // we know that we have a network connection, but no user so just rehydrate the schools cache
-        [UDataCache rehydrateSchoolCache:YES];
+        [UDataCache rehydrateSchoolCache:NO];
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
         [UDataCache hydrateSnapshotCategoriesCache:NO];
        

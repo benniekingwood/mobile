@@ -710,42 +710,49 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         for (NSString *key in [self.userImageThumbs allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.userImageThumbs objectForKey:key];
+                break;
             }
         }
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_USER_MEDIUM]) {
         for (NSString *key in [self.userImageMedium allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.userImageMedium objectForKey:key];
+                break;
             }
         }
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_THUMBS]) {
         for (NSString *key in [self.eventImageThumbs allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.eventImageThumbs objectForKey:key];
+                break;
             }
         }
     }  else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_MEDIUM]) {
         for (NSString *key in [self.eventImageMedium allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.eventImageMedium objectForKey:key];
+                break;
             }
         }
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_THUMBS]) {
         for (NSString *key in [self.snapImageThumbs allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.snapImageThumbs objectForKey:key];
+                break;
             }
         }
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_MEDIUM]) {
         for (NSString *key in [self.snapImageMedium allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.snapImageMedium objectForKey:key];
+                break;
             }
         }
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_TWEET_PROFILE]) {
         for (NSString *key in [self.tweetUserImages allKeys]) {
             if ([cacheKey isEqualToString:key]) {
                 retVal = [self.tweetUserImages objectForKey:key];
+                break;
             }
         }
     }

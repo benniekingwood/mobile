@@ -186,7 +186,7 @@
     // grab the event image from the event cache
     UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
     if (eventImage == nil) {
-        if(self.event.imageURL != nil) {
+         if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""]) {
         // set the key in the cache to let other processes know that this key is in work
         [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:self.event.eventId];
         NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:self.event.imageURL]];

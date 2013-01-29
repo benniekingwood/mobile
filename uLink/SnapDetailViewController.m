@@ -322,20 +322,21 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
             return;
         }
         [activityIndicator showActivityIndicator:self.view];
+        NSString *requestData = [@"data[SnapshotComment][comment]=" stringByAppendingString:commentTextField.text];
+        requestData = [requestData stringByAppendingString:[@"&data[SnapshotComment][snapId]=" stringByAppendingString:snap.snapId]];
+        requestData = [requestData stringByAppendingString:[@"&data[userId]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        requestData = [requestData stringByAppendingString:[@"&data[mobile_auth]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SNAPSHOTS_INSERT_COMMENT]]];
+        [req setHTTPMethod:HTTP_POST];
+        [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+        [req setHTTPShouldHandleCookies:NO];
+        [req setTimeoutInterval:11];
+        [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
+
         // how we stop refresh from freezing the main UI thread
-        dispatch_queue_t insertSnapCommentQueue = dispatch_queue_create(DISPATCH_INSERT_SNAP_COMMENT, NULL);
-        dispatch_async(insertSnapCommentQueue, ^{
-            NSString *requestData = [@"data[SnapshotComment][comment]=" stringByAppendingString:commentTextField.text];
-            requestData = [requestData stringByAppendingString:[@"&data[SnapshotComment][snapId]=" stringByAppendingString:snap.snapId]];
-            requestData = [requestData stringByAppendingString:[@"&data[userId]=" stringByAppendingString:UDataCache.sessionUser.userId]];
-            requestData = [requestData stringByAppendingString:[@"&data[mobile_auth]=" stringByAppendingString:UDataCache.sessionUser.userId]];
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SNAPSHOTS_INSERT_COMMENT]]];
-            [req setHTTPMethod:HTTP_POST];
-            [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
-            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [NSThread sleepForTimeInterval:2];
                     [activityIndicator hideActivityIndicator:self.view];
                     if ([data length] > 0 && error == nil) {
                         NSError* err;
@@ -377,7 +378,6 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                     }
                });
             }];
-        });
     }
     @catch (NSException *exception) {
         self.view.userInteractionEnabled = YES;
@@ -389,18 +389,22 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     @try {
         [activityIndicator showActivityIndicator:self.view];
         self.deleteButton.enabled = FALSE;
+        NSString *requestData = [URL_SERVER stringByAppendingString:API_SNAPSHOTS_DELETE_SNAPSHOT];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:snap.snapId];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestData]];
+        [req setHTTPMethod:HTTP_GET];
+        [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+        [req setHTTPShouldHandleCookies:NO];
+        [req setTimeoutInterval:11];
+
         // how we stop refresh from freezing the main UI thread
         dispatch_queue_t deleteSnapshotQueue = dispatch_queue_create(DISPATCH_DELETE_SNAP, NULL);
         dispatch_async(deleteSnapshotQueue, ^{
-            NSString *requestData = [URL_SERVER stringByAppendingString:API_SNAPSHOTS_DELETE_SNAPSHOT];
-            requestData = [requestData stringByAppendingString:@"/"];
-            requestData = [requestData stringByAppendingString:snap.snapId];
-            requestData = [requestData stringByAppendingString:@"/"];
-            requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
-            requestData = [requestData stringByAppendingString:@"/"];
-            requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestData]];
-            [req setHTTPMethod:HTTP_GET];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
