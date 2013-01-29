@@ -15,6 +15,7 @@
 #import "TextUtil.h"
 #import "EventUtil.h"
 #import "PreviewPhotoView.h"
+#import "ImageUtil.h"
 @interface SubmitEventViewController ()  {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -38,6 +39,7 @@
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
 - (NSMutableURLRequest*) buildDataRequest;
+-(void)rehydrateEventCaches;
 @end
 
 @implementation SubmitEventViewController
@@ -197,6 +199,10 @@
     timePickerView.alpha = ALPHA_HIGH;
 }
 
+- (void) rehydrateEventCaches {
+    [UDataCache rehydrateSessionUser];
+}
+
 #pragma mark Image Processing section
 -(void) takePhoto:(id) sender {
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -215,13 +221,16 @@
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
     // set the image on the preview image view and show the image view
     if (previewPhotoView == nil) {
         previewPhotoView = [[PreviewPhotoView alloc]initWithFrame:CGRectMake(682.5f, 4, 235, 110)];
     }
+    
     previewPhotoView.previewImageView.image = image;
     [previewPhotoView showPreviewPhoto:self.overlayFormView];
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self.view endEditing:YES];
 }
 
 #pragma mark
@@ -526,6 +535,8 @@
                     
                     NSString* result = (NSString*)[json objectForKey:JSON_KEY_RESULT];
                     if([result isEqualToString:@"true"]) {
+                        // for now we will just rehyrdate the snap data
+                        [self performSelectorInBackground:@selector(rehydrateEventCaches) withObject:self];
                         // build new event object and set in user session cache
                     /*  TODO: implement once we can retrieve the id after an insert
                      
@@ -637,8 +648,8 @@
      */
     if((takePhotoButton != nil || takePhotoButton.enabled == NO) && chooseButton.enabled == NO) {
         if (previewPhotoView.previewImageView.image != nil) {
-            // add image as event image data
-            NSData *imageData = UIImageJPEGRepresentation(previewPhotoView.previewImageView.image, 1.0);
+            // add image as event image data, and make sure it's compressed
+            NSData *imageData = [UImageUtil compressImageToData:previewPhotoView.previewImageView.image];
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"event";

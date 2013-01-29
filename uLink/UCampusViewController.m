@@ -76,8 +76,10 @@
     // initialize the page control
     pageControl.numberOfPages = 3;
     pageControl.currentPage = 0;
-    
+ 
+   
 }
+
 -(void)viewDidAppear:(BOOL)animated {
     // we need this to ensure the tab bar is able to have interactions
     self.navigationController.visibleViewController.view.userInteractionEnabled = YES;

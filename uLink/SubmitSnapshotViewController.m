@@ -16,6 +16,7 @@
 #import "EventUtil.h"
 #import "PreviewPhotoView.h"
 #import "SnapshotCategory.h"
+#import "ImageUtil.h"
 @interface SubmitSnapshotViewController () {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -31,7 +32,7 @@
     UlinkButton *chooseButton;
     AFPhotoEditorController *photoEditorController;
     NSString *selectedCategoryId;
-    NSMutableDictionary *categories;
+    NSMutableArray *categories;
     SnapshotCategory *blank;
 }
 -(void)showValidationErrors;
@@ -40,6 +41,7 @@
 - (NSMutableURLRequest*) buildDataRequest;
 - (void)showTimePickerView;
 - (void) submitSnap;
+- (void) rehydrateSnapCaches;
 @end
 
 @implementation SubmitSnapshotViewController
@@ -60,13 +62,18 @@
     if(dismissImmediately) {
        [self dismissViewControllerAnimated:NO completion:nil];
     }
-    
-    categories = UDataCache.snapshotCategories;
-    // insert a blank category for the picklist
+    categories = [[NSMutableArray alloc] init];
     blank = [[SnapshotCategory alloc] init];
     blank.name = @"";
     blank.snapCategoryId = @"";
-    [categories setValue:blank forKey:@""];
+    // insert a blank category for the picklist
+    [categories insertObject:blank atIndex:0];
+    
+    // add the snapshot categories to list for the picklist
+    for (SnapshotCategory *cat in [UDataCache.snapshotCategories allValues]) {
+        [categories addObject:cat];
+    }
+
     // initially keep the next button disabled until an image is uploaded
     self.nextButton.enabled = NO;
     self.navigationItem.title = @"Submit Snap";
@@ -161,6 +168,10 @@
     [self.view addSubview:categoryPickerView];
 }
 
+- (void) rehydrateSnapCaches {
+    [UDataCache rehydrateSessionUser];
+    [UDataCache rehydrateSnapshotsCache:NO];
+}
 #pragma mark Image Processing section
 -(void) takePhoto:(id) sender {
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -200,13 +211,11 @@
     return [categories count];
 }
 - (NSString *)pickerView:(UIPickerView *)thePickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    id key = [[categories allKeys] objectAtIndex:row];
-    SnapshotCategory *category = [categories objectForKey:key];
+    SnapshotCategory *category = [categories objectAtIndex:row];
     return category.name;
 }
 - (void)pickerView:(UIPickerView *)thePickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    id key = [[categories allKeys] objectAtIndex:row];
-    SnapshotCategory *category = [categories objectForKey:key];
+    SnapshotCategory *category = [categories objectAtIndex:row];
     self.categoryTextField.text = category.name;
     selectedCategoryId = category.snapCategoryId;
 }
@@ -362,8 +371,8 @@
      */
     if((takePhotoButton != nil || takePhotoButton.enabled == NO) && chooseButton.enabled == NO) {
         if (previewPhotoView.previewImageView.image != nil) {
-            // add image as event image data
-            NSData *imageData = UIImageJPEGRepresentation(previewPhotoView.previewImageView.image, 1.0);
+            // add image as snap image data, compressed
+            NSData *imageData = [UImageUtil compressImageToData:previewPhotoView.previewImageView.image];
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"snap";
@@ -391,8 +400,9 @@
 }
 
 - (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image {
-    previewPhotoView.previewImageView.image = image;
+   // previewPhotoView.previewImageView.image = image;
     [photoEditorController dismissViewControllerAnimated:NO completion:nil];
+    previewPhotoView.previewImageView.image = image;
     // now peform the submission of the snapshot
     [self submitSnap];
 }
@@ -424,6 +434,8 @@
                     
                     NSString* result = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
                     if([result isEqualToString:@"true"]) {
+                        // for now we will just rehyrdate the snap data
+                        [self performSelectorInBackground:@selector(rehydrateSnapCaches) withObject:self];
                         // build new snap object and set in user session cache
                         /*  TODO: implement once we can retrieve the id after an insert
                          
@@ -448,6 +460,7 @@
                         //[previewPhotoView.previewImageView removeFromSuperview];
                         [previewPhotoView hidePreviewPhoto];
                         [chooseButton removeFromSuperview];
+                        [takePhotoButton removeFromSuperview];
                         self.submitSuccessView.alpha = 1.0;
                         self.cancelButton.style = UIBarButtonItemStyleDone;
                         self.cancelButton.title = @"Done";

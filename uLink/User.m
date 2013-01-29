@@ -12,6 +12,7 @@
 #import "SnapshotComment.h"
 #import "SnapshotUtil.h"
 #import "EventUtil.h"
+#import "DataCache.h"
 
 @implementation User
 @synthesize cacheAge,
@@ -42,17 +43,8 @@ userId,username,firstname,lastname,password,email,schoolId,major,year,schoolStat
     self.twitterEnabled = (BOOL)[rawData objectForKey:@"twitter_enabled"];
     self.twitterUsername = [rawData objectForKey:@"twitter_username"];
     self.schoolName = [rawData objectForKey:@"school_name"];
-    // load the image from the image url
     self.userImgURL =[rawData objectForKey:@"image_url"];
-    if(self.userImgURL != nil) {
-        NSURL *url = [NSURL URLWithString:[URL_USER_IMAGE stringByAppendingString:self.userImgURL]];
-        self.profileImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        if (self.profileImage == nil) {
-             self.profileImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_USER_IMAGE]]];
-        }
-    } else {
-         self.profileImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_USER_IMAGE]]];
-    }
+    self.profileImage = [UDataCache.images objectForKey:KEY_DEFAULT_USER_IMAGE];
     self.cacheAge = [NSDate date];
     self.events = [UEventUtil hydrateEvents:[rawData objectForKey:@"Events"] eventCollection:self.events hydrationType:kEventHydrationAll];
     self.snaps = [USnapshotUtil hydrateSnaps:[rawData objectForKey:@"Snaps"] snapCollection:self.snaps];

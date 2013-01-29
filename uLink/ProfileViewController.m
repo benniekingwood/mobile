@@ -48,25 +48,6 @@
     self.snapCountLabel.textAlignment = NSTextAlignmentRight;
     self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
     self.eventsCountLabel.textAlignment = NSTextAlignmentRight;
-    
-   
-    
-/*
-    profilePictureViewController = [self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_PROFILE_PICTURE_VIEW_CONTROLLER_ID];
-    // make sure that it resizes on rotation automatically
-	profilePictureViewController.view.autoresizingMask = self.containerView.autoresizingMask;
-    profilePictureViewController.view.frame = CGRectMake(320, 0, 320, 120);
-    // adjust the frame to fit in the container view
-	//profilePictureViewController.view.frame = self.containerView.bounds;
-    
-    UILabel *label = [[UILabel alloc]  initWithFrame:CGRectMake(0,0,100, 100)];
-    label.backgroundColor = [UIColor yellowColor];
-    label.text = @"hellow";
-    [profilePictureViewController.view addSubview:label];
-    
-    [self addChildViewController:profilePictureViewController];
-    [self.view addSubview:profilePictureViewController.view];
-    [profilePictureViewController didMoveToParentViewController:self]; */
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -112,8 +93,12 @@
 }
 
 -(void) showProfilePicture:(UIImage *) profileImage {
+    for (UIView *view in [profilePicView subviews]) {
+        [view removeFromSuperview];
+    }
     // create and add the profile picture subview
     UIImageView *profilePicLarge = [[UIImageView alloc] initWithImage:profileImage];
+    profilePicLarge.contentMode = UIViewContentModeScaleAspectFit;
     profilePicLarge.frame = proPicFrame;
     currentProfilePic = profilePicLarge;
     currentProfilePic.userInteractionEnabled = YES;
@@ -153,21 +138,5 @@
 
     }
 }
-/*- (void) updateProfileInfo {
-    //ProfilePictureViewController *profilePicViewController = [self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_PROFILE_PICTURE_VIEW_CONTROLLER];
-    for (UIViewController *childViewController in self.childViewControllers)
-    {
-        if ([childViewController isKindOfClass:[ProfilePictureViewController class]])
-        {
-            //found container view controller
-            ProfilePictureViewController *profilePicViewController = (ProfilePictureViewController *)childViewController;
-            
-            //do something with your container view viewcontroller
-             [profilePicViewController updateProfileInformation];
-            break;
-        }
-    }
-   
-}*/
 
 @end

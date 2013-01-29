@@ -9,7 +9,9 @@
 #import "UserProfileViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AppMacros.h"
-
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "DataCache.h"
 @interface UserProfileViewController () {
     UIScrollView *scroll;
     UIImageView *profilePicThumb;
@@ -47,6 +49,7 @@
     
     proPicFrame = CGRectMake(0, 70, 320, 320);
     profilePicLarge = [[UIImageView alloc] initWithFrame:proPicFrame];
+    profilePicLarge.contentMode = UIViewContentModeScaleAspectFit;
     CGRect profilePicViewFrame;
     profilePicViewFrame.origin.x = 0;
     profilePicViewFrame.origin.y = 0;
@@ -54,8 +57,8 @@
     profilePicViewLarge = [[UIView alloc] initWithFrame:profilePicViewFrame];
     profilePicViewLarge.backgroundColor = [UIColor blackColor];
     profilePicViewLarge.frame = profilePicViewFrame;
-    profilePicViewLarge.userInteractionEnabled = YES;
-    
+    profilePicViewLarge.userInteractionEnabled = YES;;
+
     // create and add the profile picture subview
     CGRect profilePicFrame;
     profilePicFrame.origin.x = 0;
@@ -68,6 +71,7 @@
     profilePicThumb = [[UIImageView alloc] initWithFrame:proThumbFrame];
     profilePicThumb.layer.cornerRadius = 5;
     profilePicThumb.layer.masksToBounds = YES;
+    profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
     [profilePicView addSubview:profilePicThumb];
     
     // create the user's full name label
@@ -135,6 +139,46 @@
 - (void)viewWillAppear:(BOOL)animated {
     profilePicThumb.image = self.user.profileImage;
     profilePicLarge.image = self.user.profileImage;
+    
+    // grab the user's image from the user cache
+    UIImage *profileImage = [UDataCache imageExists:self.user.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
+    if (profileImage == nil) {
+        
+        if(self.user.userImgURL != nil) {
+        // set the key in the cache to let other processes know that this key is in work
+        [UDataCache.userImageMedium setValue:[NSNull null] forKey:self.user.userId];
+        // lazy load the image from the web
+        NSURL *url = [NSURL URLWithString:[URL_USER_IMAGE_MEDIUM stringByAppendingString:self.user.userImgURL]];
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+        [imageDownloader downloadImageWithURL:url
+                                      options:SDWebImageDownloaderProgressiveDownload
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         if (!iActivityIndicator)
+                                         {
+                                             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                             [iActivityIndicator showActivityIndicator:profilePicThumb];
+                                         }
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                        if (image && finished)
+                                        {
+                                            // add the user's image to the image cache
+                                            [UDataCache.userImageMedium setValue:image forKey:self.user.userId];
+                                            // set the picture in the view
+                                            profilePicThumb.image = image;
+                                            profilePicLarge.image = image;
+                                            [iActivityIndicator hideActivityIndicator:profilePicThumb];
+                                            iActivityIndicator = nil;
+                                        }
+                                    }];
+        }
+    } else if (![profileImage isKindOfClass:[NSNull class]]) {
+        profilePicThumb.image = profileImage;
+        profilePicLarge.image = profileImage;
+    }
+
+    
     usernameLabel.text = self.user.username;
     nameLabel.text = [self.user.firstname stringByAppendingFormat:@" %@", self.user.lastname];
     bio.text = self.user.bio;

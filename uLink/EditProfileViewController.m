@@ -15,6 +15,9 @@
 #import "TextUtil.h"
 #import "DataCache.h"
 #import "ProfileViewController.h"
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "ImageUtil.h"
 @interface EditProfileViewController () {
     AlertView *errorAlertView;
     NSString *defaulValidationMsg;
@@ -70,8 +73,9 @@
 - (void)viewDidLoad
 { 
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.frame.size.height-44)];
+	CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, screenHeight)];
     scrollView.delegate = self;
     scrollView.contentSize = CGSizeMake(320, 600);
     scrollView.showsHorizontalScrollIndicator = NO;
@@ -83,6 +87,7 @@
     profilePictureButton.layer.cornerRadius = 5;
     profilePictureButton.layer.masksToBounds = YES;
     [profilePictureButton addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
+    profilePictureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [scrollView addSubview:profilePictureButton];
     
     userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(125, 23, 184, 21)];
@@ -173,7 +178,7 @@
     [self.view addSubview:scrollView];
     
     schoolStatuses = [[NSArray alloc] initWithObjects:@"",SCHOOL_STATUS_CURRENT_STUDENT, SCHOOL_STATUS_ALUMNI, nil];
-    schoolStatusPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,self.view.frame.size.height-216, 320, 216)];
+    schoolStatusPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,screenHeight-216, 320, 216)];
     schoolStatusPickerView.dataSource = self;
     schoolStatusPickerView.delegate = self;
     schoolStatusPickerView.showsSelectionIndicator = YES;
@@ -242,6 +247,43 @@
     firstNameTextField.text = UDataCache.sessionUser.firstname;
     if (!imageChanged) {
         [profilePictureButton setImage:UDataCache.sessionUser.profileImage forState:UIControlStateNormal];
+
+        // grab the user's image from the user cache
+        UIImage *profileImage = [UDataCache imageExists:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
+        if (profileImage == nil) {
+            if(UDataCache.sessionUser.userImgURL != nil) {
+            // set the key in the cache to let other processes know that this key is in work
+            [UDataCache.userImageMedium setValue:[NSNull null] forKey:UDataCache.sessionUser.userId];
+            // lazy load the image from the web
+            NSURL *url = [NSURL URLWithString:[URL_USER_IMAGE_MEDIUM stringByAppendingString:UDataCache.sessionUser.userImgURL]];
+            __block ImageActivityIndicatorView *editProActIndicator;
+            SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+            [imageDownloader downloadImageWithURL:url
+                                          options:SDWebImageDownloaderProgressiveDownload
+                                         progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                             if (!editProActIndicator)
+                                             {
+                                                 editProActIndicator = [[ImageActivityIndicatorView alloc] init];
+                                                 [editProActIndicator showActivityIndicator:profilePictureButton.imageView];
+                                                 profilePictureButton.userInteractionEnabled = NO;
+                                             }
+                                         }
+                                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                            if (image && finished)
+                                            {
+                                                // add the user's image to the image cache
+                                                [UDataCache.userImageMedium setValue:image forKey:UDataCache.sessionUser.userId];
+                                                // set the picture in the view
+                                                [profilePictureButton setImage:image forState:UIControlStateNormal];
+                                                [editProActIndicator hideActivityIndicator:profilePictureButton.imageView];
+                                                editProActIndicator = nil;
+                                                profilePictureButton.userInteractionEnabled = YES;
+                                            }
+                                        }];
+            }
+        } else if(![profileImage isKindOfClass:[NSNull class]]){
+            [profilePictureButton setImage:profileImage forState:UIControlStateNormal];
+        }
     }
 }
 - (void) refreshCaches {
@@ -530,7 +572,7 @@
     if(imageChanged) {
         if (profilePictureButton.imageView.image != nil) {
             // add image as event image data
-            NSData *imageData = UIImageJPEGRepresentation(profilePictureButton.imageView.image, 1.0);
+            NSData *imageData = [UImageUtil compressImageToData:profilePictureButton.imageView.image];
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"userpic";
@@ -607,6 +649,9 @@
                             UDataCache.sessionUser.profileImage = profilePictureButton.imageView.image;
                             NSDictionary *response = [json objectForKey:JSON_KEY_RESPONSE];
                             UDataCache.sessionUser.userImgURL = [[response objectForKey:@"userdata"] objectForKey:@"image_url"];
+                            // remove the old user image since it changed
+                            [UDataCache removeImage:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
+                              [UDataCache removeImage:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
                         }
                         [successNotifiction showNotification:self.view];
                         self.cancelButton.title = @"Done";

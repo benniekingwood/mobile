@@ -18,6 +18,7 @@
 {
     UIFont *cellFont;
     TextUtil *textUtil;
+    NSMutableArray *sections;
 }
 -(void)suggestClick;
 @end
@@ -35,6 +36,9 @@
 {
     [super viewDidLoad];
     cellFont = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
+    [UDataCache.schoolSections removeObject:@""];
+    sections = UDataCache.schoolSections;
+    [sections insertObject:@"" atIndex:0];
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,7 +65,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [UDataCache.schoolSections count];
+    return [sections count];
 }
 - (UIView*)createSectionView:(NSString*)sectionText {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 10)];
@@ -83,15 +87,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger retVal;
-    //NSString *sectionKey = [textUtil getLetter:(LetterMapping)section];
-    NSString *key = [UDataCache.schoolSections objectAtIndex:section];
+    NSString *key = [sections objectAtIndex:section];
     if([key isEqualToString:@""]) {
         retVal = 1;
     } else {
         NSMutableArray *schools = [UDataCache.schools objectForKey:key];
         retVal = [schools count];
     }
-    // Return the number of rows in the section.
     return retVal;
 }
 
@@ -112,7 +114,7 @@
              forControlEvents:UIControlEventTouchUpInside];
         [cell initialize:suggestBtn];
     } else {
-        NSString *schoolKey = [UDataCache.schoolSections objectAtIndex:section];
+        NSString *schoolKey = [sections objectAtIndex:section];
         NSMutableArray *schools = [UDataCache.schools objectForKey:schoolKey];
         School *school = [schools objectAtIndex:indexPath.row];
         cell.textLabel.text = school.name;
@@ -125,7 +127,7 @@
     if (section == 0) {
         view = [self createSectionView:@""];
     } else {
-        view = [self createSectionView:[UDataCache.schoolSections objectAtIndex:section]];
+        view = [self createSectionView:[sections objectAtIndex:section]];
     }
     return view;
 }

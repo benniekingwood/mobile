@@ -8,6 +8,7 @@
 
 #import "EventUtil.h"
 #import "Event.h"
+#import "DataCache.h"
 @interface EventUtil() {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *clearDateFormatter;
@@ -44,35 +45,24 @@
     event.information = [eventRawData objectForKey:@"eventInfo"];
     event.location = [eventRawData objectForKey:@"eventLocation"];
     event.time = [eventRawData objectForKey:@"eventTime"];
-    event.date = [dateFormatter dateFromString:[[eventRawData objectForKey:@"eventDate"] objectForKey:@"date"]];
+    event.date = [dateFormatter dateFromString:[eventRawData objectForKey:@"eventDate"]];
     event.featured = [[eventRawData objectForKey:@"featured"] stringValue];
     event.clearDate = [clearDateFormatter stringFromDate:event.date];
     event.cacheAge = [NSDate date];
-    // load the event image from the image url
+    // set the image url for the event
     event.imageURL =[eventRawData objectForKey:@"imageURL"];
-    if(event.imageURL != nil) {
-        NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE stringByAppendingString:event.imageURL]];
-        event.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        if (event.image == nil) {
-          
-            if([@"1" isEqualToString:event.featured]) {
-                event.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_FEATURED_EVENT_IMAGE]]];
-            } else {
-                 event.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_EVENT_IMAGE]]];
-            }
-        }
+    
+    if([@"1" isEqualToString:event.featured]) {
+        event.image = [UDataCache.images objectForKey:KEY_DEFAULT_FEATURED_EVENT_IMAGE];
     } else {
-        if([@"1" isEqualToString:event.featured]) {
-            event.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_FEATURED_EVENT_IMAGE]]];
-        } else {
-            event.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_EVENT_IMAGE]]];
-        }
+        event.image = [UDataCache.images objectForKey:KEY_DEFAULT_EVENT_IMAGE];
     }
     // hydrate the event user
     event = [self hydrateEventUser:[eventRawData objectForKey:@"user"] event:event];
     return event;
 }
 - (NSMutableArray*) hydrateEvents:(id)rawEventData eventCollection:(NSMutableArray*)eventsList hydrationType:(EventHydrationType)hydrationType {
+  
     if(eventsList == nil) {
         eventsList = [[NSMutableArray alloc] init];
     }

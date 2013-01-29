@@ -13,12 +13,15 @@
 #import "SnapCategoryCell.h"
 #import "DataCache.h"
 #import "SnapshotUtil.h"
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 
 @interface SnapshotsViewController () {
     NSMutableArray *featuredSnaps;
     int featuredSnapTag;
 }
 -(void)animateBackground;
+-(void)setFeaturedSnapImage:(UIButton*)button snap:(Snap*)snap;
 @end
 
 @implementation SnapshotsViewController
@@ -43,38 +46,38 @@
     self.snapCategoryCollectionView.delegate = self;
     self.snapCategoryCollectionView.backgroundColor = [UIColor clearColor];
     UIFont *featLabelFont = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    featLabel1.font = featLabelFont;
-    featLabel1.textColor = [UIColor whiteColor];
-    featLabel1.backgroundColor = [UIColor clearColor];
-    featLabel1.textAlignment = NSTextAlignmentLeft;
-    featLabel1.shadowColor = [UIColor blackColor];
-    featLabel1.shadowOffset = CGSizeMake(0.0f, -1.0f);
-    featLabel1.text = @"";
-    featLabel1Bg.alpha = ALPHA_ZERO;
-    featLabel2.font = featLabelFont;
-    featLabel2.textColor = [UIColor whiteColor];
-    featLabel2.backgroundColor = [UIColor clearColor];
-    featLabel2.textAlignment = NSTextAlignmentLeft;
-    featLabel2.shadowColor = [UIColor blackColor];
-    featLabel2.shadowOffset = CGSizeMake(0.0f, -1.0f);
-    featLabel2.text = @"";
-    featLabel2Bg.alpha = ALPHA_ZERO;
-    featLabel3.font = featLabelFont;
-    featLabel3.textColor = [UIColor whiteColor];
-    featLabel3.backgroundColor = [UIColor clearColor];
-    featLabel3.textAlignment = NSTextAlignmentLeft;
-    featLabel3.shadowColor = [UIColor blackColor];
-    featLabel3.shadowOffset = CGSizeMake(0.0f, -1.0f);
-    featLabel3.text = @"";
-    featLabel3Bg.alpha = ALPHA_ZERO;
-    featLabel4.font = featLabelFont;
-    featLabel4.textColor = [UIColor whiteColor];
-    featLabel4.backgroundColor = [UIColor clearColor];
-    featLabel4.textAlignment = NSTextAlignmentLeft;
-    featLabel4.shadowColor = [UIColor blackColor];
-    featLabel4.shadowOffset = CGSizeMake(0.0f, -1.0f);
-    featLabel4.text = @"";
-    featLabel4Bg.alpha = ALPHA_ZERO;
+    self.featLabel1.font = featLabelFont;
+    self.featLabel1.textColor = [UIColor whiteColor];
+    self.featLabel1.backgroundColor = [UIColor clearColor];
+    self.featLabel1.textAlignment = NSTextAlignmentLeft;
+    self.featLabel1.shadowColor = [UIColor blackColor];
+    self.featLabel1.shadowOffset = CGSizeMake(0.0f, -1.0f);
+    self.featLabel1.text = @"";
+    self.featLabel1Bg.alpha = ALPHA_ZERO;
+    self.featLabel2.font = featLabelFont;
+    self.featLabel2.textColor = [UIColor whiteColor];
+    self.featLabel2.backgroundColor = [UIColor clearColor];
+    self.featLabel2.textAlignment = NSTextAlignmentLeft;
+    self.featLabel2.shadowColor = [UIColor blackColor];
+    self.featLabel2.shadowOffset = CGSizeMake(0.0f, -1.0f);
+    self.featLabel2.text = @"";
+    self.featLabel2Bg.alpha = ALPHA_ZERO;
+    self.featLabel3.font = featLabelFont;
+    self.featLabel3.textColor = [UIColor whiteColor];
+    self.featLabel3.backgroundColor = [UIColor clearColor];
+    self.featLabel3.textAlignment = NSTextAlignmentLeft;
+    self.featLabel3.shadowColor = [UIColor blackColor];
+    self.featLabel3.shadowOffset = CGSizeMake(0.0f, -1.0f);
+    self.featLabel3.text = @"";
+    self.featLabel3Bg.alpha = ALPHA_ZERO;
+    self.featLabel4.font = featLabelFont;
+    self.featLabel4.textColor = [UIColor whiteColor];
+    self.featLabel4.backgroundColor = [UIColor clearColor];
+    self.featLabel4.textAlignment = NSTextAlignmentLeft;
+    self.featLabel4.shadowColor = [UIColor blackColor];
+    self.featLabel4.shadowOffset = CGSizeMake(0.0f, -1.0f);
+    self.featLabel4.text = @"";
+    self.featLabel4Bg.alpha = ALPHA_ZERO;
     if(UDataCache.snapshotCategories != nil && [[UDataCache.snapshotCategories allValues] count] > 4) {
         featuredSnaps = [USnapshotUtil getFeaturedSnaps:UDataCache.snapshots snapshotCategories:UDataCache.snapshotCategories];
     }
@@ -82,27 +85,31 @@
     for (int idx = 0; idx < [featuredSnaps count]; idx++) {
             Snap *snap = [featuredSnaps objectAtIndex:idx];
             if (snap.categoryName != nil) {
-                if ([featLabel1.text isEqualToString:@""]) {
-                    featLabel1.text = [featured stringByAppendingString:snap.categoryName];
+                if ([self.featLabel1.text isEqualToString:@""]) {
+                    self.featBtn1.alpha = ALPHA_HIGH;
+                    self.featLabel1.text = [featured stringByAppendingString:snap.categoryName];
                     [featBtn1 setImage:snap.snapImage forState:UIControlStateNormal];
-                    featBtn1.alpha = ALPHA_HIGH;
-                    featBtn1.tag = idx;
-                    featLabel1Bg.alpha = ALPHA_MED;
+                    [self setFeaturedSnapImage:featBtn1 snap:snap];
+                    self.featBtn1.tag = idx;
+                    self.featLabel1Bg.alpha = ALPHA_MED;
                 } else if ([featLabel2.text isEqualToString:@""]) {
                     featLabel2.text = [featured stringByAppendingString:snap.categoryName];
                     [featBtn2 setImage:snap.snapImage forState:UIControlStateNormal];
+                    [self setFeaturedSnapImage:featBtn2 snap:snap];
                     featBtn2.alpha = ALPHA_HIGH;
                     featBtn2.tag = idx;
                     featLabel2Bg.alpha = ALPHA_MED;
                 } else if ([featLabel3.text isEqualToString:@""]) {
                     featLabel3.text = [featured stringByAppendingString:snap.categoryName];
-                    [featBtn3 setImage:snap.snapImage forState:UIControlStateNormal];
+                    [featBtn3 setImage:snap.snapImage  forState:UIControlStateNormal];
+                    [self setFeaturedSnapImage:featBtn3 snap:snap];
                     featBtn3.alpha = ALPHA_HIGH;
                     featBtn3.tag = idx;
                     featLabel3Bg.alpha = ALPHA_MED;
                 } else if ([featLabel4.text isEqualToString:@""]) {
                     featLabel4.text = [featured stringByAppendingString:snap.categoryName];
-                    [featBtn4 setImage:snap.snapImage forState:UIControlStateNormal];
+                    [featBtn4 setImage:snap.snapImage  forState:UIControlStateNormal];
+                    [self setFeaturedSnapImage:featBtn4 snap:snap];
                     featBtn4.alpha = ALPHA_HIGH;
                     featBtn4.tag = idx;
                     featLabel4Bg.alpha = ALPHA_MED;
@@ -124,6 +131,44 @@
                      completion:^(BOOL finished){ //task after an animation ends
                          [self performSelector:@selector(animateBackground) withObject:nil afterDelay:0.0];
                      }];
+}
+
+- (void) setFeaturedSnapImage:(UIButton *)button snap:(Snap *)snap {
+    // grab the snap image from the snap cache
+    UIImage *snapImage = [UDataCache imageExists:snap.snapId cacheModel:IMAGE_CACHE_SNAP_MEDIUM];
+    if (snapImage == nil) {
+        if(snap.snapImageURL != nil) {
+        // set the key in the cache to let other processes know that this key is in work
+        [UDataCache.snapImageMedium setValue:[NSNull null]  forKey:snap.snapId];
+        NSURL *url = [NSURL URLWithString:[URL_SNAP_IMAGE_MEDIUM stringByAppendingString:snap.snapImageURL]];
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+        [imageDownloader downloadImageWithURL:url
+                                      options:SDWebImageDownloaderProgressiveDownload
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         if (!iActivityIndicator)
+                                         {
+                                             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                             [iActivityIndicator showActivityIndicator:button.imageView];
+                                             button.userInteractionEnabled = NO;
+                                         }
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                        if (image && finished)
+                                        {
+                                            // add the snap image to the image cache
+                                            [UDataCache.snapImageMedium setValue:image forKey:snap.snapId];
+                                            // set the picture in the view
+                                            [button setImage:image forState:UIControlStateNormal];
+                                            [iActivityIndicator hideActivityIndicator:button.imageView];
+                                            iActivityIndicator = nil;
+                                            button.userInteractionEnabled = YES;
+                                        }
+                                    }];
+        }
+    } else if (![snapImage isKindOfClass:[NSNull class]]){
+        [button setImage:snapImage forState:UIControlStateNormal];
+    }
 }
 -(void)animateBackground {
     float newX = self.backgroundView.frame.origin.x-50;

@@ -15,6 +15,8 @@
 #import "DataCache.h"
 #import "UserProfileButton.h"
 #import "AlertView.h"
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 @interface CampusEventsViewController () {
     UIScrollView *featuredEventScroll;
 }
@@ -103,7 +105,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     if ([UDataCache.featuredEvents count] == 0) {
         UIImageView *dummyFeatureView = [[UIImageView alloc] init];
         dummyFeatureView.frame = CGRectMake(currentX, 0, featuredEventScroll.frame.size.width, featuredEventScroll.frame.size.height);
-        dummyFeatureView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_FEATURED_EVENT_IMAGE]]];
+        dummyFeatureView.image = [UDataCache.images objectForKey:KEY_DEFAULT_FEATURED_EVENT_IMAGE];
         dummyFeatureView.contentMode = UIViewContentModeScaleAspectFill;
         [featuredEventsView addSubview:dummyFeatureView];
     } else {
@@ -117,6 +119,44 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
                            forControlEvents:UIControlEventTouchDown];
             eventImageButton.frame = CGRectMake(currentX, 0, featuredEventScroll.frame.size.width, featuredEventScroll.frame.size.height);
             [eventImageButton setImage:featuredEvent.image forState:UIControlStateNormal];
+            
+            // grab the event image from the event cache
+            UIImage *eventImage = [UDataCache imageExists:featuredEvent.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
+            if (eventImage == nil) {
+                if(featuredEvent.imageURL != nil) {
+                // set the key in the cache to let other processes know that this key is in work
+                [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:featuredEvent.eventId];
+                NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:featuredEvent.imageURL]];
+                __block ImageActivityIndicatorView *iActivityIndicator;
+                SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+                [imageDownloader downloadImageWithURL:url
+                                              options:SDWebImageDownloaderProgressiveDownload
+                                             progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                                 if (!iActivityIndicator)
+                                                 {
+                                                     iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                                     [iActivityIndicator showActivityIndicator:eventImageButton.imageView];
+                                                     eventImageButton.userInteractionEnabled = NO;
+                                                 }
+                                             }
+                                            completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                                if (image && finished)
+                                                {
+                                                    // add the event image to the image cache
+                                                    [UDataCache.eventImageMedium setValue:image forKey:featuredEvent.eventId];
+                                                    // set the picture in the view
+                                                    [eventImageButton setImage:image forState:UIControlStateNormal];
+                                                    [iActivityIndicator hideActivityIndicator:eventImageButton.imageView];
+                                                    iActivityIndicator = nil;
+                                                    eventImageButton.userInteractionEnabled = YES;
+                                                }
+                                            }];
+                }
+            } else if (![eventImage isKindOfClass:[NSNull class]]){
+                [eventImageButton setImage:eventImage forState:UIControlStateNormal];
+            }
+
+            
             eventImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             eventImageButton.userInteractionEnabled = YES;
             eventImageButton.tag = idx;

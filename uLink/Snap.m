@@ -9,6 +9,6 @@
 #import "Snap.h"
 
 @implementation Snap
-@synthesize snapId, categoryId, categoryName, snapComments, snapImage, user, caption, created;
+@synthesize snapId, categoryId, categoryName, snapComments, snapImage, user, caption, created, snapImageURL;
 @synthesize cacheAge;
 @end

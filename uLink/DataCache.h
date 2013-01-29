@@ -13,6 +13,7 @@
     NSMutableDictionary *schools;
     NSMutableArray *schoolSections;
     User *sessionUser;
+    NSMutableDictionary *images;
 }
 @property (strong, nonatomic) NSMutableDictionary *schools;
 @property (strong, nonatomic) NSMutableArray *schoolSections;
@@ -24,7 +25,17 @@
 @property (strong, nonatomic) NSMutableArray *tweets;
 @property (strong, nonatomic) User *sessionUser;
 @property (strong, nonatomic) NSArray *times;
+@property (strong, nonatomic) NSMutableDictionary *images;
+@property (strong, nonatomic) NSMutableDictionary *eventImageThumbs;
+@property (strong, nonatomic) NSMutableDictionary *snapImageThumbs;
+@property (strong, nonatomic) NSMutableDictionary *userImageThumbs;
+@property (strong, nonatomic) NSMutableDictionary *eventImageMedium;
+@property (strong, nonatomic) NSMutableDictionary *snapImageMedium;
+@property (strong, nonatomic) NSMutableDictionary *userImageMedium;
+@property (strong, nonatomic) NSMutableDictionary *tweetUserImages;
 + (DataCache*) instance;
+- (UIImage*) imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
+- (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
 - (void) clearCache;
 - (void) rehydrateCaches:(BOOL)checkAge;
 - (void) hydrateCaches;
@@ -34,6 +45,7 @@
 - (void) hydrateSnapshotCategoriesCache:(BOOL)implicitHydrateSnapshots;
 - (void) hydrateTweetsCache;
 - (void) hydrateTrendsCache;
+- (void) hydrateImageCache;
 - (void) rehydrateSessionUser;
 - (void) rehydrateSchoolCache:(BOOL)checkAge;
 - (void) rehydrateEventsCache:(BOOL)checkAge;
@@ -41,6 +53,7 @@
 - (void) rehydrateSnapshotCategoriesCache:(BOOL)checkAge;
 - (void) rehydrateTweetsCache:(BOOL)checkAge;
 - (void) rehydrateTrendsCache:(BOOL)checkAge;
+- (void) rehydrateImageCache:(BOOL)checkAge;
 - (void) incrementActiveProcesses:(int)processCount;
 - (void) decrementActiveProcesses;
 @end

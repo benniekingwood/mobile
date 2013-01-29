@@ -10,6 +10,8 @@
 #import "AppMacros.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DataCache.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "ImageActivityIndicatorView.h"
 
 @interface ProfilePictureViewController () {
     UIScrollView *scroll;
@@ -68,6 +70,7 @@
     profilePicThumb.frame = proThumbFrame;
     profilePicThumb.layer.cornerRadius = 5;
     profilePicThumb.layer.masksToBounds = YES;
+    profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
     [profilePicView addSubview:profilePicThumb];
     // create the user's full name label
     CGRect labelFrame = CGRectMake( 140, 25, 200, 30 );
@@ -125,6 +128,41 @@
 - (void) updateProfileInformation {
     [nameLabel setText:[UDataCache.sessionUser.firstname stringByAppendingFormat:@" %@", UDataCache.sessionUser.lastname]];
     profilePicThumb.image = UDataCache.sessionUser.profileImage;
+    // grab the user's image from the user cache
+    UIImage *profileImage = [UDataCache imageExists:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
+    if (profileImage == nil) {
+        if(UDataCache.sessionUser.userImgURL != nil) {
+            // set the key in the cache to let other processes know that this key is in work
+            [UDataCache.userImageMedium setValue:[NSNull null] forKey:UDataCache.sessionUser.userId];
+            // lazy load the image from the web
+            NSURL *url = [NSURL URLWithString:[URL_USER_IMAGE_MEDIUM stringByAppendingString:UDataCache.sessionUser.userImgURL]];
+            __block ImageActivityIndicatorView *activityIndicator;
+            SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+            [imageDownloader downloadImageWithURL:url
+                                      options:SDWebImageDownloaderProgressiveDownload
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         if (!activityIndicator)
+                                         {
+                                              activityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                             [activityIndicator showActivityIndicator:profilePicThumb];
+                                         }
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                        if (image && finished)
+                                        {
+                                           // add the user's image to the image cache
+                                            [UDataCache.userImageMedium setValue:image forKey:UDataCache.sessionUser.userId];
+                                            // set the picture in the view
+                                            profilePicThumb.image = image;
+                                            [activityIndicator hideActivityIndicator:profilePicThumb];
+                                            activityIndicator = nil;
+                                        } 
+                                    }];
+        }
+    } else if (![profileImage isKindOfClass:[NSNull class]]){
+        profilePicThumb.image = profileImage;
+    }
+   
     bioLabel.text = UDataCache.sessionUser.bio;
     username.text = UDataCache.sessionUser.username;
 }

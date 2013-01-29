@@ -15,6 +15,9 @@
 #import "DataCache.h"
 #import "TextUtil.h"
 #import "EventUtil.h"
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "ImageUtil.h"
 @interface EditEventViewController () {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -83,6 +86,7 @@
     eventPictureButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 16, 106, 78)];
     eventPictureButton.layer.cornerRadius = 5;
     eventPictureButton.layer.masksToBounds = YES;
+    eventPictureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [eventPictureButton addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
     [formView addSubview:eventPictureButton];
     
@@ -179,6 +183,41 @@
     self.locationTextField.text = self.event.location;
     self.eventInfoTextView.text = self.event.information;
     [eventPictureButton setImage:self.event.image forState:UIControlStateNormal];
+    // grab the event image from the event cache
+    UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
+    if (eventImage == nil) {
+        if(self.event.imageURL != nil) {
+        // set the key in the cache to let other processes know that this key is in work
+        [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:self.event.eventId];
+        NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:self.event.imageURL]];
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+        [imageDownloader downloadImageWithURL:url
+                                      options:SDWebImageDownloaderProgressiveDownload
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         if (!iActivityIndicator)
+                                         {
+                                             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                             [iActivityIndicator showActivityIndicator:eventPictureButton.imageView];
+                                             eventPictureButton.userInteractionEnabled = NO;
+                                         }
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                        if (image && finished)
+                                        {
+                                            // add the event image to the image cache
+                                            [UDataCache.eventImageMedium setValue:image forKey:self.event.eventId];
+                                            // set the picture in the view
+                                            [eventPictureButton setImage:image forState:UIControlStateNormal];
+                                            [iActivityIndicator hideActivityIndicator:eventPictureButton.imageView];
+                                            iActivityIndicator = nil;
+                                            eventPictureButton.userInteractionEnabled = YES;
+                                        }
+                                    }];
+        }
+    } else if (![eventImage isKindOfClass:[NSNull class]]){
+        [eventPictureButton setImage:eventImage forState:UIControlStateNormal];
+    }
 }
 
 - (void)hideTimePickerView {
@@ -432,6 +471,9 @@
                             [successNotification showNotification:self.view];
                             // delete snapshot from the event cache
                             [UDataCache.sessionUser.events removeObject:event];
+                            // remove the old event image since it changed
+                            [UDataCache removeImage:event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
+                            [UDataCache removeImage:event.eventId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
                             // pop the controller
                             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(popController) userInfo:nil repeats:NO];
                         } else {
@@ -523,7 +565,7 @@
     if(imageChanged) {
         if (eventPictureButton.imageView.image != nil) {
             // add image as event image data
-            NSData *imageData = UIImageJPEGRepresentation(eventPictureButton.imageView.image, 1.0);
+            NSData *imageData = [UImageUtil compressImageToData:eventPictureButton.imageView.image];
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"event";
@@ -605,6 +647,9 @@
                             self.event.image = eventPictureButton.imageView.image;
                             NSDictionary *response = [json objectForKey:JSON_KEY_RESPONSE];
                             self.event.imageURL = [[response objectForKey:@"eventdata"] objectForKey:@"imageURL"];
+                            // remove the old event image since it changed
+                            [UDataCache removeImage:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
+                            [UDataCache removeImage:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
                         }
                        
                         // add the updated event back to the cache

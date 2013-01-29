@@ -10,6 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppMacros.h"
 #import "UserProfileButton.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "ImageActivityIndicatorView.h"
+#import "DataCache.h"
 @interface TweetCell() {
     UILabel *tweetLabel;
     UILabel *twitterUsername;
@@ -67,7 +70,43 @@
     } else {
         self.imageView.image  = self.tweet.twitterUserImage;
         twitterUsername = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 100, 20)];
+        
+        // grab the user image from the cache, or load from their API.
+        UIImage *twitterImage = [UDataCache imageExists:self.tweet.twitterUsername cacheModel:IMAGE_CACHE_TWEET_PROFILE];
+        if (twitterImage == nil) {
+            if(self.tweet.twitterImageURL != nil) {
+                // set the key in the cache to let other processes know that this key is in work
+                [UDataCache.tweetUserImages setValue:[NSNull null]  forKey:self.tweet.twitterUsername];
+                
+                NSURL *url = [NSURL URLWithString:self.tweet.twitterImageURL];
+                __block ImageActivityIndicatorView *activityIndicator;
+                SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+                [imageDownloader downloadImageWithURL:url
+                          options:SDWebImageDownloaderProgressiveDownload
+                         progress:^(NSUInteger receivedSize, long long expectedSize) {
+                             if (!activityIndicator)
+                             {
+                                 activityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                 [activityIndicator showActivityIndicator:self.imageView];
+                             }
+                         }
+                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                            if (image && finished)
+                            {
+                                // add the twitter profile image to the image cache
+                                [UDataCache.tweetUserImages setValue:image forKey:self.tweet.twitterUsername];
+                                // set the picture in the view
+                                self.imageView.image = image;
+                                [activityIndicator hideActivityIndicator:self.imageView];
+                                activityIndicator = nil;
+                            }
+                        }];
+            }
+        } else if(![twitterImage isKindOfClass:[NSNull class]]) {
+            self.imageView.image = twitterImage;
+        }
     }
+    
     twitterUsername.font = [UIFont fontWithName:FONT_GLOBAL size:10.0f];
     twitterUsername.textColor = [UIColor grayColor];
     twitterUsername.backgroundColor = [UIColor clearColor];

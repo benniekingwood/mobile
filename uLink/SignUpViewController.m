@@ -274,6 +274,7 @@
 }
 
 -(IBAction)createAccount {
+    [self.view endEditing:YES];
     if(pickListVisible) {
         [self hideSchoolStatusPickerView];
     }

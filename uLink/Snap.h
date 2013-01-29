@@ -15,6 +15,7 @@
 @property (nonatomic) NSString *categoryName;
 @property (nonatomic) NSString *caption;
 @property (nonatomic) NSDate *created;
+@property (nonatomic) NSString *snapImageURL;
 @property (strong, nonatomic) UIImage *snapImage;
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSMutableArray *snapComments;

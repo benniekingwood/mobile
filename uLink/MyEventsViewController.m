@@ -74,6 +74,7 @@ static NSString *kMyEventCellId = CELL_MY_EVENT_CELL;
     }
     cell.event = [UDataCache.sessionUser.events objectAtIndex:indexPath.item];
     [cell initialize];
+   // [cell layoutSubviews];
     return cell;
 }
 

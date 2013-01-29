@@ -99,6 +99,7 @@
 }
 
 -(IBAction)submitSuggestion {
+    [self.view endEditing:YES];
     @try {
         if (self.schoolNameTextField.text.length < 1) {
             errorAlertView.message = suggestValidationMsg;

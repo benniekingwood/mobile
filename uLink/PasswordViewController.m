@@ -227,6 +227,7 @@
     [errorAlertView resetAlert:@""];
 }
 - (IBAction)saveClick:(id)sender {
+    [self.view endEditing:YES];
     @try {
         [self validateField:kTextFieldNewPassword];
         [self validateField:kTextFieldPassword];

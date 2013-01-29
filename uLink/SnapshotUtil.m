@@ -11,7 +11,9 @@
 #import "AppMacros.h"
 #import "SnapshotComment.h"
 #import "Snap.h"
-#import "user.h"
+#import "User.h"
+#import "DataCache.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 @interface SnapshotUtil() {
     NSDateFormatter *dateFormatter;
 }
@@ -62,17 +64,13 @@
         snap = [self hydrateSnapUser:[currRawSnapshot objectForKey:@"user"] snap:snap];
         // build the snap comments
         snap = [self hydrateSnapComments:[currRawSnapshot objectForKey:@"comments"] snap:snap];
-        // load the snap image from the image url
-        NSString *snapImgURL =[currRawSnapshot objectForKey:@"imageURL"];
-        if(snapImgURL != nil) {
-            NSURL *url = [NSURL URLWithString:[URL_SNAP_IMAGE stringByAppendingString:snapImgURL]];
-            snap.snapImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-            if (snap.snapImage == nil) {
-                snap.snapImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_SNAP_IMAGE]]];
-            }
-        } else {
-             snap.snapImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_SNAP_IMAGE]]];
-        }
+        
+        // default the snap image
+        snap.snapImage = [UDataCache.images objectForKey:KEY_DEFAULT_SNAP_IMAGE];
+        
+        // set the snap image url
+        snap.snapImageURL = [currRawSnapshot objectForKey:@"imageURL"];
+
         if(snapsList == nil) {
             snapsList = [[NSMutableArray alloc] init];
         }
@@ -114,13 +112,11 @@
         commentUser.schoolStatus = [currRawSnapshotComment objectForKey:@"user_school_status"];
         
         // load the snap image from the image url
-        NSString *userImageURL = [currRawSnapshotComment objectForKey:@"user_image_url"];
-        if(userImageURL != nil) {
-            NSURL *url = [NSURL URLWithString:[URL_USER_IMAGE stringByAppendingString:userImageURL]];
-            commentUser.profileImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        } else {
-            commentUser.profileImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:URL_DEFAULT_USER_IMAGE]]];
-        }
+        commentUser.userImgURL = [currRawSnapshotComment objectForKey:@"user_image_url"];
+
+        // assign the default user image 
+        commentUser.profileImage = [UDataCache.images objectForKey:KEY_DEFAULT_USER_IMAGE];
+        
         // assign the created user
         snapComment.user = commentUser;
         if(snap.snapComments == nil) {
@@ -179,5 +175,22 @@
         [featuredSnaps addObject:currSnap];
     }
     return featuredSnaps;
+}
+- (void) removeSnap:(Snap*)snap {    
+    // iterate over all of the snaps and when you find it add the image
+    int matchIdx = -1;
+    for (NSString* category in [UDataCache.snapshots allKeys]) {
+        NSMutableArray *catSnaps = (NSMutableArray*)[UDataCache.snapshots objectForKey:category];
+        for(int idx =0; idx < [catSnaps count]; idx++) {
+            if ([((Snap*)catSnaps[idx]).snapId isEqualToString:snap.snapId]) {
+                matchIdx = idx;
+                break;
+            }
+        }
+        if (matchIdx != -1) {
+            [catSnaps removeObjectAtIndex:matchIdx];
+            break;
+        }
+    }
 }
 @end

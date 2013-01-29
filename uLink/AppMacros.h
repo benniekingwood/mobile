@@ -12,7 +12,7 @@
 #define RANDOM_INT(__MIN__, __MAX__) ((__MIN__) + random() % ((__MAX__+1) - (__MIN__)))
 
 #pragma mark MISC CONSTANTS
-#define SLEEP_TIME_LOGIN 3
+#define SLEEP_TIME_LOGIN 0
 
 #pragma mark APPEARANCE CONSTANTS
 #define ALPHA_HIGH 1.00
@@ -20,8 +20,8 @@
 #define ALPHA_LOW 0.2
 #define ALPHA_ZERO 0.00
 
-#pragma mark URLS
-#define URL_SERVER @"http://localhost:8888/"
+#pragma mark DEV_URLS
+/*#define URL_SERVER @"http://localhost:8888/"
 #define URL_USER_IMAGE @"http://localhost:8888/img/files/users/"
 #define URL_DEFAULT_USER_IMAGE @"http://localhost:8888/img/defaults/default_user.jpg"
 #define URL_SNAP_IMAGE @"http://localhost:8888/img/files/snaps/"
@@ -29,10 +29,32 @@
 #define URL_EVENT_IMAGE @"http://localhost:8888/img/files/events/"
 #define URL_DEFAULT_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_featured_event.png"
+*/
+#pragma mark PROD_URLS
+#define URL_SERVER @"http://www.theulink.com/"
+#define URL_USER_IMAGE_THUMB @"http://www.theulink.com/img/files/users/thumbs/"
+#define URL_USER_IMAGE_MEDIUM @"http://www.theulink.com/img/files/users/medium/"
+#define URL_DEFAULT_USER_IMAGE @"http://www.theulink.com/img/defaults/default_user.jpg"
+#define URL_SNAP_IMAGE_THUMB @"http://www.theulink.com/img/files/snaps/thumbs/"
+#define URL_SNAP_IMAGE_MEDIUM @"http://www.theulink.com/img/files/snaps/medium/"
+#define URL_DEFAULT_SNAP_IMAGE @"http://www.theulink.com/img/defaults/default_snap.png"
+#define URL_EVENT_IMAGE_THUMB @"http://www.theulink.com/img/files/events/thumbs/"
+#define URL_EVENT_IMAGE_MEDIUM @"http://www.theulink.com/img/files/events/medium/"
+#define URL_DEFAULT_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
+#define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_featured_event.png"
 
-//#define URL_SERVER @"http://www.theulink.com/"
-//#define URL_USER_IMAGE @"http://www.theulink.com/img/files/users/"
-//#define URL_SNAP_IMAGE @"http://www.theulink.com/img/files/snaps/"
+#pragma mark IMAGE CACHE KEYS
+#define KEY_DEFAULT_USER_IMAGE @"KEY_DEFAULT_USER_IMAGE"
+#define KEY_DEFAULT_SNAP_IMAGE @"KEY_DEFAULT_SNAP_IMAGE"
+#define KEY_DEFAULT_EVENT_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
+#define KEY_DEFAULT_FEATURED_EVENT_IMAGE @"KEY_DEFAULT_FEATURED_EVENT_IMAGE"
+#define IMAGE_CACHE_EVENT_THUMBS @"IMAGE_CACHE_EVENT_THUMBS"
+#define IMAGE_CACHE_SNAP_THUMBS @"IMAGE_CACHE_SNAP_THUMBS"
+#define IMAGE_CACHE_USER_THUMBS @"IMAGE_CACHE_USER_THUMBS"
+#define IMAGE_CACHE_EVENT_MEDIUM @"IMAGE_CACHE_EVENT_MEDIUM"
+#define IMAGE_CACHE_SNAP_MEDIUM @"IMAGE_CACHE_SNAP_MEDIUM"
+#define IMAGE_CACHE_USER_MEDIUM @"IMAGE_CACHE_USER_MEDIUM"
+#define IMAGE_CACHE_TWEET_PROFILE @"IMAGE_CACHE_TWEET_PROFILE"
 
 #pragma mark API FUNCTIONS
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
@@ -149,8 +171,15 @@
 #define LOGIN_AUTOPASS @"auto"
 #define LOGIN_INACTIVE @"std"
 
+#pragma mark MISC KEYS
+#define KEY_CACHE_AGE @"KEY_CACHE_AGE"
+
 #pragma mark ALERTS
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
+
+#pragma mark MISC 
+#define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
+#define VERSION_NUMBER @"0.1.0"
 
 #pragma mark TEXTFIELDS
 typedef enum {

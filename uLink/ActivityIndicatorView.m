@@ -38,27 +38,31 @@
     return self;
 }
 - (void) showActivityIndicator:(UIView*)view {
-    view.userInteractionEnabled = NO;
     [spinner startAnimating];
-    [view addSubview:modalOverlay];
-    [view addSubview:spinnerView];
+    [view.window addSubview:modalOverlay];
+    [view.window addSubview:spinnerView];
+    view.userInteractionEnabled = NO;
+    modalOverlay.userInteractionEnabled = YES;
+    [[view.superview subviews]makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:FALSE]];
     [UIView animateWithDuration:0.2
                           delay: 0.0
                         options: UIViewAnimationCurveLinear
                      animations:^{
                          CGRect frame = spinnerView.frame;
-                         frame.origin.y+=80;
+                         frame.origin.y+=100;
                          spinnerView.frame = frame;
                          modalOverlay.alpha = 0.5;
                      }
                      completion:nil];
 }
 - (void) hideActivityIndicator:(UIView*)view {
+    [[view.superview subviews]makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:YES]];
     view.userInteractionEnabled = YES;
+    modalOverlay.userInteractionEnabled = NO;
     [spinner stopAnimating];
     [spinnerView removeFromSuperview];
     CGRect frame = spinnerView.frame;
-    frame.origin.y-=80;
+    frame.origin.y-=100;
     spinnerView.frame = frame;
     [modalOverlay removeFromSuperview];
 }

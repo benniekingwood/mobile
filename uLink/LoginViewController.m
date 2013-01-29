@@ -18,6 +18,7 @@
     ActivityIndicatorView *activityIndicator;
 }
 - (void)loadSessionUserData:(NSDictionary*)rawData;
+- (void) hydrateCaches;
 @end
 
 @implementation LoginViewController
@@ -158,6 +159,7 @@
     [activityIndicator hideActivityIndicator:self.view];
 }
 - (IBAction)loginClick:(id)sender {
+    [self.view endEditing:YES];
     @try {
         [self validateField:kTextFieldUsername];
         [self validateField:kTextFieldPassword];
@@ -194,7 +196,7 @@
                         NSString* result = (NSString*)[json objectForKey:JSON_KEY_RESULT];
                         if([result isEqualToString:LOGIN_SUCCESS]) {
                             [self loadSessionUserData:response];
-                            [UDataCache hydrateCaches];
+                            [self performSelectorInBackground:@selector(hydrateCaches) withObject:self];
                             [NSThread sleepForTimeInterval:SLEEP_TIME_LOGIN];
                             [self performSegueWithIdentifier:SEGUE_SHOW_MAIN_TAB_BAR_VIEW_CONTROLLER sender:self];
                         } else if ([result isEqualToString:LOGIN_AUTOPASS]) {
@@ -227,5 +229,8 @@
     // set the current password since it's valid
     UDataCache.sessionUser.password = currentPassword;
     [UDataCache.sessionUser hydrateUser:rawData];
+}
+- (void) hydrateCaches {
+     [UDataCache hydrateCaches];
 }
 @end

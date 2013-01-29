@@ -413,7 +413,7 @@
                             </connections>
                         </button>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectSchoolCell" id="zql-cJ-8Ke" customClass="SelectSchoolCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectSchoolCell" id="egH-qp-481">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -422,7 +422,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="P3i-6a-Vtd" kind="push" identifier="ShowSignUpViewController" trigger="accessoryAction" id="sgB-vO-EDK"/>
+                                    <segue destination="P3i-6a-Vtd" kind="push" identifier="ShowSignUpViewController" id="bzl-Wj-uPs"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -973,8 +973,8 @@
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="summer-bg.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="8Zd-7m-x27">
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="550" id="kYa-Uh-8zV"/>
                                     <constraint firstAttribute="width" constant="350" id="loe-oU-gPd"/>
-                                    <constraint firstAttribute="height" constant="400" id="mZh-PE-HnO"/>
                                 </constraints>
                             </imageView>
                             <imageView alpha="0.60000000000000009" contentMode="scaleToFill" image="ulink-mobile-ucampus-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="d0b-pa-nhm"/>
@@ -1339,11 +1339,7 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="oEj-OW-ylN"/>
-                                </constraints>
-                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS"/>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="S2B-0V-dOO">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="199" id="dEq-rS-ghZ"/>
@@ -1377,7 +1373,12 @@
                                 </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                             </textView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon-camera-large.png" translatesAutoresizingMaskIntoConstraints="NO" id="UyE-XZ-aOx"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon-camera-large.png" translatesAutoresizingMaskIntoConstraints="NO" id="UyE-XZ-aOx">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="90" id="3z9-80-54z"/>
+                                    <constraint firstAttribute="width" constant="126" id="6Du-mQ-eJg"/>
+                                </constraints>
+                            </imageView>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwi-6h-0ho">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
@@ -1387,26 +1388,27 @@
                         </subviews>
                         <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="leading" secondItem="S2B-0V-dOO" secondAttribute="leading" type="default" id="1ri-7n-5tU"/>
+                            <constraint firstItem="jwi-6h-0ho" firstAttribute="trailing" secondItem="Kox-oX-W57" secondAttribute="trailing" type="default" id="2E1-IA-Ryo"/>
                             <constraint firstItem="Lbb-Ku-wdc" firstAttribute="centerX" secondItem="TV9-Iw-DFH" secondAttribute="centerX" type="default" id="2P9-hJ-xrw"/>
                             <constraint firstItem="jwi-6h-0ho" firstAttribute="top" secondItem="Kox-oX-W57" secondAttribute="top" constant="-44" id="3eA-Mr-zjk"/>
+                            <constraint firstItem="tVw-dd-kRv" firstAttribute="centerX" secondItem="7l4-Sz-pKS" secondAttribute="centerX" type="default" id="7qF-hF-6HX"/>
+                            <constraint firstItem="S2B-0V-dOO" firstAttribute="trailing" secondItem="Kox-oX-W57" secondAttribute="trailing" type="default" id="8hf-eA-Csi"/>
+                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="top" secondItem="Kox-oX-W57" secondAttribute="top" constant="188" id="Afg-UY-pG1"/>
                             <constraint firstItem="vUP-HO-QxW" firstAttribute="top" secondItem="Lbb-Ku-wdc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="BH3-dG-rBp"/>
                             <constraint firstItem="Lbb-Ku-wdc" firstAttribute="top" secondItem="Kox-oX-W57" secondAttribute="top" constant="9" id="CRa-06-ALe"/>
-                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="leading" secondItem="Kox-oX-W57" secondAttribute="leading" constant="-1" id="Fjz-3f-ZuI"/>
-                            <constraint firstItem="UyE-XZ-aOx" firstAttribute="top" secondItem="7l4-Sz-pKS" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="H4n-6a-Cis"/>
-                            <constraint firstItem="tVw-dd-kRv" firstAttribute="top" secondItem="Lbb-Ku-wdc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="KFj-g0-mo9"/>
+                            <constraint firstItem="UyE-XZ-aOx" firstAttribute="top" secondItem="7l4-Sz-pKS" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Cx3-8l-zaM"/>
+                            <constraint firstItem="S2B-0V-dOO" firstAttribute="leading" secondItem="Kox-oX-W57" secondAttribute="leading" type="default" id="KJR-Lj-nS7"/>
                             <constraint firstItem="Lbb-Ku-wdc" firstAttribute="top" secondItem="TV9-Iw-DFH" secondAttribute="top" type="default" id="LCs-Fh-vFO"/>
-                            <constraint firstItem="Lbb-Ku-wdc" firstAttribute="centerX" secondItem="Kox-oX-W57" secondAttribute="centerX" type="default" id="QL4-Qi-3Kb"/>
+                            <constraint firstItem="UyE-XZ-aOx" firstAttribute="centerX" secondItem="7l4-Sz-pKS" secondAttribute="centerX" type="default" id="P3x-kL-iUQ"/>
+                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="leading" secondItem="Kox-oX-W57" secondAttribute="leading" type="default" id="SPP-xW-JES"/>
+                            <constraint firstItem="jwi-6h-0ho" firstAttribute="leading" secondItem="Kox-oX-W57" secondAttribute="leading" type="default" id="Vo7-eb-uMp"/>
                             <constraint firstItem="S2B-0V-dOO" firstAttribute="top" secondItem="Kox-oX-W57" secondAttribute="top" type="default" id="af6-Mx-T3O"/>
+                            <constraint firstItem="UyE-XZ-aOx" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Kox-oX-W57" secondAttribute="top" constant="223" type="user" id="bmD-Cl-ocd"/>
                             <constraint firstItem="TV9-Iw-DFH" firstAttribute="leading" secondItem="vUP-HO-QxW" secondAttribute="leading" type="default" id="gIT-q2-f4L"/>
-                            <constraint firstItem="jwi-6h-0ho" firstAttribute="trailing" secondItem="7l4-Sz-pKS" secondAttribute="trailing" type="default" id="lOq-Y4-LCb"/>
-                            <constraint firstItem="jwi-6h-0ho" firstAttribute="leading" secondItem="7l4-Sz-pKS" secondAttribute="leading" type="default" id="mow-qN-ixT"/>
-                            <constraint firstItem="tVw-dd-kRv" firstAttribute="top" secondItem="TV9-Iw-DFH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="qqd-uK-fgQ"/>
-                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="top" secondItem="Kox-oX-W57" secondAttribute="top" constant="188" id="tLj-wN-Zmf"/>
+                            <constraint firstItem="tVw-dd-kRv" firstAttribute="top" secondItem="Lbb-Ku-wdc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="kHo-VB-Wcj"/>
+                            <constraint firstItem="vUP-HO-QxW" firstAttribute="top" secondItem="TV9-Iw-DFH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="qO4-lB-Usx"/>
                             <constraint firstItem="jwi-6h-0ho" firstAttribute="bottom" secondItem="Kox-oX-W57" secondAttribute="bottom" type="default" id="tTC-jf-C0D"/>
-                            <constraint firstItem="7l4-Sz-pKS" firstAttribute="trailing" secondItem="S2B-0V-dOO" secondAttribute="trailing" type="default" id="tnM-i5-auX"/>
                             <constraint firstItem="Lbb-Ku-wdc" firstAttribute="centerX" secondItem="tVw-dd-kRv" secondAttribute="centerX" type="default" id="uV2-5Q-253"/>
-                            <constraint firstItem="tVw-dd-kRv" firstAttribute="centerX" secondItem="UyE-XZ-aOx" secondAttribute="centerX" type="default" id="ugf-4S-5bm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="knu-mX-d40">
@@ -3765,7 +3767,8 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="dP3-wF-rsD">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="113" id="Jjv-ds-rT7"/>
+                                                        <constraint firstAttribute="width" constant="120" id="Iyf-x6-5RT"/>
+                                                        <constraint firstAttribute="height" constant="109" id="lUa-VP-BDg"/>
                                                     </constraints>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" image="pushpin.png" translatesAutoresizingMaskIntoConstraints="NO" id="2KU-SP-l9L">
@@ -3777,13 +3780,11 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstItem="dP3-wF-rsD" firstAttribute="centerY" secondItem="DKe-NN-fUL" secondAttribute="centerY" type="default" id="7gJ-eC-vTd"/>
-                                            <constraint firstItem="2KU-SP-l9L" firstAttribute="centerX" secondItem="dP3-wF-rsD" secondAttribute="centerX" type="default" id="mF9-WE-EI6"/>
-                                            <constraint firstItem="dP3-wF-rsD" firstAttribute="leading" secondItem="DKe-NN-fUL" secondAttribute="leading" constant="10" type="user" id="pQF-W3-MHb"/>
-                                            <constraint firstItem="2KU-SP-l9L" firstAttribute="top" secondItem="DKe-NN-fUL" secondAttribute="top" constant="-11" id="pnc-91-Pb1"/>
-                                            <constraint firstAttribute="trailing" secondItem="dP3-wF-rsD" secondAttribute="trailing" constant="10" type="user" id="zpj-DQ-Cl6"/>
+                                            <constraint firstItem="2KU-SP-l9L" firstAttribute="top" secondItem="DKe-NN-fUL" secondAttribute="top" constant="3" id="0aR-cf-pqw"/>
+                                            <constraint firstItem="2KU-SP-l9L" firstAttribute="centerX" secondItem="DKe-NN-fUL" secondAttribute="centerX" type="default" id="IkL-lh-xqN"/>
+                                            <constraint firstItem="dP3-wF-rsD" firstAttribute="centerY" secondItem="DKe-NN-fUL" secondAttribute="centerY" type="default" id="gel-Om-sRC"/>
+                                            <constraint firstItem="dP3-wF-rsD" firstAttribute="centerX" secondItem="2KU-SP-l9L" secondAttribute="centerX" type="default" id="sep-VK-ezh"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="snapImage" destination="dP3-wF-rsD" id="rjY-0s-Jk0"/>
@@ -6203,9 +6204,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <relationship kind="outlet" name="signUpButton" candidateClass="UlinkButton"/>
             </relationships>
         </class>
-        <class className="SelectSchoolCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectSchoolCell.h"/>
-        </class>
         <class className="SelectSchoolViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectSchoolViewController.h"/>
         </class>
@@ -6419,7 +6417,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="7AH-dB-mE2"/>
+        <segue reference="M9F-rl-iBX"/>
         <segue reference="ntw-wn-Fcr"/>
     </inferredMetricsTieBreakers>
 </document>

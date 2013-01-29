@@ -15,6 +15,7 @@
 @property (nonatomic) NSString *twitterUsername;
 @property (nonatomic) NSString *tweetAge;
 @property (nonatomic) NSString *tweetText;
+@property (nonatomic) NSString *twitterImageURL;
 @property (nonatomic) NSDate *created;
 @property (nonatomic) NSDate *cacheAge;
 @end

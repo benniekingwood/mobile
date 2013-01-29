@@ -14,6 +14,7 @@
 #import "EventUtil.h"
 #import "Tweet.h"
 #import "AppDelegate.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 @interface DataCache() {
     TextUtil *textUtil;
     NSDateFormatter *tweetDateFormatter;
@@ -25,6 +26,7 @@
 - (void) buildTrends:(id)trendsRaw;
 - (void) buildTweets:(id)tweetsRaw;
 - (void) buildTimes;
+- (void) initImageCaches;
 @end
 @implementation DataCache
 #pragma mark CACHE CONSTANTS
@@ -39,6 +41,7 @@ const double CACHE_AGE_LIMIT_SNAPSHOTS = 1800;  // 30 minutes
 const double CACHE_AGE_LIMIT_TWEETS = 900;  // 15 minutes
 const double CACHE_AGE_LIMIT_EVENTS = 86400;  // 1 days
 const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
+const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
 
 #pragma mark
 @synthesize schools;
@@ -50,6 +53,11 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
 @synthesize snapshotCategories;
 @synthesize tweets;
 @synthesize trends;
+@synthesize images;
+@synthesize eventImageMedium, eventImageThumbs;
+@synthesize snapImageMedium, snapImageThumbs;
+@synthesize userImageThumbs, userImageMedium;
+@synthesize tweetUserImages;
 + (DataCache*) instance {
     static DataCache* _one = nil;
     
@@ -67,18 +75,51 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         [tweetDateFormatter setDateFormat:@"E, d MMMM yyyy HH:m:s Z"];
         [self buildTimes];
         activeProcesses = 0;
+        [self initImageCaches];
     }
     return self;
 }
 - (void) clearCache {
-    self.schools = nil;
-    self.schoolSections = nil;
     self.sessionUser = nil;
     self.events = nil;
     self.snapshots = nil;
     self.tweets = nil;
     self.trends = nil;
     self.snapshotCategories = nil;
+    self.eventImageThumbs = nil;
+    self.snapImageThumbs = nil;
+    self.userImageThumbs = nil;
+    self.eventImageMedium = nil;
+    self.snapImageMedium = nil;
+    self.userImageMedium = nil;
+    self.tweetUserImages = nil;
+}
+- (void) initImageCaches {
+    if(self.userImageThumbs == nil) {
+        self.userImageThumbs = [[NSMutableDictionary alloc] init];
+    } else {
+        [self.userImageThumbs removeAllObjects];
+    }
+    if(self.userImageMedium == nil) {
+        self.userImageMedium = [[NSMutableDictionary alloc] init];
+    } else {
+        [self.userImageMedium removeAllObjects];
+    }
+    if(self.snapImageThumbs == nil) {
+        self.snapImageThumbs = [[NSMutableDictionary alloc] init];
+    }
+    if (self.eventImageThumbs == nil) {
+        self.eventImageThumbs = [[NSMutableDictionary alloc] init];
+    }
+    if(self.snapImageMedium == nil) {
+        self.snapImageMedium = [[NSMutableDictionary alloc] init];
+    }
+    if (self.eventImageMedium == nil) {
+        self.eventImageMedium = [[NSMutableDictionary alloc] init];
+    }
+    if (self.tweetUserImages == nil) {
+        self.tweetUserImages = [[NSMutableDictionary alloc] init];
+    }
 }
 - (void) buildTimes {
     if (self.times == nil) {
@@ -107,6 +148,7 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
     }
 }
 - (void) rehydrateCaches:(BOOL)checkAge {
+    [self initImageCaches];
     activeProcesses = 0;
     [self incrementActiveProcesses:5];
     [self rehydrateSessionUser];
@@ -117,6 +159,7 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
     [self rehydrateTrendsCache:checkAge];
 }
 - (void) hydrateCaches {
+    [self initImageCaches];
     [self hydrateSnapshotsCache];
     [self hydrateEventsCache];
     [self hydrateTweetsCache];
@@ -129,8 +172,9 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         // grab a school
         NSArray *values = [self.schools allValues];
         if ([values count] > 0) {
-            School *school = [values objectAtIndex:0];
-            double timeElapsed = [[NSDate date]timeIntervalSinceDate:school.cacheAge];
+            NSMutableArray *sectionSchools = [values objectAtIndex:0];
+            School *school = [sectionSchools objectAtIndex:0];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:school.cacheAge];
             if (timeElapsed <= CACHE_AGE_LIMIT_SCHOOLS) {
                 rehydrate = FALSE;
             }
@@ -148,13 +192,16 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
     if (checkAge) {
         if ([self.events count] > 0) {
             Event *event = [self.events objectAtIndex:0];
-            double timeElapsed = [[NSDate date]timeIntervalSinceDate:event.cacheAge];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:event.cacheAge];
             if (timeElapsed <= CACHE_AGE_LIMIT_EVENTS) {
                 rehydrate = FALSE;
             }
         }
     }
     if (rehydrate) {
+        // clear out the image cache to maintain memory
+        [self.eventImageMedium removeAllObjects];
+        [self.eventImageThumbs removeAllObjects];
         [self hydrateEventsCache];
     } else {
         [self decrementActiveProcesses];
@@ -168,13 +215,16 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         NSArray *values = [self.snapshots allValues];
         if ([values count] > 0) {
             Snap *snap = [values objectAtIndex:0];
-            double timeElapsed = [[NSDate date]timeIntervalSinceDate:snap.cacheAge];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:snap.cacheAge];
             if (timeElapsed <= CACHE_AGE_LIMIT_SNAPSHOTS) {
                 rehydrate = FALSE;
             }
         }
     }
     if (rehydrate) {
+        // clear out the image cache to maintain memory
+        [self.snapImageMedium removeAllObjects];
+        [self.snapImageThumbs removeAllObjects];
         [self hydrateSnapshotsCache];
     } else {
         [self decrementActiveProcesses];
@@ -188,7 +238,7 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         NSArray *values = [self.snapshotCategories allValues];
         if ([values count] > 0) {
             SnapshotCategory *cat = [values objectAtIndex:0];
-            double timeElapsed = [[NSDate date]timeIntervalSinceDate:cat.cacheAge];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:cat.cacheAge];
             if (timeElapsed <= CACHE_AGE_LIMIT_SNAP_CATEGORIES) {
                 rehydrate = FALSE;
             } 
@@ -206,13 +256,15 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
     if (checkAge) {
         if ([self.tweets count] > 0) {
             Tweet *tweet = [self.tweets objectAtIndex:0];
-            double timeElapsed = [[NSDate date]timeIntervalSinceDate:tweet.cacheAge];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:tweet.cacheAge];
             if (timeElapsed <= CACHE_AGE_LIMIT_TWEETS) {
                 rehydrate = FALSE;
             }
         }
     }
     if (rehydrate) {
+        // clear out the image cache to maintain memory
+        [self.tweetUserImages removeAllObjects];
         [self hydrateTweetsCache];
     } else {
         [self decrementActiveProcesses];
@@ -231,6 +283,22 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         [self hydrateTrendsCache];
     } else {
         [self decrementActiveProcesses];
+    }
+}
+- (void) rehydrateImageCache:(BOOL)checkAge {
+    BOOL rehydrate = TRUE;
+    // check cache ages and refresh as necessary
+    if (checkAge) {
+        if ([self.images count] > 0) {
+            // grab the cache age from the dictionary 
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:[self.images objectForKey:KEY_CACHE_AGE]];
+            if (timeElapsed <= CACHE_AGE_LIMIT_IMAGES) {
+                rehydrate = FALSE;
+            }
+        }
+    }
+    if (rehydrate) {
+        [self hydrateImageCache];
     }
 }
 - (void) rehydrateSessionUser {
@@ -275,6 +343,22 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         });
     }
     @catch (NSException *exception) {} // TODO: report error?
+}
+
+- (void) hydrateImageCache {
+    clock_t start = clock();
+    // load the default images into the image dictionary
+    if (self.images == nil) {
+        self.images = [[NSMutableDictionary alloc] init];
+    } else{
+        [self.images removeAllObjects];
+    }
+    [self.images setValue:[NSDate date] forKey:KEY_CACHE_AGE];
+    [self.images setValue:[UIImage imageNamed:@"default_user.jpg"] forKey:KEY_DEFAULT_USER_IMAGE];
+    [self.images setValue:[UIImage imageNamed:@"default_snap.png"] forKey:KEY_DEFAULT_SNAP_IMAGE];
+    [self.images setValue:[UIImage imageNamed:@"default_campus_event.png"] forKey:KEY_DEFAULT_EVENT_IMAGE];
+    [self.images setValue:[UIImage imageNamed:@"default_featured_event.png"] forKey:KEY_DEFAULT_FEATURED_EVENT_IMAGE];
+    NSLog(@"hydrateImageCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
 }
 - (void) hydrateSchoolCache {
     @try {
@@ -551,7 +635,7 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
     NSEnumerator *ee = [sortedKeys objectEnumerator];
     id key;
     // iterate over the cacheSchools putting each section school in an array
-    while (key = [ee nextObject]) {
+    while (key = [ee nextObject]) { 
         [self.schoolSections addObject:(NSString*)key];
     }
 }
@@ -583,6 +667,7 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
                                 NSMutableArray *snaps = [[NSMutableArray alloc] init];
                                 snaps = [USnapshotUtil hydrateSnaps:[json objectForKey:JSON_KEY_RESPONSE] snapCollection:snaps];
                                 [self.snapshots setValue:snaps forKey:categoryId];
+                            NSLog(@"hydrateSnapshots Category %@ Complete.", ((SnapshotCategory*)[UDataCache.snapshotCategories objectForKey:categoryId]).name);
                         } else {
                             // TODO: report error?
                         }
@@ -603,7 +688,8 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         tweet.created = [tweetDateFormatter dateFromString:[tweetsRaw[idx] objectForKey:@"created_at"]];
         tweet.tweetAge = [tweetsRaw[idx] objectForKey:@"age"];
         tweet.twitterUsername = [@"@" stringByAppendingString:[tweetsRaw[idx] objectForKey:@"from_user"]];
-        tweet.twitterUserImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[tweetsRaw[idx] objectForKey:@"profile_image_url"]]]];
+        tweet.twitterUserImage = [UDataCache.images objectForKey:KEY_DEFAULT_USER_IMAGE];
+        tweet.twitterImageURL = [tweetsRaw[idx] objectForKey:@"profile_image_url"];
         tweet.tweetText = [tweetsRaw[idx] objectForKey:@"text"];
         NSDictionary *userRaw = [tweetsRaw[idx] objectForKey:@"ulinkuser"];
         if(userRaw != nil) {
@@ -613,8 +699,73 @@ const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
         }
         [self.tweets insertObject:tweet atIndex:idx];
     }
-    // make sure they are sorted my most recent to oldest
 }
 
 #pragma mark
+
+#pragma mark IMAGE CACHE
+- (UIImage*)imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel {
+    UIImage *retVal = nil;
+    if ([cacheModel isEqualToString:IMAGE_CACHE_USER_THUMBS]) {
+        for (NSString *key in [self.userImageThumbs allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.userImageThumbs objectForKey:key];
+            }
+        }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_USER_MEDIUM]) {
+        for (NSString *key in [self.userImageMedium allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.userImageMedium objectForKey:key];
+            }
+        }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_THUMBS]) {
+        for (NSString *key in [self.eventImageThumbs allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.eventImageThumbs objectForKey:key];
+            }
+        }
+    }  else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_MEDIUM]) {
+        for (NSString *key in [self.eventImageMedium allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.eventImageMedium objectForKey:key];
+            }
+        }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_THUMBS]) {
+        for (NSString *key in [self.snapImageThumbs allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.snapImageThumbs objectForKey:key];
+            }
+        }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_MEDIUM]) {
+        for (NSString *key in [self.snapImageMedium allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.snapImageMedium objectForKey:key];
+            }
+        }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_TWEET_PROFILE]) {
+        for (NSString *key in [self.tweetUserImages allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.tweetUserImages objectForKey:key];
+            }
+        }
+    }
+    return retVal;
+}
+- (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel {
+    if ([cacheModel isEqualToString:IMAGE_CACHE_USER_THUMBS]) {
+        [self.userImageThumbs removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_USER_MEDIUM]) {
+        [self.userImageMedium removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_MEDIUM]) {
+        [self.eventImageMedium removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_EVENT_THUMBS]) {
+        [self.eventImageThumbs removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_MEDIUM]) {
+        [self.snapImageMedium removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_SNAP_THUMBS]) {
+        [self.snapImageThumbs removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_TWEET_PROFILE]) {
+        [self.tweetUserImages removeObjectForKey:cacheKey];
+    }
+}
 @end

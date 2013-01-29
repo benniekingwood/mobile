@@ -17,4 +17,5 @@
 - (Snap*) hydrateSnapUser:(id)rawSnapUser snap:(Snap*)snap;
 -(NSMutableDictionary*) buildSnapshotCategories:(id)categoriesRaw snapshotCategories:(NSMutableDictionary*)categories;
 -(NSMutableArray*) getFeaturedSnaps:(NSMutableDictionary*)snapshotsCache snapshotCategories:(NSMutableDictionary*)categoriesCache;
+- (void) removeSnap:(Snap*)snap;
 @end

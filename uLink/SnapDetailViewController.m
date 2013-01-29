@@ -16,6 +16,9 @@
 #import "SuccessNotificationView.h"
 #import "UserProfileButton.h"
 #import "UserProfileViewController.h"
+#import "SnapshotUtil.h"
+#import "ImageActivityIndicatorView.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 
 @interface SnapDetailViewController () {
     AlertView *customAlertView;
@@ -134,6 +137,40 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
 {
     [super viewWillAppear:animated];
     self.snapImageView.image = self.snap.snapImage;
+    // grab the snap image from the snap cache
+    UIImage *snapImage = [UDataCache imageExists:self.snap.snapId cacheModel:IMAGE_CACHE_SNAP_MEDIUM];
+    if (snapImage == nil) {
+        if(self.snap.snapImageURL != nil) {
+        // set the key in the cache to let other processes know that this key is in work
+        [UDataCache.snapImageMedium setValue:[NSNull null]  forKey:self.snap.snapId];
+        NSURL *url = [NSURL URLWithString:[URL_SNAP_IMAGE_MEDIUM stringByAppendingString:self.snap.snapImageURL]];
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+        [imageDownloader downloadImageWithURL:url
+                                      options:SDWebImageDownloaderProgressiveDownload
+                                     progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                         if (!iActivityIndicator)
+                                         {
+                                             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                             [iActivityIndicator showActivityIndicator:self.snapImageView];
+                                         }
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                        if (image && finished)
+                                        {
+                                            // add the snap image to the image cache
+                                            [UDataCache.snapImageMedium setValue:image forKey:self.snap.snapId];
+                                            // set the picture in the view
+                                            self.snapImageView.image = image;
+                                            [iActivityIndicator hideActivityIndicator:self.snapImageView];
+                                            iActivityIndicator = nil;
+                                        }
+                                    }];
+        }
+    } else if (![snapImage isKindOfClass:[NSNull class]]) {
+       self.snapImageView.image  = snapImage;
+    }
+
     self.snapCaptionLabel.text = self.snap.caption;
     // if there are no comments hide the comments table
     if([self.snap.snapComments count] == 0) {
@@ -298,6 +335,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [NSThread sleepForTimeInterval:2];
                     [activityIndicator hideActivityIndicator:self.view];
                     if ([data length] > 0 && error == nil) {
                         NSError* err;
@@ -337,7 +375,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                         // show alert to user
                         [errorAlertView show];
                     }
-                });
+               });
             }];
         });
     }
@@ -380,6 +418,11 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                             [successNotification showNotification:self.view];
                             // delete snapshot from the snap cache
                             [UDataCache.sessionUser.snaps removeObject:snap];
+                            // remove the snap from the global snap cache
+                            [USnapshotUtil removeSnap:snap];
+                            // remove the old snap image
+                            [UDataCache removeImage:snap.snapId cacheModel:IMAGE_CACHE_SNAP_MEDIUM];
+                            [UDataCache removeImage:snap.snapId cacheModel:IMAGE_CACHE_SNAP_THUMBS];
                             // pop the controller
                             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(popController) userInfo:nil repeats:NO];
                         } else {

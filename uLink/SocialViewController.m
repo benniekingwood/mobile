@@ -108,6 +108,7 @@
     [UDataCache hydrateTweetsCache];
 }
 - (IBAction)saveClick:(id)sender {
+    [self.view endEditing:YES];
     @try {
         [self validateField:kTextFieldTwitterUsername];
         if([validationErrors count] > 0) {

@@ -16,7 +16,7 @@
     UlinkButton *logoutButton;
 }
 - (void)logout;
-- (void) hydrateSchoolCache;
+- (void) hydrateInitialCaches;
 @end
 
 @implementation SettingsViewController
@@ -75,12 +75,13 @@
     MainNavigationViewController *parent = (MainNavigationViewController*)self.presentingViewController;
     [parent popToRootViewControllerAnimated:NO];
     // rehydrate school cache in background 
-    [self performSelectorInBackground:@selector(hydrateSchoolCache) withObject:self];
+    [self performSelectorInBackground:@selector(hydrateInitialCaches) withObject:self];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) hydrateSchoolCache {
+- (void) hydrateInitialCaches {
     [UDataCache hydrateSchoolCache];
+    [UDataCache hydrateSnapshotCategoriesCache:NO];
 }
 #pragma mark - Table view data source
 

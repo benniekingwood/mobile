@@ -10,7 +10,8 @@
 #import "SnapDetailViewController.h"
 #import "DataCache.h"
 #import "AppMacros.h"
-
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "ImageActivityIndicatorView.h"
 @interface MySnapsViewController ()
 @end
 
@@ -53,7 +54,44 @@ static NSString *cellId = CELL_MY_SNAP_CELL;
 }
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SnapCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
-    [cell setSnapShot:[UDataCache.sessionUser.snaps objectAtIndex:indexPath.item]];
+    Snap *snap = [UDataCache.sessionUser.snaps objectAtIndex:indexPath.item];
+    [cell setSnapShot:snap];
+    
+    // grab the snap image from the snap cache
+    UIImage *snapImage = [UDataCache imageExists:snap.snapId cacheModel:IMAGE_CACHE_SNAP_MEDIUM];
+    if (snapImage == nil) {
+        if(snap.snapImageURL != nil) {
+        // set the key in the cache to let other processes know that this key is in work
+        [UDataCache.snapImageMedium setValue:[NSNull null]  forKey:snap.snapId];
+        NSURL *url = [NSURL URLWithString:[URL_SNAP_IMAGE_MEDIUM stringByAppendingString:snap.snapImageURL]];
+        __block ImageActivityIndicatorView *activityIndicator;
+        SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+        [imageDownloader downloadImageWithURL:url
+                options:SDWebImageDownloaderProgressiveDownload
+                 progress:^(NSUInteger receivedSize, long long expectedSize) {
+                     if (!activityIndicator)
+                     {
+                         activityIndicator = [[ImageActivityIndicatorView alloc] init];
+                         [activityIndicator showActivityIndicator:cell.snapImage];
+                         cell.userInteractionEnabled = NO;
+                     }
+             }
+            completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+            if (image && finished)
+            {
+                // add the snap image to the image cache
+                [UDataCache.snapImageMedium setValue:image forKey:snap.snapId];
+                // set the picture in the view
+                cell.snapImage.image = image;
+                [activityIndicator hideActivityIndicator:cell.snapImage];
+                activityIndicator = nil;
+                cell.userInteractionEnabled = YES;
+            }
+        }];
+        }
+    } else if (![snapImage isKindOfClass:[NSNull class]]){
+        cell.snapImage.image = snapImage;
+    }
     cell.alpha = 0.0;
     [UIView animateWithDuration:0.8 animations:^{
         cell.alpha = 1.0;
@@ -75,29 +113,16 @@ static NSString *cellId = CELL_MY_SNAP_CELL;
 
 // 1
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UIImage *snapImage = ((Snap*)[UDataCache.sessionUser.snaps objectAtIndex:indexPath.row]).snapImage;
     CGSize retval;
-    float oldWidth = snapImage.size.width;
-    float oldHeight = snapImage.size.height;
+    float oldWidth = 400;
+    float oldHeight = 400;
     float newWidth = 0.0f;
     float newHeight = 0.0f;
-    if (oldWidth >= oldHeight && oldWidth > 70.0f) {
-        float scaleFactor = 50.0f / oldWidth;
-         newHeight = oldHeight * scaleFactor;
-         newWidth = oldWidth * scaleFactor;
-         retval = CGSizeMake(newWidth, newHeight);
-    } else if(oldHeight > oldWidth && oldHeight > 70.0f) {
-        float scaleFactor = 50.0f / oldHeight;
-         newWidth = oldWidth * scaleFactor;
-         newHeight = oldHeight * scaleFactor;
-         retval = CGSizeMake(newWidth, newHeight);
-    } else {
-         retval = CGSizeMake(oldWidth, oldHeight);
-    }
- 
+    float scaleFactor = 60.0f / oldWidth;
+    newHeight = oldHeight * scaleFactor;
+    newWidth = oldWidth * scaleFactor;
+    retval = CGSizeMake(newWidth, newHeight);
     retval.height += 35; retval.width += 35;
-    
     return retval;
 }
 

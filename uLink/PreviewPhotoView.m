@@ -42,8 +42,10 @@
     self.previewImageView.layer.borderWidth = 2.0f;
     self.previewImageView.alpha = ALPHA_ZERO;
     self.previewImageView.contentMode = UIViewContentModeScaleAspectFill;
-    closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width-20, 0, 20, 20)];
-    [closeButton setImage:[UIImage imageNamed:@"close-button"] forState:UIControlStateNormal];
+    closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width-30, -10, 40, 40)];
+    [closeButton setBackgroundColor:[UIColor clearColor]];
+    UIImage *resizableButton = [[UIImage imageNamed:@"close-button" ] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [closeButton setImage:resizableButton forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(hidePreviewPhoto) forControlEvents:UIControlEventTouchUpInside];
 }
 

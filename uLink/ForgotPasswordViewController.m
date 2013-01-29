@@ -102,6 +102,7 @@
     [errorAlertView resetAlert:needEmailValidationMsg];
 }
 -(IBAction) resetPassword {
+    [self.view endEditing:YES];
     @try {
         if (![textUtil validEmail:self.emailTextField.text]) {
             [errorAlertView show];

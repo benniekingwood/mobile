@@ -16,6 +16,8 @@
 #import "ActivityIndicatorView.h"
 #import "AlertView.h"
 #import "Reachability.h"
+#import "UCampusViewController.h"
+#import <SDWebImage/SDWebImageDownloader.h>
 
 @implementation AppDelegate {
     UIStoryboard* storyboard;
@@ -28,14 +30,14 @@
 {
     storyboard = [UIStoryboard storyboardWithName:@"uLink" bundle:nil];
     [self setupNavigationControllerApp];
-    [UDataCache hydrateSchoolCache];
-    [UDataCache hydrateSnapshotCategoriesCache:NO];
     activityIndicator = [[ActivityIndicatorView alloc] init];
     appDelegateAlert = [[AlertView alloc] initWithTitle:@""
                              message: ALERT_NO_INTERNET_CONN
                             delegate:self
                    cancelButtonTitle:BTN_OK
                    otherButtonTitles:nil];
+    SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+    imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
     return YES;
 }
 
@@ -77,12 +79,25 @@
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:2];
 }
 -(void) showActivityIndicator {
-    MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-    [activityIndicator showActivityIndicator:mainTabBarController.selectedViewController.view];
+    /*
+     * NOTE: keeping commented out for now.  The main indicator
+     * is not functioning correctly so we will not show it when
+     * user's reopen our application.
+     */
+  /*  MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
+
+    self.window.rootViewController.view.userInteractionEnabled = NO;
+    [[self.window.rootViewController.view subviews] makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:FALSE]];
+    [activityIndicator showActivityIndicator:mainTabBarController.selectedViewController.view];*/
 }
 -(void) hideActivityIndicator {
-    MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-    [activityIndicator hideActivityIndicator:mainTabBarController.selectedViewController.view];
+   /* MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
+       [[self.window subviews]makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:TRUE]];
+    [activityIndicator hideActivityIndicator:mainTabBarController.selectedViewController.view]; */
+}
+
+- (void) hydrateImages {
+    [UDataCache rehydrateImageCache:YES];
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -94,15 +109,40 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"applicationDidEnterBackground");
+    // TODO: if there are rehyrdations going, we need to kill those process and decrement the active
+    // processes to zero
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+     NSLog(@"applicationWillEnterForeground");
+    BOOL networkActive = FALSE;
+    // check for network connectivity
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    networkActive = (networkStatus != NotReachable);
+    
+    // if there is network connectivity, we can continue
+    if(UDataCache.sessionUser != nil && networkActive) {
+        NSLog(@"rehyrdating caches");
+        // pop to main tab bar view controller
+        MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
+        [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
+        [UDataCache rehydrateCaches:YES];
+    } else if (networkActive) {
+        // we know that we have a network connection, but no user so just rehydrate the schools cache
+        [UDataCache rehydrateSchoolCache:YES];
+        [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+        [UDataCache hydrateSnapshotCategoriesCache:NO];
+    }
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    NSLog(@"applicationDidBecomeActive");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     BOOL networkActive = FALSE;
     // check for network connectivity
@@ -113,12 +153,14 @@
         [appDelegateAlert show];
     }
     
-    // if there is network connectivity, we can continue
-    if(UDataCache.sessionUser != nil && networkActive) {
-        // pop to main tab bar view controller
-        MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-        [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
-        [UDataCache rehydrateCaches:YES];
+   if (UDataCache.sessionUser == nil && networkActive) {
+        // we know that we have a network connection, but no user so just rehydrate the schools cache
+        [UDataCache rehydrateSchoolCache:YES];
+        [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+        [UDataCache hydrateSnapshotCategoriesCache:NO];
+       
+       // pop back to the login screen
+       [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
     }
 }
 

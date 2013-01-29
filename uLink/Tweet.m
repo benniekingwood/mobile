@@ -9,5 +9,5 @@
 #import "Tweet.h"
 
 @implementation Tweet
-@synthesize twitterUserImage, tweetText, tweetAge, twitterUsername, user, created, cacheAge;
+@synthesize twitterUserImage, tweetText, tweetAge, twitterUsername, user, created, cacheAge, twitterImageURL;
 @end
