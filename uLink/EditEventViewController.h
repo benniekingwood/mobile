@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "UlinkButton.h"
 #import "Event.h"
-
-@interface EditEventViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+#import "AFPhotoEditorController.h"
+@interface EditEventViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AFPhotoEditorControllerDelegate>
 - (IBAction)saveClick:(id)sender;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (strong, nonatomic) IBOutlet UIView *formView;

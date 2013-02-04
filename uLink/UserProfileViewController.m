@@ -144,7 +144,7 @@
     UIImage *profileImage = [UDataCache imageExists:self.user.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
     if (profileImage == nil) {
         
-        if(self.user.userImgURL != nil) {
+        if(![self.user.userImgURL isKindOfClass:[NSNull class]] && self.user.userImgURL != nil && ![self.user.userImgURL isEqualToString:@""]) {
         // set the key in the cache to let other processes know that this key is in work
         [UDataCache.userImageMedium setValue:[NSNull null] forKey:self.user.userId];
         // lazy load the image from the web
@@ -180,11 +180,18 @@
 
     
     usernameLabel.text = self.user.username;
-    nameLabel.text = [self.user.firstname stringByAppendingFormat:@" %@", self.user.lastname];
-    bio.text = self.user.bio;
-    //schoolLabel.text = self.user.schoolName;
+    if(![self.user.firstname isKindOfClass:[NSNull class]] && ![self.user.firstname isEqualToString:@""]) {
+        nameLabel.text = [self.user.firstname stringByAppendingFormat:@" %@", self.user.lastname];
+    } else {
+        nameLabel.text = @"uLink User";
+    }
+    bio.text = (![self.user.bio isKindOfClass:[NSNull class]] && ![self.user.bio isEqualToString:@""]) ? self.user.bio : @"I haven't entered my bio yet, but rest assured when I do it will be amazing.";
     schoolStatusLabel.text = [@"Status: " stringByAppendingFormat:@" %@", self.user.schoolStatus];
-    gradYearLabel.text = [@"Graduation Year: " stringByAppendingFormat:@" %@", self.user.year];
+    if(![self.user.year isKindOfClass:[NSNull class]] && ![self.user.year isEqualToString:@""]) {
+        gradYearLabel.text = [@"Graduation Year: " stringByAppendingFormat:@" %@", self.user.year];
+    } else {
+        gradYearLabel.text = @"Graduation Year: unknown";
+    }
 }
 
 - (void)didReceiveMemoryWarning

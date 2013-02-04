@@ -48,6 +48,8 @@
     UIImagePickerController *imagePicker;
     UIActionSheet *photoActionSheet;
     BOOL imageChanged;
+    
+    AFPhotoEditorController *photoEditorController;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -174,6 +176,7 @@
     bioTextView.textColor = [UIColor blackColor];
     bioTextView.backgroundColor = [UIColor clearColor];
     bioTextView.returnKeyType = UIReturnKeyDone;
+    bioTextView.text = @"Your Bio";
     [scrollView addSubview:bioTextView];
     [self.view addSubview:scrollView];
     
@@ -251,7 +254,7 @@
         // grab the user's image from the user cache
         UIImage *profileImage = [UDataCache imageExists:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
         if (profileImage == nil) {
-            if(UDataCache.sessionUser.userImgURL != nil) {
+            if(![UDataCache.sessionUser.userImgURL isKindOfClass:[NSNull class]] && UDataCache.sessionUser.userImgURL != nil && ![UDataCache.sessionUser.userImgURL isEqualToString:@""]) {
             // set the key in the cache to let other processes know that this key is in work
             [UDataCache.userImageMedium setValue:[NSNull null] forKey:UDataCache.sessionUser.userId];
             // lazy load the image from the web
@@ -323,13 +326,33 @@
 #pragma mark
 #pragma mark UIImagePickerView Section
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];    
     [profilePictureButton setImage:image forState:UIControlStateNormal];
     imageChanged = TRUE;
     self.saveButton.enabled = YES;
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:^{
+        // initialize the aviary filter gallery
+        photoEditorController = [[AFPhotoEditorController alloc] initWithImage:image];
+        [AFPhotoEditorCustomization setOptionValue:[UIColor colorWithRed:35.0f / 255.0f green:85.0f / 255.0f blue:100.0f / 255.0f alpha:1.0f] forKey:@"editor.accentColor"];
+        [AFPhotoEditorCustomization setOptionValue:@"Submit" forKey:@"editor"];
+        
+        [photoEditorController setDelegate:self];
+        [self presentViewController:photoEditorController animated:YES completion:nil];
+    }];
 }
 #pragma mark
+
+#pragma mark Aviary Image Section
+- (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image {
+    [photoEditorController dismissViewControllerAnimated:NO completion:nil];
+    [profilePictureButton setImage:image forState:UIControlStateNormal];
+}
+
+- (void)photoEditorCanceled:(AFPhotoEditorController *)editor {
+    [photoEditorController dismissViewControllerAnimated:YES completion:nil];
+}
+#pragma mark
+
 #pragma mark UIPickerView Section
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
     return 1;
@@ -374,7 +397,7 @@
         }
             break;
         case kTextViewBio: {
-            if (bioTextView.text.length < 1) {
+            if (bioTextView.text.length < 1 || [bioTextView.text isEqualToString:@"Your Bio"]) {
                 [validationErrors addObject:@"\nPlease enter your bio"];
             } else {
                 [validationErrors removeObject:@"\nPlease enter your bio"];
@@ -389,7 +412,7 @@
             }
             break;
         case kTextFieldYear:
-            if (yearTextField.text.length != 4 && [textUtil isDigitsOnly:yearTextField.text]) {
+            if (yearTextField.text.length != 4 || ![textUtil isDigitsOnly:yearTextField.text]) {
                 [validationErrors addObject:@"\nPlease enter your four digit graduation year"];
             } else {
                 [validationErrors removeObject:@"\nPlease enter your four digit graduation year"];
@@ -463,6 +486,9 @@
     [scrollView setContentOffset:CGPointMake(0, 200) animated:YES];
     if(pickListVisible) {
         [self hideSchoolStatusPickerView];
+    }
+    if ([bioTextView.text isEqualToString:@"Your Bio"]) {
+        bioTextView.text = @"";
     }
     return TRUE;
 }
@@ -651,7 +677,7 @@
                             UDataCache.sessionUser.userImgURL = [[response objectForKey:@"userdata"] objectForKey:@"image_url"];
                             // remove the old user image since it changed
                             [UDataCache removeImage:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
-                              [UDataCache removeImage:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
+                            [UDataCache removeImage:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_THUMBS];
                         }
                         [successNotifiction showNotification:self.view];
                         self.cancelButton.title = @"Done";

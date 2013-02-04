@@ -34,6 +34,7 @@
     UIImagePickerController *imagePicker;
     UIActionSheet *photoActionSheet;
     BOOL imageChanged;
+    AFPhotoEditorController *photoEditorController;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -259,9 +260,29 @@
     [eventPictureButton setImage:image forState:UIControlStateNormal];
     imageChanged = TRUE;
     self.saveButton.enabled = YES;
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:^{
+        // initialize the aviary filter gallery
+        photoEditorController = [[AFPhotoEditorController alloc] initWithImage:image];
+        [AFPhotoEditorCustomization setOptionValue:[UIColor colorWithRed:35.0f / 255.0f green:85.0f / 255.0f blue:100.0f / 255.0f alpha:1.0f] forKey:@"editor.accentColor"];
+        [AFPhotoEditorCustomization setOptionValue:@"Submit" forKey:@"editor"];
+        
+        [photoEditorController setDelegate:self];
+        [self presentViewController:photoEditorController animated:YES completion:nil];
+    }];
 }
 #pragma mark
+
+#pragma mark Aviary Image Section
+- (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image {
+    [photoEditorController dismissViewControllerAnimated:NO completion:nil];
+    [eventPictureButton setImage:image forState:UIControlStateNormal];
+}
+
+- (void)photoEditorCanceled:(AFPhotoEditorController *)editor {
+    [photoEditorController dismissViewControllerAnimated:YES completion:nil];
+}
+#pragma mark
+
 #pragma mark UIPickerView Section
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
     return 1;

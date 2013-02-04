@@ -80,7 +80,7 @@
 }
 
 - (void) hydrateInitialCaches {
-    [UDataCache hydrateSchoolCache];
+    [UDataCache rehydrateSchoolCache:YES];
     [UDataCache hydrateSnapshotCategoriesCache:NO];
 }
 #pragma mark - Table view data source

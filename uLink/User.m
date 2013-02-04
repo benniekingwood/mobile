@@ -32,18 +32,19 @@ userId,username,firstname,lastname,password,email,schoolId,major,year,schoolStat
     // password is already set in the caller
     self.userId = [rawData objectForKey:@"id"];
     self.username = [rawData objectForKey:@"username"];
-    self.bio = [rawData objectForKey:@"bio"];
-    self.email = [rawData objectForKey:@"email"];
-    self.major = [rawData objectForKey:@"major"];
-    self.year = [rawData objectForKey:@"year"];
-    self.firstname = [rawData objectForKey:@"firstname"];
-    self.lastname  = [rawData objectForKey:@"lastname"];
+    self.bio = (![[rawData objectForKey:@"bio"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"bio"] : @"";
+    self.email = (![[rawData objectForKey:@"email"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"email"] : @"";
+    self.major = (![[rawData objectForKey:@"major"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"major"] : @"";
+    self.year = (![[rawData objectForKey:@"year"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"year"] : @"";
+    self.firstname = (![[rawData objectForKey:@"firstname"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"firstname"] : @"";
+    self.lastname  = (![[rawData objectForKey:@"lastname"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"lastname"] : @"";
     self.schoolId = [rawData objectForKey:@"school_id"];
-    self.schoolStatus = [rawData objectForKey:@"school_status"];
+    self.schoolStatus = (![[rawData objectForKey:@"school_status"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"school_status"] : @"";
     self.twitterEnabled = (BOOL)[rawData objectForKey:@"twitter_enabled"];
-    self.twitterUsername = [rawData objectForKey:@"twitter_username"];
-    self.schoolName = [rawData objectForKey:@"school_name"];
-    self.userImgURL =[rawData objectForKey:@"image_url"];
+    self.twitterUsername = (![[rawData objectForKey:@"twitter_username"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"twitter_username"] : @"";
+    self.schoolName = (![[rawData objectForKey:@"school_name"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"school_name"] : @"";
+    
+    self.userImgURL = ([[rawData objectForKey:@"image_url"] isKindOfClass:[NSNull class]] || [[rawData objectForKey:@"image_url"] isEqualToString:@"<null>"]) ? nil : [rawData objectForKey:@"image_url"];
     self.profileImage = [UDataCache.images objectForKey:KEY_DEFAULT_USER_IMAGE];
     self.cacheAge = [NSDate date];
     self.events = [UEventUtil hydrateEvents:[rawData objectForKey:@"Events"] eventCollection:self.events hydrationType:kEventHydrationAll];

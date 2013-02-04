@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Snap.h"
+#import "SnapshotComment.h"
 #import "AppMacros.h"
 #define USnapshotUtil ((SnapshotUtil *)[SnapshotUtil instance])
 @interface SnapshotUtil : NSObject
@@ -18,4 +19,5 @@
 -(NSMutableDictionary*) buildSnapshotCategories:(id)categoriesRaw snapshotCategories:(NSMutableDictionary*)categories;
 -(NSMutableArray*) getFeaturedSnaps:(NSMutableDictionary*)snapshotsCache snapshotCategories:(NSMutableDictionary*)categoriesCache;
 - (void) removeSnap:(Snap*)snap;
+- (void) removeSnapComment:(NSString*)snapId comment:(SnapshotComment*)comment;
 @end

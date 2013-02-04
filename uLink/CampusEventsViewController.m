@@ -24,6 +24,7 @@
 - (void) buildFeaturedEventViews;
 - (void) viewUserProfileClick:(UserProfileButton*)sender;
 - (void) showEventDetail:(UIButton*)sender;
+- (void) scrollPages;
 @end
 
 @implementation CampusEventsViewController
@@ -68,14 +69,14 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     if([UDataCache.events count] == 0 && [UDataCache.featuredEvents count] == 0) {
         [noEventsAlert show];
     }
+    [self buildFeaturedEventViews];
+    self.featuredEventsHeader.text = [UDataCache.sessionUser.schoolName stringByAppendingFormat:@" %@", @"Featured Events"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-      self.featuredEventsHeader.text = [UDataCache.sessionUser.schoolName stringByAppendingFormat:@" %@", @"Featured Events"];
-    [self buildFeaturedEventViews];
+
     [self.eventsTableView reloadData];
-    // TODO: have automatic scrolling of featured events
 }
 
 - (void)applyUlinkTableFooter {
@@ -211,10 +212,27 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
         self.pageControl.alpha = ALPHA_ZERO;
     } else {
         self.pageControl.alpha = ALPHA_HIGH;
+        // since there are more than one page initialize the auto scroll timer
+        // enable timer after each 2 seconds for scrolling.
+        [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_EVENT_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
     }
     
     // add the scroll view to the main view
     [self.view addSubview:featuredEventScroll];
+}
+- (void) scrollPages {
+    // get the current offset ( which page is being displayed )
+    CGFloat contentOffset = featuredEventScroll.contentOffset.x;
+    // calculate next page to display
+    int nextPage = (int)(contentOffset/featuredEventScroll.frame.size.width) + 1 ;
+    // if we are not on the last page, we can show the page
+    if( nextPage != self.pageControl.numberOfPages )  {
+        [featuredEventScroll scrollRectToVisible:CGRectMake(nextPage*featuredEventScroll.frame.size.width, 0, featuredEventScroll.frame.size.width, featuredEventScroll.frame.size.height) animated:YES];
+        self.pageControl.currentPage=nextPage;
+    } else {  // else start sliding from the first page
+        [featuredEventScroll scrollRectToVisible:CGRectMake(0, 0, featuredEventScroll.frame.size.width, featuredEventScroll.frame.size.height) animated:YES];
+        self.pageControl.currentPage=0;
+    }
 }
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:SEGUE_SHOW_EVENT_DETAIL_VIEW_CONTROLLER]) {

@@ -189,7 +189,33 @@
         }
         if (matchIdx != -1) {
             [catSnaps removeObjectAtIndex:matchIdx];
+            [UDataCache.snapshots setValue:catSnaps forKey:category];
             break;
+        }
+        
+    }
+}
+- (void) removeSnapComment:(NSString*)snapId comment:(SnapshotComment*)comment {
+    // iterate over all of the snaps and when you find it add the image
+    for (NSString* category in [UDataCache.snapshots allKeys]) {
+        NSMutableArray *catSnaps = (NSMutableArray*)[UDataCache.snapshots objectForKey:category];
+        for(int idx =0; idx < [catSnaps count]; idx++) {
+            if ([((Snap*)catSnaps[idx]).snapId isEqualToString:snapId]) {
+                int matchSnapCommentIdx = -1;
+                Snap *curSnap = ((Snap*)catSnaps[idx]);
+                // iterate over the comments and find the matching comment
+                for (int y=0;y<[curSnap.snapComments count]; y++) {
+                  
+                    if ([comment.snapCommentId isEqualToString:((SnapshotComment*)curSnap.snapComments[y]).snapCommentId]) {
+                        matchSnapCommentIdx = y;
+                        break;
+                    }
+                }
+                if(matchSnapCommentIdx != -1) {
+                    [curSnap.snapComments removeObjectAtIndex:matchSnapCommentIdx];
+                }
+                break;
+            }
         }
     }
 }

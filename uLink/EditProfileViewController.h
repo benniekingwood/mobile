@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AFPhotoEditorController.h"
 @protocol EditProfileViewControllerDelegate;
 @protocol EditProfileViewControllerDelegate <NSObject>
 -(void) updateProfileInformation;
 @end
-@interface EditProfileViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
+@interface EditProfileViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, AFPhotoEditorControllerDelegate> {
     id<EditProfileViewControllerDelegate> _delegate;
 }
 @property (nonatomic, assign) id<EditProfileViewControllerDelegate> delegate;

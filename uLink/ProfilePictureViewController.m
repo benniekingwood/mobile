@@ -126,12 +126,16 @@
 }
 
 - (void) updateProfileInformation {
-    [nameLabel setText:[UDataCache.sessionUser.firstname stringByAppendingFormat:@" %@", UDataCache.sessionUser.lastname]];
+    if(![UDataCache.sessionUser.firstname isKindOfClass:[NSNull class]] && ![UDataCache.sessionUser.firstname isEqualToString:@""]) {
+        [nameLabel setText:[UDataCache.sessionUser.firstname stringByAppendingFormat:@" %@", UDataCache.sessionUser.lastname]];
+    } else {
+        [nameLabel setText:@"Your Name"];
+    }
     profilePicThumb.image = UDataCache.sessionUser.profileImage;
     // grab the user's image from the user cache
     UIImage *profileImage = [UDataCache imageExists:UDataCache.sessionUser.userId cacheModel:IMAGE_CACHE_USER_MEDIUM];
     if (profileImage == nil) {
-        if(UDataCache.sessionUser.userImgURL != nil) {
+        if(![UDataCache.sessionUser.userImgURL isKindOfClass:[NSNull class]] && UDataCache.sessionUser.userImgURL != nil && ![UDataCache.sessionUser.userImgURL isEqualToString:@""]) {
             // set the key in the cache to let other processes know that this key is in work
             [UDataCache.userImageMedium setValue:[NSNull null] forKey:UDataCache.sessionUser.userId];
             // lazy load the image from the web
@@ -163,7 +167,7 @@
         profilePicThumb.image = profileImage;
     }
    
-    bioLabel.text = UDataCache.sessionUser.bio;
+    bioLabel.text = (![UDataCache.sessionUser.bio isKindOfClass:[NSNull class]] && ![UDataCache.sessionUser.bio isEqualToString:@""]) ? UDataCache.sessionUser.bio : @"Your bio will be displayed here.  You should edit your profile and tell us your bio!";
     username.text = UDataCache.sessionUser.username;
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)sender {

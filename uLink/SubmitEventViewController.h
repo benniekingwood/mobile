@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "UlinkButton.h"
+#import "AFPhotoEditorController.h"
 typedef enum {
     CameraActive, 
     TimeActive, 
     LocationActive
 } LowerOverlayPosition;
 
-@interface SubmitEventViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface SubmitEventViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,AFPhotoEditorControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *eventInfoTextView;
 @property (strong, nonatomic) IBOutlet UITextField *dateTextField;
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;

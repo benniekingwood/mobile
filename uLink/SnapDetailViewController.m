@@ -19,6 +19,8 @@
 #import "SnapshotUtil.h"
 #import "ImageActivityIndicatorView.h"
 #import <SDWebImage/SDWebImageDownloader.h>
+#import "ModalImageView.h"
+#import "Snap.h"
 
 @interface SnapDetailViewController () {
     AlertView *customAlertView;
@@ -33,12 +35,15 @@
     float commentToolbarY;
     float commentFormY;
     NSDateFormatter *dateFormatter;
+    ModalImageView *modalSnapView;
 }
 -(void)saveComment;
 - (void)deleteSnap;
+- (void)deleteSnapComment:(SnapshotComment*)comment;
 - (void) popController;
 - (void) reloadComments;
 - (void) viewUserProfileClick:(UserProfileButton*)sender;
+- (void) updateSessionUserSnapComments:(SnapshotComment*)comment action:(BOOL)addComment;
 @end
 static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
 @implementation SnapDetailViewController
@@ -130,7 +135,11 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     self.snapImageView.layer.masksToBounds = YES;
     self.snapUserImageView.layer.cornerRadius = 5;
     self.snapUserImageView.layer.masksToBounds = YES;
+    self.snapImageView.userInteractionEnabled = YES;
     [self applyUlinkTableFooter];
+    
+    modalSnapView = [[ModalImageView alloc] initWithFrame:self.view.window.bounds];
+    modalSnapView.userInteractionEnabled = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -172,6 +181,10 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     }
 
     self.snapCaptionLabel.text = self.snap.caption;
+    [self setCommentHeaderInfo];
+}
+
+-(void) setCommentHeaderInfo {
     // if there are no comments hide the comments table
     if([self.snap.snapComments count] == 0) {
         self.commentsTableView.alpha = ALPHA_ZERO;
@@ -203,6 +216,40 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     viewProfileController.user = user;
     [self.navigationController presentViewController:viewProfileController animated:YES completion:nil];
 }
+
+- (void) updateSessionUserSnapComments:(SnapshotComment*)comment action:(BOOL)addComment {
+    
+     if(inUCampusMode) {
+        /* 
+         * iterate over the session user's snaps until we
+         * find the current snap.  Once we find it, we need
+         * to update it's comments with the action passed in 
+         * to this function
+         */
+        for (Snap *curSnap in UDataCache.sessionUser.snaps) {
+            if([self.snap.snapId isEqualToString:curSnap.snapId]) {
+                if (addComment) {
+                    [curSnap.snapComments addObject:comment];
+                } else {
+                    int matchSnapCommentIdx = -1;
+                    for (int y=0;y<[curSnap.snapComments count]; y++) {
+                        if ([comment.snapCommentId isEqualToString:((SnapshotComment*)curSnap.snapComments[y]).snapCommentId]) {
+                            matchSnapCommentIdx = y;
+                            break;
+                        }
+                    }
+                    if(matchSnapCommentIdx != -1) {
+                        [curSnap.snapComments removeObjectAtIndex:matchSnapCommentIdx];
+                    }
+                }
+                break;
+            }
+        }
+     } else {
+         [USnapshotUtil removeSnapComment:self.snap.snapId comment:comment];
+     }
+    [self setCommentHeaderInfo];
+}
 #pragma mark - UITextField section
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     BOOL retVal = NO;
@@ -214,9 +261,15 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     return retVal;
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [[event allTouches] anyObject];
+  
+    UITouch *touch = [touches anyObject];
     if ([commentTextField isFirstResponder] && [touch view] != commentTextField) {
         [commentTextField  resignFirstResponder];
+    }
+    if ([touch view] == self.snapImageView) {
+        [modalSnapView toggleImageView:self.view image:self.snapImageView.image];
+    } else if(modalSnapView.imageVisible) {
+        [modalSnapView toggleImageView:self.view image:self.snapImageView.image];
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -289,6 +342,28 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     [cell layoutSubviews];
     return cell;
 }
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCellEditingStyle *retVal = UITableViewCellEditingStyleNone;
+    // grab the snap comment from the cell
+    SnapshotComment *snapCom = [self.snap.snapComments objectAtIndex:indexPath.row];
+    // check if the snap user is the session user, they can see the edit button
+    if([UDataCache.sessionUser.userId isEqualToString:snapCom.user.userId]) {
+        retVal = UITableViewCellEditingStyleDelete;
+    }
+    return retVal;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // delete from the server
+        // grab the snap comment from the cell
+        SnapshotComment *snapCom = [self.snap.snapComments objectAtIndex:indexPath.row];
+        //if successful  Delete the row from the data source
+        // TODO: check to see if this deletes from the snap comments too
+        [self deleteSnapComment:snapCom];
+    }
+}
 #pragma mark
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -353,6 +428,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                             snapComment.created = [NSDate date];
                             snapComment.createdShort = [dateFormatter stringFromDate:snapComment.created];
                             snapComment.user = UDataCache.sessionUser;
+                            snapComment.snapCommentId = (NSString*)[json objectForKey:@"_id"];
                             if (self.snap.snapComments == nil) {
                                 self.snap.snapComments = [[NSMutableArray alloc] init];
                             }
@@ -366,7 +442,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                             // update the number of comments label
                             self.commentHeader.text = [NSString stringWithFormat:@"%i Comments", [self.snap.snapComments count]];
                             commentTextField.text = @"";
-                           
+                             [self updateSessionUserSnapComments:snapComment action:TRUE];
                         } else {
                             errorAlertView.message = @"There was a problem adding your comment.  Please try again later or contact help@theulink.com.";
                             [errorAlertView show];
@@ -455,4 +531,68 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
         [errorAlertView show];
     }
 }
+- (void)deleteSnapComment:(SnapshotComment*)comment {
+    @try {
+        [activityIndicator showActivityIndicator:self.view];
+       // self.deleteButton.enabled = FALSE;
+        NSString *requestData = [URL_SERVER stringByAppendingString:API_SNAPSHOTS_DELETE_SNAPSHOT_COMMENT];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:comment.snapCommentId];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
+        requestData = [requestData stringByAppendingString:@"/"];
+        requestData = [requestData stringByAppendingString:UDataCache.sessionUser.userId];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestData]];
+        [req setHTTPMethod:HTTP_GET];
+        [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+        [req setHTTPShouldHandleCookies:NO];
+        [req setTimeoutInterval:11];
+        
+        // how we stop refresh from freezing the main UI thread
+        dispatch_queue_t deleteSnapCommentQueue = dispatch_queue_create(DISPATCH_DELETE_SNAP_COMMENT, NULL);
+        dispatch_async(deleteSnapCommentQueue, ^{
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [activityIndicator hideActivityIndicator:self.view];
+                    if ([data length] > 0 && error == nil) {
+                        NSError* err;
+                        NSDictionary* json = [NSJSONSerialization
+                                              JSONObjectWithData:data
+                                              options:kNilOptions
+                                              error:&err];
+                        NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
+                        NSString* result = (NSString*)[json objectForKey:JSON_KEY_RESULT];
+                        if([result isEqualToString:@"true"]) {
+                            [successNotification setMessage:@"Comment Deleted."];
+                            [successNotification showNotification:self.view];
+                            // delete snapshot comment from the snap comments
+                            [self.snap.snapComments removeObject:comment];
+                            [self reloadComments];
+                            // TODO: this is not working
+                            [self updateSessionUserSnapComments:comment action:FALSE];
+                        } else {
+                            if (response != nil && [response isEqualToString:@""] ) {
+                                errorAlertView.message = response;
+                            } else {
+                                errorAlertView.message = @"There was a problem deleting your snapshot comment.  Please try again later or contact help@theulink.com.";
+                            }
+                            [errorAlertView show];
+                        }
+                    } else {
+                        errorAlertView.message = @"There was a problem deleting your snapshot comment.  Please try again later or contact help@theulink.com.";
+                        // show alert to user
+                        [errorAlertView show];
+                    }
+                });
+            }];
+        });
+    }
+    @catch (NSException *exception) {
+        self.view.userInteractionEnabled = YES;
+        // show alert to user
+        [errorAlertView show];
+    }
+}
+
 @end

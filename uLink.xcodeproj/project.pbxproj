@@ -176,6 +176,7 @@
 		0DC91B1E1683B76C00141A89 /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B1D1683B76B00141A89 /* Tweet.m */; };
 		0DC91B2416868DD300141A89 /* EventUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B2316868DD200141A89 /* EventUtil.m */; };
 		0DC91B271686A0FB00141A89 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B261686A0FA00141A89 /* EventCell.m */; };
+		0DCF4C1316BED0B400CD6FE5 /* ModalImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF4C1216BED0B400CD6FE5 /* ModalImageView.m */; };
 		0DDCFAB4169B75A400CA5048 /* libAviarySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFAB1169B75A400CA5048 /* libAviarySDK.a */; };
 		0DDCFAB5169B75A400CA5048 /* AviarySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0DDCFAB3169B75A400CA5048 /* AviarySDKResources.bundle */; };
 		0DDCFAB7169B7D5C00CA5048 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFAB6169B7D5C00CA5048 /* Accelerate.framework */; };
@@ -455,6 +456,8 @@
 		0DC91B2316868DD200141A89 /* EventUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventUtil.m; sourceTree = "<group>"; };
 		0DC91B251686A0F900141A89 /* EventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCell.h; sourceTree = "<group>"; };
 		0DC91B261686A0FA00141A89 /* EventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCell.m; sourceTree = "<group>"; };
+		0DCF4C1116BED0B400CD6FE5 /* ModalImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalImageView.h; sourceTree = "<group>"; };
+		0DCF4C1216BED0B400CD6FE5 /* ModalImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalImageView.m; sourceTree = "<group>"; };
 		0DDCFAAB169B75A400CA5048 /* AFPhotoEditorContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorContext.h; sourceTree = "<group>"; };
 		0DDCFAAC169B75A400CA5048 /* AFPhotoEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorController.h; sourceTree = "<group>"; };
 		0DDCFAAD169B75A400CA5048 /* AFPhotoEditorControllerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorControllerOptions.h; sourceTree = "<group>"; };
@@ -934,6 +937,8 @@
 				0D6EB7DD16920DFD009B88C0 /* PreviewPhotoView.m */,
 				0DA1C27C16AAA0180089A443 /* ImageActivityIndicatorView.h */,
 				0DA1C27D16AAA0190089A443 /* ImageActivityIndicatorView.m */,
+				0DCF4C1116BED0B400CD6FE5 /* ModalImageView.h */,
+				0DCF4C1216BED0B400CD6FE5 /* ModalImageView.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -1389,6 +1394,7 @@
 				0D519A6416A2553100A791F8 /* Reachability.m in Sources */,
 				0DA1C27E16AAA0190089A443 /* ImageActivityIndicatorView.m in Sources */,
 				0DA1C28216AD1D8F0089A443 /* ImageUtil.m in Sources */,
+				0DCF4C1316BED0B400CD6FE5 /* ModalImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1472,7 +1478,8 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: BlaancoSolutions, LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BlaancoSolutions, LLC";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1485,6 +1492,8 @@
 					"-all_load",
 					"-fobjc-arc",
 				);
+				PROVISIONING_PROFILE = "5844D5B3-AE5F-414B-A731-409B3D6C10EB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5844D5B3-AE5F-414B-A731-409B3D6C10EB";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1494,6 +1503,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bennie Kingwood (2U59TM3C4Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uLink\"",
@@ -1513,6 +1523,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "363A85AD-3EFA-4567-90A6-BA4F88648998";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "363A85AD-3EFA-4567-90A6-BA4F88648998";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1520,8 +1531,8 @@
 		0D4633CC164B30D500284893 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: BlaancoSolutions, LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BlaancoSolutions, LLC";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uLink\"",
@@ -1540,8 +1551,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "69A01B89-CB4D-4F7C-A401-AE94BDDD3DDD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "69A01B89-CB4D-4F7C-A401-AE94BDDD3DDD";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

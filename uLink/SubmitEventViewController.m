@@ -35,6 +35,7 @@
     UIView *modalOverlay;
     BOOL floatLocationVisible;
     UILabel *infoCounter;
+    AFPhotoEditorController *photoEditorController;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -59,7 +60,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.overlayPosition = CameraActive;
-    self.navigationItem.title = @"Submit Event";
+   // self.navBar = @"Submit Event";
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
   
@@ -151,6 +152,7 @@
     self.eventInfoTextView.textColor = [UIColor blackColor];
     self.eventInfoTextView.backgroundColor = [UIColor clearColor];
     self.eventInfoTextView.returnKeyType = UIReturnKeyDone;
+    self.eventInfoTextView.text = @"Event Information";
     
     // TODO: add later, fix counter issue.info counter
     infoCounter = [[UILabel alloc] initWithFrame:CGRectMake(260, 269, 100, 20)];
@@ -229,7 +231,15 @@
     
     previewPhotoView.previewImageView.image = image;
     [previewPhotoView showPreviewPhoto:self.overlayFormView];
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:^{
+        // initialize the aviary filter gallery
+        photoEditorController = [[AFPhotoEditorController alloc] initWithImage:previewPhotoView.previewImageView.image];
+        [AFPhotoEditorCustomization setOptionValue:[UIColor colorWithRed:35.0f / 255.0f green:85.0f / 255.0f blue:100.0f / 255.0f alpha:1.0f] forKey:@"editor.accentColor"];
+        [AFPhotoEditorCustomization setOptionValue:@"Submit" forKey:@"editor"];
+        
+        [photoEditorController setDelegate:self];
+        [self presentViewController:photoEditorController animated:YES completion:nil];
+    }];
     [self.view endEditing:YES];
 }
 
@@ -278,7 +288,7 @@
         }
             break;
         case kTextViewEventInfo: {
-            if (eventInfoTextView.text.length < 1) {
+            if (eventInfoTextView.text.length < 2 || [self.eventInfoTextView.text isEqualToString:@"Event Information"]) {
                 [validationErrors addObject:@"\nPlease enter your event information"];
             } else {
                 [validationErrors removeObject:@"\nPlease enter your event information"];
@@ -353,6 +363,9 @@
     if(timePickListVisible) {
         [self hideTimePickerView];
     }
+    if ([self.eventInfoTextView.text isEqualToString:@"Event Information"]) {
+        self.eventInfoTextView.text = @"";
+    }
     return TRUE;
 }
 
@@ -420,12 +433,28 @@
     return retVal;
 }
 
+#pragma mark Aviary Image Section
+- (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image {
+    [photoEditorController dismissViewControllerAnimated:NO completion:nil];
+    previewPhotoView.previewImageView.image = image;
+}
+
+- (void)photoEditorCanceled:(AFPhotoEditorController *)editor {
+    [photoEditorController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark
+
 #pragma mark Actions
 - (IBAction)cancelClick:(UIBarButtonItem *)sender {
      [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)cameraClick:(UIButton *)sender {
+    [self.view endEditing:YES];
+    if(timePickListVisible) {
+        [self hideTimePickerView];
+    }
     float newX = self.lowerOverlay.frame.origin.x;
     float overlayFormX = self.overlayFormView.frame.origin.x;
     if(overlayPosition == TimeActive) {
@@ -452,6 +481,10 @@
 }
 
 - (IBAction)timeClick:(UIButton *)sender {
+    [self.view endEditing:YES];
+    if(timePickListVisible) {
+        [self hideTimePickerView];
+    }
     float newX = self.lowerOverlay.frame.origin.x;
     float overlayFormX = self.overlayFormView.frame.origin.x;
     if(overlayPosition == CameraActive) {
@@ -477,6 +510,10 @@
 }
 
 - (IBAction)locationClick:(UIButton *)sender {
+    [self.view endEditing:YES];
+    if(timePickListVisible) {
+        [self hideTimePickerView];
+    }
     float newX = self.lowerOverlay.frame.origin.x;
     float overlayFormX = self.overlayFormView.frame.origin.x;
     if(overlayPosition == TimeActive) {
