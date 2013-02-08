@@ -140,7 +140,7 @@
         case 0:
             [self performSegueWithIdentifier:SEGUE_SHOW_SIGNUP_LOGIN_HELP_VIEW_CONTROLLER sender:self];
             break;
-        case 1: [self performSegueWithIdentifier:SEGUE_SHOT_MYPROFILE_ACCOUNT_HELP_VIEW_CONTROLLER sender:self];
+        case 1: [self performSegueWithIdentifier:SEGUE_SHOW_MYPROFILE_ACCOUNT_HELP_VIEW_CONTROLLER sender:self];
             break;
         case 2: [self performSegueWithIdentifier:SEGUE_SHOW_UCAMPUS_HELP_VIEW_CONROLLER sender:self];
             break;

@@ -17,6 +17,7 @@
 @interface SelectSchoolViewController ()
 {
     UIFont *cellFont;
+    UIFont *cellFontBold;
     TextUtil *textUtil;
     NSMutableArray *sections;
 }
@@ -36,6 +37,7 @@
 {
     [super viewDidLoad];
     cellFont = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
+    cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     [UDataCache.schoolSections removeObject:@""];
     sections = UDataCache.schoolSections;
     [sections insertObject:@"" atIndex:0];
@@ -71,9 +73,9 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 10)];
     view.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.6f];
     UILabel *sectionLabel = [[UILabel alloc] init];
-    sectionLabel.frame = CGRectMake(10, 3, 10, 20);
+    sectionLabel.frame = CGRectMake(10, 1, 20, 20);
     sectionLabel.textColor = [UIColor whiteColor];
-    sectionLabel.font = cellFont;
+    sectionLabel.font = cellFontBold;
     sectionLabel.backgroundColor = [UIColor clearColor];
     sectionLabel.shadowColor = [UIColor blackColor];
     sectionLabel.shadowOffset = CGSizeMake(0.0f, -0.5f);

@@ -77,6 +77,9 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     [super viewWillAppear:animated];
 
     [self.eventsTableView reloadData];
+    // We want the view to be on top every time the it is shown
+    [featuredEventScroll setContentOffset:CGPointMake(0,0) animated:NO];
+     self.pageControl.currentPage = 0;
 }
 
 - (void)applyUlinkTableFooter {
@@ -204,8 +207,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     [featuredEventScroll addSubview:featuredEventsView];
     // set this to be 320 x number of pages
     featuredEventScroll.contentSize = CGSizeMake(320*self.pageControl.numberOfPages, 146);
-    // We want the view to be on top every time the it is shown
-    [featuredEventScroll setContentOffset:CGPointMake(0,0) animated:NO];
+
     
     self.pageControl.currentPage = 0;
     if(self.pageControl.numberOfPages == 1) {

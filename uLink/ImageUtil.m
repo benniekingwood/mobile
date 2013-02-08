@@ -7,6 +7,7 @@
 //
 
 #import "ImageUtil.h"
+#import "AppMacros.h"
 @implementation ImageUtil
 + (ImageUtil*) instance {
     static ImageUtil* _one = nil;
@@ -28,7 +29,7 @@
     if(image != nil) {
         CGFloat compression = 0.9f; // start the compression at 90% image quality
         CGFloat maxCompression = 0.1f; // go as low as 10% image quality
-        int maxFileSize = 200*1024; // measured in bytes
+        int maxFileSize = IMAGE_MAX_FILE_SIZE*1024; // measured in bytes
         retVal = UIImageJPEGRepresentation(image, compression);
         while ([retVal length] > maxFileSize && compression > maxCompression)
         {

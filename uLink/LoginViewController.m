@@ -227,7 +227,7 @@
     UDataCache.sessionUser = [[User alloc] init];
     // set the current password since it's valid
     UDataCache.sessionUser.password = currentPassword;
-    [UDataCache.sessionUser hydrateUser:rawData];
+    [UDataCache.sessionUser hydrateUser:rawData isSessionUser:YES];
 }
 - (void) hydrateCaches {
      [UDataCache hydrateCaches];

@@ -47,6 +47,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
 @synthesize schools;
 @synthesize schoolSections;
 @synthesize sessionUser;
+@synthesize topSnapper;
 @synthesize events;
 @synthesize featuredEvents;
 @synthesize snapshots;
@@ -81,6 +82,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
 }
 - (void) clearCache {
     self.sessionUser = nil;
+    self.topSnapper = nil;
     self.events = nil;
     self.snapshots = nil;
     self.tweets = nil;
@@ -331,7 +333,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
                             if(UDataCache.sessionUser.events != nil) {
                                 [UDataCache.sessionUser.events removeAllObjects];
                             }
-                            [UDataCache.sessionUser hydrateUser:response];
+                            [UDataCache.sessionUser hydrateUser:response isSessionUser:YES];
                         }
                     } else {
                     }
@@ -694,7 +696,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         NSDictionary *userRaw = [tweetsRaw[idx] objectForKey:@"ulinkuser"];
         if(userRaw != nil) {
             User *user = [[User alloc] init];
-            [user hydrateUser:userRaw];
+            [user hydrateUser:userRaw isSessionUser:NO];
             tweet.user = user;
         }
         [self.tweets insertObject:tweet atIndex:idx];
@@ -755,6 +757,13 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
                 break;
             }
         }
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE]) {
+        for (NSString *key in [self.images allKeys]) {
+            if ([cacheKey isEqualToString:key]) {
+                retVal = [self.images objectForKey:key];
+                break;
+            }
+        }
     }
     return retVal;
 }
@@ -773,6 +782,8 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         [self.snapImageThumbs removeObjectForKey:cacheKey];
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_TWEET_PROFILE]) {
         [self.tweetUserImages removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE]) {
+        [self.images removeObjectForKey:cacheKey];
     }
 }
 @end

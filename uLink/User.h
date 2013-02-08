@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "School.h"
 @interface User : NSObject
 @property (nonatomic) NSString *userId;
 @property (nonatomic) NSString *username;
@@ -17,6 +17,7 @@
 @property (nonatomic) NSString *email;
 @property (nonatomic) NSString *schoolId;
 @property (nonatomic) NSString *schoolName;
+@property (nonatomic) School *school;
 @property (nonatomic) NSString *major;
 @property (nonatomic) NSString *year;
 @property (nonatomic) NSString *schoolStatus;
@@ -28,5 +29,5 @@
 @property (strong, nonatomic) NSMutableArray *events;
 @property (strong, nonatomic) NSMutableArray *snaps;
 @property (nonatomic) NSDate *cacheAge;
-- (void) hydrateUser:(NSDictionary*)rawData;
+- (void) hydrateUser:(NSDictionary*)rawData isSessionUser:(BOOL)isSessionUser;
 @end

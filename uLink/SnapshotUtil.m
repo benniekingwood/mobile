@@ -80,7 +80,7 @@
 }
 - (Snap*) hydrateSnapUser:(id)rawSnapUser snap:(Snap*)snap {
     User *user = [[User alloc] init];
-    [user hydrateUser:[(NSDictionary*)rawSnapUser objectForKey:@"User"]];
+    [user hydrateUser:[(NSDictionary*)rawSnapUser objectForKey:@"User"] isSessionUser:NO];
     snap.user = user;
     return snap;
 }

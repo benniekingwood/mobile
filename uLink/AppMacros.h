@@ -14,7 +14,10 @@
 #pragma mark MISC CONSTANTS
 #define SLEEP_TIME_LOGIN 0
 #define AUTO_SCROLL_EVENT_TIME 6
-#define AUTO_SCROLL_UCAMPUS_HOME_TIME 6
+#define AUTO_SCROLL_UCAMPUS_HOME_TIME 20
+#define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
+#define IMAGE_MAX_FILE_SIZE 600
+#define VERSION_NUMBER @"0.2.0"
 
 #pragma mark APPEARANCE CONSTANTS
 #define ALPHA_HIGH 1.00
@@ -44,12 +47,14 @@
 #define URL_EVENT_IMAGE_MEDIUM @"http://www.theulink.com/img/files/events/medium/"
 #define URL_DEFAULT_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_featured_event.png"
+#define URL_SCHOOL_IMAGE @"http://www.theulink.com/img/files/schools/"
 
 #pragma mark IMAGE CACHE KEYS
 #define KEY_DEFAULT_USER_IMAGE @"KEY_DEFAULT_USER_IMAGE"
 #define KEY_DEFAULT_SNAP_IMAGE @"KEY_DEFAULT_SNAP_IMAGE"
 #define KEY_DEFAULT_EVENT_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
 #define KEY_DEFAULT_FEATURED_EVENT_IMAGE @"KEY_DEFAULT_FEATURED_EVENT_IMAGE"
+#define KEY_SESSION_USER_SCHOOL @"KEY_SESSION_USER_SCHOOL"
 #define IMAGE_CACHE_EVENT_THUMBS @"IMAGE_CACHE_EVENT_THUMBS"
 #define IMAGE_CACHE_SNAP_THUMBS @"IMAGE_CACHE_SNAP_THUMBS"
 #define IMAGE_CACHE_USER_THUMBS @"IMAGE_CACHE_USER_THUMBS"
@@ -57,6 +62,7 @@
 #define IMAGE_CACHE_SNAP_MEDIUM @"IMAGE_CACHE_SNAP_MEDIUM"
 #define IMAGE_CACHE_USER_MEDIUM @"IMAGE_CACHE_USER_MEDIUM"
 #define IMAGE_CACHE_TWEET_PROFILE @"IMAGE_CACHE_TWEET_PROFILE"
+#define IMAGE_CACHE @"IMAGE_CACHE_SCHOOL"
 
 #pragma mark API FUNCTIONS
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
@@ -115,7 +121,7 @@
 
 #pragma mark FONT MACROS
 #define FONT_GLOBAL @"HelveticaNeue-Light"
-
+#define FONT_GLOBAL_BOLD @"HelveticaNeue-Bold"
 #pragma mark LOCALES
 #define LOCALE_EN_US [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]
 
@@ -149,7 +155,7 @@
 #define SEGUE_SHOW_HELP_VIEW_CONTROLLER @"ShowHelpViewController"
 #define SEGUE_SHOW_TERMS_VIEW_CONTROLLER @"ShowTermsViewController"
 #define SEGUE_SHOW_SIGNUP_LOGIN_HELP_VIEW_CONTROLLER @"ShowSignupLoginHelpViewController"
-#define SEGUE_SHOT_MYPROFILE_ACCOUNT_HELP_VIEW_CONTROLLER @"ShowMyProfileAccountHelpViewController"
+#define SEGUE_SHOW_MYPROFILE_ACCOUNT_HELP_VIEW_CONTROLLER @"ShowMyProfileAccountHelpViewController"
 #define SEGUE_SHOW_UCAMPUS_HELP_VIEW_CONROLLER @"ShowUCampusHelpViewController"
 #define SEGUE_SHOW_SNAP_DETAIL_VIEW_CONTROLLER @"ShowSnapDetailViewController"
 #define SEGUE_SHOW_SETTINGS_VIEW_CONTROLLER @"ShowSettingsViewController"
@@ -157,6 +163,9 @@
 #define SEGUE_SHOW_SNAPSHOTS_CATEGORY_VIEW_CONTROLLER @"ShowSnapshotsCategoryViewController"
 #define SEGUE_SHOW_EDIT_EVENT_VIEW_CONTROLLER @"ShowEditEventViewController"
 #define SEGUE_SHOW_EVENT_DETAIL_VIEW_CONTROLLER @"ShowEventDetailViewController"
+#define SEGUE_SHOW_CAMPUS_EVENTS_VIEW_CONTROLLER @"ShowCampusEventsViewController"
+#define SEGUE_SHOW_SOCIAL_VIEW_CONTROLLER @"ShowSocialViewController"
+#define SEGUE_SHOW_SNAPSHOTS_VIEW_CONTROLLER @"ShowSnapshotsViewController"
 
 #pragma mark BUTTONS
 #define BTN_SUGGEST_HERE @"Suggest Here"
@@ -178,10 +187,6 @@
 
 #pragma mark ALERTS
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
-
-#pragma mark MISC 
-#define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
-#define VERSION_NUMBER @"0.1.0"
 
 #pragma mark TEXTFIELDS
 typedef enum {

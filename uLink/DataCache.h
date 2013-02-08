@@ -13,6 +13,7 @@
     NSMutableDictionary *schools;
     NSMutableArray *schoolSections;
     User *sessionUser;
+    User *topSnapper;
     NSMutableDictionary *images;
 }
 @property (strong, nonatomic) NSMutableDictionary *schools;
@@ -24,6 +25,7 @@
 @property (strong, nonatomic) NSMutableArray *trends;
 @property (strong, nonatomic) NSMutableArray *tweets;
 @property (strong, nonatomic) User *sessionUser;
+@property (strong, nonatomic) User *topSnapper;
 @property (strong, nonatomic) NSArray *times;
 @property (strong, nonatomic) NSMutableDictionary *images;
 @property (strong, nonatomic) NSMutableDictionary *eventImageThumbs;

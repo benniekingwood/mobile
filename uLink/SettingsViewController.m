@@ -11,6 +11,7 @@
 #import "AppMacros.h"
 #import "DataCache.h"
 #import "MainNavigationViewController.h"
+#import "ImageUtil.h"
 @interface SettingsViewController () {
     UIFont *cellFont;
     UlinkButton *logoutButton;
@@ -71,6 +72,8 @@
 - (void) logout {
     // clear all cache data
     [UDataCache clearCache];
+    // remove the school image, NOTE: this can probably be removed once we add a schoolImage cache
+    [UDataCache removeImage:KEY_SESSION_USER_SCHOOL cacheModel:IMAGE_CACHE];
     // pop back to the login screen 
     MainNavigationViewController *parent = (MainNavigationViewController*)self.presentingViewController;
     [parent popToRootViewControllerAnimated:NO];

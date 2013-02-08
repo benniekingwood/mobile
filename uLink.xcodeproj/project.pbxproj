@@ -28,6 +28,12 @@
 		0D2B73D31654E3D000B759E5 /* logouLinkv2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D2B73D21654E3D000B759E5 /* logouLinkv2@2x.png */; };
 		0D2B73D51654E52C00B759E5 /* ulink-suggest-here-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D2B73D41654E52C00B759E5 /* ulink-suggest-here-btn.png */; };
 		0D2B73D71654ECD900B759E5 /* ulink-mobile-profile-btn-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D2B73D61654ECD900B759E5 /* ulink-mobile-profile-btn-bg@2x.png */; };
+		0D35957216C0ED4E00F8B634 /* jmu_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957016C0ED4E00F8B634 /* jmu_splash.png */; };
+		0D35957316C0ED4E00F8B634 /* jmu_splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957116C0ED4E00F8B634 /* jmu_splash@2x.png */; };
+		0D35957616C0F04400F8B634 /* ucla.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957416C0F04300F8B634 /* ucla.png */; };
+		0D35957716C0F04400F8B634 /* ucla@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957516C0F04300F8B634 /* ucla@2x.png */; };
+		0D35957A16C0F40000F8B634 /* wisc_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957816C0F40000F8B634 /* wisc_splash.png */; };
+		0D35957B16C0F40000F8B634 /* wisc_splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35957916C0F40000F8B634 /* wisc_splash@2x.png */; };
 		0D35FDD5164E00100064219E /* ulink_mobile_input_field.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35FDD4164E00100064219E /* ulink_mobile_input_field.png */; };
 		0D35FDE5164E249D0064219E /* success-check.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D35FDE4164E249D0064219E /* success-check.png */; };
 		0D35FDE8164E3C2A0064219E /* ForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D35FDE7164E3C2A0064219E /* ForgotPasswordViewController.m */; };
@@ -41,7 +47,6 @@
 		0D39B772165DBFE200D4BD23 /* MainNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D39B771165DBFE200D4BD23 /* MainNavigationViewController.m */; };
 		0D39B7CE16616C5B00D4BD23 /* options.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D39B7CC16616C5B00D4BD23 /* options.png */; };
 		0D39B7CF16616C5B00D4BD23 /* options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D39B7CD16616C5B00D4BD23 /* options@2x.png */; };
-		0D39B7D116631C6C00D4BD23 /* ulink-mobile-campus-events-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D39B7D016631C6C00D4BD23 /* ulink-mobile-campus-events-splash.png */; };
 		0D39B7D3166340A000D4BD23 /* ulink-mobile-ucampus-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D39B7D2166340A000D4BD23 /* ulink-mobile-ucampus-bg.png */; };
 		0D46338B164B30D400284893 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D46338A164B30D400284893 /* UIKit.framework */; };
 		0D46338D164B30D400284893 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D46338C164B30D400284893 /* Foundation.framework */; };
@@ -120,12 +125,7 @@
 		0D8DA4A21651735C001503F5 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D8DA4A11651735C001503F5 /* ProfileViewController.m */; };
 		0DA1C27E16AAA0190089A443 /* ImageActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA1C27D16AAA0190089A443 /* ImageActivityIndicatorView.m */; };
 		0DA1C28216AD1D8F0089A443 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA1C28116AD1D8F0089A443 /* ImageUtil.m */; };
-		0DA798201663EEB8000740CD /* ulink-mobile-campus-events-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA7981E1663EEB8000740CD /* ulink-mobile-campus-events-splash@2x.png */; };
 		0DA798211663EEB8000740CD /* ulink-mobile-ucampus-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA7981F1663EEB8000740CD /* ulink-mobile-ucampus-bg@2x.png */; };
-		0DA798251663F392000740CD /* ulink-mobile-snapshots-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA798231663F392000740CD /* ulink-mobile-snapshots-splash.png */; };
-		0DA798261663F392000740CD /* ulink-mobile-snapshots-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA798241663F392000740CD /* ulink-mobile-snapshots-splash@2x.png */; };
-		0DA798291663FAF7000740CD /* ulink-mobile-social-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA798271663FAF7000740CD /* ulink-mobile-social-splash.png */; };
-		0DA7982A1663FAF7000740CD /* ulink-mobile-social-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA798281663FAF7000740CD /* ulink-mobile-social-splash@2x.png */; };
 		0DA7982D16640D1C000740CD /* UCampusMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA7982C16640D1C000740CD /* UCampusMenuCell.m */; };
 		0DA7982F16641531000740CD /* ulink-mobile-campus-events-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA7982E16641531000740CD /* ulink-mobile-campus-events-icon.png */; };
 		0DA79832166421B0000740CD /* ulink-mobile-campus-events-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DA79830166421B0000740CD /* ulink-mobile-campus-events-icon@2x.png */; };
@@ -170,6 +170,10 @@
 		0DB269CB16544B7800B999A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB269CA16544B7800B999A1 /* QuartzCore.framework */; };
 		0DB269DA1654692400B999A1 /* UlinkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB269D91654692400B999A1 /* UlinkButton.m */; };
 		0DB269DD1654731300B999A1 /* SelectSchoolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB269DC1654731300B999A1 /* SelectSchoolViewController.m */; };
+		0DC7EB5016C3616C00F0B682 /* libAviarySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC7EB4D16C3616C00F0B682 /* libAviarySDK.a */; };
+		0DC7EB5116C3616C00F0B682 /* AviarySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0DC7EB4F16C3616C00F0B682 /* AviarySDKResources.bundle */; };
+		0DC7EB5416C3724E00F0B682 /* ucampus-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DC7EB5216C3724E00F0B682 /* ucampus-bg.png */; };
+		0DC7EB5516C3724E00F0B682 /* ucampus-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DC7EB5316C3724E00F0B682 /* ucampus-bg@2x.png */; };
 		0DC91B14168034FA00141A89 /* SnapshotCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B13168034FA00141A89 /* SnapshotCategory.m */; };
 		0DC91B181680D26200141A89 /* SnapshotUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B171680D26200141A89 /* SnapshotUtil.m */; };
 		0DC91B1B1680E16000141A89 /* SnapCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B1A1680E16000141A89 /* SnapCategoryCell.m */; };
@@ -177,8 +181,6 @@
 		0DC91B2416868DD300141A89 /* EventUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B2316868DD200141A89 /* EventUtil.m */; };
 		0DC91B271686A0FB00141A89 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC91B261686A0FA00141A89 /* EventCell.m */; };
 		0DCF4C1316BED0B400CD6FE5 /* ModalImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF4C1216BED0B400CD6FE5 /* ModalImageView.m */; };
-		0DDCFAB4169B75A400CA5048 /* libAviarySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFAB1169B75A400CA5048 /* libAviarySDK.a */; };
-		0DDCFAB5169B75A400CA5048 /* AviarySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0DDCFAB3169B75A400CA5048 /* AviarySDKResources.bundle */; };
 		0DDCFAB7169B7D5C00CA5048 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFAB6169B7D5C00CA5048 /* Accelerate.framework */; };
 		0DDCFAB9169B7D6600CA5048 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFAB8169B7D6600CA5048 /* CoreData.framework */; };
 		0DDCFABB169B7D7900CA5048 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DDCFABA169B7D7900CA5048 /* libsqlite3.0.dylib */; };
@@ -244,6 +246,12 @@
 		0D2B73D21654E3D000B759E5 /* logouLinkv2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logouLinkv2@2x.png"; path = "images/logouLinkv2@2x.png"; sourceTree = "<group>"; };
 		0D2B73D41654E52C00B759E5 /* ulink-suggest-here-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-suggest-here-btn.png"; path = "images/ulink-suggest-here-btn.png"; sourceTree = "<group>"; };
 		0D2B73D61654ECD900B759E5 /* ulink-mobile-profile-btn-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-profile-btn-bg@2x.png"; path = "images/ulink-mobile-profile-btn-bg@2x.png"; sourceTree = "<group>"; };
+		0D35957016C0ED4E00F8B634 /* jmu_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jmu_splash.png; sourceTree = "<group>"; };
+		0D35957116C0ED4E00F8B634 /* jmu_splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jmu_splash@2x.png"; sourceTree = "<group>"; };
+		0D35957416C0F04300F8B634 /* ucla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ucla.png; sourceTree = "<group>"; };
+		0D35957516C0F04300F8B634 /* ucla@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ucla@2x.png"; sourceTree = "<group>"; };
+		0D35957816C0F40000F8B634 /* wisc_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wisc_splash.png; sourceTree = "<group>"; };
+		0D35957916C0F40000F8B634 /* wisc_splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wisc_splash@2x.png"; sourceTree = "<group>"; };
 		0D35FDD4164E00100064219E /* ulink_mobile_input_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ulink_mobile_input_field.png; path = images/ulink_mobile_input_field.png; sourceTree = "<group>"; };
 		0D35FDE4164E249D0064219E /* success-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "success-check.png"; path = "images/success-check.png"; sourceTree = "<group>"; };
 		0D35FDE6164E3C2A0064219E /* ForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgotPasswordViewController.h; sourceTree = "<group>"; };
@@ -266,7 +274,6 @@
 		0D39B771165DBFE200D4BD23 /* MainNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainNavigationViewController.m; sourceTree = "<group>"; };
 		0D39B7CC16616C5B00D4BD23 /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = options.png; path = images/options.png; sourceTree = "<group>"; };
 		0D39B7CD16616C5B00D4BD23 /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "options@2x.png"; path = "images/options@2x.png"; sourceTree = "<group>"; };
-		0D39B7D016631C6C00D4BD23 /* ulink-mobile-campus-events-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-campus-events-splash.png"; path = "images/ulink-mobile-campus-events-splash.png"; sourceTree = "<group>"; };
 		0D39B7D2166340A000D4BD23 /* ulink-mobile-ucampus-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-ucampus-bg.png"; path = "images/ulink-mobile-ucampus-bg.png"; sourceTree = "<group>"; };
 		0D463386164B30D400284893 /* uLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = uLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D46338A164B30D400284893 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -370,12 +377,7 @@
 		0DA1C27D16AAA0190089A443 /* ImageActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageActivityIndicatorView.m; sourceTree = "<group>"; };
 		0DA1C28016AD1D8F0089A443 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		0DA1C28116AD1D8F0089A443 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
-		0DA7981E1663EEB8000740CD /* ulink-mobile-campus-events-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-campus-events-splash@2x.png"; path = "images/ulink-mobile-campus-events-splash@2x.png"; sourceTree = "<group>"; };
 		0DA7981F1663EEB8000740CD /* ulink-mobile-ucampus-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-ucampus-bg@2x.png"; path = "images/ulink-mobile-ucampus-bg@2x.png"; sourceTree = "<group>"; };
-		0DA798231663F392000740CD /* ulink-mobile-snapshots-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-snapshots-splash.png"; path = "images/ulink-mobile-snapshots-splash.png"; sourceTree = "<group>"; };
-		0DA798241663F392000740CD /* ulink-mobile-snapshots-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-snapshots-splash@2x.png"; path = "images/ulink-mobile-snapshots-splash@2x.png"; sourceTree = "<group>"; };
-		0DA798271663FAF7000740CD /* ulink-mobile-social-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-social-splash.png"; path = "images/ulink-mobile-social-splash.png"; sourceTree = "<group>"; };
-		0DA798281663FAF7000740CD /* ulink-mobile-social-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-social-splash@2x.png"; path = "images/ulink-mobile-social-splash@2x.png"; sourceTree = "<group>"; };
 		0DA7982B16640D1C000740CD /* UCampusMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UCampusMenuCell.h; sourceTree = "<group>"; };
 		0DA7982C16640D1C000740CD /* UCampusMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UCampusMenuCell.m; sourceTree = "<group>"; };
 		0DA7982E16641531000740CD /* ulink-mobile-campus-events-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-campus-events-icon.png"; path = "images/ulink-mobile-campus-events-icon.png"; sourceTree = "<group>"; };
@@ -444,6 +446,16 @@
 		0DB269D91654692400B999A1 /* UlinkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UlinkButton.m; sourceTree = "<group>"; };
 		0DB269DB1654731300B999A1 /* SelectSchoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSchoolViewController.h; sourceTree = "<group>"; };
 		0DB269DC1654731300B999A1 /* SelectSchoolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectSchoolViewController.m; sourceTree = "<group>"; };
+		0DC7EB4716C3616C00F0B682 /* AFPhotoEditorContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorContext.h; sourceTree = "<group>"; };
+		0DC7EB4816C3616C00F0B682 /* AFPhotoEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorController.h; sourceTree = "<group>"; };
+		0DC7EB4916C3616C00F0B682 /* AFPhotoEditorControllerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorControllerOptions.h; sourceTree = "<group>"; };
+		0DC7EB4A16C3616C00F0B682 /* AFPhotoEditorCustomization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorCustomization.h; sourceTree = "<group>"; };
+		0DC7EB4B16C3616C00F0B682 /* AFPhotoEditorSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorSession.h; sourceTree = "<group>"; };
+		0DC7EB4C16C3616C00F0B682 /* AFPhotoEditorStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorStyle.h; sourceTree = "<group>"; };
+		0DC7EB4D16C3616C00F0B682 /* libAviarySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAviarySDK.a; sourceTree = "<group>"; };
+		0DC7EB4F16C3616C00F0B682 /* AviarySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AviarySDKResources.bundle; sourceTree = "<group>"; };
+		0DC7EB5216C3724E00F0B682 /* ucampus-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ucampus-bg.png"; sourceTree = "<group>"; };
+		0DC7EB5316C3724E00F0B682 /* ucampus-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ucampus-bg@2x.png"; sourceTree = "<group>"; };
 		0DC91B12168034FA00141A89 /* SnapshotCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotCategory.h; sourceTree = "<group>"; };
 		0DC91B13168034FA00141A89 /* SnapshotCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotCategory.m; sourceTree = "<group>"; };
 		0DC91B161680D26200141A89 /* SnapshotUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotUtil.h; sourceTree = "<group>"; };
@@ -458,14 +470,6 @@
 		0DC91B261686A0FA00141A89 /* EventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCell.m; sourceTree = "<group>"; };
 		0DCF4C1116BED0B400CD6FE5 /* ModalImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalImageView.h; sourceTree = "<group>"; };
 		0DCF4C1216BED0B400CD6FE5 /* ModalImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalImageView.m; sourceTree = "<group>"; };
-		0DDCFAAB169B75A400CA5048 /* AFPhotoEditorContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorContext.h; sourceTree = "<group>"; };
-		0DDCFAAC169B75A400CA5048 /* AFPhotoEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorController.h; sourceTree = "<group>"; };
-		0DDCFAAD169B75A400CA5048 /* AFPhotoEditorControllerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorControllerOptions.h; sourceTree = "<group>"; };
-		0DDCFAAE169B75A400CA5048 /* AFPhotoEditorCustomization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorCustomization.h; sourceTree = "<group>"; };
-		0DDCFAAF169B75A400CA5048 /* AFPhotoEditorSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorSession.h; sourceTree = "<group>"; };
-		0DDCFAB0169B75A400CA5048 /* AFPhotoEditorStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPhotoEditorStyle.h; sourceTree = "<group>"; };
-		0DDCFAB1169B75A400CA5048 /* libAviarySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAviarySDK.a; sourceTree = "<group>"; };
-		0DDCFAB3169B75A400CA5048 /* AviarySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AviarySDKResources.bundle; sourceTree = "<group>"; };
 		0DDCFAB6169B7D5C00CA5048 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		0DDCFAB8169B7D6600CA5048 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0DDCFABA169B7D7900CA5048 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
@@ -523,8 +527,8 @@
 				0D46338B164B30D400284893 /* UIKit.framework in Frameworks */,
 				0D46338D164B30D400284893 /* Foundation.framework in Frameworks */,
 				0D46338F164B30D400284893 /* CoreGraphics.framework in Frameworks */,
-				0DDCFAB4169B75A400CA5048 /* libAviarySDK.a in Frameworks */,
 				0DDD915E16A9169E002F2E25 /* SDWebImage.framework in Frameworks */,
+				0DC7EB5016C3616C00F0B682 /* libAviarySDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,8 +589,8 @@
 		0D39B673165C6DC700D4BD23 /* plugins */ = {
 			isa = PBXGroup;
 			children = (
+				0DC7EB4516C3616C00F0B682 /* AviarySDK */,
 				0D519A6116A2551500A791F8 /* Reachability */,
-				0DDCFAA9169B75A400CA5048 /* AviarySDK */,
 				0D39B7CB165DE3FB00D4BD23 /* mfsidemenu */,
 			);
 			name = plugins;
@@ -706,6 +710,14 @@
 		0D4633D8164B3AD400284893 /* backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				0DC7EB5216C3724E00F0B682 /* ucampus-bg.png */,
+				0DC7EB5316C3724E00F0B682 /* ucampus-bg@2x.png */,
+				0D35957816C0F40000F8B634 /* wisc_splash.png */,
+				0D35957916C0F40000F8B634 /* wisc_splash@2x.png */,
+				0D35957416C0F04300F8B634 /* ucla.png */,
+				0D35957516C0F04300F8B634 /* ucla@2x.png */,
+				0D35957016C0ED4E00F8B634 /* jmu_splash.png */,
+				0D35957116C0ED4E00F8B634 /* jmu_splash@2x.png */,
 				0D0D490016AE7081009AB2CB /* default_campus_event.png */,
 				0D0D490116AE7081009AB2CB /* default_featured_event.png */,
 				0D0D490216AE7081009AB2CB /* default_snap.png */,
@@ -719,14 +731,8 @@
 				0D4633A0164B30D400284893 /* Default-568h@2x.png */,
 				0D2B73C01654D3FF00B759E5 /* select_your_school@2x.png */,
 				0DDEAE0E164CD05E0074388A /* select_your_school.png */,
-				0DA798271663FAF7000740CD /* ulink-mobile-social-splash.png */,
-				0DA798281663FAF7000740CD /* ulink-mobile-social-splash@2x.png */,
-				0DA798231663F392000740CD /* ulink-mobile-snapshots-splash.png */,
-				0DA798241663F392000740CD /* ulink-mobile-snapshots-splash@2x.png */,
-				0DA7981E1663EEB8000740CD /* ulink-mobile-campus-events-splash@2x.png */,
 				0DA7981F1663EEB8000740CD /* ulink-mobile-ucampus-bg@2x.png */,
 				0D39B7D2166340A000D4BD23 /* ulink-mobile-ucampus-bg.png */,
-				0D39B7D016631C6C00D4BD23 /* ulink-mobile-campus-events-splash.png */,
 				0DEA907E165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png */,
 				0DEA907C165AC82C0065A970 /* ulink-mobile-blk-hr-bg.png */,
 				0DEA90721658423E0065A970 /* bg_cork.png */,
@@ -1034,33 +1040,33 @@
 			name = utils;
 			sourceTree = "<group>";
 		};
-		0DDCFAA9169B75A400CA5048 /* AviarySDK */ = {
+		0DC7EB4516C3616C00F0B682 /* AviarySDK */ = {
 			isa = PBXGroup;
 			children = (
-				0DDCFAAA169B75A400CA5048 /* Headers */,
-				0DDCFAB1169B75A400CA5048 /* libAviarySDK.a */,
-				0DDCFAB2169B75A400CA5048 /* Resources */,
+				0DC7EB4616C3616C00F0B682 /* Headers */,
+				0DC7EB4D16C3616C00F0B682 /* libAviarySDK.a */,
+				0DC7EB4E16C3616C00F0B682 /* Resources */,
 			);
 			path = AviarySDK;
 			sourceTree = "<group>";
 		};
-		0DDCFAAA169B75A400CA5048 /* Headers */ = {
+		0DC7EB4616C3616C00F0B682 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				0DDCFAAB169B75A400CA5048 /* AFPhotoEditorContext.h */,
-				0DDCFAAC169B75A400CA5048 /* AFPhotoEditorController.h */,
-				0DDCFAAD169B75A400CA5048 /* AFPhotoEditorControllerOptions.h */,
-				0DDCFAAE169B75A400CA5048 /* AFPhotoEditorCustomization.h */,
-				0DDCFAAF169B75A400CA5048 /* AFPhotoEditorSession.h */,
-				0DDCFAB0169B75A400CA5048 /* AFPhotoEditorStyle.h */,
+				0DC7EB4716C3616C00F0B682 /* AFPhotoEditorContext.h */,
+				0DC7EB4816C3616C00F0B682 /* AFPhotoEditorController.h */,
+				0DC7EB4916C3616C00F0B682 /* AFPhotoEditorControllerOptions.h */,
+				0DC7EB4A16C3616C00F0B682 /* AFPhotoEditorCustomization.h */,
+				0DC7EB4B16C3616C00F0B682 /* AFPhotoEditorSession.h */,
+				0DC7EB4C16C3616C00F0B682 /* AFPhotoEditorStyle.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
 		};
-		0DDCFAB2169B75A400CA5048 /* Resources */ = {
+		0DC7EB4E16C3616C00F0B682 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0DDCFAB3169B75A400CA5048 /* AviarySDKResources.bundle */,
+				0DC7EB4F16C3616C00F0B682 /* AviarySDKResources.bundle */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1240,14 +1246,8 @@
 				0DEA907F165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png in Resources */,
 				0D39B7CE16616C5B00D4BD23 /* options.png in Resources */,
 				0D39B7CF16616C5B00D4BD23 /* options@2x.png in Resources */,
-				0D39B7D116631C6C00D4BD23 /* ulink-mobile-campus-events-splash.png in Resources */,
 				0D39B7D3166340A000D4BD23 /* ulink-mobile-ucampus-bg.png in Resources */,
-				0DA798201663EEB8000740CD /* ulink-mobile-campus-events-splash@2x.png in Resources */,
 				0DA798211663EEB8000740CD /* ulink-mobile-ucampus-bg@2x.png in Resources */,
-				0DA798251663F392000740CD /* ulink-mobile-snapshots-splash.png in Resources */,
-				0DA798261663F392000740CD /* ulink-mobile-snapshots-splash@2x.png in Resources */,
-				0DA798291663FAF7000740CD /* ulink-mobile-social-splash.png in Resources */,
-				0DA7982A1663FAF7000740CD /* ulink-mobile-social-splash@2x.png in Resources */,
 				0DA7982F16641531000740CD /* ulink-mobile-campus-events-icon.png in Resources */,
 				0DA79832166421B0000740CD /* ulink-mobile-campus-events-icon@2x.png in Resources */,
 				0DA79833166421B0000740CD /* ulink-mobile-social-icon.png in Resources */,
@@ -1283,13 +1283,21 @@
 				0D61E66E167DA76C00D3F7F4 /* Walkway Bold.ttf in Resources */,
 				0D6EB7E116921E8C009B88C0 /* close-button.png in Resources */,
 				0D6EB7E216921E8C009B88C0 /* close-button@2x.png in Resources */,
-				0DDCFAB5169B75A400CA5048 /* AviarySDKResources.bundle in Resources */,
 				0D519A5F169D334000A791F8 /* ulink_short_logo.png in Resources */,
 				0D519A60169D334000A791F8 /* ulink_short_logo@2x.png in Resources */,
 				0D0D490416AE7081009AB2CB /* default_campus_event.png in Resources */,
 				0D0D490516AE7081009AB2CB /* default_featured_event.png in Resources */,
 				0D0D490616AE7081009AB2CB /* default_snap.png in Resources */,
 				0D0D490716AE7081009AB2CB /* default_user.jpg in Resources */,
+				0D35957216C0ED4E00F8B634 /* jmu_splash.png in Resources */,
+				0D35957316C0ED4E00F8B634 /* jmu_splash@2x.png in Resources */,
+				0D35957616C0F04400F8B634 /* ucla.png in Resources */,
+				0D35957716C0F04400F8B634 /* ucla@2x.png in Resources */,
+				0D35957A16C0F40000F8B634 /* wisc_splash.png in Resources */,
+				0D35957B16C0F40000F8B634 /* wisc_splash@2x.png in Resources */,
+				0DC7EB5116C3616C00F0B682 /* AviarySDKResources.bundle in Resources */,
+				0DC7EB5416C3724E00F0B682 /* ucampus-bg.png in Resources */,
+				0DC7EB5516C3724E00F0B682 /* ucampus-bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

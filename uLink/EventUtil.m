@@ -91,7 +91,7 @@
 
 - (Event*) hydrateEventUser:(id)rawEventUser event:(Event*)event {
     User *user = [[User alloc] init];
-    [user hydrateUser:[(NSDictionary*)rawEventUser objectForKey:@"User"]];
+    [user hydrateUser:[(NSDictionary*)rawEventUser objectForKey:@"User"] isSessionUser:NO];
     event.user = user;
     return event;
 }
