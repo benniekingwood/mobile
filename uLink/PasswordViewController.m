@@ -307,6 +307,7 @@
     @catch (NSException *exception) {
         self.view.userInteractionEnabled = YES;
         self.navigationItem.rightBarButtonItem.enabled = TRUE;
+        errorAlertView.message = @"There was a problem updating your password.  Please try again later or contact help@theulink.com.";
         // show alert to user
         [errorAlertView show];
     }

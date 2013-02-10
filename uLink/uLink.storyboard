@@ -683,7 +683,7 @@
                                             <segue destination="YJH-Pk-ttZ" kind="push" id="lJq-Yc-tyj"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="33" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWp-fe-mOg">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWp-fe-mOg">
                                         <constraints>
                                             <constraint firstAttribute="width" constant="97" id="5K2-rn-wlT"/>
                                             <constraint firstAttribute="height" constant="61" id="elc-gi-8PC"/>
@@ -708,7 +708,7 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="3" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTY-JI-f8K">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTY-JI-f8K">
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="3R8-9p-xXA"/>
                                         </constraints>
@@ -737,7 +737,7 @@
                                     <constraint firstItem="DC9-Ka-LwF" firstAttribute="top" secondItem="MTY-JI-f8K" secondAttribute="top" type="default" id="CCX-iS-0kv"/>
                                     <constraint firstItem="XzD-9K-yaR" firstAttribute="leading" secondItem="sBu-If-RTd" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="GWj-OJ-cUI"/>
                                     <constraint firstItem="GNY-MA-6R1" firstAttribute="top" secondItem="sBu-If-RTd" secondAttribute="top" constant="21" id="JJN-NZ-4jt"/>
-                                    <constraint firstAttribute="trailing" secondItem="GNY-MA-6R1" secondAttribute="trailing" constant="42" id="Sxc-Zc-uep"/>
+                                    <constraint firstAttribute="trailing" secondItem="22M-bh-v9J" secondAttribute="trailing" constant="15" id="OmW-ph-SXx"/>
                                     <constraint firstAttribute="bottom" secondItem="XzD-9K-yaR" secondAttribute="bottom" constant="14" id="YRI-E3-mls"/>
                                     <constraint firstItem="iWp-fe-mOg" firstAttribute="leading" secondItem="MTY-JI-f8K" secondAttribute="leading" type="default" id="avK-Ef-KBR"/>
                                     <constraint firstItem="MTY-JI-f8K" firstAttribute="top" secondItem="sBu-If-RTd" secondAttribute="top" constant="109" id="cFx-3r-z9G"/>
@@ -5393,6 +5393,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="270" id="IW3-Qx-uDE"/>
+                                    <constraint firstAttribute="width" constant="289" id="x5C-GY-h1R"/>
                                 </constraints>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -5427,10 +5428,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                     <outlet property="delegate" destination="QpB-4S-MDV" id="hNp-nC-N8R"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Virginia Tech Trends" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lvI-zP-uB1">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="231" id="Csy-sa-GpL"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Virginia Tech Trends" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lvI-zP-uB1">
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -5525,15 +5523,15 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                             <constraint firstItem="oZL-Ui-Vcq" firstAttribute="bottom" secondItem="wYz-so-MzX" secondAttribute="bottom" type="default" id="DsR-DC-TDG"/>
                             <constraint firstItem="BUa-7P-VDz" firstAttribute="top" secondItem="wYz-so-MzX" secondAttribute="top" constant="161" id="JSd-I4-ztq"/>
                             <constraint firstItem="oZL-Ui-Vcq" firstAttribute="leading" secondItem="wYz-so-MzX" secondAttribute="leading" type="default" id="NmZ-oI-HqF"/>
-                            <constraint firstItem="oZL-Ui-Vcq" firstAttribute="centerX" secondItem="wYz-so-MzX" secondAttribute="centerX" type="default" id="UBW-6R-vNJ"/>
+                            <constraint firstItem="lvI-zP-uB1" firstAttribute="leading" secondItem="wYz-so-MzX" secondAttribute="leading" type="default" id="UfE-rm-umK"/>
                             <constraint firstItem="BUa-7P-VDz" firstAttribute="leading" secondItem="wYz-so-MzX" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Vqc-Vl-sS4"/>
-                            <constraint firstItem="PzR-tM-d4c" firstAttribute="centerX" secondItem="lvI-zP-uB1" secondAttribute="centerX" type="default" id="aBi-FA-UaJ"/>
                             <constraint firstItem="PzR-tM-d4c" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wYz-so-MzX" secondAttribute="top" constant="29" type="user" id="cwK-xy-3cE"/>
-                            <constraint firstItem="PzR-tM-d4c" firstAttribute="centerX" secondItem="oZL-Ui-Vcq" secondAttribute="centerX" type="default" id="dF9-sk-kUt"/>
+                            <constraint firstItem="lvI-zP-uB1" firstAttribute="trailing" secondItem="wYz-so-MzX" secondAttribute="trailing" type="default" id="dKg-Tt-F9a"/>
                             <constraint firstItem="hED-Xz-HNN" firstAttribute="trailing" secondItem="PzR-tM-d4c" secondAttribute="trailing" type="default" id="eLj-1b-Fq9"/>
+                            <constraint firstItem="oZL-Ui-Vcq" firstAttribute="centerX" secondItem="lvI-zP-uB1" secondAttribute="centerX" type="default" id="q4j-is-SpZ"/>
                             <constraint firstItem="hED-Xz-HNN" firstAttribute="leading" secondItem="PzR-tM-d4c" secondAttribute="leading" type="default" id="r4C-xe-Tl6"/>
                             <constraint firstItem="BUa-7P-VDz" firstAttribute="top" secondItem="PzR-tM-d4c" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="v7h-Mi-eCf"/>
-                            <constraint firstItem="PzR-tM-d4c" firstAttribute="leading" secondItem="wYz-so-MzX" secondAttribute="leading" constant="16" id="zIN-fZ-dER"/>
+                            <constraint firstItem="PzR-tM-d4c" firstAttribute="centerX" secondItem="lvI-zP-uB1" secondAttribute="centerX" type="default" id="weY-1H-wBE"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -6412,7 +6410,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="aW1-Y9-rEi"/>
         <segue reference="M9F-rl-iBX"/>
-        <segue reference="ntw-wn-Fcr"/>
     </inferredMetricsTieBreakers>
 </document>

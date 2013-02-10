@@ -68,6 +68,8 @@
                      completion:^(BOOL finished){ //task after an animation ends
                          [self performSelector:@selector(animateBackground) withObject:nil afterDelay:0.0];
                      }];
+    self.usernameTextField.text = @"";
+    self.passwordTextField.text = @"";
 }
 -(void)animateBackground {
     [UIView animateWithDuration:15.0
@@ -199,6 +201,12 @@
                             [NSThread sleepForTimeInterval:SLEEP_TIME_LOGIN];
                             [self performSegueWithIdentifier:SEGUE_SHOW_MAIN_TAB_BAR_VIEW_CONTROLLER sender:self];
                         } else if ([result isEqualToString:LOGIN_AUTOPASS]) {
+                            /*
+                             * Load the user here, because we need the user id
+                             * when changing the password
+                             */
+                            [self loadSessionUserData:response];
+                
                             [self performSegueWithIdentifier:SEGUE_SHOW_PASSWORD_VIEW_CONTROLLER sender:self];
                         } else if ([(NSString*)result isEqualToString:LOGIN_INACTIVE]) {
                            errorAlertView.message = @"Your account is inactive, please check your email to complete the activation process or contact help@theulink.com.";

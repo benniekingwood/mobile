@@ -127,10 +127,22 @@
     // if there is network connectivity, we can continue
     if(UDataCache.sessionUser != nil && networkActive) {
         //NSLog(@"rehyrdating caches");
+   
         // pop to main tab bar view controller
         MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-        [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
-        [UDataCache rehydrateCaches:YES];
+        
+        // If it's not the main bar controller, clear caches and pop back to the root view controller
+        if(![mainTabBarController isKindOfClass:[MainTabBarViewController class]]) {
+            // clear all cache data
+            [UDataCache clearCache];
+            // remove the school image, NOTE: this can probably be removed once we add a schoolImage cache
+            [UDataCache removeImage:KEY_SESSION_USER_SCHOOL cacheModel:IMAGE_CACHE];
+        } else {
+            // always default the the ucampus home
+            [mainTabBarController setSelectedIndex:0];
+            [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
+            [UDataCache rehydrateCaches:YES];
+        }
     } else if (networkActive) {
         // we know that we have a network connection, but no user so just rehydrate the schools cache
         [UDataCache rehydrateSchoolCache:YES];

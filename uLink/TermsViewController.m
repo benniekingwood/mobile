@@ -30,6 +30,15 @@
 	// Do any additional setup after loading the view.
     self.termsTextView.layer.cornerRadius = 5;
     self.termsTextView.layer.masksToBounds = YES;
+    
+    // adjust the height of the text view if it's an iPhone5
+   /* CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    if (screenHeight > 560) {
+        CGRect frame = self.termsTextView.frame;
+        frame.size.height = screenHeight-30;
+        self.termsTextView.frame = frame;
+    }*/
 }
 
 - (void)didReceiveMemoryWarning

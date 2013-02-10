@@ -40,7 +40,13 @@ userId,username,firstname,lastname,password,email,schoolId,major,year,schoolStat
     self.lastname  = (![[rawData objectForKey:@"lastname"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"lastname"] : @"";
     self.schoolId = [rawData objectForKey:@"school_id"];
     self.schoolStatus = (![[rawData objectForKey:@"school_status"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"school_status"] : @"";
-    self.twitterEnabled = (BOOL)[rawData objectForKey:@"twitter_enabled"];
+    
+    if(![[rawData objectForKey:@"twitter_enabled"] isKindOfClass:[NSNull class]]) {
+        self.twitterEnabled = ([[rawData objectForKey:@"twitter_enabled"]boolValue] == TRUE);
+    } else {
+        self.twitterEnabled = FALSE;
+    }
+    
     self.twitterUsername = (![[rawData objectForKey:@"twitter_username"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"twitter_username"] : @"";
     self.schoolName = (![[rawData objectForKey:@"school_name"] isKindOfClass:[NSNull class]])  ? [rawData objectForKey:@"school_name"] : @"";
     self.userImgURL = ([[rawData objectForKey:@"image_url"] isKindOfClass:[NSNull class]] || [[rawData objectForKey:@"image_url"] isEqualToString:@"<null>"]) ? nil : [rawData objectForKey:@"image_url"];
