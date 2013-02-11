@@ -145,6 +145,7 @@
 #define CONTROLLER_PROFILE_VIEW_CONTROLLER_ID @"ProfileViewController"
 #define CONTROLLER_PROFILE_PICTURE_VIEW_CONTROLLER_ID @"ProfilePictureViewController"
 #define CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID @"UserProfileViewController"
+#define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
 
 #pragma mark SEQUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"

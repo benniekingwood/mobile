@@ -786,4 +786,26 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         [self.images removeObjectForKey:cacheKey];
     }
 }
+
+- (BOOL) userIsLoggedIn {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return ((BOOL)[defaults objectForKey:@"userIsLoggedIn"]);
+}
+
+- (void) storeUserLoginInfo {
+    // persist last successful login data on the device
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:self.sessionUser.username forKey:@"username"];
+    [defaults setObject:self.sessionUser.password forKey:@"password"];
+    [defaults setObject:@"YES" forKey:@"userIsLoggedIn"];
+    [defaults synchronize];
+}
+- (void) removeLoginInfo {
+    // remove last successful login data on the device
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"username"];
+    [defaults removeObjectForKey:@"password"];
+    [defaults removeObjectForKey:@"userIsLoggedIn"];
+    [defaults synchronize];
+}
 @end

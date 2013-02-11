@@ -70,6 +70,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (void) logout {
+    [UDataCache removeLoginInfo];
     // clear all cache data
     [UDataCache clearCache];
     // remove the school image, NOTE: this can probably be removed once we add a schoolImage cache

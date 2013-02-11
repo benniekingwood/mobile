@@ -11,9 +11,14 @@
 #import "ActivityIndicatorView.h"
 @interface LoginViewController : UIViewController <UITextFieldDelegate> {
 IBOutlet UlinkButton *logInButton;
+    NSString *currentPassword;
+    NSString *username;
 }
+@property (nonatomic) NSString *currentPassword;
+@property (nonatomic) NSString *username;
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (strong, nonatomic) IBOutlet UITextField *usernameTextField;
 - (IBAction)loginClick:(id)sender;
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundView;
+- (void) login;
 @end

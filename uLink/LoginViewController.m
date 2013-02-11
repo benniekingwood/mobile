@@ -12,7 +12,6 @@
 #import "DataCache.h"
 @interface LoginViewController () {
     AlertView *errorAlertView;
-    NSString *currentPassword;
     NSString *defaulValidationMsg;
     NSHashTable *validationErrors;
     ActivityIndicatorView *activityIndicator;
@@ -23,7 +22,7 @@
 
 @implementation LoginViewController
 @synthesize backgroundView;
-@synthesize usernameTextField, passwordTextField;
+@synthesize usernameTextField, passwordTextField, currentPassword, username;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -127,6 +126,9 @@
     if(textField.tag == kTextFieldPassword) {
         currentPassword = self.passwordTextField.text;
     }
+    if(textField.tag == kTextFieldUsername) {
+        username = self.usernameTextField.text;
+    }
     return YES;
 }
 
@@ -157,24 +159,28 @@
     {
         PasswordViewController *detailViewController = [segue destinationViewController];
         detailViewController.autoPass = TRUE;
-    }
+    } 
     [activityIndicator hideActivityIndicator:self.view];
 }
 - (IBAction)loginClick:(id)sender {
+    [self validateField:kTextFieldUsername];
+    [self validateField:kTextFieldPassword];
+    if([validationErrors count] > 0) {
+        errorAlertView.message = @"";
+        for (NSString *error in validationErrors) {
+            errorAlertView.message = [errorAlertView.message stringByAppendingString:error];
+        }
+        [errorAlertView show];
+        return;
+    }
+    [self login];
+}
+
+- (void) login {
     [self.view endEditing:YES];
     @try {
-        [self validateField:kTextFieldUsername];
-        [self validateField:kTextFieldPassword];
-        if([validationErrors count] > 0) {
-            errorAlertView.message = @"";
-            for (NSString *error in validationErrors) {
-                errorAlertView.message = [errorAlertView.message stringByAppendingString:error];
-            }
-            [errorAlertView show];
-            return;
-        }
         [activityIndicator showActivityIndicator:self.view];
-        NSString *requestData = [@"username=" stringByAppendingString:self.usernameTextField.text];
+        NSString *requestData = [@"username=" stringByAppendingString:username];
         requestData = [requestData stringByAppendingString:[@"&password=" stringByAppendingString:currentPassword]];
         requestData = [requestData stringByAppendingString:[@"&mobile_login=" stringByAppendingString:@"yes"]];
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_USERS_LOG_IN]]];
@@ -199,6 +205,7 @@
                             [self loadSessionUserData:response];
                             [self performSelectorInBackground:@selector(hydrateCaches) withObject:self];
                             [NSThread sleepForTimeInterval:SLEEP_TIME_LOGIN];
+                            [UDataCache storeUserLoginInfo];
                             [self performSegueWithIdentifier:SEGUE_SHOW_MAIN_TAB_BAR_VIEW_CONTROLLER sender:self];
                         } else if ([result isEqualToString:LOGIN_AUTOPASS]) {
                             /*
@@ -206,14 +213,14 @@
                              * when changing the password
                              */
                             [self loadSessionUserData:response];
-                
+                            [UDataCache storeUserLoginInfo];
                             [self performSegueWithIdentifier:SEGUE_SHOW_PASSWORD_VIEW_CONTROLLER sender:self];
                         } else if ([(NSString*)result isEqualToString:LOGIN_INACTIVE]) {
-                           errorAlertView.message = @"Your account is inactive, please check your email to complete the activation process or contact help@theulink.com.";
-                           [errorAlertView show];
+                            errorAlertView.message = @"Your account is inactive, please check your email to complete the activation process or contact help@theulink.com.";
+                            [errorAlertView show];
                         } else {
-                           errorAlertView.message = @"Invalid login, please try again.";
-                           [errorAlertView show];
+                            errorAlertView.message = @"Invalid login, please try again.";
+                            [errorAlertView show];
                         }
                     } else {
                         errorAlertView.message = @"There was a problem with your login.  Please try again later or contact help@theulink.com.";
@@ -229,13 +236,13 @@
         self.view.userInteractionEnabled = YES;
         // show alert to user
         [errorAlertView show];
-    }
+    } 
 }
 - (void) loadSessionUserData:(NSDictionary*)rawData {
     UDataCache.sessionUser = [[User alloc] init];
     // set the current password since it's valid
     UDataCache.sessionUser.password = currentPassword;
-    [UDataCache.sessionUser hydrateUser:rawData isSessionUser:YES];
+    [UDataCache.sessionUser hydrateUser:rawData isSessionUser:YES];    
 }
 - (void) hydrateCaches {
      [UDataCache hydrateCaches];

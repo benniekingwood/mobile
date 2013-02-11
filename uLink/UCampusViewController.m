@@ -40,6 +40,7 @@
 {
     [super viewDidLoad];
     self.tabBarController.navigationItem.hidesBackButton = YES;
+    
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
     scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,screenHeight)];

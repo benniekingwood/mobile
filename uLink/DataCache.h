@@ -58,4 +58,7 @@
 - (void) rehydrateImageCache:(BOOL)checkAge;
 - (void) incrementActiveProcesses:(int)processCount;
 - (void) decrementActiveProcesses;
+- (BOOL) userIsLoggedIn;
+- (void) storeUserLoginInfo;
+- (void) removeLoginInfo;
 @end

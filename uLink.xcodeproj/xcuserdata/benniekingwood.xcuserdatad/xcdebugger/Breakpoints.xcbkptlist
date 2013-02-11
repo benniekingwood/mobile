@@ -33,19 +33,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "uLink/LoginViewController.m"
-         timestampString = "382142178.363137"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "196"
-         endingLineNumber = "196"
-         landmarkName = "-loginClick:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "uLink/EditProfileViewController.m"
          timestampString = "381475143.004747"
          startingColumnNumber = "9223372036854775807"
@@ -92,19 +79,6 @@
          startingLineNumber = "289"
          endingLineNumber = "289"
          landmarkName = "-rehydrateTrendsCache:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "uLink/AppDelegate.m"
-         timestampString = "382219581.570236"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "168"
-         endingLineNumber = "168"
-         landmarkName = "-applicationDidBecomeActive:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -333,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "uLink/LoginViewController.m"
-         timestampString = "382142178.363137"
+         timestampString = "382228265.098938"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "235"
-         endingLineNumber = "235"
+         startingLineNumber = "242"
+         endingLineNumber = "242"
          landmarkName = "-loadSessionUserData:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -346,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "uLink/LoginViewController.m"
-         timestampString = "382142178.363137"
+         timestampString = "382228265.098938"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "234"
-         endingLineNumber = "234"
+         startingLineNumber = "241"
+         endingLineNumber = "241"
          landmarkName = "-loadSessionUserData:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -365,6 +339,19 @@
          startingLineNumber = "47"
          endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "uLink/AppDelegate.m"
+         timestampString = "382232041.353624"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "180"
+         endingLineNumber = "180"
+         landmarkName = "-applicationDidBecomeActive:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

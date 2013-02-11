@@ -18,6 +18,7 @@
 #import "Reachability.h"
 #import "UCampusViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
+#import "LoginViewController.h"
 
 @implementation AppDelegate {
     UIStoryboard* storyboard;
@@ -107,6 +108,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    //NSLog(@"applicationDidEnterBackground");
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     //NSLog(@"applicationDidEnterBackground");
@@ -143,7 +145,7 @@
             [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
             [UDataCache rehydrateCaches:YES];
         }
-    } else if (networkActive) {
+    } else if (networkActive) {        
         // we know that we have a network connection, but no user so just rehydrate the schools cache
         [UDataCache rehydrateSchoolCache:YES];
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
@@ -154,7 +156,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-   // NSLog(@"applicationDidBecomeActive");
+    //NSLog(@"applicationDidBecomeActive");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     BOOL networkActive = FALSE;
     // check for network connectivity
@@ -166,13 +168,30 @@
     }
     
    if (UDataCache.sessionUser == nil && networkActive) {
-        // we know that we have a network connection, but no user so just rehydrate the schools cache
-        [UDataCache rehydrateSchoolCache:NO];
-        [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
-        [UDataCache hydrateSnapshotCategoriesCache:NO];
-       
-       // pop back to the login screen
-       [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
+       /*
+        * If the user has logged in before and their session
+        * has expired, attempt to re-log them in again which
+        * the last successful login information.
+        */
+       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+       if([UDataCache userIsLoggedIn]) {
+           // pop back to the root, then to the login screen
+           [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
+            LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_LOGIN_VIEW_CONTROLLER_ID];
+            [((MainNavigationViewController*)self.window.rootViewController) pushViewController:loginViewController animated:NO];
+           // set the username and password from the user defaults
+           loginViewController.username = (NSString*)[defaults objectForKey:@"username"];
+           loginViewController.currentPassword = (NSString*)[defaults objectForKey:@"password"];
+           // perform a login
+           [loginViewController login];
+       } else {
+           // we know that we have a network connection, but no user so just rehydrate the schools cache
+           [UDataCache rehydrateSchoolCache:NO];
+           [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+           [UDataCache hydrateSnapshotCategoriesCache:NO];
+           // pop back to the login screen
+           [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
+       }
     }
 }
 
