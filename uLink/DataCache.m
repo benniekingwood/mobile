@@ -133,7 +133,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         activeProcesses+=processCount;
         // if activity indicator is not shown, show it
         if(activeProcesses > 0 && !indicatorVisible) {
-            [UAppDelegate showActivityIndicator];
+            //[UAppDelegate showActivityIndicator];
             indicatorVisible = YES;
         }
     }
@@ -145,7 +145,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         if(activeProcesses <= 0 && indicatorVisible) {
             activeProcesses = 0;
             indicatorVisible = NO;
-            [UAppDelegate hideActivityIndicator];
+            //[UAppDelegate hideActivityIndicator];
         }
     }
 }
@@ -789,7 +789,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
 
 - (BOOL) userIsLoggedIn {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return ((BOOL)[defaults objectForKey:@"userIsLoggedIn"]);
+    return ([defaults objectForKey:@"userIsLoggedIn"] != nil);
 }
 
 - (void) storeUserLoginInfo {

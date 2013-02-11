@@ -11,4 +11,7 @@
 @interface ImageActivityIndicatorView : UIView
 -(void) showActivityIndicator:(UIView*)view;
 -(void) hideActivityIndicator:(UIView*)view;
+- (void) largeModeOn;
+@property (nonatomic) BOOL centerOnScreen;
+
 @end

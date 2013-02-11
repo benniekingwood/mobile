@@ -12,4 +12,5 @@
 -(void) showActivityIndicator:(UIView*)view;
 -(void) hideActivityIndicator:(UIView*)view;
 -(void) initWhiteIndicator;
+@property (nonatomic) BOOL addToWindow;
 @end

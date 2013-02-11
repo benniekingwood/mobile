@@ -8,18 +8,22 @@
 
 #import "ActivityIndicatorView.h"
 
-@implementation ActivityIndicatorView {
+@interface ActivityIndicatorView() {
     UIView *spinnerView;
     UILabel *backgroundOverlay;
     UIActivityIndicatorView *spinner;
     UIView *modalOverlay;
 }
-
+@end
+@implementation ActivityIndicatorView
+@synthesize addToWindow;
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        // default to add to the window of the passed in view
+        self.addToWindow = YES;
         spinnerView = [[UIView alloc] initWithFrame:CGRectMake(-2, -100, 324, 50)];
         backgroundOverlay = [[UILabel alloc] initWithFrame:CGRectMake(0,0, 324, 50)];
         backgroundOverlay.backgroundColor = [UIColor blackColor];
@@ -39,8 +43,14 @@
 }
 - (void) showActivityIndicator:(UIView*)view {
     [spinner startAnimating];
-    [view.window addSubview:modalOverlay];
-    [view.window addSubview:spinnerView];
+    if (self.addToWindow) {
+        [view.window addSubview:modalOverlay];
+        [view.window addSubview:spinnerView];
+    } else {
+        [view addSubview:modalOverlay];
+        [view addSubview:spinnerView];
+    }
+    
     view.userInteractionEnabled = NO;
     modalOverlay.userInteractionEnabled = YES;
     [[view.superview subviews]makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:FALSE]];

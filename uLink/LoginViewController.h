@@ -20,5 +20,5 @@ IBOutlet UlinkButton *logInButton;
 @property (strong, nonatomic) IBOutlet UITextField *usernameTextField;
 - (IBAction)loginClick:(id)sender;
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundView;
-- (void) login;
+- (void) login:(BOOL)relogin;
 @end

@@ -183,7 +183,7 @@
            loginViewController.username = (NSString*)[defaults objectForKey:@"username"];
            loginViewController.currentPassword = (NSString*)[defaults objectForKey:@"password"];
            // perform a login
-           [loginViewController login];
+           [loginViewController login:YES];
        } else {
            // we know that we have a network connection, but no user so just rehydrate the schools cache
            [UDataCache rehydrateSchoolCache:NO];

@@ -10,6 +10,7 @@
 #import "AlertView.h"
 #import "PasswordViewController.h"
 #import "DataCache.h"
+#import "AppDelegate.h"
 @interface LoginViewController () {
     AlertView *errorAlertView;
     NSString *defaulValidationMsg;
@@ -173,12 +174,16 @@
         [errorAlertView show];
         return;
     }
-    [self login];
+    [self login:NO];
 }
 
-- (void) login {
+- (void) login:(BOOL)relogin {
     [self.view endEditing:YES];
     @try {
+        if(relogin) {
+            activityIndicator.addToWindow = NO;
+            self.navigationItem.hidesBackButton = YES;
+        } 
         [activityIndicator showActivityIndicator:self.view];
         NSString *requestData = [@"username=" stringByAppendingString:username];
         requestData = [requestData stringByAppendingString:[@"&password=" stringByAppendingString:currentPassword]];
@@ -227,6 +232,9 @@
                         // show alert to user
                         [errorAlertView show];
                     }
+                    if(relogin) {
+                        activityIndicator.addToWindow = YES;
+                    } 
                     [activityIndicator hideActivityIndicator:self.view];
                 });
             }];
