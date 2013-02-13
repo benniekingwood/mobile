@@ -19,6 +19,7 @@
 #import <SDWebImage/SDWebImageDownloader.h>
 @interface CampusEventsViewController () {
     UIScrollView *featuredEventScroll;
+    NSTimer *scrollTimer;
 }
 - (void) applyUlinkTableFooter;
 - (void) buildFeaturedEventViews;
@@ -77,10 +78,30 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     [super viewWillAppear:animated];
 
     [self.eventsTableView reloadData];
+    if(self.pageControl.numberOfPages == 1) {
+        self.pageControl.alpha = ALPHA_ZERO;
+    } else {
+        self.pageControl.alpha = ALPHA_HIGH;
+        // initialize the scroller if it's not already initilialized
+        if(!scrollTimer) {
+            // since there are more than one page initialize the auto scroll timer
+            // enable timer after each 2 seconds for scrolling.
+            scrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_EVENT_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
+        }
+    }
+
     // We want the view to be on top every time the it is shown
     [featuredEventScroll setContentOffset:CGPointMake(0,0) animated:NO];
      self.pageControl.currentPage = 0;
 }
+
+- (void) viewWillDisappear:(BOOL)animated {
+    if(scrollTimer) {
+        [scrollTimer invalidate];
+        scrollTimer = nil;
+    }
+}
+
 
 - (void)applyUlinkTableFooter {
 	UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 55)];
@@ -210,15 +231,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
 
     
     self.pageControl.currentPage = 0;
-    if(self.pageControl.numberOfPages == 1) {
-        self.pageControl.alpha = ALPHA_ZERO;
-    } else {
-        self.pageControl.alpha = ALPHA_HIGH;
-        // since there are more than one page initialize the auto scroll timer
-        // enable timer after each 2 seconds for scrolling.
-        [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_EVENT_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
-    }
-    
+      
     // add the scroll view to the main view
     [self.view addSubview:featuredEventScroll];
 }
@@ -278,10 +291,22 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     [self.navigationController presentViewController:viewProfileController animated:YES completion:nil];
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)sender {
+    // stop timer
+    if(scrollTimer != nil) {
+        [scrollTimer invalidate];
+        scrollTimer = nil;
+    }
     // Update the page when more than 50% of the previous/next page is visible
     CGFloat pageWidth = featuredEventScroll.frame.size.width;
     int page = floor((featuredEventScroll.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     self.pageControl.currentPage = page;
+    
+    
+    // start timer
+    if(scrollTimer == nil) {
+        scrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_EVENT_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
+    }
+
     
 }
 - (IBAction)changePage:(id)sender {

@@ -48,13 +48,26 @@
     self.snapCountLabel.textAlignment = NSTextAlignmentRight;
     self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
     self.eventsCountLabel.textAlignment = NSTextAlignmentRight;
+    // Register an observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationViewUpdate:) name:NOTIFICATION_PROFILE_VIEW_CONTROLLER
+                                               object:nil];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+// Handle the notification
+- (void) notificationViewUpdate:(NSNotification*) notification {
+    [self updateView];
+}
+
+- (void) updateView {
     self.tabBarController.navigationItem.title = @"Me";
     self.tabBarController.navigationItem.rightBarButtonItem = settingsButton;
     self.snapCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.snaps count]];
     self.eventsCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.events count]];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self updateView];
 }
 
 - (void)didReceiveMemoryWarning

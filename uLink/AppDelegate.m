@@ -125,10 +125,8 @@
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     networkActive = (networkStatus != NotReachable);
-    
     // if there is network connectivity, we can continue
     if(UDataCache.sessionUser != nil && networkActive) {
-        //NSLog(@"rehyrdating caches");
    
         // pop to main tab bar view controller
         MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
@@ -150,6 +148,7 @@
         [UDataCache rehydrateSchoolCache:YES];
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
         [UDataCache hydrateSnapshotCategoriesCache:NO];
+        //NSLog(@"loading school stuff");
     }
 
 }
@@ -168,6 +167,10 @@
     }
     
    if (UDataCache.sessionUser == nil && networkActive) {
+       // we know that we have a network connection, but no user so just rehydrate the schools cache
+       [UDataCache rehydrateSchoolCache:NO];
+       [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+       [UDataCache hydrateSnapshotCategoriesCache:NO];
        /*
         * If the user has logged in before and their session
         * has expired, attempt to re-log them in again which
@@ -185,10 +188,6 @@
            // perform a login
            [loginViewController login:YES];
        } else {
-           // we know that we have a network connection, but no user so just rehydrate the schools cache
-           [UDataCache rehydrateSchoolCache:NO];
-           [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
-           [UDataCache hydrateSnapshotCategoriesCache:NO];
            // pop back to the login screen
            [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
        }

@@ -542,7 +542,7 @@
     [req setHTTPMethod:HTTP_POST];
     [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
     [req setHTTPShouldHandleCookies:NO];
-    [req setTimeoutInterval:11];
+    [req setTimeoutInterval:30];
     
     // just some random text that will never occur in the body
     NSString *stringBoundary = @"0xKhTmLbOuNdArY---This_Is_ThE_BoUnDaRyy---pqo";

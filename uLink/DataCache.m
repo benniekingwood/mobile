@@ -334,10 +334,12 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
                                 [UDataCache.sessionUser.events removeAllObjects];
                             }
                             [UDataCache.sessionUser hydrateUser:response isSessionUser:YES];
+                            // send a notification the ucampus view controller
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_UCAMPUS_VIEW_CONTROLLER object:nil];
                         }
                     } else {
                     }
-                    NSLog(@"hydrateSessionUser complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                    NSLog(@"rehydrateSessionUser complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
                 } else {// TODO: report error?
                 }
                 [self decrementActiveProcesses];

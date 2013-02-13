@@ -8,6 +8,7 @@
 
 #import "MainTabBarViewController.h"
 #import "AppDelegate.h"
+#import "AppMacros.h"
 @interface MainTabBarViewController ()
 
 @end
@@ -43,6 +44,8 @@
     } else {
         self.navigationItem.title = @"Me";
         [UAppDelegate deactivateUCampusSideMenu];
+        // Send a notification
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PROFILE_VIEW_CONTROLLER object:nil];
     }
 }
 

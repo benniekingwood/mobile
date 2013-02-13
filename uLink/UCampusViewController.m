@@ -17,6 +17,15 @@
     UIScrollView *scroll;
     UIButton *topSnapperProfileButton;
     UIImageView *schoolImageView;
+    NSTimer *scrollTimer;
+    UIView *campusHome;
+    UILabel *topSnapperLabel;
+    UILabel *topSnapperUserNameLabel;
+    UILabel *schoolLabel;
+    UILabel *noSnapperLabel;
+    UIImageView *ulinkLogo;
+    UILabel *foundedLabel;
+    UILabel *studentsLabel;
 }
 -(void) showCampusEvents:(UIButton *)sender;
 -(void) showSocial:(UIButton *)sender;
@@ -58,7 +67,7 @@
     splashPicView.backgroundColor = [UIColor clearColor];
     
     // build the campus home page
-    UIView *campusHome = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, screenHeight)];
+    campusHome = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, screenHeight)];
     
     // build the bg image
     UIImageView *bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, screenHeight)];
@@ -70,7 +79,6 @@
     schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
     schoolImageView.contentMode = UIViewContentModeScaleAspectFit;
     [campusHome addSubview:schoolImageView];
-    [self loadSchoolImage];
     
     // build black label background
     UILabel *campusHomeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 170, 320, 100)];
@@ -78,86 +86,7 @@
     campusHomeLabel.alpha = 0.4f;
     [campusHome addSubview:campusHomeLabel];
     
-    // if there is a top snapper we can show their data
-    if(![UDataCache.topSnapper.firstname isKindOfClass:[NSNull class]] && UDataCache.topSnapper.firstname != nil && ![UDataCache.topSnapper.firstname isEqualToString:@""]) {
-        
-        UILabel *topSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 180, 200, 50)];
-        topSnapperLabel.backgroundColor = [UIColor clearColor];
-        topSnapperLabel.text = @"Top Snapper";
-        topSnapperLabel.textColor = [UIColor whiteColor];
-        topSnapperLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
-        [campusHome addSubview:topSnapperLabel];
-        
-        UILabel *topSnapperUserNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 210, 200, 50)];
-        topSnapperUserNameLabel.backgroundColor = [UIColor clearColor];
-        topSnapperUserNameLabel.text = UDataCache.topSnapper.username;
-        topSnapperUserNameLabel.textColor = [UIColor colorWithRed:255.0f / 255.0f green:255.0f / 255.0f blue:255.0f / 255.0f alpha:ALPHA_MED];
-        topSnapperUserNameLabel.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
-        [campusHome addSubview:topSnapperUserNameLabel];
-        
-        // add the top snapper's profile button
-        topSnapperProfileButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [topSnapperProfileButton addTarget:self
-                              action:@selector(viewUserProfileClick:)
-                    forControlEvents:UIControlEventTouchDown];
-        topSnapperProfileButton.frame = CGRectMake(200, 180, 80, 80);
-        topSnapperProfileButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        topSnapperProfileButton.userInteractionEnabled = YES;
-        topSnapperProfileButton.imageView.layer.cornerRadius = 5;
-        topSnapperProfileButton.imageView.layer.masksToBounds = YES;
-        [topSnapperProfileButton setImage:UDataCache.topSnapper.profileImage forState:UIControlStateNormal];
-        [campusHome addSubview:topSnapperProfileButton];
-        [self loadTopSnapperImage];
-        
-        // school name label
-        UILabel *schoolLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 265, 200, 50)];
-        schoolLabel.backgroundColor = [UIColor clearColor];
-        schoolLabel.text = UDataCache.sessionUser.schoolName;
-        schoolLabel.textColor = [UIColor whiteColor];
-        schoolLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
-        [campusHome addSubview:schoolLabel];
-    } else { // else show label that states there needs to be a top snapper
-        // no top snapper label
-        UILabel *noSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 180, 240, 50)];
-        noSnapperLabel.backgroundColor = [UIColor clearColor];
-        noSnapperLabel.numberOfLines = 3;
-        noSnapperLabel.text = @"Welcome to uCampus, here you will be able to stay up to date with all that is happening on your campus!";
-        noSnapperLabel.textColor = [UIColor colorWithRed:255.0f / 255.0f green:255.0f / 255.0f blue:255.0f / 255.0f alpha:ALPHA_MED];
-        noSnapperLabel.font = [UIFont fontWithName:FONT_GLOBAL size:13.0];
-        [campusHome addSubview:noSnapperLabel];
-        
-        // add the ulink logo
-        UIImageView *ulinkLogo = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
-        ulinkLogo.contentMode = UIViewContentModeScaleAspectFit;
-        ulinkLogo.image = [UIImage imageNamed:@"logouLinkv2.png"];
-        [campusHome addSubview:ulinkLogo];
-    }
-    
-    /* 
-     * NOTE: For now we are using the top snapper's school info, but we will move it over to use
-     * the session user's down the road
-     */
-    
-    if(![UDataCache.topSnapper.school.year isKindOfClass:[NSNull class]] && UDataCache.topSnapper.school.year != nil && ![UDataCache.topSnapper.school.year isEqualToString:@""]) {
-        // founded label
-        UILabel *foundedLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 295, 200, 50)];
-        foundedLabel.backgroundColor = [UIColor clearColor];
-        foundedLabel.text = [@"Founded in " stringByAppendingString:UDataCache.topSnapper.school.year];
-        foundedLabel.textColor = [UIColor whiteColor];
-        foundedLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
-        [campusHome addSubview:foundedLabel];
-    }
-    
-    if(![UDataCache.topSnapper.school.attendance isKindOfClass:[NSNull class]] && UDataCache.topSnapper.school.attendance != nil && ![UDataCache.topSnapper.school.attendance isEqualToString:@""]) {
-        // number of students label
-        UILabel *studentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 325, 200, 50)];
-        studentsLabel.backgroundColor = [UIColor clearColor];
-       
-        studentsLabel.text = [UDataCache.topSnapper.school.attendance stringByAppendingString:@" Students"];
-        studentsLabel.textColor = [UIColor whiteColor];
-        studentsLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
-        [campusHome addSubview:studentsLabel];
-    }
+    [self buildView];
     
     // finally add the campus home page
     [splashPicView addSubview:campusHome];
@@ -279,10 +208,24 @@
     self.pageControl.currentPage = 0;
     self.pageControl.transform = CGAffineTransformMakeRotation(M_PI / 2);
     
-     [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_UCAMPUS_HOME_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
+    // Register an observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationViewUpdate:) name:NOTIFICATION_UCAMPUS_VIEW_CONTROLLER
+                                               object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    if(scrollTimer) {
+        [scrollTimer invalidate];
+        scrollTimer = nil;
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated {
+    // initialize the scroller if it's not already initilialized
+    if(!scrollTimer) {
+        scrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_UCAMPUS_HOME_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
+    }
     // We want the view to be on top every time the it is shown
     [scroll setContentOffset:CGPointMake(0,0) animated:NO];
     self.pageControl.currentPage = 0;
@@ -294,6 +237,124 @@
     self.tabBarController.navigationItem.title = @"uCampus";
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
 }
+
+// Handle the notification
+- (void) notificationViewUpdate:(NSNotification*) notification {
+    [self buildView];
+}
+
+- (void) buildView {
+    // if there is a top snapper we can show their data
+    if(![UDataCache.topSnapper.firstname isKindOfClass:[NSNull class]] && UDataCache.topSnapper.firstname != nil && ![UDataCache.topSnapper.firstname isEqualToString:@""]) {
+        noSnapperLabel.alpha = ALPHA_ZERO;
+        ulinkLogo.alpha = ALPHA_ZERO;
+        [noSnapperLabel removeFromSuperview];
+        [ulinkLogo removeFromSuperview];
+        [self loadSchoolImage];
+        if(!topSnapperLabel) {
+            topSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 180, 200, 50)];
+            topSnapperLabel.backgroundColor = [UIColor clearColor];
+            topSnapperLabel.text = @"Top Snapper";
+            topSnapperLabel.textColor = [UIColor whiteColor];
+            topSnapperLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
+            [campusHome addSubview:topSnapperLabel];
+        }
+        
+        if(topSnapperUserNameLabel) {
+            topSnapperUserNameLabel.text = UDataCache.topSnapper.username;
+        } else {
+            topSnapperUserNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 210, 200, 50)];
+            topSnapperUserNameLabel.backgroundColor = [UIColor clearColor];
+            topSnapperUserNameLabel.text = UDataCache.topSnapper.username;
+            topSnapperUserNameLabel.textColor = [UIColor colorWithRed:255.0f / 255.0f green:255.0f / 255.0f blue:255.0f / 255.0f alpha:ALPHA_MED];
+            topSnapperUserNameLabel.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
+            [campusHome addSubview:topSnapperUserNameLabel];
+        }
+        
+        if (topSnapperProfileButton) {
+            [topSnapperProfileButton setImage:UDataCache.topSnapper.profileImage forState:UIControlStateNormal];
+            [self loadTopSnapperImage];
+        } else {
+            // add the top snapper's profile button
+            topSnapperProfileButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [topSnapperProfileButton addTarget:self
+                                        action:@selector(viewUserProfileClick:)
+                              forControlEvents:UIControlEventTouchDown];
+            topSnapperProfileButton.frame = CGRectMake(200, 180, 80, 80);
+            topSnapperProfileButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+            topSnapperProfileButton.userInteractionEnabled = YES;
+            topSnapperProfileButton.imageView.layer.cornerRadius = 5;
+            topSnapperProfileButton.imageView.layer.masksToBounds = YES;
+            [topSnapperProfileButton setImage:UDataCache.topSnapper.profileImage forState:UIControlStateNormal];
+            [campusHome addSubview:topSnapperProfileButton];
+            [self loadTopSnapperImage];
+        }
+        
+        // school name label
+        if(schoolLabel) {
+             schoolLabel.text = UDataCache.sessionUser.schoolName;
+        } else {
+            schoolLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 265, 300, 50)];
+            schoolLabel.backgroundColor = [UIColor clearColor];
+            schoolLabel.text = UDataCache.sessionUser.schoolName;
+            schoolLabel.textColor = [UIColor whiteColor];
+            schoolLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
+            [campusHome addSubview:schoolLabel];
+        }
+    } else { // else show label that states there needs to be a top snapper
+        // no top snapper label
+        if(!noSnapperLabel) {
+            noSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 180, 240, 50)];
+            noSnapperLabel.backgroundColor = [UIColor clearColor];
+            noSnapperLabel.numberOfLines = 3;
+            noSnapperLabel.text = @"Welcome to uCampus, here you will be able to stay up to date with all that is happening on your campus!";
+            noSnapperLabel.textColor = [UIColor colorWithRed:255.0f / 255.0f green:255.0f / 255.0f blue:255.0f / 255.0f alpha:ALPHA_MED];
+            noSnapperLabel.font = [UIFont fontWithName:FONT_GLOBAL size:13.0];
+            [campusHome addSubview:noSnapperLabel];
+            
+            // add the ulink logo
+            ulinkLogo = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
+            ulinkLogo.contentMode = UIViewContentModeScaleAspectFit;
+            ulinkLogo.image = [UIImage imageNamed:@"logouLinkv2.png"];
+            [campusHome addSubview:ulinkLogo];
+        }
+    }
+    
+    /*
+     * NOTE: For now we are using the top snapper's school info, but we will move it over to use
+     * the session user's down the road
+     */
+    
+    if(![UDataCache.topSnapper.school.year isKindOfClass:[NSNull class]] && UDataCache.topSnapper.school.year != nil && ![UDataCache.topSnapper.school.year isEqualToString:@""]) {
+        // founded label
+        if (foundedLabel) {
+            foundedLabel.text = [@"Founded in " stringByAppendingString:UDataCache.topSnapper.school.year];
+        } else {
+            foundedLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 295, 200, 50)];
+            foundedLabel.backgroundColor = [UIColor clearColor];
+            foundedLabel.text = [@"Founded in " stringByAppendingString:UDataCache.topSnapper.school.year];
+            foundedLabel.textColor = [UIColor whiteColor];
+            foundedLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
+            [campusHome addSubview:foundedLabel];
+        }
+    }
+    
+    if(![UDataCache.topSnapper.school.attendance isKindOfClass:[NSNull class]] && UDataCache.topSnapper.school.attendance != nil && ![UDataCache.topSnapper.school.attendance isEqualToString:@""]) {
+        // number of students label
+        if (studentsLabel) {
+            studentsLabel.text = [UDataCache.topSnapper.school.attendance stringByAppendingString:@" Students"];
+        } else {
+            studentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 325, 200, 50)];
+            studentsLabel.backgroundColor = [UIColor clearColor];
+            
+            studentsLabel.text = [UDataCache.topSnapper.school.attendance stringByAppendingString:@" Students"];
+            studentsLabel.textColor = [UIColor whiteColor];
+            studentsLabel.font = [UIFont fontWithName:FONT_GLOBAL size:18.0];
+            [campusHome addSubview:studentsLabel];
+        }
+    }
+}
+
 
 - (void) scrollPages {
     // get the current offset ( which page is being displayed )
@@ -311,10 +372,21 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)sender {
+    // stop timer
+    if(scrollTimer != nil) {
+        [scrollTimer invalidate];
+        scrollTimer = nil;
+    }
+
     // Update the page when more than 50% of the previous/next page is visible
     CGFloat pageHeight = scroll.frame.size.height;
     int page = floor((scroll.contentOffset.y - pageHeight / 2) / pageHeight) + 1;
     self.pageControl.currentPage = page;
+    
+    // start timer
+    if(scrollTimer == nil) {
+        scrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_UCAMPUS_HOME_TIME target:self selector:@selector(scrollPages) userInfo:nil repeats:YES];
+    }
 }
 
 - (IBAction)changePage:(UIPageControl *)sender {
@@ -359,6 +431,10 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    scrollTimer = nil;
+    topSnapperLabel = nil;
+    topSnapperUserNameLabel = nil;
+    schoolLabel = nil;
 }
 
 #pragma mark Image loading
