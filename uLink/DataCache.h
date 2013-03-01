@@ -61,4 +61,5 @@
 - (BOOL) userIsLoggedIn;
 - (void) storeUserLoginInfo;
 - (void) removeLoginInfo;
+- (void) clearAllModelImageCaches;
 @end

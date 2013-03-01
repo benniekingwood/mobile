@@ -88,6 +88,10 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
     self.tweets = nil;
     self.trends = nil;
     self.snapshotCategories = nil;
+    [self clearAllModelImageCaches];
+}
+
+-(void) clearAllModelImageCaches {
     self.eventImageThumbs = nil;
     self.snapImageThumbs = nil;
     self.userImageThumbs = nil;

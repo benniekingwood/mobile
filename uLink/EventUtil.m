@@ -36,6 +36,18 @@
     }
     return self;
 }
+- (void) removeEvent:(Event*)event {
+    int matchedIdx = -1;
+    for (int x=0; x < [UDataCache.events count]; x++) {
+        if([((Event*)UDataCache.events[x]).eventId isEqualToString:event.eventId]) {
+            matchedIdx = x;
+            break;
+        }
+    }
+     if(matchedIdx != -1) {
+         [UDataCache.events removeObjectAtIndex:matchedIdx];
+     }
+}
 - (Event*) buildEvent:(NSDictionary*)eventRawData event:(Event*)event {
     if(event == nil) {
         event = [[Event alloc] init];

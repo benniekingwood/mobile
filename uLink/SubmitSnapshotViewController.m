@@ -376,7 +376,7 @@
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"snap";
-                imageName = [imageName stringByAppendingFormat:@"%@ %i.jpg\"\r\n",UDataCache.sessionUser.userId, UDataCache.sessionUser.snaps.count];
+                imageName = [imageName stringByAppendingFormat:@"%@ %i-%@.jpg\"\r\n",UDataCache.sessionUser.userId, UDataCache.sessionUser.snaps.count, [UImageUtil generateRandomString:10]];
                 NSString *imageParamData = [@"Content-Disposition: form-data; name=\"data[Snapshot][image]\"; filename=\"" stringByAppendingString:imageName];
                 [postBody appendData:[imageParamData dataUsingEncoding:NSUTF8StringEncoding]];
                 [postBody appendData:[@"Content-Type: image/jpeg\r\n" dataUsingEncoding:NSUTF8StringEncoding]];

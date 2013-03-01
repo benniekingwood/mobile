@@ -85,6 +85,7 @@
     for (int idx = 0; idx < [featuredSnaps count]; idx++) {
             Snap *snap = [featuredSnaps objectAtIndex:idx];
             if (snap.categoryName != nil) {
+               // NSLog(@"category name: %@", snap.categoryName);
                 if ([self.featLabel1.text isEqualToString:@""]) {
                     self.featBtn1.alpha = ALPHA_HIGH;
                     self.featLabel1.text = [featured stringByAppendingString:snap.categoryName];
@@ -120,6 +121,12 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    for (int idx = 0; idx < [featuredSnaps count]; idx++) {
+        Snap *snap = [featuredSnaps objectAtIndex:idx];
+        if (snap.categoryName != nil) {
+          //  NSLog(@"category name: %@", snap.categoryName);
+        }
+    }
     backgroundView.alpha = 0.0;
     [backgroundView sizeToFit];
     [UIView animateWithDuration:1.0
@@ -136,7 +143,11 @@
 - (void) setFeaturedSnapImage:(UIButton *)button snap:(Snap *)snap {
     // grab the snap image from the snap cache
     UIImage *snapImage = [UDataCache imageExists:snap.snapId cacheModel:IMAGE_CACHE_SNAP_MEDIUM];
+  /*  if((snapImage != nil && [snapImage isEqual:@"RELOAD_IMAGE"])) {
+        NSLog(@"snap image is equal to reload image");
+    }*/
     if (snapImage == nil) {
+       // NSLog(@"setFeaturedSnapImage-snap image is nil");
         if(snap.snapImageURL != nil) {
         // set the key in the cache to let other processes know that this key is in work
         [UDataCache.snapImageMedium setValue:[NSNull null]  forKey:snap.snapId];
@@ -156,6 +167,7 @@
                                     completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
                                         if (image && finished)
                                         {
+                                         //   NSLog(@"setFeaturedSnapImage- image is being set");
                                             // add the snap image to the image cache
                                             [UDataCache.snapImageMedium setValue:image forKey:snap.snapId];
                                             // set the picture in the view
@@ -163,11 +175,23 @@
                                             [iActivityIndicator hideActivityIndicator:button.imageView];
                                             iActivityIndicator = nil;
                                             button.userInteractionEnabled = YES;
+                                        } else {
+                                          //  NSLog(@"setFeaturedSnapImage-there was an error %i", error.code);
+                                            if(error.code == -1001) {
+                                             //  NSLog(@"setFeaturedSnapImage-removing snap image from cache");
+                                                //[UDataCache.snapImageMedium removeObjectForKey:snap.snapId];
+                                                  [UDataCache.snapImageMedium removeObjectForKey:snap.snapId];
+                                                 [iActivityIndicator hideActivityIndicator:button.imageView];
+                                                 button.userInteractionEnabled = YES;
+                                            }
                                         }
                                     }];
         }
     } else if (![snapImage isKindOfClass:[NSNull class]]){
+       // NSLog(@"snap image is not nil");
         [button setImage:snapImage forState:UIControlStateNormal];
+    } else {
+       // NSLog(@"Snapshots View controllerImage is in weird state %@", snapImage);
     }
 }
 -(void)animateBackground {

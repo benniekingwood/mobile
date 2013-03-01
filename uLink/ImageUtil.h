@@ -12,4 +12,5 @@
 + (ImageUtil*) instance;
 - (NSData*) compressImageToData:(UIImage*)image;
 - (UIImage*) compressImage:(UIImage*)image;
+-(NSString *) generateRandomString: (int) length;
 @end

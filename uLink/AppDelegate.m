@@ -25,10 +25,15 @@
     UCampusMenuViewController *sideMenuController;
     ActivityIndicatorView *activityIndicator;
     AlertView *appDelegateAlert;
+    BOOL initialLoad;
 }
 @synthesize window = _window;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [UDataCache hydrateSchoolCache];
+    [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+    [UDataCache hydrateSnapshotCategoriesCache:NO];
+    [NSThread sleepForTimeInterval:SLEEP_TIME_APP_LOAD];
     storyboard = [UIStoryboard storyboardWithName:@"uLink" bundle:nil];
     [self setupNavigationControllerApp];
     activityIndicator = [[ActivityIndicatorView alloc] init];
@@ -39,6 +44,7 @@
                    otherButtonTitles:nil];
     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
     imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
+    initialLoad = TRUE;
     return YES;
 }
 
@@ -102,12 +108,14 @@
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {
+        initialLoad = FALSE;
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+        initialLoad = FALSE;
     //NSLog(@"applicationDidEnterBackground");
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -143,19 +151,17 @@
             [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
             [UDataCache rehydrateCaches:YES];
         }
-    } else if (networkActive) {        
+    } else if (networkActive && !initialLoad) {
         // we know that we have a network connection, but no user so just rehydrate the schools cache
         [UDataCache rehydrateSchoolCache:YES];
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
         [UDataCache hydrateSnapshotCategoriesCache:NO];
-        //NSLog(@"loading school stuff");
     }
-
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    //NSLog(@"applicationDidBecomeActive");
+   // NSLog(@"applicationDidBecomeActive");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     BOOL networkActive = FALSE;
     // check for network connectivity
@@ -167,10 +173,16 @@
     }
     
    if (UDataCache.sessionUser == nil && networkActive) {
-       // we know that we have a network connection, but no user so just rehydrate the schools cache
-       [UDataCache rehydrateSchoolCache:NO];
-       [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
-       [UDataCache hydrateSnapshotCategoriesCache:NO];
+       if(!initialLoad) {
+           /*
+            * we need this here just in case the app has a memory warning 
+            * in which the user session is cleared.
+            */
+           // we know that we have a network connection, but no user so just rehydrate the schools cache
+           [UDataCache rehydrateSchoolCache:NO];
+           [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
+           [UDataCache hydrateSnapshotCategoriesCache:NO];
+       }
        /*
         * If the user has logged in before and their session
         * has expired, attempt to re-log them in again which

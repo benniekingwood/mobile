@@ -13,11 +13,12 @@
 
 #pragma mark MISC CONSTANTS
 #define SLEEP_TIME_LOGIN 0
+#define SLEEP_TIME_APP_LOAD 1.5
 #define AUTO_SCROLL_EVENT_TIME 6
 #define AUTO_SCROLL_UCAMPUS_HOME_TIME 7
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
-#define VERSION_NUMBER @"0.2.3"
+#define VERSION_NUMBER @"0.2.4"
 
 #pragma mark APPEARANCE CONSTANTS
 #define ALPHA_HIGH 1.00
@@ -26,28 +27,33 @@
 #define ALPHA_ZERO 0.00
 
 #pragma mark DEV_URLS
-/*#define URL_SERVER @"http://localhost:8888/"
-#define URL_USER_IMAGE @"http://localhost:8888/img/files/users/"
-#define URL_DEFAULT_USER_IMAGE @"http://localhost:8888/img/defaults/default_user.jpg"
-#define URL_SNAP_IMAGE @"http://localhost:8888/img/files/snaps/"
-#define URL_DEFAULT_SNAP_IMAGE @"http://localhost:8888/img/defaults/default_snap.png"
-#define URL_EVENT_IMAGE @"http://localhost:8888/img/files/events/"
-#define URL_DEFAULT_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
-#define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_featured_event.png"
+/*
+ #define URL_SERVER @"http://localhost:8888/"
+ #define URL_USER_IMAGE_THUMB @"http://localhost:8888/img/files/users/thumbs/"
+ #define URL_USER_IMAGE_MEDIUM @"http://localhost:8888/img/files/users/medium/"
+ #define URL_DEFAULT_USER_IMAGE @"http://localhost:8888/img/defaults/default_user.jpg"
+ #define URL_SNAP_IMAGE_THUMB @"http://localhost:8888/img/files/snaps/thumbs/"
+ #define URL_SNAP_IMAGE_MEDIUM @"http://localhost:8888/img/files/snaps/medium/"
+ #define URL_DEFAULT_SNAP_IMAGE @"http://localhost:8888/img/defaults/default_snap.png"
+ #define URL_EVENT_IMAGE_THUMB @"http://localhost:8888/img/files/events/thumbs/"
+ #define URL_EVENT_IMAGE_MEDIUM @"http://localhost:8888/img/files/events/medium/"
+ #define URL_DEFAULT_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
+ #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_featured_event.png"
+ #define URL_SCHOOL_IMAGE @"http://localhost:8888/img/files/schools/"
 */
 #pragma mark PROD_URLS
 #define URL_SERVER @"http://www.theulink.com/"
-#define URL_USER_IMAGE_THUMB @"http://www.theulink.com/img/files/users/thumbs/"
-#define URL_USER_IMAGE_MEDIUM @"http://www.theulink.com/img/files/users/medium/"
+#define URL_USER_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/files/users/thumbs/"
+#define URL_USER_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/users/medium/"
 #define URL_DEFAULT_USER_IMAGE @"http://www.theulink.com/img/defaults/default_user.jpg"
-#define URL_SNAP_IMAGE_THUMB @"http://www.theulink.com/img/files/snaps/thumbs/"
-#define URL_SNAP_IMAGE_MEDIUM @"http://www.theulink.com/img/files/snaps/medium/"
+#define URL_SNAP_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/img/files/snaps/thumbs/"
+#define URL_SNAP_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/snaps/medium/"
 #define URL_DEFAULT_SNAP_IMAGE @"http://www.theulink.com/img/defaults/default_snap.png"
-#define URL_EVENT_IMAGE_THUMB @"http://www.theulink.com/img/files/events/thumbs/"
-#define URL_EVENT_IMAGE_MEDIUM @"http://www.theulink.com/img/files/events/medium/"
+#define URL_EVENT_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/files/events/thumbs/"
+#define URL_EVENT_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/events/medium/"
 #define URL_DEFAULT_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_featured_event.png"
-#define URL_SCHOOL_IMAGE @"http://www.theulink.com/img/files/schools/"
+#define URL_SCHOOL_IMAGE @"https://s3.amazonaws.com/ulink_images/img/files/schools/"
 
 #pragma mark IMAGE CACHE KEYS
 #define KEY_DEFAULT_USER_IMAGE @"KEY_DEFAULT_USER_IMAGE"

@@ -602,7 +602,7 @@
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"userpic";
-                imageName = [imageName stringByAppendingFormat:@"%@.jpg\"\r\n",UDataCache.sessionUser.userId];
+                imageName = [imageName stringByAppendingFormat:@"%@-%@.jpg\"\r\n",UDataCache.sessionUser.userId,[UImageUtil generateRandomString:10]];
                 NSString *imageParamData = [@"Content-Disposition: form-data; name=\"data[User][file]\"; filename=\"" stringByAppendingString:imageName];
                 [postBody appendData:[imageParamData dataUsingEncoding:NSUTF8StringEncoding]];
                 [postBody appendData:[@"Content-Type: image/jpeg\r\n" dataUsingEncoding:NSUTF8StringEncoding]];

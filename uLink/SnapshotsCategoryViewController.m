@@ -108,11 +108,21 @@ static NSString *ksnapCellId = CELL_SNAP_CELL;
                                             [iActivityIndicator hideActivityIndicator:cell.snapImage];
                                             iActivityIndicator = nil;
                                             cell.userInteractionEnabled = YES;
+                                        } else {
+                                          //  NSLog(@"setFeaturedSnapImage-there was an error %i", error.code);
+                                            if(error.code == -1001) {
+                                              //  NSLog(@"setFeaturedSnapImage-removing snap image from cache");
+                                                [UDataCache.snapImageMedium removeObjectForKey:snap.snapId];
+                                                [iActivityIndicator hideActivityIndicator:cell.snapImage];
+                                            }
                                         }
+
                                     }];
         }
     } else if (![snapImage isKindOfClass:[NSNull class]]){
         cell.snapImage.image = snapImage;
+    }else {
+       // NSLog(@"Image is in weird state %@", snapImage);
     }
 
     cell.alpha = 0.0;

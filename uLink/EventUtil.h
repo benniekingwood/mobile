@@ -15,4 +15,5 @@
 - (NSMutableArray*) hydrateEvents:(id)rawEventData eventCollection:(NSMutableArray*)eventsList hydrationType:(EventHydrationType)hydrationType;
 - (Event*) hydrateEventUser:(id)rawEventUser event:(Event*)event;
 - (NSString*)getClearDate:(NSDate*)eventDate;
+- (void) removeEvent:(Event*)event;
 @end

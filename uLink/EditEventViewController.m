@@ -492,6 +492,8 @@
                             [successNotification showNotification:self.view];
                             // delete snapshot from the event cache
                             [UDataCache.sessionUser.events removeObject:event];
+                            // remove the event from the global event cache
+                            [UEventUtil removeEvent:event];
                             // remove the old event image since it changed
                             [UDataCache removeImage:event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
                             [UDataCache removeImage:event.eventId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
@@ -590,7 +592,7 @@
             if (imageData) {
                 [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", stringBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 NSString *imageName = @"event";
-                imageName = [imageName stringByAppendingFormat:@"%@ %i.jpg\"\r\n",UDataCache.sessionUser.userId, UDataCache.sessionUser.events.count];
+                imageName = [imageName stringByAppendingFormat:@"%@ %i-%@.jpg\"\r\n",UDataCache.sessionUser.userId, UDataCache.sessionUser.events.count, [UImageUtil generateRandomString:10]];
                 NSString *imageParamData = [@"Content-Disposition: form-data; name=\"data[Event][image]\"; filename=\"" stringByAppendingString:imageName];
                 [postBody appendData:[imageParamData dataUsingEncoding:NSUTF8StringEncoding]];
                 [postBody appendData:[@"Content-Type: image/jpeg\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
