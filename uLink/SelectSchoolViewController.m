@@ -52,7 +52,7 @@
 -(void)suggestClick {
     [self performSegueWithIdentifier:SEGUE_SHOW_SUGGEST_SCHOOL_VIEW_CONTROLLER sender:self];
 }
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender 
 {
     if ([[segue identifier] isEqualToString:SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER])
     {
