@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0D463385164B30D400284893"
-               BuildableName = "uLink.app"
-               BlueprintName = "uLink"
-               ReferencedContainer = "container:uLink.xcodeproj">
+               BuildableName = "ulink.temp_caseinsensitive_rename.app"
+               BlueprintName = "ulink.temp_caseinsensitive_rename"
+               ReferencedContainer = "container:ulink.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0D4633B7164B30D500284893"
-               BuildableName = "uLinkTests.octest"
-               BlueprintName = "uLinkTests"
-               ReferencedContainer = "container:uLink.xcodeproj">
+               BuildableName = "ulink.temp_caseinsensitive_renameTests.octest"
+               BlueprintName = "ulink.temp_caseinsensitive_renameTests"
+               ReferencedContainer = "container:ulink.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D463385164B30D400284893"
-            BuildableName = "uLink.app"
-            BlueprintName = "uLink"
-            ReferencedContainer = "container:uLink.xcodeproj">
+            BuildableName = "ulink.temp_caseinsensitive_rename.app"
+            BlueprintName = "ulink.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:ulink.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D463385164B30D400284893"
-            BuildableName = "uLink.app"
-            BlueprintName = "uLink"
-            ReferencedContainer = "container:uLink.xcodeproj">
+            BuildableName = "ulink.temp_caseinsensitive_rename.app"
+            BlueprintName = "ulink.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:ulink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D463385164B30D400284893"
-            BuildableName = "uLink.app"
-            BlueprintName = "uLink"
-            ReferencedContainer = "container:uLink.xcodeproj">
+            BuildableName = "ulink.temp_caseinsensitive_rename.app"
+            BlueprintName = "ulink.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:ulink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

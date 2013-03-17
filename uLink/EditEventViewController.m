@@ -490,7 +490,7 @@
                         if([result isEqualToString:@"true"]) {
                             [successNotification setMessage:@"Event Deleted."];
                             [successNotification showNotification:self.view];
-                            // delete snapshot from the event cache
+                            // delete event from the event cache
                             [UDataCache.sessionUser.events removeObject:event];
                             // remove the event from the global event cache
                             [UEventUtil removeEvent:event];
@@ -504,13 +504,13 @@
                             if (response != nil && [response isEqualToString:@""] ) {
                                 errorAlertView.message = response;
                             } else {
-                                errorAlertView.message = @"There was a problem deleting your snapshot.  Please try again later or contact help@theulink.com.";
+                                errorAlertView.message = @"There was a problem deleting your event.  Please try again later or contact help@theulink.com.";
                             }
                             [errorAlertView show];
                         }
                     } else {
                         self.deleteButton.enabled = TRUE;
-                        errorAlertView.message = @"There was a problem deleting your snapshot.  Please try again later or contact help@theulink.com.";
+                        errorAlertView.message = @"There was a problem deleting your event.  Please try again later or contact help@theulink.com.";
                         // show alert to user
                         [errorAlertView show];
                     }

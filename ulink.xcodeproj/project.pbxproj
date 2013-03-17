@@ -94,8 +94,6 @@
 		0D61E66E167DA76C00D3F7F4 /* Walkway Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D61E66D167DA76C00D3F7F4 /* Walkway Bold.ttf */; };
 		0D6381B2167C59EE009B66E2 /* SnapshotComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6381B1167C59EE009B66E2 /* SnapshotComment.m */; };
 		0D680C1B1669DDA2004A3909 /* SnapshotsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D680C1A1669DDA2004A3909 /* SnapshotsViewController.m */; };
-		0D680C1E166A8DC9004A3909 /* bleach-characters.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0D680C1D166A8DC9004A3909 /* bleach-characters.jpg */; };
-		0D680C20166A8DD4004A3909 /* Bleach-228-CC95560915-1400x1050.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0D680C1F166A8DD4004A3909 /* Bleach-228-CC95560915-1400x1050.jpg */; };
 		0D680C23166BEE46004A3909 /* FeaturedSnapButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D680C22166BEE46004A3909 /* FeaturedSnapButton.m */; };
 		0D680C2F166C2C11004A3909 /* SnapshotsCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D680C2E166C2C11004A3909 /* SnapshotsCategoryViewController.m */; };
 		0D680C32166CA878004A3909 /* SubmitSnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D680C31166CA878004A3909 /* SubmitSnapshotViewController.m */; };
@@ -116,7 +114,6 @@
 		0D8DA47D16504220001503F5 /* user-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA47C16504220001503F5 /* user-icon@2x.png */; };
 		0D8DA47F165043DB001503F5 /* user-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA47E165043DB001503F5 /* user-icon.png */; };
 		0D8DA48216505F8C001503F5 /* ProfilePictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D8DA48116505F8C001503F5 /* ProfilePictureViewController.m */; };
-		0D8DA4851650687F001503F5 /* alfred.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA4841650687F001503F5 /* alfred.png */; };
 		0D8DA487165091A4001503F5 /* ulink-mobile-profile-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA486165091A4001503F5 /* ulink-mobile-profile-btn-bg.png */; };
 		0D8DA48B1650A0AE001503F5 /* ulink-mobile-profile-edit-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA48A1650A0AE001503F5 /* ulink-mobile-profile-edit-btn.png */; };
 		0D8DA48E1650E3E7001503F5 /* ulink-mobile-profile-password-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D8DA48C1650E3E6001503F5 /* ulink-mobile-profile-password-btn.png */; };
@@ -204,7 +201,6 @@
 		0DEA90751658423E0065A970 /* bg_cork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA90731658423E0065A970 /* bg_cork@2x.png */; };
 		0DEA9078165851210065A970 /* pushpin.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA9076165851210065A970 /* pushpin.png */; };
 		0DEA9079165851210065A970 /* pushpin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA9077165851210065A970 /* pushpin@2x.png */; };
-		0DEA907B165ABB1F0065A970 /* 80s.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA907A165ABB1F0065A970 /* 80s.jpg */; };
 		0DEA907D165AC82C0065A970 /* ulink-mobile-blk-hr-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA907C165AC82C0065A970 /* ulink-mobile-blk-hr-bg.png */; };
 		0DEA907F165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEA907E165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png */; };
 		0DFA8CF31673F2F200F266CC /* School.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA8CF21673F2F200F266CC /* School.m */; };
@@ -275,22 +271,22 @@
 		0D39B7CC16616C5B00D4BD23 /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = options.png; path = images/options.png; sourceTree = "<group>"; };
 		0D39B7CD16616C5B00D4BD23 /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "options@2x.png"; path = "images/options@2x.png"; sourceTree = "<group>"; };
 		0D39B7D2166340A000D4BD23 /* ulink-mobile-ucampus-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-ucampus-bg.png"; path = "images/ulink-mobile-ucampus-bg.png"; sourceTree = "<group>"; };
-		0D463386164B30D400284893 /* uLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = uLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D463386164B30D400284893 /* ulink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ulink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D46338A164B30D400284893 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0D46338C164B30D400284893 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0D46338E164B30D400284893 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		0D463392164B30D400284893 /* uLink-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "uLink-Info.plist"; sourceTree = "<group>"; };
+		0D463392164B30D400284893 /* ulink.temp_caseinsensitive_rename-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ulink.temp_caseinsensitive_rename-Info.plist"; sourceTree = "<group>"; };
 		0D463394164B30D400284893 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D463396164B30D400284893 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		0D463398164B30D400284893 /* uLink-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "uLink-Prefix.pch"; sourceTree = "<group>"; };
+		0D463398164B30D400284893 /* ulink.temp_caseinsensitive_rename-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ulink.temp_caseinsensitive_rename-Prefix.pch"; sourceTree = "<group>"; };
 		0D463399164B30D400284893 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0D46339A164B30D400284893 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0D46339C164B30D400284893 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		0D46339E164B30D400284893 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		0D4633A0164B30D400284893 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		0D4633B8164B30D500284893 /* uLinkTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = uLinkTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D4633B8164B30D500284893 /* ulink.temp_caseinsensitive_renameTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ulink.temp_caseinsensitive_renameTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D4633B9164B30D500284893 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		0D4633C1164B30D500284893 /* uLinkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "uLinkTests-Info.plist"; sourceTree = "<group>"; };
+		0D4633C1164B30D500284893 /* ulink.temp_caseinsensitive_renameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ulink.temp_caseinsensitive_renameTests-Info.plist"; sourceTree = "<group>"; };
 		0D4633C3164B30D500284893 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D4633C5164B30D500284893 /* uLinkTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uLinkTests.h; sourceTree = "<group>"; };
 		0D4633C6164B30D500284893 /* uLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = uLinkTests.m; sourceTree = "<group>"; };
@@ -329,8 +325,6 @@
 		0D6381B1167C59EE009B66E2 /* SnapshotComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotComment.m; sourceTree = "<group>"; };
 		0D680C191669DDA2004A3909 /* SnapshotsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotsViewController.h; sourceTree = "<group>"; };
 		0D680C1A1669DDA2004A3909 /* SnapshotsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotsViewController.m; sourceTree = "<group>"; };
-		0D680C1D166A8DC9004A3909 /* bleach-characters.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "bleach-characters.jpg"; path = "../../../../../Pictures/wallpapers/bleach-characters.jpg"; sourceTree = "<group>"; };
-		0D680C1F166A8DD4004A3909 /* Bleach-228-CC95560915-1400x1050.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Bleach-228-CC95560915-1400x1050.jpg"; path = "../../../../../Pictures/wallpapers/Bleach-228-CC95560915-1400x1050.jpg"; sourceTree = "<group>"; };
 		0D680C21166BEE46004A3909 /* FeaturedSnapButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeaturedSnapButton.h; sourceTree = "<group>"; };
 		0D680C22166BEE46004A3909 /* FeaturedSnapButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeaturedSnapButton.m; sourceTree = "<group>"; };
 		0D680C2D166C2C11004A3909 /* SnapshotsCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotsCategoryViewController.h; sourceTree = "<group>"; };
@@ -363,7 +357,6 @@
 		0D8DA47E165043DB001503F5 /* user-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "user-icon.png"; path = "images/user-icon.png"; sourceTree = "<group>"; };
 		0D8DA48016505F8C001503F5 /* ProfilePictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePictureViewController.h; sourceTree = "<group>"; };
 		0D8DA48116505F8C001503F5 /* ProfilePictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePictureViewController.m; sourceTree = "<group>"; };
-		0D8DA4841650687F001503F5 /* alfred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alfred.png; path = ../../../../../../../Applications/MAMP/htdocs/Websites/ulink/app/webroot/img/alfred.png; sourceTree = "<group>"; };
 		0D8DA486165091A4001503F5 /* ulink-mobile-profile-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-profile-btn-bg.png"; path = "images/ulink-mobile-profile-btn-bg.png"; sourceTree = "<group>"; };
 		0D8DA48A1650A0AE001503F5 /* ulink-mobile-profile-edit-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-profile-edit-btn.png"; path = "images/ulink-mobile-profile-edit-btn.png"; sourceTree = "<group>"; };
 		0D8DA48C1650E3E6001503F5 /* ulink-mobile-profile-password-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-profile-password-btn.png"; path = "images/ulink-mobile-profile-password-btn.png"; sourceTree = "<group>"; };
@@ -498,7 +491,6 @@
 		0DEA90731658423E0065A970 /* bg_cork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_cork@2x.png"; path = "images/bg_cork@2x.png"; sourceTree = "<group>"; };
 		0DEA9076165851210065A970 /* pushpin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pushpin.png; path = images/pushpin.png; sourceTree = "<group>"; };
 		0DEA9077165851210065A970 /* pushpin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pushpin@2x.png"; path = "images/pushpin@2x.png"; sourceTree = "<group>"; };
-		0DEA907A165ABB1F0065A970 /* 80s.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 80s.jpg; path = images/80s.jpg; sourceTree = "<group>"; };
 		0DEA907C165AC82C0065A970 /* ulink-mobile-blk-hr-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-blk-hr-bg.png"; path = "images/ulink-mobile-blk-hr-bg.png"; sourceTree = "<group>"; };
 		0DEA907E165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ulink-mobile-blk-hr-bg@2x.png"; path = "images/ulink-mobile-blk-hr-bg@2x.png"; sourceTree = "<group>"; };
 		0DFA8CF11673F2F200F266CC /* School.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = School.h; sourceTree = "<group>"; };
@@ -620,8 +612,8 @@
 		0D463387164B30D400284893 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0D463386164B30D400284893 /* uLink.app */,
-				0D4633B8164B30D500284893 /* uLinkTests.octest */,
+				0D463386164B30D400284893 /* ulink.app */,
+				0D4633B8164B30D500284893 /* ulink.temp_caseinsensitive_renameTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -666,10 +658,10 @@
 			isa = PBXGroup;
 			children = (
 				0D4633E4164B901800284893 /* presentation */,
-				0D463392164B30D400284893 /* uLink-Info.plist */,
+				0D463392164B30D400284893 /* ulink.temp_caseinsensitive_rename-Info.plist */,
 				0D463393164B30D400284893 /* InfoPlist.strings */,
 				0D463396164B30D400284893 /* main.m */,
-				0D463398164B30D400284893 /* uLink-Prefix.pch */,
+				0D463398164B30D400284893 /* ulink.temp_caseinsensitive_rename-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -687,7 +679,7 @@
 		0D4633C0164B30D500284893 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0D4633C1164B30D500284893 /* uLinkTests-Info.plist */,
+				0D4633C1164B30D500284893 /* ulink.temp_caseinsensitive_renameTests-Info.plist */,
 				0D4633C2164B30D500284893 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -816,7 +808,6 @@
 		0D4633E4164B901800284893 /* presentation */ = {
 			isa = PBXGroup;
 			children = (
-				0D8DA48316506854001503F5 /* mock */,
 				0D35FDE3164E24890064219E /* icons */,
 				0D4633D7164B3ACC00284893 /* buttons */,
 				0D4633D8164B3AD400284893 /* backgrounds */,
@@ -903,17 +894,6 @@
 				0D6EB7D9168D2909009B88C0 /* UserProfileButton.m */,
 			);
 			name = buttons;
-			sourceTree = "<group>";
-		};
-		0D8DA48316506854001503F5 /* mock */ = {
-			isa = PBXGroup;
-			children = (
-				0D680C1F166A8DD4004A3909 /* Bleach-228-CC95560915-1400x1050.jpg */,
-				0D680C1D166A8DC9004A3909 /* bleach-characters.jpg */,
-				0DEA907A165ABB1F0065A970 /* 80s.jpg */,
-				0D8DA4841650687F001503F5 /* alfred.png */,
-			);
-			name = mock;
 			sourceTree = "<group>";
 		};
 		0D8DA490165168A8001503F5 /* common */ = {
@@ -1118,9 +1098,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0D463385164B30D400284893 /* uLink */ = {
+		0D463385164B30D400284893 /* ulink.temp_caseinsensitive_rename */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0D4633CA164B30D500284893 /* Build configuration list for PBXNativeTarget "uLink" */;
+			buildConfigurationList = 0D4633CA164B30D500284893 /* Build configuration list for PBXNativeTarget "ulink.temp_caseinsensitive_rename" */;
 			buildPhases = (
 				0D463382164B30D400284893 /* Sources */,
 				0D463383164B30D400284893 /* Frameworks */,
@@ -1130,14 +1110,14 @@
 			);
 			dependencies = (
 			);
-			name = uLink;
+			name = ulink.temp_caseinsensitive_rename;
 			productName = uLink;
-			productReference = 0D463386164B30D400284893 /* uLink.app */;
+			productReference = 0D463386164B30D400284893 /* ulink.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0D4633B7164B30D500284893 /* uLinkTests */ = {
+		0D4633B7164B30D500284893 /* ulink.temp_caseinsensitive_renameTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0D4633CD164B30D500284893 /* Build configuration list for PBXNativeTarget "uLinkTests" */;
+			buildConfigurationList = 0D4633CD164B30D500284893 /* Build configuration list for PBXNativeTarget "ulink.temp_caseinsensitive_renameTests" */;
 			buildPhases = (
 				0D4633B3164B30D500284893 /* Sources */,
 				0D4633B4164B30D500284893 /* Frameworks */,
@@ -1149,9 +1129,9 @@
 			dependencies = (
 				0D4633BE164B30D500284893 /* PBXTargetDependency */,
 			);
-			name = uLinkTests;
+			name = ulink.temp_caseinsensitive_renameTests;
 			productName = uLinkTests;
-			productReference = 0D4633B8164B30D500284893 /* uLinkTests.octest */;
+			productReference = 0D4633B8164B30D500284893 /* ulink.temp_caseinsensitive_renameTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1163,7 +1143,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "uLink, Inc.";
 			};
-			buildConfigurationList = 0D463380164B30D400284893 /* Build configuration list for PBXProject "uLink" */;
+			buildConfigurationList = 0D463380164B30D400284893 /* Build configuration list for PBXProject "ulink" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1175,8 +1155,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0D463385164B30D400284893 /* uLink */,
-				0D4633B7164B30D500284893 /* uLinkTests */,
+				0D463385164B30D400284893 /* ulink.temp_caseinsensitive_rename */,
+				0D4633B7164B30D500284893 /* ulink.temp_caseinsensitive_renameTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1212,7 +1192,6 @@
 				0D8DA47B16503E2A001503F5 /* ucampus-icon@2x.png in Resources */,
 				0D8DA47D16504220001503F5 /* user-icon@2x.png in Resources */,
 				0D8DA47F165043DB001503F5 /* user-icon.png in Resources */,
-				0D8DA4851650687F001503F5 /* alfred.png in Resources */,
 				0D8DA487165091A4001503F5 /* ulink-mobile-profile-btn-bg.png in Resources */,
 				0D8DA48B1650A0AE001503F5 /* ulink-mobile-profile-edit-btn.png in Resources */,
 				0D8DA48E1650E3E7001503F5 /* ulink-mobile-profile-password-btn.png in Resources */,
@@ -1241,7 +1220,6 @@
 				0DEA90751658423E0065A970 /* bg_cork@2x.png in Resources */,
 				0DEA9078165851210065A970 /* pushpin.png in Resources */,
 				0DEA9079165851210065A970 /* pushpin@2x.png in Resources */,
-				0DEA907B165ABB1F0065A970 /* 80s.jpg in Resources */,
 				0DEA907D165AC82C0065A970 /* ulink-mobile-blk-hr-bg.png in Resources */,
 				0DEA907F165AC9960065A970 /* ulink-mobile-blk-hr-bg@2x.png in Resources */,
 				0D39B7CE16616C5B00D4BD23 /* options.png in Resources */,
@@ -1264,8 +1242,6 @@
 				0DA7985D16659167000740CD /* location-dark@2x.png in Resources */,
 				0DA798611665A2D0000740CD /* submit-event-overlay.png in Resources */,
 				0DA798631665E9CA000740CD /* submit-event-overlay@2x.png in Resources */,
-				0D680C1E166A8DC9004A3909 /* bleach-characters.jpg in Resources */,
-				0D680C20166A8DD4004A3909 /* Bleach-228-CC95560915-1400x1050.jpg in Resources */,
 				0D680C38166CA9E9004A3909 /* icon-camera-large.png in Resources */,
 				0D680C39166CA9E9004A3909 /* icon-camera-large@2x.png in Resources */,
 				0D61E658167D203700D3F7F4 /* Static Bold Italic.otf in Resources */,
@@ -1419,7 +1395,7 @@
 /* Begin PBXTargetDependency section */
 		0D4633BE164B30D500284893 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0D463385164B30D400284893 /* uLink */;
+			target = 0D463385164B30D400284893 /* ulink.temp_caseinsensitive_rename */;
 			targetProxy = 0D4633BD164B30D500284893 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1486,8 +1462,8 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: BlaancoSolutions, LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BlaancoSolutions, LLC";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: uLink, Inc.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: uLink, Inc.";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1500,8 +1476,8 @@
 					"-all_load",
 					"-fobjc-arc",
 				);
-				PROVISIONING_PROFILE = "6360EFDB-C096-4BD8-ADE8-68B4D7015A80";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6360EFDB-C096-4BD8-ADE8-68B4D7015A80";
+				PROVISIONING_PROFILE = "797B37CF-576A-4360-B547-127948AD799B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "797B37CF-576A-4360-B547-127948AD799B";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1518,8 +1494,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "uLink/uLink-Prefix.pch";
-				INFOPLIST_FILE = "uLink/uLink-Info.plist";
+				GCC_PREFIX_HEADER = "uLink/ulink.temp_caseinsensitive_rename-Prefix.pch";
+				INFOPLIST_FILE = "uLink/ulink.temp_caseinsensitive_rename-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uLink/AviarySDK\"",
@@ -1529,7 +1505,7 @@
 					"-all_load",
 					"-fobjc-arc",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ulink;
 				PROVISIONING_PROFILE = "363A85AD-3EFA-4567-90A6-BA4F88648998";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "363A85AD-3EFA-4567-90A6-BA4F88648998";
 				WRAPPER_EXTENSION = app;
@@ -1547,8 +1523,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "uLink/uLink-Prefix.pch";
-				INFOPLIST_FILE = "uLink/uLink-Info.plist";
+				GCC_PREFIX_HEADER = "uLink/ulink.temp_caseinsensitive_rename-Prefix.pch";
+				INFOPLIST_FILE = "uLink/ulink.temp_caseinsensitive_rename-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uLink/AviarySDK\"",
@@ -1558,7 +1534,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ulink;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
@@ -1575,8 +1551,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "uLink/uLink-Prefix.pch";
-				INFOPLIST_FILE = "uLinkTests/uLinkTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "uLinkTests/ulink.temp_caseinsensitive_renameTests-Info.plist";
+				PRODUCT_NAME = ulink.temp_caseinsensitive_renameTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1592,8 +1568,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "uLink/uLink-Prefix.pch";
-				INFOPLIST_FILE = "uLinkTests/uLinkTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "uLinkTests/ulink.temp_caseinsensitive_renameTests-Info.plist";
+				PRODUCT_NAME = ulink.temp_caseinsensitive_renameTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1602,7 +1578,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0D463380164B30D400284893 /* Build configuration list for PBXProject "uLink" */ = {
+		0D463380164B30D400284893 /* Build configuration list for PBXProject "ulink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0D4633C8164B30D500284893 /* Debug */,
@@ -1611,7 +1587,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0D4633CA164B30D500284893 /* Build configuration list for PBXNativeTarget "uLink" */ = {
+		0D4633CA164B30D500284893 /* Build configuration list for PBXNativeTarget "ulink.temp_caseinsensitive_rename" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0D4633CB164B30D500284893 /* Debug */,
@@ -1620,7 +1596,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0D4633CD164B30D500284893 /* Build configuration list for PBXNativeTarget "uLinkTests" */ = {
+		0D4633CD164B30D500284893 /* Build configuration list for PBXNativeTarget "ulink.temp_caseinsensitive_renameTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0D4633CE164B30D500284893 /* Debug */,
