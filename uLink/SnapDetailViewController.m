@@ -36,6 +36,8 @@
     float commentFormY;
     NSDateFormatter *dateFormatter;
     ModalImageView *modalSnapView;
+    UIActionSheet *optionsActionSheet;
+    UIBarButtonItem *optionsButton;
 }
 -(void)saveComment;
 - (void)deleteSnap;
@@ -44,6 +46,7 @@
 - (void) reloadComments;
 - (void) viewUserProfileClick:(UserProfileButton*)sender;
 - (void) updateSessionUserSnapComments:(SnapshotComment*)comment action:(BOOL)addComment;
+- (void)reportFlag;
 @end
 static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
 @implementation SnapDetailViewController
@@ -102,7 +105,17 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
         [self.view addSubview:commentForm];
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMM d, yyyy"];
-    }
+        optionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"mobile-options.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionSheet:)];
+        self.navigationItem.rightBarButtonItem = optionsButton;
+        optionsActionSheet = [[UIActionSheet alloc]
+                            initWithTitle:nil
+                            delegate:self
+                            cancelButtonTitle:BTN_CANCEL
+                            destructiveButtonTitle:BTN_REPORT_INAPPROPRIATE
+                            otherButtonTitles:nil, nil];
+        
+        
+    } 
     
     [self.commentHeader setFont:[UIFont fontWithName:FONT_GLOBAL size:12.0f]];
     [self.commentHeader setShadowColor:[UIColor whiteColor]];
@@ -194,6 +207,16 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     }
 }
 
+#pragma mark UIActionSheet Section
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    //Get the name of the current pressed button
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if ([buttonTitle isEqualToString:BTN_REPORT_INAPPROPRIATE]) {
+        [self reportFlag];
+    } 
+}
+#pragma mark
+
 - (void) reloadComments {
     [self.commentsTableView reloadData];
     self.commentsTableView.alpha = ALPHA_HIGH;
@@ -215,6 +238,10 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     UserProfileViewController *viewProfileController = [self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID];
     viewProfileController.user = user;
     [self.navigationController presentViewController:viewProfileController animated:YES completion:nil];
+}
+
+- (void)showActionSheet:(id)sender {
+    [optionsActionSheet showInView:self.view];
 }
 
 - (void) updateSessionUserSnapComments:(SnapshotComment*)comment action:(BOOL)addComment {
@@ -594,5 +621,52 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
         [errorAlertView show];
     }
 }
-
+- (void)reportFlag {
+    @try {
+        [activityIndicator showActivityIndicator:self.view];
+        NSString *requestData = [@"&data[Flag][snap_id]=" stringByAppendingString:snap.snapId];
+        requestData = [requestData stringByAppendingString:@"&data[Flag][inappropriate]=1"];
+        requestData = [requestData stringByAppendingString:[@"&data[reporter_user_id]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        requestData = [requestData stringByAppendingString:[@"&data[mobile_auth]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_FLAGS_INSERT_FLAG]]];
+        [req setHTTPMethod:HTTP_POST];
+        [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+        [req setHTTPShouldHandleCookies:NO];
+        [req setTimeoutInterval:15];
+        [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        // how we stop refresh from freezing the main UI thread
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [activityIndicator hideActivityIndicator:self.view];
+                if ([data length] > 0 && error == nil) {
+                    NSError* err;
+                    NSDictionary* json = [NSJSONSerialization
+                                          JSONObjectWithData:data
+                                          options:kNilOptions
+                                          error:&err];
+                    NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
+                    
+                    if([response isEqualToString:@"true"]) {   
+                        [successNotification setMessage:@"This snap was flagged."];
+                        [successNotification showNotification:self.view];
+                    } else {
+                        errorAlertView.message = @"There was a problem flagging this snapshot.  Please try again later or contact help@theulink.com.";
+                        [errorAlertView show];
+                    }
+                } else {
+                    errorAlertView.message = @"There was a problem flagging this snapshot.  Please try again later or contact help@theulink.com.";
+                    // show alert to user
+                    [errorAlertView show];
+                }
+            });
+        }];
+    }
+    @catch (NSException *exception) {
+        self.view.userInteractionEnabled = YES;
+        // show alert to user
+        [errorAlertView show];
+    }
+}
 @end

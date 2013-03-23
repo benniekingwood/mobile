@@ -11,6 +11,7 @@
 #import "AlertView.h"
 #import "AppMacros.h"
 #import "TextUtil.h"
+#import "TermsViewController.h"
 
 @interface SignUpViewController (){
     AlertView *errorAlertView;
@@ -21,6 +22,7 @@
     BOOL pickListVisible;
     NSString *currentPassword;
     ActivityIndicatorView *activityIndicator;
+    UIButton *termsButton;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -76,8 +78,31 @@
     [schoolStatusPickerView selectRow:0 inComponent:0 animated:NO];
     schoolStatusPickerView.alpha = ALPHA_ZERO;
     activityIndicator = [[ActivityIndicatorView alloc] init];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    CGFloat screenWidth = screenRect.size.width;
+    UIView *termsView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-130, screenWidth, 70)];
+    termsView.alpha = ALPHA_MED;
+    termsView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:termsView];
+    UILabel *termsTextPart1 = [[UILabel alloc] initWithFrame:CGRectMake(30, screenHeight-150, 250, 100)];
+    termsTextPart1.text = @"By Pressing the \"Create My Account\" button you agree to the policies and conditions listed in the ";
+    termsTextPart1.font = [UIFont fontWithName:FONT_GLOBAL size:11];
+    termsTextPart1.backgroundColor = [UIColor clearColor];
+    termsTextPart1.textColor = [UIColor whiteColor];
+    termsTextPart1.numberOfLines = 2;
+    termsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [termsButton addTarget:self
+               action:@selector(termsClick)
+     forControlEvents:UIControlEventTouchDown];
+    [termsButton setTitle:@"Terms" forState:UIControlStateNormal];
+    termsButton.frame = CGRectMake(255, screenHeight-102.5, 50, 20.0);
+    termsButton.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12];
+    [self.view addSubview:termsTextPart1];
+    [self.view addSubview:termsButton];
 }
 -(void)viewWillAppear:(BOOL)animated {
+     termsButton.titleLabel.textColor = [UIColor orangeColor];
     backgroundView.alpha = 1;
     [backgroundView sizeToFit];
     [UIView animateWithDuration:1.0
@@ -271,6 +296,12 @@
         retVal = textField.text.length < 255;
     }
     return retVal;
+}
+
+-(void) termsClick {
+    TermsViewController *termsViewController = (TermsViewController*)[self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_TERMS_VIEW_CONTROLLER_ID];
+    termsViewController.view.backgroundColor = [UIColor blackColor];
+    [self.navigationController pushViewController:termsViewController animated:YES];
 }
 
 -(IBAction)createAccount {

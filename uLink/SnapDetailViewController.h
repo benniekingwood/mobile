@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Snap.h"
 #import "SnapCommentCell.h"
-
-@interface SnapDetailViewController : UIViewController <UIAlertViewDelegate,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, SnapCommentCellDelegate>
+@interface SnapDetailViewController : UIViewController <UIAlertViewDelegate,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, SnapCommentCellDelegate, UIActionSheetDelegate>
 - (IBAction)showDeleteAlert:(UIBarButtonItem *)sender;
 @property (weak, nonatomic) IBOutlet UIImageView *snapImageView;
 @property (weak, nonatomic) IBOutlet UILabel *commentHeader;

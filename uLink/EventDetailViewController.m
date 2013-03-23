@@ -14,10 +14,19 @@
 #import "ImageActivityIndicatorView.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "DataCache.h"
+#import "ActivityIndicatorView.h"
+#import "SuccessNotificationView.h"
+#import "AlertView.h"
 @interface EventDetailViewController () {
     UserProfileButton *eventUserImageButton;
+    UIActionSheet *optionsActionSheet;
+    AlertView *errorAlertView;
+    ActivityIndicatorView *activityIndicator;
+    SuccessNotificationView *successNotification;
+    UIBarButtonItem *optionsButton;
 }
 - (void)viewUserProfileClick:(UserProfileButton*)sender;
+- (void)reportFlag;
 @end
 
 @implementation EventDetailViewController
@@ -68,6 +77,24 @@
     self.eventDateTime.backgroundColor = [UIColor clearColor];
     self.eventDateTime.textAlignment = NSTextAlignmentLeft;
     self.eventDateTime.textColor = [UIColor blackColor];
+    errorAlertView = [[AlertView alloc] initWithTitle:@""
+                                              message: @""
+                                             delegate:self
+                                    cancelButtonTitle:BTN_OK
+                                    otherButtonTitles:nil];
+    activityIndicator = [[ActivityIndicatorView alloc] init];
+    successNotification = [[SuccessNotificationView alloc] init];
+    // setup the options button
+    optionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"mobile-options.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionSheet:)];
+    self.navigationItem.rightBarButtonItem = optionsButton;
+    
+    optionsActionSheet = [[UIActionSheet alloc]
+                          initWithTitle:nil
+                          delegate:self
+                          cancelButtonTitle:BTN_CANCEL
+                          destructiveButtonTitle:BTN_REPORT_INAPPROPRIATE
+                          otherButtonTitles:nil, nil];
+
 }
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -117,6 +144,17 @@
     self.eventTitle.text = self.event.title;
     self.eventLocation.text = self.event.location;
 }
+#pragma mark UIActionSheet Section
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    //Get the name of the current pressed button
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if ([buttonTitle isEqualToString:BTN_REPORT_INAPPROPRIATE]) {
+        [self reportFlag];
+    }
+}
+- (void)showActionSheet:(id)sender {
+    [optionsActionSheet showInView:self.view];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -126,5 +164,53 @@
     UserProfileViewController *viewProfileController = [self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID];
     viewProfileController.user = sender.user;
     [self.navigationController presentViewController:viewProfileController animated:YES completion:nil];
+}
+- (void)reportFlag {
+    @try {
+        [activityIndicator showActivityIndicator:self.view];
+        NSString *requestData = [@"&data[Flag][event_id]=" stringByAppendingString:self.event.eventId];
+        requestData = [requestData stringByAppendingString:@"&data[Flag][inappropriate]=1"];
+        requestData = [requestData stringByAppendingString:[@"&data[reporter_user_id]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        requestData = [requestData stringByAppendingString:[@"&data[mobile_auth]=" stringByAppendingString:UDataCache.sessionUser.userId]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_FLAGS_INSERT_FLAG]]];
+        [req setHTTPMethod:HTTP_POST];
+        [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+        [req setHTTPShouldHandleCookies:NO];
+        [req setTimeoutInterval:15];
+        [req setHTTPBody:[requestData dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        // how we stop refresh from freezing the main UI thread
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [activityIndicator hideActivityIndicator:self.view];
+                if ([data length] > 0 && error == nil) {
+                    NSError* err;
+                    NSDictionary* json = [NSJSONSerialization
+                                          JSONObjectWithData:data
+                                          options:kNilOptions
+                                          error:&err];
+                    NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
+                    
+                    if([response isEqualToString:@"true"]) {
+                        [successNotification setMessage:@"This event was flagged."];
+                        [successNotification showNotification:self.view];
+                    } else {
+                        errorAlertView.message = @"There was a problem flagging this event.  Please try again later or contact help@theulink.com.";
+                        [errorAlertView show];
+                    }
+                } else {
+                    errorAlertView.message = @"There was a problem flagging this event.  Please try again later or contact help@theulink.com.";
+                    // show alert to user
+                    [errorAlertView show];
+                }
+            });
+        }];
+    }
+    @catch (NSException *exception) {
+        self.view.userInteractionEnabled = YES;
+        // show alert to user
+        [errorAlertView show];
+    }
 }
 @end

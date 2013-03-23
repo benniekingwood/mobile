@@ -18,7 +18,7 @@
 #define AUTO_SCROLL_UCAMPUS_HOME_TIME 7
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
-#define VERSION_NUMBER @"0.2.5"
+#define VERSION_NUMBER @"0.2.6"
 
 #pragma mark APPEARANCE CONSTANTS
 #define ALPHA_HIGH 1.00
@@ -92,6 +92,7 @@
 #define API_EVENTS_DELETE_EVENT @"events/delete_event"
 #define API_EVENTS_UPDATE_EVENT @"events/update_event"
 #define API_EVENTS_EVENTS @"events/events"
+#define API_FLAGS_INSERT_FLAG @"flags/insert_flag"
 
 #pragma mark HTTP 
 #define HTTP_POST @"POST"
@@ -152,6 +153,7 @@
 #define CONTROLLER_PROFILE_PICTURE_VIEW_CONTROLLER_ID @"ProfilePictureViewController"
 #define CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID @"UserProfileViewController"
 #define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
+#define CONTROLLER_TERMS_VIEW_CONTROLLER_ID @"TermsViewController"
 
 #pragma mark SEQUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"
@@ -185,6 +187,7 @@
 #define BTN_DELETE @"Delete"
 #define BTN_TAKE_PHOTO @"Take photo..."
 #define BTN_CHOOSE_PHOTO @"Choose photo from library..."
+#define BTN_REPORT_INAPPROPRIATE @"Report Inappropriate"
 
 #pragma mark STRINGS
 #define SCHOOL_STATUS_CURRENT_STUDENT @"Current Student"

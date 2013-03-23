@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
-@interface EventDetailViewController : UIViewController
+@interface EventDetailViewController : UIViewController <UIActionSheetDelegate>
 @property (strong, nonatomic) IBOutlet UILabel *eventLocation;
 @property (strong, nonatomic) IBOutlet UILabel *eventDateTime;
 @property (strong, nonatomic) IBOutlet UILabel *eventUsername;

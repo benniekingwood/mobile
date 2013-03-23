@@ -17,4 +17,5 @@
 - (void) createDefaultButton:(UlinkButton*)btn;
 - (void) createDefaultSmallButton:(UlinkButton*)btn;
 - (void) createOrangeSmallButton:(UlinkButton*)btn;
+- (void) createFlatBlackButton:(UlinkButton*)btn;
 @end

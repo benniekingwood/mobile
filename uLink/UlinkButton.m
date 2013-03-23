@@ -221,6 +221,22 @@
     [btnLayer setBorderWidth:0.2f];
     [btnLayer setBorderColor:[[UIColor darkGrayColor] CGColor]];
 }
+
+- (void) createFlatBlackButton:(UlinkButton*)btn {
+    btn.backgroundColor = [UIColor blackColor];
+    // Round button corners
+    CALayer *btnLayer = [btn layer];
+    [btnLayer setMasksToBounds:YES];
+    [btnLayer setCornerRadius:5.0f];
+    [btnLayer setShadowColor:[UIColor blackColor].CGColor];
+    [btnLayer setShadowOpacity:0.8];
+    [btnLayer setShadowRadius:3.0];
+    [btnLayer setShadowOffset:CGSizeMake(2.0, 2.0)];
+    
+    // Apply a 1 pixel, black border around Buy Button
+   // [btnLayer setBorderWidth:0.2f];
+   // [btnLayer setBorderColor:[[UIColor darkGrayColor] CGColor]];
+}
 - (void) createDefaultButton:(UlinkButton*)btn {
     [self applyDefaultBlackFontAttrs:btn];
     [self buildDefaultButton:btn];
