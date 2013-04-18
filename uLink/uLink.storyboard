@@ -638,7 +638,7 @@
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pdn-31-bsx" userLabel="Profile View Controller - Me" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze4-00-dPP">
-                        <rect key="frame" x="0.0" y="20" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0K4-wM-F1A">
@@ -836,12 +836,100 @@
             </objects>
             <point key="canvasLocation" x="-467" y="-1907"/>
         </scene>
+        <!--List School Home View Controller-->
+        <scene sceneID="Hlb-kb-BdA">
+            <objects>
+                <viewController storyboardIdentifier="UListSchoolHomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ert-Lm-yBf" customClass="UListSchoolHomeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6bH-7B-Xg9">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="hqM-dY-bXU"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y57-vL-ezg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2729" y="-2369"/>
+        </scene>
+        <!--List Home View Controller - uList-->
+        <scene sceneID="okt-Kd-kZz">
+            <objects>
+                <viewController storyboardIdentifier="UListHomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ele-wz-CVo" customClass="UListHomeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="L8s-es-QzL">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="wisc_splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="X6d-HS-zts">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="149" id="ROX-yZ-yuZ"/>
+                                </constraints>
+                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qc7-j3-9fG">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="311" id="d9C-Y9-ZrS"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectSchoolCell" id="diJ-MD-Wr7" customClass="SelectSchoolCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="med-dx-UmK">
+                                        <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="qxN-QK-r9H">
+                                        <rect key="frame" x="0.0" y="110" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Ele-wz-CVo" id="zMo-gq-Dts"/>
+                                    <outlet property="delegate" destination="Ele-wz-CVo" id="noV-Zh-2vr"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="X6d-HS-zts" firstAttribute="top" secondItem="L8s-es-QzL" secondAttribute="top" type="default" id="0WO-ME-Wcg"/>
+                            <constraint firstItem="qc7-j3-9fG" firstAttribute="trailing" secondItem="L8s-es-QzL" secondAttribute="trailing" type="default" id="El8-X7-kfP"/>
+                            <constraint firstItem="qc7-j3-9fG" firstAttribute="leading" secondItem="L8s-es-QzL" secondAttribute="leading" type="default" id="Ln4-f2-Uix"/>
+                            <constraint firstItem="X6d-HS-zts" firstAttribute="leading" secondItem="L8s-es-QzL" secondAttribute="leading" type="default" id="Pxy-Al-Pmn"/>
+                            <constraint firstItem="qc7-j3-9fG" firstAttribute="bottom" secondItem="L8s-es-QzL" secondAttribute="bottom" type="default" id="a7Z-cM-rPe"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="uList" image="mobile-options.png" id="Ftk-9g-39X"/>
+                    <connections>
+                        <outlet property="schoolsTableView" destination="qc7-j3-9fG" id="ImH-Uq-rWC"/>
+                        <segue destination="ert-Lm-yBf" kind="push" identifier="ShowUListSchoolHomeViewController" id="jLX-Bs-ZZv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XAq-25-DRM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2210" y="-2356"/>
+        </scene>
         <!--UCampus View Controller-->
         <scene sceneID="dr1-4e-LXl">
             <objects>
                 <viewController storyboardIdentifier="UCampusViewController" title="uCampus" id="1g6-PO-L77" userLabel="UCampus View Controller" customClass="UCampusViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cDL-aP-Sl4">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpN-ME-Rz9">
@@ -932,7 +1020,7 @@
             <objects>
                 <viewController id="5My-q7-iAR" customClass="SnapshotsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="66U-Wk-cYn">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uq2-VD-BWa">
@@ -1230,7 +1318,7 @@
             <objects>
                 <viewController id="oAO-EV-Ga2" customClass="SnapshotsCategoryViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="C8c-oq-SSI">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0YG-e0-9R9">
@@ -1331,7 +1419,7 @@
             <objects>
                 <viewController id="fEJ-Op-KGX" customClass="SubmitSnapshotViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Kox-oX-W57">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS"/>
@@ -1514,7 +1602,7 @@
             <objects>
                 <viewController id="d1n-pK-Xx8" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RuK-cP-ytR">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eZp-cX-Q2l"/>
@@ -1782,7 +1870,7 @@
             <objects>
                 <viewController storyboardIdentifier="CampusEventsViewController" id="QpB-4S-MDV" customClass="CampusEventsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="enA-rt-XIR">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="82q-DA-2D1">
@@ -1905,7 +1993,7 @@
             <objects>
                 <viewController id="ORV-da-V8B" customClass="EventDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Rie-Gp-NbJ">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mK0-mj-ZBH">
@@ -2287,7 +2375,7 @@
             <objects>
                 <tableViewController id="PRm-vn-ILC" customClass="SettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="OPU-xq-8QV">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2389,7 +2477,7 @@
             <objects>
                 <viewController storyboardIdentifier="TermsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gJJ-vC-RT0" customClass="TermsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zmO-Kn-7fp">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0s5-A4-0QF">
@@ -2829,7 +2917,7 @@ Cg
             <objects>
                 <viewController id="7Jr-yC-CWx" customClass="UCampusHelpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Iu4-H3-R4K">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lTn-5J-mRY">
@@ -2893,7 +2981,7 @@ Verify that you have correctly entered and enabled your Twitter username from th
             <objects>
                 <tableViewController id="TAE-jC-OU7" customClass="HelpViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="22Q-6g-xjb">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -2954,7 +3042,7 @@ Verify that you have correctly entered and enabled your Twitter username from th
             <objects>
                 <viewController id="jEO-Zw-PbZ" customClass="SignupLoginHelpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2h5-9X-1Jb">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UjR-Lv-bdw">
@@ -3182,7 +3270,7 @@ Contact </string>
             <objects>
                 <viewController id="OGL-6A-uSr" customClass="MyProfileAccountHelpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MHy-Kn-lxg">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gga-7L-YGk">
@@ -3276,7 +3364,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <tableViewController id="Ihg-ym-a1V" customClass="AboutViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="i9K-hX-73j">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -3331,6 +3419,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                     <connections>
                         <segue destination="1g6-PO-L77" kind="relationship" relationship="viewControllers" id="oTi-gv-9lv"/>
                         <segue destination="pdn-31-bsx" kind="relationship" relationship="viewControllers" id="uXK-un-Jjh"/>
+                        <segue destination="Ele-wz-CVo" kind="relationship" relationship="viewControllers" id="G5k-AJ-lgj"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VxY-Na-Pp7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3742,7 +3831,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController id="YJH-Pk-ttZ" customClass="MySnapsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RFb-Da-x6H">
-                        <rect key="frame" x="0.0" y="20" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yfF-Ng-KPy">
@@ -4477,7 +4566,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController storyboardIdentifier="ProfilePictureViewController" id="Kyy-YR-gfL" userLabel="Profile Page View Controller" customClass="ProfilePictureViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QV9-GY-fWw">
-                        <rect key="frame" x="0.0" y="20" width="320" height="120"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="164"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Bv-04-2lv"/>
@@ -4563,7 +4652,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <tableViewController id="CTi-vb-kVX" customClass="MyEventsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="59" sectionHeaderHeight="22" sectionFooterHeight="22" id="4Di-8T-gX3">
-                        <rect key="frame" x="0.0" y="20" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -4597,7 +4686,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController id="KWv-0k-Tka" customClass="EditEventViewController" sceneMemberID="viewController">
                     <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="MTE-Pj-MqY">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </scrollView>
                     <navigationItem key="navigationItem" title="Event" id="1UO-8r-nZQ">
@@ -4864,7 +4953,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController id="bW8-4g-jo0" customClass="SocialViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="96q-e5-fZ4">
-                        <rect key="frame" x="0.0" y="20" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="0n6-dC-DeL"/>
@@ -5385,7 +5474,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController storyboardIdentifier="UCampusSocialViewController" id="TxN-HI-WPZ" customClass="UCampusSocialViewController" sceneMemberID="viewController">
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="wYz-so-MzX">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="oZL-Ui-Vcq"/>
@@ -5557,7 +5646,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController storyboardIdentifier="SubmitEventSuccessController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EjF-pK-sXv" sceneMemberID="viewController">
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4pm-lY-SFk">
-                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="wNN-3i-qzU"/>
@@ -6038,6 +6127,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <image name="icon-camera-large.png" width="140" height="103"/>
         <image name="location-dark.png" width="40" height="40"/>
         <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="mobile-options.png" width="25" height="13"/>
         <image name="nature.jpg" width="700" height="525"/>
         <image name="pushpin.png" width="22" height="31"/>
         <image name="select_your_school.png" width="200" height="41"/>
@@ -6056,6 +6146,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <image name="ulink_mobile_input_field_small.png" width="123" height="42"/>
         <image name="ulink_mobile_input_field_textarea.png" width="248" height="121"/>
         <image name="user-icon.png" width="30" height="30"/>
+        <image name="wisc_splash.png" width="320" height="570"/>
     </resources>
     <classes>
         <class className="AboutViewController" superclassName="UITableViewController">
@@ -6196,6 +6287,9 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <relationship kind="outlet" name="loginInButton" candidateClass="UlinkButton"/>
                 <relationship kind="outlet" name="signUpButton" candidateClass="UlinkButton"/>
             </relationships>
+        </class>
+        <class className="SelectSchoolCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectSchoolCell.h"/>
         </class>
         <class className="SelectSchoolViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectSchoolViewController.h"/>
@@ -6391,6 +6485,15 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UListHomeViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UListHomeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="schoolsTableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="UListSchoolHomeViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UListSchoolHomeViewController.h"/>
         </class>
         <class className="UlinkButton" superclassName="UIButton">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UlinkButton.h"/>

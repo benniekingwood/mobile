@@ -41,11 +41,15 @@
         self.navigationItem.title = @"uCampus";
         self.navigationItem.rightBarButtonItem = nil;
         [UAppDelegate activateUCampusSideMenu];
-    } else {
+    } else if([[item title] isEqualToString:@"Me"]) {
         self.navigationItem.title = @"Me";
         [UAppDelegate deactivateUCampusSideMenu];
         // Send a notification
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PROFILE_VIEW_CONTROLLER object:nil];
+    } else if([[item title] isEqualToString:@"uList"]) {
+        self.navigationItem.title = @"uList";
+        self.navigationItem.rightBarButtonItem = nil;
+        [UAppDelegate deactivateUCampusSideMenu];
     }
 }
 
