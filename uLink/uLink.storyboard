@@ -1331,7 +1331,7 @@
             <objects>
                 <viewController id="fEJ-Op-KGX" customClass="SubmitSnapshotViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Kox-oX-W57">
-                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS"/>
@@ -1514,7 +1514,7 @@
             <objects>
                 <viewController id="d1n-pK-Xx8" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RuK-cP-ytR">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eZp-cX-Q2l"/>
@@ -3414,7 +3414,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                     <constraint firstAttribute="height" constant="32" id="jzc-xd-yka"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
                                         <fragment content="Click Here">
@@ -5557,7 +5556,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             <objects>
                 <viewController storyboardIdentifier="SubmitEventSuccessController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EjF-pK-sXv" sceneMemberID="viewController">
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4pm-lY-SFk">
-                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="wNN-3i-qzU"/>
@@ -6391,6 +6390,9 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UlinkButton" superclassName="UIButton">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UlinkButton.h"/>
