@@ -70,6 +70,8 @@
     // Dispose of any resources that can be recreated.
 }
 - (void) logout {
+    // change the nav bar to be back to the main color
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"ulink-mobile-nav-bar-bg.png"] forBarMetrics:UIBarMetricsDefault];
     [UDataCache removeLoginInfo];
     // clear all cache data
     [UDataCache clearCache];
@@ -163,6 +165,8 @@
 }
 
 - (IBAction)doneClick:(UIBarButtonItem *)sender {
+    // change the nav bar to be back to the main color
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"ulink-mobile-nav-bar-bg.png"] forBarMetrics:UIBarMetricsDefault];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

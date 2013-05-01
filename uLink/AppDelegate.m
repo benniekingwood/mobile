@@ -45,12 +45,49 @@
     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
     imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
     initialLoad = TRUE;
+
+    /*
+     * Below we will set up the navigation bar styling
+     * We first set the background image for the navigation bar.
+     * Then we set the text font.
+     * Finally we set the defaults for the navigation back and other buttons.
+     */
+    UIImage *navBackgroundImage = [UIImage imageNamed:@"ulink-mobile-nav-bar-bg.png"];
+    [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], UITextAttributeTextColor,
+                                                           [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],UITextAttributeTextShadowColor,
+                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+                                                           UITextAttributeTextShadowOffset,
+                                                           [UIFont fontWithName:FONT_GLOBAL size:20.0], UITextAttributeFont, nil]];
+    // Change the appearance of back button
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
+                                                         forBarMetrics:UIBarMetricsDefault];
+    UIImage* backButtonImage = [UIImage imageNamed:@"10-dark-back-button.png"];
+    backButtonImage = [backButtonImage  resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, 0)];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    // Change the appearance of other navigation button
+    UIImage *barButtonImage = [[UIImage imageNamed:@"ulink-mobile-button-normal-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+    [[UIBarButtonItem appearance] setBackgroundImage:barButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     return YES;
+}
+
+- (UIButton *)createUIButtonNoBorderNSString *)imageName methodSEL)selMethod targetid)selTarget {
+    //NSLog(@"%@", NSStringFromSelector(selMethod));
+    
+    UIButton *tmpButton = [[UIButton alloc] init];
+    [tmpButton setImageUIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [tmpButton addTarget:selTarget action:selMethod forControlEvents:UIControlEventTouchUpInside];
+    [tmpButton setFrame:CGRectMake(0, 0, 25, 25)];
+    
+    return tmpButton;
 }
 
 - (MFSideMenu *)createSideMenu {
     sideMenuController = [[UCampusMenuViewController alloc] init];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_MAIN_NAVIGATION_CONTROLLER_ID];
+
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled
     |MFSideMenuOptionShadowEnabled;
     MFSideMenuPanMode panMode = MFSideMenuPanModeNavigationBar | MFSideMenuPanModeNavigationController;
@@ -148,6 +185,8 @@
         } else {
             // always default the the ucampus home
             [mainTabBarController setSelectedIndex:0];
+            // make sure the side menu for ucampus is active
+            [self activateUCampusSideMenu];
             [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
             [UDataCache rehydrateCaches:YES];
         }

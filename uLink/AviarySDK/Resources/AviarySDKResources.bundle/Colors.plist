@@ -82,7 +82,7 @@
 	<key>bottomBarOuterStrokeColor</key>
 	<dict>
 		<key>alpha</key>
-		<real>1</real>
+		<real>0.0</real>
 		<key>hex</key>
 		<string>#000000</string>
 	</dict>
@@ -117,14 +117,14 @@
 	<key>cancelButtonInnerShadowColor</key>
 	<dict>
 		<key>alpha</key>
-		<real>0.40000000600000002</real>
+		<real>0.0</real>
 		<key>hex</key>
-		<string>#ffffff</string>
+		<string>#000000</string>
 	</dict>
 	<key>cancelButtonStrokeColor</key>
 	<dict>
 		<key>alpha</key>
-		<real>0.75</real>
+		<real>0.0</real>
 		<key>hex</key>
 		<string>#000000</string>
 	</dict>
@@ -257,14 +257,14 @@
 	<key>navBarInnerStrokeColor</key>
 	<dict>
 		<key>alpha</key>
-		<real>1</real>
+		<real>0.0</real>
 		<key>hex</key>
 		<string>#474953</string>
 	</dict>
 	<key>navBarOuterStrokeColor</key>
 	<dict>
 		<key>alpha</key>
-		<real>1</real>
+		<real>0.0</real>
 		<key>hex</key>
 		<string>#000000</string>
 	</dict>
