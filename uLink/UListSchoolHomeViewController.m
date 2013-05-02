@@ -40,6 +40,7 @@
     
     // Activate side menu with uList 
     [UAppDelegate activateSideMenu:@"uList"];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {

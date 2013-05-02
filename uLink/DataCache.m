@@ -23,7 +23,7 @@
     BOOL indicatorVisible;
 }
 - (void) buildSchoolList:(id)schoolsRaw;
-- (void) buildUListCategoryList:(NSDictionary*)json;
+- (void) buildUListCategoryList:(NSArray*)json;
 - (void) retrieveSnapshots:(NSString*)categoryId;
 - (void) buildTrends:(id)trendsRaw;
 - (void) buildTweets:(id)tweetsRaw;
@@ -460,7 +460,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
                     if (httpResponse.statusCode==200)
                     {
                         NSError* err;
-                        NSDictionary* json = [NSJSONSerialization
+                        NSArray* json = [NSJSONSerialization
                                               JSONObjectWithData:data
                                               options:kNilOptions
                                               error:&err];
@@ -729,48 +729,55 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
  * Build uList Categories from json object passed from
  * hydrateUListCategories
  */
--(void) buildUListCategoryList:(NSDictionary*)json {
-    
-    // iterate over list of schools
-    NSEnumerator *e = [json keyEnumerator];
+-(void) buildUListCategoryList:(NSArray*)json {
+    //NSLog(@"%@", json);
+    // iterate over list of categories
+    //NSEnumerator *e = [json keyEnumerator];
     id categoryId;
     NSString *uListCategorySectionKey = nil;
-    while (categoryId = [e nextObject]) {
+    //while (categoryId = [e nextObject]) {
+    for (id object in json) {
+       // NSLog(@"%@", object);
         NSString* uListCategoryName = [(NSDictionary*)json valueForKey:@"name"];
+        //NSLog(@"%@", uListCategoryName);
         
-        // captialize the first letter of school name
-        uListCategoryName = [textUtil capitalizeString:uListCategoryName];
         uListCategorySectionKey = uListCategoryName;
         
         // grab array from schools dictionary based on captialized letter
-        NSMutableArray *sectionCategories = [self.uListCategories objectForKey:uListCategorySectionKey];
+        //NSMutableArray *sectionCategories = [self.uListCategories objectForKey:uListCategorySectionKey];
+        //NSString* strSectionCategories = [(NSDictionary*)json valueForKey:@"subcategories"];
         
-        // if there is no array for that letter, create one
-        if(sectionCategories == nil) {
-            sectionCategories = [[NSMutableArray alloc] init];
-        }
+        // create array for the sub categories of the main category
+        NSMutableArray *sectionCategories = [[NSMutableArray alloc] init];
         
-        // create ulist (sub)-category object, and add it to the retreived array
-        UListCategory *category = [[UListCategory alloc] init];
+        NSArray* uListSubCategories = [(NSArray*)json valueForKey:@"subcategories"];
+        NSArray* subCategories = [uListSubCategories objectAtIndex:0];
+        for (id object in subCategories) {
         
-        // set the name and cache age for category
-        category.name = uListCategoryName;
-        category.cacheAge = [NSDate date];
+            // create ulist (sub)-category object, and add it to the retreived array
+            UListCategory *category = [[UListCategory alloc] init];
+            
+            // set the name and cache age for category
+            category.name = (NSString*)object;
+            category.cacheAge = [NSDate date];
         
-        // add sub-category to categories array
-        [sectionCategories addObject:category];
-        [self.uListCategories setObject:sectionCategories forKey:uListCategorySectionKey];
+            // add sub-category to categories array
+            [sectionCategories addObject:category];
+            [self.uListCategories setObject:sectionCategories forKey:uListCategoryName];
+         }
     }
     
-    NSArray *keys = [self.schools allKeys];
+    NSArray *keys = [self.uListCategories allKeys];
     // sort the cacheSchools by key
     NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSEnumerator *ee = [sortedKeys objectEnumerator];
     id key;
     // iterate over the cacheSchools putting each section school in an array
     while (key = [ee nextObject]) {
-        [self.schoolSections addObject:(NSString*)key];
+        [self.uListCategorySections addObject:(NSString*)key];
     }
+    
+    NSLog(@"%@%@", self.uListCategorySections, self.uListCategories);
 }
 -(void) retrieveSnapshots:(NSString*)categoryId {
     @try {

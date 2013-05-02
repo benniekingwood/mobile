@@ -12,6 +12,8 @@
 #import "AppDelegate.h"
 #import "UCampusMenuCell.h"
 #import "UListMenuCell.h"
+#import "DataCache.h"
+#import "UListCategory.h"
 
 
 @interface UCampusMenuViewController () {
@@ -67,8 +69,9 @@
         retVal = 1;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        retVal = 2;
+        retVal = [UDataCache.uListCategorySections count];
     }
+    NSLog(@"%i", retVal);
     return retVal;
 }
 
@@ -80,10 +83,13 @@
         retVal = 3;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        //NOTE: grab category count
-        retVal = 1;
+        NSInteger retVal;
+        NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
+        NSMutableArray *subcategories = [UDataCache.uListCategories objectForKey:key];
+        retVal = [subcategories count];
     }
-    
+    NSLog(@"%i", retVal);
+
     return retVal;
 }
 
@@ -91,9 +97,8 @@
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = nil;
-    
-    NSLog(@"%@ in cellForRowAtIndexPath",mode);
-    
+    int section = [indexPath section];
+        
     if ([mode isEqualToString:@"uCampus"]) {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
@@ -129,21 +134,11 @@
             cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"Test";
-                ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
-                cell.tag = 0;
-                break;
-            case 1:
-                cell.textLabel.text = @"Test";
-                ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-snapshots-icon.png"];
-                cell.tag = 1;
-                break;
-            default:
-                break;
-        }
-        
+        NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
+        NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
+        UListCategory *category = [categories objectAtIndex:indexPath.row];
+        ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
+        ((UListMenuCell*)cell).textLabel.text = category.name;
         [(UListMenuCell*)cell layoutSubviews];
         [(UListMenuCell*)cell setEnabled:YES];
     }
