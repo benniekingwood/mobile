@@ -11,18 +11,15 @@
 #import "MFSideMenu.h"
 #import "AppDelegate.h"
 #import "UCampusMenuCell.h"
-#import "UListMenuCell.h"
 
 
 @interface UCampusMenuViewController () {
     UIView *overlay;
-    NSMutableArray *data;
 }
 @end
 
 @implementation UCampusMenuViewController
 @synthesize sideMenu;
-@synthesize mode;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -45,12 +42,10 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"side-menu-bg.png"]];
     self.tableView.separatorColor = [UIColor clearColor];
 }
-
 -(void)hideMenu {
     [self.view addSubview:overlay];
 }
 - (void)showMenu {
-     NSLog(@"view will appear. mode is %@", self.mode);
     [overlay removeFromSuperview];
 }
 - (void)didReceiveMemoryWarning
@@ -61,93 +56,44 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    int retVal = 0;
-    
-    if ([mode isEqualToString:@"uCampus"]) {
-        retVal = 1;
-    }
-    else if ([mode isEqualToString:@"uList"]) {
-        retVal = 2;
-    }
-    return retVal;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int retVal = 0;
-    
-    if ([mode isEqualToString:@"uCampus"]) {
-        retVal = 3;
-    }
-    else if ([mode isEqualToString:@"uList"]) {
-        //NOTE: grab category count
-        retVal = 1;
-    }
-    
-    return retVal;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = nil;
     
-    NSLog(@"%@ in cellForRowAtIndexPath",mode);
-    
-    if ([mode isEqualToString:@"uCampus"]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UCampusMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-    
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"Events";
-                ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
-                cell.tag = 0;
-                break;
-            case 1:
-                cell.textLabel.text = @"Snapshots";
-                ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-snapshots-icon.png"];
-                cell.tag = 1;
-                break;
-            case 2:
-                cell.textLabel.text = @"Social Media";
-                ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-social-icon.png"];
-                cell.tag = 2;
-                break;
-            default:
-                break;
-        }
-        
-        [(UCampusMenuCell*)cell layoutSubviews];
-        [(UCampusMenuCell*)cell setEnabled:YES];
-    }
-    else if ([mode isEqualToString:@"uList"]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"Test";
-                ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
-                cell.tag = 0;
-                break;
-            case 1:
-                cell.textLabel.text = @"Test";
-                ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-snapshots-icon.png"];
-                cell.tag = 1;
-                break;
-            default:
-                break;
-        }
-        
-        [(UListMenuCell*)cell layoutSubviews];
-        [(UListMenuCell*)cell setEnabled:YES];
+    UCampusMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UCampusMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    switch (indexPath.row) {
+        case 0:
+            cell.textLabel.text = @"Events";
+            cell.iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
+            cell.tag = 0;
+            break;
+        case 1:
+            cell.textLabel.text = @"Snapshots";
+            cell.iconImage = [UIImage imageNamed:@"ulink-mobile-snapshots-icon.png"];
+            cell.tag = 1;
+            break;
+        case 2:
+            cell.textLabel.text = @"Social Media";
+            cell.iconImage = [UIImage imageNamed:@"ulink-mobile-social-icon.png"];
+            cell.tag = 2;
+            break;
+        default:
+            break;
+    }
+    [cell layoutSubviews];
+    [cell setEnabled:YES];
     return cell;
 }
 #pragma mark - UITableViewDelegate

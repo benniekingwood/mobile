@@ -17,15 +17,12 @@
 #import "AlertView.h"
 #import "Reachability.h"
 #import "UCampusViewController.h"
-#import "UListHomeViewController.h"
-#import "UListSchoolHomeMenuViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "LoginViewController.h"
 
 @implementation AppDelegate {
     UIStoryboard* storyboard;
     UCampusMenuViewController *sideMenuController;
-    //UListSchoolHomeMenuViewController *uListSideMenuController;
     ActivityIndicatorView *activityIndicator;
     AlertView *appDelegateAlert;
     BOOL initialLoad;
@@ -38,10 +35,7 @@
     [UDataCache hydrateSnapshotCategoriesCache:NO];
     [NSThread sleepForTimeInterval:SLEEP_TIME_APP_LOAD];
     storyboard = [UIStoryboard storyboardWithName:@"uLink" bundle:nil];
-    
     [self setupNavigationControllerApp];
-    //[self setupUListNavigationControllerApp];
-    
     activityIndicator = [[ActivityIndicatorView alloc] init];
     appDelegateAlert = [[AlertView alloc] initWithTitle:@""
                              message: ALERT_NO_INTERNET_CONN
@@ -92,7 +86,6 @@
 
 - (MFSideMenu *)createSideMenu {
     sideMenuController = [[UCampusMenuViewController alloc] init];
-    sideMenuController.mode = @"uCampus";
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_MAIN_NAVIGATION_CONTROLLER_ID];
 
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled
@@ -109,33 +102,26 @@
     return sideMenu;
 }
 
-
 - (void) setupNavigationControllerApp {
     self.window.rootViewController = [self createSideMenu].navigationController;
     [self.window makeKeyAndVisible];
 }
 
--(void)activateSideMenu : (NSString*) mode {
-    //NSLog(@"%@",mode);
-    self.window.rootViewController.navigationController.navigationItem.title = mode;
+-(void)activateUCampusSideMenu {
+    self.window.rootViewController.navigationController.navigationItem.title = @"uCampus";
     [sideMenuController.sideMenu setSideMenuEnabled:YES];
     [sideMenuController.sideMenu showOptionsButton];
-    sideMenuController.mode = mode;
-    [sideMenuController.tableView reloadData];
     [((UCampusMenuViewController*)sideMenuController.sideMenu.sideMenuController) showMenu];
 }
-
--(void)deactivateSideMenu  {
+-(void)deactivateUCampusSideMenu  {
     [sideMenuController.sideMenu setSideMenuEnabled:NO];
     [sideMenuController.sideMenu hideOptionsButton];
     [((UCampusMenuViewController*)sideMenuController.sideMenu.sideMenuController) hideMenu];
 
 }
-
 -(UITabBarController*)getMainTabBarViewController {
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:2];
 }
-
 -(void) showActivityIndicator {
     /*
      * NOTE: keeping commented out for now.  The main indicator
@@ -262,16 +248,5 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-- (UIButton *)createUIButtonNoBorder:(NSString *)imageName method:(SEL)selMethod target:(id)selTarget {
-    //NSLog(@"%@", NSStringFromSelector(selMethod));
-    
-    UIButton *tmpButton = [[UIButton alloc] init];
-    [tmpButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-    [tmpButton addTarget:selTarget action:selMethod forControlEvents:UIControlEventTouchUpInside];
-    [tmpButton setFrame:CGRectMake(0, 0, 25, 25)];
-
-    return tmpButton;
 }
 @end

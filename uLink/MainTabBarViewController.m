@@ -28,8 +28,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [UAppDelegate activateSideMenu : @"uCampus"];
-    //[UAppDelegate activateUListSideMenu];
+    [UAppDelegate activateUCampusSideMenu];
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,16 +40,12 @@
     if([[item title] isEqualToString:@"uCampus"]) {
         self.navigationItem.title = @"uCampus";
         self.navigationItem.rightBarButtonItem = nil;
-        [UAppDelegate activateSideMenu : @"uCampus"];
-    } else if([[item title] isEqualToString:@"Me"]) {
+        [UAppDelegate activateUCampusSideMenu];
+    } else {
         self.navigationItem.title = @"Me";
-        [UAppDelegate deactivateSideMenu];
+        [UAppDelegate deactivateUCampusSideMenu];
         // Send a notification
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PROFILE_VIEW_CONTROLLER object:nil];
-    } else if([[item title] isEqualToString:@"uList"]) {
-        self.navigationItem.title = @"uList";
-        self.navigationItem.rightBarButtonItem = nil;
-        [UAppDelegate deactivateSideMenu];
     }
 }
 

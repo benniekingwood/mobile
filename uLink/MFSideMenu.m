@@ -29,7 +29,6 @@
 //
 
 #import "MFSideMenu.h"
-#import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
@@ -237,22 +236,11 @@
 #pragma mark -
 #pragma mark - UIBarButtonItems & Callbacks
 
-/*
 - (UIBarButtonItem *)menuBarButtonItem {
     return [[UIBarButtonItem alloc]
             initWithImage:[UIImage imageNamed:@"options.png"] style:UIBarButtonItemStyleBordered
             target:self
             action:@selector(toggleSideMenuPressed:)];
-}
- */
-
-/* Added to customize our side bar button item to blend in with tab bar controller */
-- (UIBarButtonItem *)menuBarButtonItem {
-    NSString *func = [NSString stringWithFormat:@"%@%@", @"toggleSideMenuPressed", @":"];
-    SEL selector = NSSelectorFromString( func ) ;
-
-    return [[UIBarButtonItem alloc]
-            initWithCustomView:[UAppDelegate createUIButtonNoBorder:@"options.png" method:selector target:self]];
 }
 
 - (UIBarButtonItem *)backBarButtonItem {
