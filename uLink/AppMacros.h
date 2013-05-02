@@ -43,6 +43,7 @@
 */
 #pragma mark PROD_URLS
 #define URL_SERVER @"http://www.theulink.com/"
+#define LOCAL_HOST @"http://localhost:3737/"
 #define URL_USER_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/files/users/thumbs/"
 #define URL_USER_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/users/medium/"
 #define URL_DEFAULT_USER_IMAGE @"http://www.theulink.com/img/defaults/default_user.jpg"
@@ -73,6 +74,7 @@
 #pragma mark API FUNCTIONS
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
 #define API_SCHOOLS_SCHOOL @"schools/school"
+#define API_ULIST_CATEGORIES @"api/categories/"
 #define API_USERS_RESET_PASSWORD @"users/reset_password"
 #define API_USERS_SIGN_UP @"users/sign_up"
 #define API_USERS_LOG_IN @"users/login"
@@ -107,6 +109,7 @@
 #define DISPATCH_RESETPASSWORD "reset_password"
 #define DISPATCH_SIGNUP "sign_up"
 #define DISPATCH_SCHOOL "school"
+#define DISPATCH_ULIST_CATEGORY "ulist_category"
 #define DISPATCH_LOGIN "log_in"
 #define DISPATCH_UPDATE_PASSWORD "update_password"
 #define DISPATCH_UPDATE_USER "update_user"
@@ -176,6 +179,7 @@
 #define SEGUE_SHOW_SOCIAL_VIEW_CONTROLLER @"ShowSocialViewController"
 #define SEGUE_SHOW_SNAPSHOTS_VIEW_CONTROLLER @"ShowSnapshotsViewController"
 #define SEGUE_SHOW_ULIST_SCHOOL_HOME_VIEW_CONTROLLER @"ShowUListSchoolHomeViewController"
+#define SEGUE_SHOW_ULIST_CATEGORY_VIEW_CONTROLLER @"ShowUListCategoryViewController"
 
 #pragma mark NOTIFICATIONS
 #define NOTIFICATION_PROFILE_VIEW_CONTROLLER @"NOTIFICATION_PROFILE_VIEW_CONTROLLER"

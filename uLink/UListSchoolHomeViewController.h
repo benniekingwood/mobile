@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface UListSchoolHomeViewController : UIViewController
+//#import "UListSchoolHomeMenuViewController.h"
+#import "UCampusMenuViewController.h"
+@interface UListSchoolHomeViewController : UIViewController <UCampusMenuViewControllerDelegate>
+@property (strong, nonatomic) IBOutlet UIView *mainView;
 @property (nonatomic) NSString *schoolId;
 @property (nonatomic) NSString *schoolName;
+
 @end

@@ -12,9 +12,13 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> 
 @property (strong, nonatomic) UIWindow *window;
--(void) activateUCampusSideMenu;
--(void) deactivateUCampusSideMenu;
+-(void) activateSideMenu : (NSString*) mode;
+-(void) deactivateSideMenu;
+//-(void) activateUListSideMenu;
+//-(void) deactivateUListSideMenu;
 -(UITabBarController*) getMainTabBarViewController;
+//-(UITabBarController*) getUListMainTabBarViewController;
 -(void) showActivityIndicator;
 -(void) hideActivityIndicator;
+-(UIButton*) createUIButtonNoBorder : (NSString*)imageName method:(SEL)selMethod target:(id)selTarget;
 @end

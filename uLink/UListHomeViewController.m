@@ -7,6 +7,7 @@
 //
 
 #import "UListHomeViewController.h"
+#import "AppDelegate.h"
 #import "AppMacros.h"
 #import "DataCache.h"
 #import "SelectSchoolCell.h"
