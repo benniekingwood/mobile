@@ -731,38 +731,35 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
  */
 -(void) buildUListCategoryList:(NSArray*)json {
     //NSLog(@"%@", json);
-    // iterate over list of categories
-    //NSEnumerator *e = [json keyEnumerator];
-    id categoryId;
+
     NSString *uListCategorySectionKey = nil;
-    //while (categoryId = [e nextObject]) {
     for (id object in json) {
-       // NSLog(@"%@", object);
-        NSString* uListCategoryName = [(NSDictionary*)json valueForKey:@"name"];
-        //NSLog(@"%@", uListCategoryName);
+        //NSLog(@"%@", object);
+        NSString* uListCategoryName = [(NSString*)object valueForKey:@"name"];
+        //NSLog(@"Main Category Name: %@", uListCategoryName);
         
         uListCategorySectionKey = uListCategoryName;
-        
-        // grab array from schools dictionary based on captialized letter
-        //NSMutableArray *sectionCategories = [self.uListCategories objectForKey:uListCategorySectionKey];
-        //NSString* strSectionCategories = [(NSDictionary*)json valueForKey:@"subcategories"];
-        
+
         // create array for the sub categories of the main category
         NSMutableArray *sectionCategories = [[NSMutableArray alloc] init];
         
-        NSArray* uListSubCategories = [(NSArray*)json valueForKey:@"subcategories"];
-        NSArray* subCategories = [uListSubCategories objectAtIndex:0];
-        for (id object in subCategories) {
+        NSArray* uListSubCategories = [(NSArray*)object valueForKey:@"subcategories"];
+        //NSLog(@"Subcategories: %@", uListSubCategories);
+        //NSArray* subCategories = [uListSubCategories objectAtIndex:0];
+        
+        for (id object in uListSubCategories) {
         
             // create ulist (sub)-category object, and add it to the retreived array
-            UListCategory *category = [[UListCategory alloc] init];
+            UListCategory *subCategory = [[UListCategory alloc] init];
             
             // set the name and cache age for category
-            category.name = (NSString*)object;
-            category.cacheAge = [NSDate date];
+            subCategory.name = (NSString*)object;
+            subCategory.cacheAge = [NSDate date];
         
+            //NSLog(@"ulist subcat: %@", category.name);
+            
             // add sub-category to categories array
-            [sectionCategories addObject:category];
+            [sectionCategories addObject:subCategory];
             [self.uListCategories setObject:sectionCategories forKey:uListCategoryName];
          }
     }
@@ -777,7 +774,8 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
         [self.uListCategorySections addObject:(NSString*)key];
     }
     
-    NSLog(@"%@%@", self.uListCategorySections, self.uListCategories);
+    //NSLog(@"section count: %i, cat count: %i", [self.uListCategorySections count], [self.uListCategories count]);
+    //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
 }
 -(void) retrieveSnapshots:(NSString*)categoryId {
     @try {

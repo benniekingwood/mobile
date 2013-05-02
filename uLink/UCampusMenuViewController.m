@@ -10,6 +10,7 @@
 #import "MainTabBarViewController.h"
 #import "MFSideMenu.h"
 #import "AppDelegate.h"
+#import "AppMacros.h"
 #import "UCampusMenuCell.h"
 #import "UListMenuCell.h"
 #import "DataCache.h"
@@ -19,6 +20,8 @@
 @interface UCampusMenuViewController () {
     UIView *overlay;
     NSMutableArray *data;
+    UIFont *cellFont;
+    UIFont *cellFontBold;
 }
 @end
 
@@ -37,6 +40,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    cellFont = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
+    cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
+    
     CGRect overlayFrame;
     overlayFrame.origin.x = 0;
     overlayFrame.origin.y = 0;
@@ -52,7 +58,7 @@
     [self.view addSubview:overlay];
 }
 - (void)showMenu {
-     NSLog(@"view will appear. mode is %@", self.mode);
+    //NSLog(@"view will appear. mode is %@", self.mode);
     [overlay removeFromSuperview];
 }
 - (void)didReceiveMemoryWarning
@@ -71,7 +77,7 @@
     else if ([mode isEqualToString:@"uList"]) {
         retVal = [UDataCache.uListCategorySections count];
     }
-    NSLog(@"%i", retVal);
+
     return retVal;
 }
 
@@ -83,12 +89,10 @@
         retVal = 3;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        NSInteger retVal;
         NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
-        NSMutableArray *subcategories = [UDataCache.uListCategories objectForKey:key];
+        NSMutableArray *subcategories = [UDataCache.uListCategories mutableArrayValueForKey:key];
         retVal = [subcategories count];
     }
-    NSLog(@"%i", retVal);
 
     return retVal;
 }
@@ -98,7 +102,9 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = nil;
     int section = [indexPath section];
-        
+    
+    NSLog(@"%@", mode);
+    
     if ([mode isEqualToString:@"uCampus"]) {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
@@ -137,7 +143,7 @@
         NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
         NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
         UListCategory *category = [categories objectAtIndex:indexPath.row];
-        ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
+        //((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
         ((UListMenuCell*)cell).textLabel.text = category.name;
         [(UListMenuCell*)cell layoutSubviews];
         [(UListMenuCell*)cell setEnabled:YES];
@@ -161,5 +167,31 @@
         [uCampusViewController performSegue:selectedCell.tag];
     }
 }
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = nil;
+    view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
+    return view;
+}
+
+- (UIView*)createSectionView:(NSString*)category {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 10)];
+    view.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.6f];
+    UILabel *sectionLabel = [[UILabel alloc] init];
+    sectionLabel.frame = CGRectMake(0, 0, 300, 15);
+    sectionLabel.textColor = [UIColor whiteColor];
+    sectionLabel.font = cellFontBold;
+    sectionLabel.backgroundColor = [UIColor grayColor];
+    sectionLabel.shadowColor = [UIColor blackColor];
+    sectionLabel.shadowOffset = CGSizeMake(0.0f, -0.5f);
+    sectionLabel.text = category;
+    [view addSubview:sectionLabel];
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 320, 0.1)];
+    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8f];
+    [view addSubview:bottomLine];
+    return view;
+}
+
+
 
 @end
