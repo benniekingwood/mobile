@@ -3503,7 +3503,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                                     <constraint firstAttribute="height" constant="32" id="jzc-xd-yka"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
                                         <fragment content="Click Here">

@@ -76,6 +76,8 @@
     // Dispose of any resources that can be recreated.
 }
 -(void) showSettingsViewController {
+    // change the nav bar to be black
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"ulink-mobile-nav-bar-blk-bg.png"] forBarMetrics:UIBarMetricsDefault];
     [self performSegueWithIdentifier:SEGUE_SHOW_SETTINGS_VIEW_CONTROLLER sender:self];
 }
 

@@ -234,9 +234,6 @@
     [self dismissViewControllerAnimated:NO completion:^{
         // initialize the aviary filter gallery
         photoEditorController = [[AFPhotoEditorController alloc] initWithImage:previewPhotoView.previewImageView.image];
-        [AFPhotoEditorCustomization setOptionValue:[UIColor colorWithRed:35.0f / 255.0f green:85.0f / 255.0f blue:100.0f / 255.0f alpha:1.0f] forKey:@"editor.accentColor"];
-        [AFPhotoEditorCustomization setOptionValue:@"Submit" forKey:@"editor"];
-        
         [photoEditorController setDelegate:self];
         [self presentViewController:photoEditorController animated:YES completion:nil];
     }];
