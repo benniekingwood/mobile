@@ -73,17 +73,6 @@
     return YES;
 }
 
-- (UIButton *)createUIButtonNoBorderNSString *)imageName methodSEL)selMethod targetid)selTarget {
-    //NSLog(@"%@", NSStringFromSelector(selMethod));
-    
-    UIButton *tmpButton = [[UIButton alloc] init];
-    [tmpButton setImageUIImage imageNamed:imageName] forState:UIControlStateNormal];
-    [tmpButton addTarget:selTarget action:selMethod forControlEvents:UIControlEventTouchUpInside];
-    [tmpButton setFrame:CGRectMake(0, 0, 25, 25)];
-    
-    return tmpButton;
-}
-
 - (MFSideMenu *)createSideMenu {
     sideMenuController = [[UCampusMenuViewController alloc] init];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_MAIN_NAVIGATION_CONTROLLER_ID];
