@@ -62,6 +62,9 @@
         self.imageView.image = iconImage;
         iconImage = nil;
     }
+    else {
+        self.imageView.image = nil;
+    }
     
     // Reenable user interaction and selection ability
     self.selectionStyle = UITableViewCellSelectionStyleBlue;

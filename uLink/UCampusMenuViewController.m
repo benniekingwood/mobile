@@ -91,6 +91,7 @@
     else if ([mode isEqualToString:@"uList"]) {
         NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
         NSMutableArray *subcategories = [UDataCache.uListCategories mutableArrayValueForKey:key];
+        //NSLog(@"%@", subcategories);
         retVal = [subcategories count];
     }
 
@@ -103,14 +104,14 @@
     UITableViewCell *cell = nil;
     int section = [indexPath section];
     
-    NSLog(@"%@", mode);
+    //NSLog(@"%@", mode);
     
     if ([mode isEqualToString:@"uCampus"]) {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UCampusMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
-    
+        
         switch (indexPath.row) {
             case 0:
                 cell.textLabel.text = @"Events";
@@ -144,6 +145,7 @@
         NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
         UListCategory *category = [categories objectAtIndex:indexPath.row];
         //((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
+        ((UListMenuCell*)cell).iconImage = nil;
         ((UListMenuCell*)cell).textLabel.text = category.name;
         [(UListMenuCell*)cell layoutSubviews];
         [(UListMenuCell*)cell setEnabled:YES];
@@ -181,7 +183,7 @@
     sectionLabel.frame = CGRectMake(0, 0, 300, 15);
     sectionLabel.textColor = [UIColor whiteColor];
     sectionLabel.font = cellFontBold;
-    sectionLabel.backgroundColor = [UIColor grayColor];
+    sectionLabel.backgroundColor = [UIColor clearColor];
     sectionLabel.shadowColor = [UIColor blackColor];
     sectionLabel.shadowOffset = CGSizeMake(0.0f, -0.5f);
     sectionLabel.text = category;
