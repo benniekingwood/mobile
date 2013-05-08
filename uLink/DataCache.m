@@ -478,7 +478,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
                             [self buildUListCategoryList:json];
                         }
 
-                    }
+                    } 
                     
                     // Add logging for performance maintenance
                     NSLog(@"hydrateUListCategoryCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
@@ -777,6 +777,7 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
     //NSLog(@"section count: %i, cat count: %i", [self.uListCategorySections count], [self.uListCategories count]);
     //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
 }
+ 
 -(void) retrieveSnapshots:(NSString*)categoryId {
     @try {
         dispatch_queue_t snapsQueue = dispatch_queue_create(DISPATCH_SNAPS, NULL);

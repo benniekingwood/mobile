@@ -51,6 +51,7 @@
     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
     imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
     initialLoad = TRUE;
+    //NSLog(@"%@",(UITabBarController*)self.window.rootViewController);
     return YES;
 }
 
@@ -97,6 +98,12 @@
 
 -(UITabBarController*)getMainTabBarViewController {
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:2];
+}
+
+-(UIViewController*)getUListSchoolHomeViewController {
+    NSLog(@"In getUlistSchoolHOmeViewController");
+    //NSLog(@"%@",[[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:3]);
+    return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:3];
 }
 
 -(void) showActivityIndicator {

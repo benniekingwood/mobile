@@ -8,6 +8,7 @@
 
 #import "UCampusMenuViewController.h"
 #import "MainTabBarViewController.h"
+#import "UListSchoolHomeMenuViewController.h"
 #import "MFSideMenu.h"
 #import "AppDelegate.h"
 #import "AppMacros.h"
@@ -162,11 +163,22 @@
         [self.sideMenu setMenuState:MFSideMenuStateVisible];
     }
     UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-    // grab the UCampusViewController from the MainTabBarViewController
-    MainTabBarViewController *tabBarController = (MainTabBarViewController*)[UAppDelegate getMainTabBarViewController];
-    id uCampusViewController = [[tabBarController viewControllers] objectAtIndex:0];
-    if ([uCampusViewController respondsToSelector:@selector(performSegue:)]) {
-        [uCampusViewController performSegue:selectedCell.tag];
+    
+    if ([mode isEqualToString:@"uCampus"]) {
+        // grab the UCampusViewController from the MainTabBarViewController
+        MainTabBarViewController *tabBarController = (MainTabBarViewController*)[UAppDelegate getMainTabBarViewController];
+        id uCampusViewController = [[tabBarController viewControllers] objectAtIndex:0];
+        if ([uCampusViewController respondsToSelector:@selector(performSegue:)]) {
+            [uCampusViewController performSegue:selectedCell.tag];
+        }
+    }
+    
+    if ([mode isEqualToString:@"uList"]) {
+        UListSchoolHomeMenuViewController *uListSchoolHomeController = (UListSchoolHomeMenuViewController*)[UAppDelegate getUListSchoolHomeViewController];
+        //NSLog(@"%@", [UAppDelegate getUListSchoolHomeViewController]);
+        if ([(id)uListSchoolHomeController respondsToSelector:@selector(performSegue:)]) {
+            [(id)uListSchoolHomeController performSegue:selectedCell.tag];
+        }
     }
 }
 

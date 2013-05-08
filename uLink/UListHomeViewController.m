@@ -67,6 +67,10 @@
     
     [UDataCache.schoolSections removeObject:@""];
     sections = UDataCache.schoolSections;
+    //[UDataCache hydrateUListCategoryCache];
+}
+
+-(void) viewWillAppear:(BOOL)animated {
     [UDataCache hydrateUListCategoryCache];
 }
 

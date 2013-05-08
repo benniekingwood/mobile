@@ -7,6 +7,7 @@
 //
 
 #import "UListSchoolHomeViewController.h"
+#import "UListSchoolCategoryViewController.h"
 #import "AppDelegate.h"
 #import "AppMacros.h"
 #import "DataCache.h"
@@ -61,14 +62,34 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    if([[item title] isEqualToString:@"uCampus"]) {
+        self.navigationItem.title = @"uCampus";
+        self.navigationItem.rightBarButtonItem = nil;
+        [UAppDelegate activateSideMenu : @"uCampus"];
+    } else if([[item title] isEqualToString:@"Me"]) {
+        self.navigationItem.title = @"Me";
+        [UAppDelegate deactivateSideMenu];
+        // Send a notification
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PROFILE_VIEW_CONTROLLER object:nil];
+    } else if([[item title] isEqualToString:@"uList"]) {
+        self.navigationItem.title = @"uList";
+        self.navigationItem.rightBarButtonItem = nil;
+        [UAppDelegate deactivateSideMenu];
+    }
+}
+
+/*
+ * Prepare for seque from Side Menu Bar Table View
+ */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:SEGUE_SHOW_ULIST_CATEGORY_VIEW_CONTROLLER])
+    if ([[segue identifier] isEqualToString:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER])
     {
         SelectCategoryCell *cell = (SelectCategoryCell *)sender;
-        UListSchoolHomeViewController *categoryViewController = [segue destinationViewController];
-        //categoryViewController.categoryId = cell.schoolId;
-        //categoryViewController.categoryName = cell.schoolName;
+        UListSchoolCategoryViewController *categoryViewController = [segue destinationViewController];
+        categoryViewController.categoryId = cell.categoryId;
+        categoryViewController.categoryName = cell.categoryName;
     }
 }
 
@@ -76,7 +97,10 @@
 - (void)performSegue:(NSInteger)item {
     switch (item) {
         case 0:
-            [self performSegueWithIdentifier:SEGUE_SHOW_ULIST_CATEGORY_VIEW_CONTROLLER sender:self];
+            [self performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:self];
+            break;
+        default:
+            [self performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:self];
             break;
     }
 }

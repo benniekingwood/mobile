@@ -9,6 +9,7 @@
 #import "SelectCategoryCell.h"
 
 @implementation SelectCategoryCell
+@synthesize categoryId, categoryName;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
