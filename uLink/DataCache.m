@@ -22,6 +22,7 @@
     BOOL indicatorVisible;
 }
 - (void) buildSchoolList:(id)schoolsRaw;
+- (void) buildUListCategoryList:(NSArray*)json;
 - (void) retrieveSnapshots:(NSString*)categoryId;
 - (void) buildTrends:(id)trendsRaw;
 - (void) buildTweets:(id)tweetsRaw;
@@ -412,6 +413,57 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
     @catch (NSException *exception) {} // TODO: report error?
 }
 
+/*
+ * Hydrate the uList category cache
+ *
+ */
+- (void) hydrateUListCategoryCache {
+    @try {
+        clock_t start = clock();
+        dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_CATEGORY, NULL);
+        dispatch_async(categoryQueue, ^{
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[LOCAL_HOST stringByAppendingString:API_ULIST_CATEGORIES]]];
+            [req setHTTPMethod:HTTP_GET];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+         
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                              JSONObjectWithData:data
+                                              options:kNilOptions
+                                              error:&err];
+                        @synchronized(self) {
+                            if(self.uListCategorySections == nil) {
+                                self.uListCategorySections = [[NSMutableArray alloc] init];
+                            }  else {
+                                [self.uListCategorySections removeAllObjects];
+                            }
+                            if (self.uListCategories == nil) {
+                                self.uListCategories = [[NSMutableDictionary alloc] init];
+                            } else{
+                                [self.uListCategories removeAllObjects];
+                            }
+                            [self buildUListCategoryList:json];
+                        }
+
+                    }
+                    
+                    // Add logging for performance maintenance
+                    NSLog(@"hydrateUListCategoryCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                }
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {} // TODO: report error?
+}
+
 - (void) hydrateEventsCache {
     @try {
         clock_t start = clock();
@@ -646,6 +698,59 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
     while (key = [ee nextObject]) { 
         [self.schoolSections addObject:(NSString*)key];
     }
+}
+
+/*
+ * Build uList Categories from json object passed from
+ * hydrateUListCategories
+ */
+-(void) buildUListCategoryList:(NSArray*)json {
+    //NSLog(@"%@", json);
+
+    NSString *uListCategorySectionKey = nil;
+    for (id object in json) {
+        //NSLog(@"%@", object);
+        NSString* uListCategoryName = [(NSString*)object valueForKey:@"name"];
+        //NSLog(@"Main Category Name: %@", uListCategoryName);
+        
+        uListCategorySectionKey = uListCategoryName;
+
+        // create array for the sub categories of the main category
+        NSMutableArray *sectionCategories = [[NSMutableArray alloc] init];
+        
+        NSArray* uListSubCategories = [(NSArray*)object valueForKey:@"subcategories"];
+        //NSLog(@"Subcategories: %@", uListSubCategories);
+        //NSArray* subCategories = [uListSubCategories objectAtIndex:0];
+        
+        for (id object in uListSubCategories) {
+        
+            // create ulist (sub)-category object, and add it to the retreived array
+            UListCategory *subCategory = [[UListCategory alloc] init];
+            
+            // set the name and cache age for category
+            subCategory.name = (NSString*)object;
+            subCategory.cacheAge = [NSDate date];
+        
+            //NSLog(@"ulist subcat: %@", category.name);
+            
+            // add sub-category to categories array
+            [sectionCategories addObject:subCategory];
+            [self.uListCategories setObject:sectionCategories forKey:uListCategoryName];
+         }
+    }
+    
+    NSArray *keys = [self.uListCategories allKeys];
+    // sort the cacheSchools by key
+    NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSEnumerator *ee = [sortedKeys objectEnumerator];
+    id key;
+    // iterate over the cacheSchools putting each section school in an array
+    while (key = [ee nextObject]) {
+        [self.uListCategorySections addObject:(NSString*)key];
+    }
+    
+    //NSLog(@"section count: %i, cat count: %i", [self.uListCategorySections count], [self.uListCategories count]);
+    //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
 }
 -(void) retrieveSnapshots:(NSString*)categoryId {
     @try {
