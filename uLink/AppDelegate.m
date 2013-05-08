@@ -97,6 +97,7 @@
 - (void) setupNavigationControllerApp {
     self.window.rootViewController = [self createSideMenu].navigationController;
     [self.window makeKeyAndVisible];
+}
 
 -(void)activateSideMenu : (NSString*) mode {
     //NSLog(@"%@",mode);
@@ -188,7 +189,7 @@
             // always default the the ucampus home
             [mainTabBarController setSelectedIndex:0];
             // make sure the side menu for ucampus is active
-            [self activateUCampusSideMenu];
+            //[self activateSideMenu : @"uCampus"];
             [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
             [UDataCache rehydrateCaches:YES];
         }

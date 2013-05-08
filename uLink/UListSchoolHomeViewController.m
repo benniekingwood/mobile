@@ -88,8 +88,8 @@
     {
         SelectCategoryCell *cell = (SelectCategoryCell *)sender;
         UListSchoolCategoryViewController *categoryViewController = [segue destinationViewController];
-        categoryViewController.categoryId = cell.categoryId;
-        categoryViewController.categoryName = cell.categoryName;
+        //categoryViewController.categoryId = cell.categoryId;
+        //categoryViewController.categoryName = cell.categoryName;
     }
 }
 

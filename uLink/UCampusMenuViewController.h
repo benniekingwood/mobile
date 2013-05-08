@@ -16,7 +16,7 @@
 @interface UCampusMenuViewController : UITableViewController
 @property (nonatomic, assign) MFSideMenu *sideMenu;
 @property (nonatomic, assign) id<UCampusMenuViewControllerDelegate> delegate;
-
+@property (nonatomic) NSString *mode;
 -(void)hideMenu;
 -(void)showMenu;
 @end
