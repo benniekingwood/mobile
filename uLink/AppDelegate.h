@@ -20,5 +20,4 @@
 -(UIViewController*) getUListSchoolHomeViewController;
 -(void) showActivityIndicator;
 -(void) hideActivityIndicator;
--(UIButton*) createUIButtonNoBorder : (NSString*)imageName method:(SEL)selMethod target:(id)selTarget;
 @end

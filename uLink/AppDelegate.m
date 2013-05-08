@@ -25,7 +25,6 @@
 @implementation AppDelegate {
     UIStoryboard* storyboard;
     UCampusMenuViewController *sideMenuController;
-    //UListSchoolHomeMenuViewController *uListSideMenuController;
     ActivityIndicatorView *activityIndicator;
     AlertView *appDelegateAlert;
     BOOL initialLoad;
@@ -38,10 +37,7 @@
     [UDataCache hydrateSnapshotCategoriesCache:NO];
     [NSThread sleepForTimeInterval:SLEEP_TIME_APP_LOAD];
     storyboard = [UIStoryboard storyboardWithName:@"uLink" bundle:nil];
-    
     [self setupNavigationControllerApp];
-    //[self setupUListNavigationControllerApp];
-    
     activityIndicator = [[ActivityIndicatorView alloc] init];
     appDelegateAlert = [[AlertView alloc] initWithTitle:@""
                              message: ALERT_NO_INTERNET_CONN
@@ -51,7 +47,31 @@
     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
     imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
     initialLoad = TRUE;
-    //NSLog(@"%@",(UITabBarController*)self.window.rootViewController);
+
+    /*
+     * Below we will set up the navigation bar styling
+     * We first set the background image for the navigation bar.
+     * Then we set the text font.
+     * Finally we set the defaults for the navigation back and other buttons.
+     */
+    UIImage *navBackgroundImage = [UIImage imageNamed:@"ulink-mobile-nav-bar-bg.png"];
+    [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], UITextAttributeTextColor,
+                                                           [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],UITextAttributeTextShadowColor,
+                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+                                                           UITextAttributeTextShadowOffset,
+                                                           [UIFont fontWithName:FONT_GLOBAL size:20.0], UITextAttributeFont, nil]];
+    // Change the appearance of back button
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
+                                                         forBarMetrics:UIBarMetricsDefault];
+    UIImage* backButtonImage = [UIImage imageNamed:@"10-dark-back-button.png"];
+    backButtonImage = [backButtonImage  resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, 0)];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    // Change the appearance of other navigation button
+    UIImage *barButtonImage = [[UIImage imageNamed:@"ulink-mobile-button-normal-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+    [[UIBarButtonItem appearance] setBackgroundImage:barButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     return YES;
 }
 
@@ -59,6 +79,7 @@
     sideMenuController = [[UCampusMenuViewController alloc] init];
     sideMenuController.mode = @"uCampus";
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_MAIN_NAVIGATION_CONTROLLER_ID];
+
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled
     |MFSideMenuOptionShadowEnabled;
     MFSideMenuPanMode panMode = MFSideMenuPanModeNavigationBar | MFSideMenuPanModeNavigationController;
@@ -73,11 +94,9 @@
     return sideMenu;
 }
 
-
 - (void) setupNavigationControllerApp {
     self.window.rootViewController = [self createSideMenu].navigationController;
     [self.window makeKeyAndVisible];
-}
 
 -(void)activateSideMenu : (NSString*) mode {
     //NSLog(@"%@",mode);
@@ -95,7 +114,6 @@
     [((UCampusMenuViewController*)sideMenuController.sideMenu.sideMenuController) hideMenu];
 
 }
-
 -(UITabBarController*)getMainTabBarViewController {
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:2];
 }
@@ -169,6 +187,8 @@
         } else {
             // always default the the ucampus home
             [mainTabBarController setSelectedIndex:0];
+            // make sure the side menu for ucampus is active
+            [self activateUCampusSideMenu];
             [((MainNavigationViewController*)self.window.rootViewController) popToViewController:mainTabBarController animated:NO];
             [UDataCache rehydrateCaches:YES];
         }

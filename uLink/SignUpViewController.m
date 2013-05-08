@@ -23,6 +23,8 @@
     NSString *currentPassword;
     ActivityIndicatorView *activityIndicator;
     UIButton *termsButton;
+    UIView *termsView;
+    UILabel *termsTextPart1;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -81,11 +83,11 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
     CGFloat screenWidth = screenRect.size.width;
-    UIView *termsView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-130, screenWidth, 70)];
+    termsView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-130, screenWidth, 70)];
     termsView.alpha = ALPHA_MED;
     termsView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:termsView];
-    UILabel *termsTextPart1 = [[UILabel alloc] initWithFrame:CGRectMake(30, screenHeight-150, 250, 100)];
+    [self.view insertSubview:termsView belowSubview:self.schoolStatusPickerView];
+    termsTextPart1 = [[UILabel alloc] initWithFrame:CGRectMake(30, screenHeight-150, 250, 100)];
     termsTextPart1.text = @"By Pressing the \"Create My Account\" button you agree to the policies and conditions listed in the ";
     termsTextPart1.font = [UIFont fontWithName:FONT_GLOBAL size:11];
     termsTextPart1.backgroundColor = [UIColor clearColor];
@@ -98,8 +100,8 @@
     [termsButton setTitle:@"Terms" forState:UIControlStateNormal];
     termsButton.frame = CGRectMake(255, screenHeight-102.5, 50, 20.0);
     termsButton.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12];
-    [self.view addSubview:termsTextPart1];
-    [self.view addSubview:termsButton];
+    [self.view insertSubview:termsTextPart1 aboveSubview:termsView];
+    [self.view insertSubview:termsButton aboveSubview:termsView];
 }
 -(void)viewWillAppear:(BOOL)animated {
      termsButton.titleLabel.textColor = [UIColor orangeColor];
@@ -350,6 +352,10 @@
                         NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
                         NSArray* result = [json objectForKey:JSON_KEY_RESULT];
                         if([(NSString*)result isEqualToString:@"true"]) {
+                            // hide the terms view related subviews
+                            termsTextPart1.alpha = ALPHA_ZERO;
+                            termsButton.alpha = ALPHA_ZERO;
+                            termsView.alpha  = ALPHA_ZERO;
                             self.signUpSuccessView.alpha = 1.0;
                         } else {
                             errorAlertView.message = response;

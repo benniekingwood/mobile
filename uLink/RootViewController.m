@@ -29,7 +29,7 @@
 	// Do any additional setup after loading the view.
     [signUpButton createOrangeButton:signUpButton];
     [loginInButton createOrangeButton:loginInButton];
-    [UAppDelegate deactivateSideMenu];
+    [UAppDelegate deactivateUCampusSideMenu];
    // FontUtil *utils = [[FontUtil alloc] init];
    // [utils listSystemFonts];
 }

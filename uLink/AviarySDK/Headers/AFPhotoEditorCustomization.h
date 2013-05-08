@@ -27,6 +27,7 @@ extern NSString *const kAFCrop;        /* Crop */
 extern NSString *const kAFBrightness;  /* Brightness */
 extern NSString *const kAFContrast;    /* Contrast */
 extern NSString *const kAFSaturation;  /* Saturation */
+extern NSString *const kAFWarmth;      /* Warmth */
 extern NSString *const kAFSharpness;   /* Sharpness */
 extern NSString *const kAFDraw;        /* Draw */
 extern NSString *const kAFText;        /* Text */
@@ -34,7 +35,8 @@ extern NSString *const kAFRedeye;      /* Redeye */
 extern NSString *const kAFWhiten;      /* Whiten */
 extern NSString *const kAFBlemish;     /* Blemish */
 extern NSString *const kAFMeme;        /* Meme */
-extern NSString *const kAFFrames;       /* Frames */
+extern NSString *const kAFFrames;      /* Frames */
+extern NSString *const kAFFocus;   /* TiltShift */
 
 /**
  Use this key to define the interface orientations you want to allow in
@@ -62,6 +64,7 @@ extern NSString *const kAFLeftNavigationTitlePresetExit;   /* Exit */
 extern NSString *const kAFRightNavigationTitlePresetDone;  /* Done */
 extern NSString *const kAFRightNavigationTitlePresetSave;  /* Save */
 extern NSString *const kAFRightNavigationTitlePresetNext;  /* Next */
+extern NSString *const kAFRightNavigationTitlePresetSend;  /* Send */
 
 extern NSString *const kAFCropPresetName;   /* Name */
 extern NSString *const kAFCropPresetWidth;  /* Width */
@@ -74,45 +77,135 @@ extern NSString *const kAFTextFillColors;   /* Text Tool Text Fill Colors */
 
 
 /**
- This class provides a powerful interface for configuring an AFPhotoEditorController's appearance. While setting and removing option values after presenting an AFPhotoEditorController instance is possible, it is strongly recommended that you make all necessary calls to AFPhotoEditorCustomization *before* editor presentation. For a full list of keys and a more detailed explanation, please see the Aviary iOS SDK Customization Guide.
+ This class provides a powerful interface for configuring an AFPhotoEditorController's appearance and behavior. While changing values after presenting an AFPhotoEditorController instance is possible, it is strongly recommended that you make all necessary calls to AFPhotoEditorCustomization *before* editor presentation. Example of usage can be found in the Aviary iOS SDK Customization Guide.
  */
 @interface AFPhotoEditorCustomization : NSObject
 
-/**
- Sets the value for key to obj.
+/** 
+ Enables or disables in-app purchases in the editor.
  
- @param obj The object.
- @param key The key whose value should be set.
+ By default, in-app purchases are disabled. See the Aviary In-App Purchase guide for more information on setting up in app purchases.
+ 
+ @param enableIAP YES enables IAPs, NO disables them. 
  */
-+ (void)setOptionValue:(id)obj forKey:(NSString *)key;
++ (void)enableInAppPurchases:(BOOL)enableIAP;
+
+/** 
+ Configures the editor to point at the Premium Content Network's staging environment.
+ 
+ By default, the editor points at the production environment. Call this method with YES before editor to launch to view the content in the Premium Content Network staging environment.
+ 
+ @param usePCNStagingEnvironment YES points the editor to staging, no points it to production. 
+ */
++ (void)usePCNStagingEnvironment:(BOOL)usePCNStagingEnvironment;
+
+/** 
+ Configures the editor to free GPU memory when possible.
+ 
+ By default, Aviary keeps a small number of OpenGL objects loaded to optimize launches of Aviary products. Set this key to YES purge GPU memory when possible.
+ 
+ @param purgeGPUMemory YES purges GPU memory when possible, NO retains it. 
+ */
++ (void)purgeGPUMemoryWhenPossible:(BOOL)purgeGPUMemory;
+
+/** 
+ Sets the text of the editor's left navigation bar button. 
+ 
+ Attempting to set any string besides one of the kAFLeftNavigationTitlePresets will have no effect.
+ 
+ @param leftNavigationBarButtonTitle An NSString value represented by one of the three kAFLeftNavigationTitlePreset keys.*/
++ (void)setLeftNavigationBarButtonTitle:(NSString *)leftNavigationBarButtonTitle;
 
 /**
- Sets the value for key to the object returned by block.
+ Sets the text of the editor's right navigation bar button.
  
- The block is lazily evaluated, making it useful for specifying options with values that require loading information from disk.
-  
- @param block The block that returns the object that key will be set to.
- @param key The key whose value should be set.
- */
-+ (void)setOptionValueWithBlock:(id (^)(void))block forKey:(NSString *)key;
+ Attempting to set any string besides one of the kAFRightNavigationTitlePresets will have no effect.
+ 
+ @param rightNavigationBarButtonTitle An NSString value represented by one of the three kAFRightNavigationTitlePreset keys.*/
++ (void)setRightNavigationBarButtonTitle:(NSString *)rightNavigationBarButtonTitle;
+
+/** 
+ Sets the type and order of tools to be presented by the editor.
+ 
+ The valid tool keys are:
+ 
+    kAFEnhance
+    kAFEffects
+    kAFStickers
+    kAFOrientation
+    kAFCrop
+    kAFBrightness
+    kAFContrast
+    kAFSaturation
+    kAFSharpness
+    kAFDraw
+    kAFText
+    kAFRedeye
+    kAFWhiten
+    kAFBlemish
+    kAFMeme
+    kAFFrames;
+    kAFFocus
+
+ @param toolOrder An NSArray containing NSString values represented by one of the tool keys*/
++ (void)setToolOrder:(NSArray *)toolOrder;
 
 /**
- Sets the value for key to the UIImage named name. 
+ Configures the editor to use localization or not.
  
- A convenience method that lazily sets the value of the key to the image with the name provided. This method uses UIImage's imageNamed: class method to create the image. Thus, if the image doesn't exist, the value for key will be set to nil.
+ By default, Aviary enables localization.
  
- @param name The name of the image.
- @param key The key whose value should be set.
- */
-+ (void)setOptionWithImageNamed:(NSString *)name forKey:(NSString *)key;
+ @param disableLocalization YES disables localization, NO leaves it enabled.*/
++ (void)disableLocalization:(BOOL)disableLocalization;
 
 /**
- Removes the value for a given key.
+ Configures the orientations the editor can have on the iPad form factor.
  
- The view elements described by the key will be assume their default appearances.
+ On the iPhone form factor, orientation is always portrait.
  
- @param key The key whose value should be removed.
+ @param supportedOrientations An NSArray containing NSNumbers each representing a valid UIInterfaceOrientation.*/
++ (void)setSupportedIpadOrientations:(NSArray *)supportedOrientations;
+
+/**
+ Enables or disables the custom crop size.
+
+ The Custom crop preset does not constrain the crop area to any specific aspect ratio. By default, custom crop size is enabled.
+ 
+ @param cropToolEnableCustom YES enables the custom crop size, NO disables it.*/
++ (void)setCropToolCustomEnabled:(BOOL)cropToolEnableCustom;
+
+/**
+ Enables or disables the custom crop size.
+ 
+ The Original crop preset constrains the crop area to photo's original aspect ratio. By default, original crop size is enabled.
+ 
+ @param cropToolEnableOriginal YES enables the original crop size, NO disables it.*/
++ (void)setCropToolOriginalEnabled:(BOOL)cropToolEnableOriginal;
+
+/**
+ Enables or disables the invertability of crop sizes.
+ 
+ By default, inversion is enabled. Presets with names, i.e. Square, are not invertible, regardless of whether inversion is enabled.
+ 
+ @param cropToolEnableInvert YES enables the crop size inversion, NO disables it.*/
++ (void)setCropToolInvertEnabled:(BOOL)cropToolEnableInvert;
+
+/** Sets the availability and order of crop preset options.
+
+ The dictionaries should be of the form @{kAFCropPresetName: <NSString representing the display name>, kAFCropPresetWidth: <NSNumber representing width>, kAFCropPresetHeight: <NSNumber representing height>}. When the corresponding option is selected, the crop box will be constrained to a kAFCropPresetWidth:kAFCropPresetHeight aspect ratio. 
+ 
+ If Original and/or Custom options are enabled, then they will precede the presets defined here. If no crop tool presets are set, the default options are Square, 3x2, 5x3, 4x3, 6x4, and 7x5. 
+ 
+ @param cropToolPresets An array of dictionaries. The dictionaries should 
  */
-+ (void)removeOptionValueForKey:(NSString *)key;
++ (void)setCropToolPresets:(NSArray *)cropToolPresets;
+
+/** 
+ This property sets the width of the crop preset selection cells.
+ 
+ @param cropToolCellWidth The width of the crop option cell in points.
+ */
++ (void)setCropToolCellWidth:(float)cropToolCellWidth;
+
 
 @end

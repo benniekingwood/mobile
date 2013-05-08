@@ -12,8 +12,6 @@
 @interface DataCache : NSObject {
     NSMutableDictionary *schools;
     NSMutableArray *schoolSections;
-    NSMutableDictionary *_uListCategories;
-    NSMutableArray *_uListCategorySections;
     User *sessionUser;
     User *topSnapper;
     NSMutableDictionary *images;
@@ -37,8 +35,6 @@
 @property (strong, nonatomic) NSMutableDictionary *snapImageMedium;
 @property (strong, nonatomic) NSMutableDictionary *userImageMedium;
 @property (strong, nonatomic) NSMutableDictionary *tweetUserImages;
-@property (strong, nonatomic) NSMutableDictionary *uListCategories;
-@property (strong, nonatomic) NSMutableArray *uListCategorySections;
 + (DataCache*) instance;
 - (UIImage*) imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
 - (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
@@ -52,7 +48,6 @@
 - (void) hydrateTweetsCache;
 - (void) hydrateTrendsCache;
 - (void) hydrateImageCache;
-- (void) hydrateUListCategoryCache;
 - (void) rehydrateSessionUser;
 - (void) rehydrateSchoolCache:(BOOL)checkAge;
 - (void) rehydrateEventsCache:(BOOL)checkAge;
@@ -61,7 +56,6 @@
 - (void) rehydrateTweetsCache:(BOOL)checkAge;
 - (void) rehydrateTrendsCache:(BOOL)checkAge;
 - (void) rehydrateImageCache:(BOOL)checkAge;
-- (void) rehydrateUListCategories:(BOOL)checkAge;
 - (void) incrementActiveProcesses:(int)processCount;
 - (void) decrementActiveProcesses;
 - (BOOL) userIsLoggedIn;

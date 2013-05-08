@@ -8,7 +8,6 @@
 
 #import "DataCache.h"
 #import "School.h"
-#import "UListCategory.h"
 #import "TextUtil.h"
 #import "SnapshotCategory.h"
 #import "SnapshotUtil.h"
@@ -43,14 +42,11 @@ const double CACHE_AGE_LIMIT_SNAPSHOTS = 1800;  // 30 minutes
 const double CACHE_AGE_LIMIT_TWEETS = 900;  // 15 minutes
 const double CACHE_AGE_LIMIT_EVENTS = 86400;  // 1 days
 const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
-const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 604800; // 7 days
 const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
 
 #pragma mark
 @synthesize schools;
 @synthesize schoolSections;
-@synthesize uListCategories = _uListCategories;
-@synthesize uListCategorySections = _uListCategorySections;
 @synthesize sessionUser;
 @synthesize topSnapper;
 @synthesize events;
@@ -194,27 +190,6 @@ const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
     if (rehydrate) {
         [self hydrateSchoolCache];
     } else {
-        [self decrementActiveProcesses];
-    }
-}
-- (void) rehydrateUListCategoriesCache:(BOOL)checkAge {
-    BOOL rehydrate = TRUE;
-    
-    if (checkAge) {
-        NSArray *values = [self.uListCategories allValues];
-        if ([values count] > 0) {
-            NSMutableArray *sectionCategories = [values objectAtIndex:0];
-            UListCategory *category = [sectionCategories objectAtIndex:0];
-            double timeElapsed = [[NSDate date] timeIntervalSinceDate:category.cacheAge];
-            if (timeElapsed <= CACHE_AGE_LIMIT_ULIST_CATEGORIES) {
-                rehydrate = FALSE;
-            }
-        }
-    }
-    if (rehydrate) {
-        [self hydrateUListCategoryCache];
-    }
-    else {
         [self decrementActiveProcesses];
     }
 }
