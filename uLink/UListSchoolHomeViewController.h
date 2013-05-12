@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UCampusMenuViewController.h"
+#import "School.h"
 @interface UListSchoolHomeViewController : UIViewController <UCampusMenuViewControllerDelegate, UITabBarDelegate>
 @property (strong, nonatomic) IBOutlet UIView *mainView;
 //@property (strong, nonatomic) IBOutlet UITabBarController *tabController;
-@property (nonatomic) NSString *schoolId;
-@property (nonatomic) NSString *schoolName;
-
+@property (nonatomic, weak) School *school;
 @end

@@ -11,6 +11,7 @@
 @interface School : NSObject
 @property (nonatomic) NSString *schoolId;
 @property (nonatomic) NSString *name;
+@property (nonatomic) NSString *shortName;
 @property (nonatomic) NSString *year;
 @property (nonatomic) NSString *attendance;
 @property (nonatomic) NSString *imageURL;

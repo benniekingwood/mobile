@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "UlinkButton.h"
+#import "School.h"
 
 @interface SelectSchoolCell : UITableViewCell {
     NSString *schoolId;
     NSString *schoolName;
+    School *school;
+    
 }
 @property (nonatomic, strong) NSString *schoolId;
 @property (nonatomic, strong) NSString *schoolName;
+@property (nonatomic, strong) School *school;
 -(void)initialize:(UlinkButton*)suggestBtn;
 @end

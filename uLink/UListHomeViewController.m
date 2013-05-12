@@ -117,9 +117,7 @@
     cell.textLabel.font = cellFont;
     NSString *schoolKey = [sections objectAtIndex:section];
     NSMutableArray *schools = [UDataCache.schools objectForKey:schoolKey];
-    School *school = [schools objectAtIndex:indexPath.row];
-    cell.textLabel.text = school.name;
-    cell.schoolId = school.schoolId;
+    cell.school = [schools objectAtIndex:indexPath.row];
     return cell;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -144,8 +142,7 @@
     {
         SelectSchoolCell *cell = (SelectSchoolCell *)sender;
         UListSchoolHomeViewController *schoolHomeViewController = [segue destinationViewController];
-        schoolHomeViewController.schoolId = cell.schoolId;
-        schoolHomeViewController.schoolName = cell.schoolName;
+        schoolHomeViewController.school = cell.school;
     }
 }
 

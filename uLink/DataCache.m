@@ -447,7 +447,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         clock_t start = clock();
         dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_CATEGORY, NULL);
         dispatch_async(categoryQueue, ^{
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[LOCAL_HOST stringByAppendingString:API_ULIST_CATEGORIES]]];
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_CATEGORIES]]];
             [req setHTTPMethod:HTTP_GET];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
@@ -693,8 +693,15 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     id schoolId;
     NSString *schoolSectionKey = nil;
     while (schoolId = [e nextObject]) {
-        NSString* schoolName = [(NSDictionary*)schoolsRaw valueForKey:schoolId];
-        
+        NSString *schoolName;
+        NSString *schoolShortName;
+        NSDictionary* schoolDict = [(NSDictionary*)schoolsRaw valueForKey:schoolId];
+        for (NSString* shortNameKey in schoolDict) {
+            id name = [schoolDict objectForKey:shortNameKey];
+            schoolName = (NSString*)name;
+            schoolShortName = shortNameKey;
+            break;
+        }
         // captialize the first letter of school name
         schoolName = [textUtil capitalizeString:schoolName];
         schoolSectionKey = [schoolName substringToIndex:1];
@@ -706,8 +713,9 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         }
         // create school object, and add it to the retreived array
         School *school = [[School alloc] init];
-        // set the name and id for the school
+        // set the name, shortName and id for the school
         school.name = schoolName;
+        school.shortName = schoolShortName;
         school.schoolId = schoolId;
         school.cacheAge = [NSDate date];
         [sectionSchools addObject:school];

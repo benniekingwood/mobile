@@ -10,7 +10,7 @@
 #import "AppMacros.h"
 
 @implementation SelectSchoolCell
-@synthesize schoolId, schoolName;
+@synthesize schoolId, schoolName, school;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -27,6 +27,10 @@
     // Configure the view for the selected state
 }
 -(void)initialize:(UlinkButton*)suggestBtn {
+    if(self.school != nil) {
+        self.schoolId = self.school.schoolId;
+        self.schoolName = self.school.name;
+    }
     self.textLabel.font = [UIFont fontWithName:FONT_GLOBAL size:15.0f];;
     self.textLabel.backgroundColor = [UIColor clearColor];
     self.textLabel.text = @"Don't see your school?";

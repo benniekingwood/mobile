@@ -19,7 +19,7 @@
 @end
 
 @implementation UListSchoolHomeViewController
-@synthesize schoolId, schoolName;
+@synthesize school;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -33,7 +33,7 @@
     [super viewDidLoad];
     
     // TODO: use school short_name here
-    self.navigationItem.title = self.schoolName;
+    self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
     
     // Generate search button using custom created button from AppDelegate
@@ -49,7 +49,7 @@
 }
 
 - (void)updateView {
-    self.navigationItem.title = self.schoolName;
+    self.navigationItem.title = [self.school.shortName stringByAppendingString:@" uList"];
     //self.navigationItem.rightBarButtonItem = searchButton;
 }
 
