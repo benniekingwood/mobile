@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface UListSchoolCategoryViewController : UIViewController//UITableViewController
+@interface UListSchoolCategoryViewController : UITableViewController
+@property (nonatomic) IBOutlet CLLocationManager *locationManager;
 @property (nonatomic) NSString *categoryId;
 @property (nonatomic) NSString *categoryName;
+@property (nonatomic) GMSMapView *uListMapView_;
 @end

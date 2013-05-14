@@ -21,6 +21,7 @@
 #import "UListSchoolHomeMenuViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "LoginViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate {
     UIStoryboard* storyboard;
@@ -47,7 +48,10 @@
     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
     imageDownloader.maxConcurrentDownloads = IMAGE_MAX_CONCURRENT_DOWNLOADS;
     initialLoad = TRUE;
-
+    
+    /* Google map services */
+    [GMSServices provideAPIKey:@"AIzaSyAhCm2ePecMkeVRBMO2AJI9ltS8-Y0P5T4"];
+    
     /*
      * Below we will set up the navigation bar styling
      * We first set the background image for the navigation bar.
@@ -151,6 +155,7 @@
         initialLoad = FALSE;
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [self activateSideMenu:@"uCampus"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -162,6 +167,9 @@
     //NSLog(@"applicationDidEnterBackground");
     // TODO: if there are rehyrdations going, we need to kill those process and decrement the active
     // processes to zero
+    // ensure that we hide the side menu if it is shown
+    NSLog(@"deactivating side menu");
+    [self deactivateSideMenu];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -199,6 +207,8 @@
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
         [UDataCache hydrateSnapshotCategoriesCache:NO];
     }
+    
+    [self activateSideMenu : @"uCampus"];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -252,7 +262,7 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
+/*
 - (UIButton *)createUIButtonNoBorder:(NSString *)imageName method:(SEL)selMethod target:(id)selTarget {
     //NSLog(@"%@", NSStringFromSelector(selMethod));
     
@@ -263,4 +273,5 @@
 
     return tmpButton;
 }
+*/
 @end

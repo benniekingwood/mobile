@@ -7,23 +7,21 @@
 //
 
 #import "UListSchoolCategoryViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
+#import "AppMacros.h"
+#import "DataCache.h"
+#import "UListListingCell.h"
+#import <Foundation/Foundation.h>
 
-@interface UListSchoolCategoryViewController ()
+@interface UListSchoolCategoryViewController () {
+    UIView *mapView;
+    CGRect mapFrame;
+}
 
 @end
 
 @implementation UListSchoolCategoryViewController
-@synthesize categoryId, categoryName;
-/*
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
- */
+@synthesize categoryId, categoryName, locationManager, uListMapView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,16 +31,80 @@
     }
     return self;
 }
+/*
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+*/
+
+
+//- (void) loadView {
+    // Create a GMSCameraPosition that tells the map to display the
+    // coordinate -33.86,151.20 at zoom level 6.
+    /*
+     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.86
+                                                            longitude:151.20
+                                                                 zoom:14];
+    uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 100) camera:camera];
+    uListMapView_.myLocationEnabled = YES;
+    self.view = uListMapView_;
+    
+    // Creates a marker in the center of the map.
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20);
+    marker.title = @"Sydney";
+    marker.snippet = @"Australia";
+    marker.map = uListMapView_;
+    */
+//}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tabBarController.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem = nil;
+    mapFrame = CGRectMake(0, 70, 320, 120);
+    CGRect mViewFrame;
+    mViewFrame.origin.x = 0;
+    mViewFrame.origin.y = 0;
+    mViewFrame.size = self.view.frame.size;
+    mapView = [[UIView alloc] initWithFrame:mViewFrame];
+    mapView.backgroundColor = [UIColor blackColor];
+    mapView.frame = mViewFrame;
+    mapView.userInteractionEnabled = YES;
+    
+    /* set up map view */
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.uListMapView_.myLocation.coordinate.latitude
+                                                            longitude:self.uListMapView_.myLocation.coordinate.longitude
+                                                                 zoom:14];
+    uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
+    uListMapView_.myLocationEnabled = YES;
+    
+    // Creates a marker in the center of the map.
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = CLLocationCoordinate2DMake(camera.target.latitude,camera.target.longitude);
+    marker.animated = YES;
+    marker.title = @"MyLocation";
+    marker.snippet = @"Me";
+    marker.map = uListMapView_;
+}
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -54,21 +116,73 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    int retVal = 0;
+    switch (section) {
+        case 0:
+            retVal = 1;
+            break;
+            
+        case 1:
+            retVal = [UDataCache.uListListings count];
+            break;
+    }
+    NSLog(@"number of rows in section retVal: %i", retVal);
+    return retVal;
 }
 
+/*
+ * Custom create table view cells for map and listingss
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    int section = [indexPath section];
+    UITableViewCell *cell = nil;//[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    // map section
+    if (section == 0) {
+        static NSString *CellIdentifier = @"selectMapCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        // add google maps to cell view
+        mapView = uListMapView_;
+        cell.frame = CGRectMake(0, 0, 320, 120);
+        [cell.contentView addSubview:mapView];
+    } else {
+        static NSString *CellIdentifier = @"selectListingCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        //@try {
+        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        Listing *list = [UDataCache.uListListings objectAtIndex:indexPath.row];
+        NSLog(@"index: %i, %@", indexPath.row, list);
+        
+        ((UListListingCell*)cell).uListListing = list;
+        ((UListListingCell*)cell).textLabel.text = list.title;
+        //((UListListingCell*)cell).listing = [UDataCache.uListListings objectAtIndex:indexPath.row];
+        //} @catch (NSException *exception) {}
+    }
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int section = [indexPath section];
+    if (section == 0) {
+        return 120.0;
+    } else {
+        return 50.0;
+    }
 }
 
 /*
@@ -90,13 +204,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    int section = [indexPath section];
+    if (section == 0) {
+        /* if we select the map, then expand map to display larger */
+    } else {
+        
+    }
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"myLocation"] && [object isKindOfClass:[GMSMapView class]])
+    {
+        [self.uListMapView_ animateToCameraPosition:[GMSCameraPosition cameraWithLatitude:self.uListMapView_.myLocation.coordinate.latitude
+                                                                                 longitude:self.uListMapView_.myLocation.coordinate.longitude
+                                                                                      zoom:self.uListMapView_.camera.zoom]];
+    }
+}
+
 
 @end

@@ -40,8 +40,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.textLabel.frame = CGRectMake(60, 2, 125, 43);
-    self.imageView.frame = CGRectMake(10, 5, 30, 30);
+    /*
+    self.textLabel.frame = CGRectZero;
+    self.imageView.frame = CGRectZero;
+     */
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -60,7 +62,6 @@
 - (void)setEnabled:(BOOL)newValue {
     if (iconImage) {
         self.imageView.image = iconImage;
-        iconImage = nil;
     }
     else {
         self.imageView.image = nil;
