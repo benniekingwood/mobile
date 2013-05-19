@@ -10,6 +10,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "AppMacros.h"
 #import "DataCache.h"
+#import "DataLoader.h"
 #import "UListListingCell.h"
 #import <Foundation/Foundation.h>
 
@@ -22,6 +23,12 @@
 
 @implementation UListSchoolCategoryViewController
 @synthesize categoryId, categoryName, locationManager, uListMapView_;
+
+/* Synthesize for lazy loading properties */
+@synthesize searchResultOfSets;
+@synthesize fetchBatch;
+@synthesize loading;
+@synthesize noMoreResultsAvail;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,30 +49,28 @@
 }
 */
 
-
-//- (void) loadView {
-    // Create a GMSCameraPosition that tells the map to display the
-    // coordinate -33.86,151.20 at zoom level 6.
-    /*
-     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.86
-                                                            longitude:151.20
-                                                                 zoom:14];
-    uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 100) camera:camera];
-    uListMapView_.myLocationEnabled = YES;
-    self.view = uListMapView_;
-    
-    // Creates a marker in the center of the map.
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20);
-    marker.title = @"Sydney";
-    marker.snippet = @"Australia";
-    marker.map = uListMapView_;
-    */
-//}
+- (void)loadRequest
+{
+    DataLoader *loader = [[DataLoader alloc] init];
+    loader.uListDelegate = self;
+    [loader loadUListListingData];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    /****** Setup Lazy Loading (Initial) **********/
+    fetchBatch = 0;
+    noMoreResultsAvail = NO;
+    searchResultOfSets = [[NSMutableArray alloc] init];
+    if ([UDataCache.uListListings count] > 0) {
+        for (int i = 0; i<10 ; i++) {
+            [self.searchResultOfSets addObject:[UDataCache.uListListings objectAtIndex:i]];
+        }
+    }
+    [self loadRequest];
+    /****** End Lazy Loading ***********/
     
     self.tabBarController.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = nil;
@@ -104,7 +109,7 @@
 {
     [super viewWillDisappear:animated];
     [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
-    
+    self.searchResultOfSets = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -123,11 +128,21 @@
     int retVal = 0;
     switch (section) {
         case 0:
+            // Return 1 row for the map view to be displayed
             retVal = 1;
             break;
             
         case 1:
-            retVal = [UDataCache.uListListings count];
+            // Return the number of rows in the section.
+            // If data source is yet empty, then return 0 cell.
+            // If data source is not empty, then return one more cell space.
+            // (for displaying the "Loading More..." text)
+            if (searchResultOfSets.count == 0) {
+                retVal =  0;
+            } else {
+                retVal = ([searchResultOfSets count]+1);
+            }
+            //retVal = [UDataCache.uListListings count];
             break;
     }
     NSLog(@"number of rows in section retVal: %i", retVal);
@@ -144,8 +159,8 @@
     
     // map section
     if (section == 0) {
-        static NSString *CellIdentifier = @"selectMapCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        static NSString *CellIdentifier = CELL_SELECT_ULIST_MAP;
+        //cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
@@ -155,21 +170,65 @@
         cell.frame = CGRectMake(0, 0, 320, 120);
         [cell.contentView addSubview:mapView];
     } else {
-        static NSString *CellIdentifier = @"selectListingCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        static NSString *CellIdentifier = CELL_SELECT_ULIST_LISTING_CELL;
+        //cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        //@try {
-        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        Listing *list = [UDataCache.uListListings objectAtIndex:indexPath.row];
-        NSLog(@"index: %i, %@", indexPath.row, list);
+        // If scrolled beyond two thirds of the table, load next batch of data.
+        if (indexPath.row >= (searchResultOfSets.count /3 *2)) {
+            if (!loading) {
+                NSLog(@"at 2/3 of page.. loading next 10 results");
+                loading = YES;
+                // loadRequest is the method that loads the next batch of data.
+                // This needs your implementation to load the data into searchResultOfSets
+                [self loadRequest];
+            }
+        }
         
+        // Only starts populating the table if data source is not empty.
+        if (searchResultOfSets.count != 0) {
+            // If the currently requested cell is not the last one, display normal data.
+            // Else dispay @"Loading More..." or @"(No More Results Available)"
+            if (indexPath.row < searchResultOfSets.count) {
+                cell.textLabel.text = ((Listing*)[searchResultOfSets objectAtIndex:indexPath.row]).title;
+                return cell;
+            } else {
+                // The currently requested cell is the last cell.
+                if (!noMoreResultsAvail) {
+                    // If there are results available, display @"Loading More..." in the last cell
+
+                    cell.textLabel.text = @"Loading More...";
+                    cell.textLabel.font = [UIFont systemFontOfSize:18];
+                    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
+                                                               green:0.65f
+                                                                blue:0.65f
+                                                               alpha:1.00f];
+                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                    return cell;
+                } else {
+                    // If there are no results available, display @"(No More Results Available)" in the last cell
+                    cell.textLabel.font = [UIFont systemFontOfSize:16];
+                    cell.textLabel.text = @"(No More Results Available)";
+                    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
+                                                               green:0.65f
+                                                                blue:0.65f
+                                                               alpha:1.00f];
+                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                    return cell;
+                }
+            }
+        } else {
+            [self.tableView reloadData];
+        }
+        
+        /*
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        Listing *list = [UDataCache.uListListings objectAtIndex:indexPath.row];
         ((UListListingCell*)cell).uListListing = list;
         ((UListListingCell*)cell).textLabel.text = list.title;
-        //((UListListingCell*)cell).listing = [UDataCache.uListListings objectAtIndex:indexPath.row];
-        //} @catch (NSException *exception) {}
+        */
     }
     
     return cell;

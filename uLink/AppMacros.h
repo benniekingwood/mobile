@@ -149,6 +149,8 @@
 #define CELL_SNAP_COMMENT_CELL @"snapCommentCell"
 #define CELL_SNAP_CATEGORY @"snapCategoryCell"
 #define CELL_TWEET @"tweetCell"
+#define CELL_SELECT_ULIST_MAP @"selectUListMapCell"
+#define CELL_SELECT_ULIST_LISTING_CELL @"selectUListListingCell"
 
 
 #pragma mark CONTROLLER IDS

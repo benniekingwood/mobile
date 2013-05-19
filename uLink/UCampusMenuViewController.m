@@ -176,6 +176,11 @@
     
     if ([mode isEqualToString:@"uList"]) {
         UListSchoolHomeMenuViewController *uListSchoolHomeController = (UListSchoolHomeMenuViewController*)[UAppDelegate getUListSchoolHomeViewController];
+        
+        // we can hydrate the list cache here
+        // hydrate listings cache prior to rendering view
+        [UDataCache hydrateUListListingsCache];
+        
         //NSLog(@"%@", [UAppDelegate getUListSchoolHomeViewController]);
         if ([(id)uListSchoolHomeController respondsToSelector:@selector(performSegue:)]) {
             [(id)uListSchoolHomeController performSegue:selectedCell.tag];

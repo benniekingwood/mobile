@@ -91,8 +91,6 @@
         //categoryViewController.categoryId = cell.categoryId;
         //categoryViewController.categoryName = cell.categoryName;
     }
-    // hydrate listings cache prior to rendering view
-    [UDataCache hydrateUListListingsCache];
 }
 
 // NOTE: create category view
