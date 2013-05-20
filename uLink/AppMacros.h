@@ -74,6 +74,7 @@
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
 #define API_SCHOOLS_SCHOOL @"schools/school"
 #define API_ULIST_CATEGORIES @"api/categories/"
+#define API_ULIST_LISTINGS @"api/listings/"
 #define API_USERS_RESET_PASSWORD @"users/reset_password"
 #define API_USERS_SIGN_UP @"users/sign_up"
 #define API_USERS_LOG_IN @"users/login"
@@ -109,6 +110,7 @@
 #define DISPATCH_SIGNUP "sign_up"
 #define DISPATCH_SCHOOL "school"
 #define DISPATCH_ULIST_CATEGORY "ulist_category"
+#define DISPATCH_ULIST_LISTING "ulist_listing"
 #define DISPATCH_LOGIN "log_in"
 #define DISPATCH_UPDATE_PASSWORD "update_password"
 #define DISPATCH_UPDATE_USER "update_user"
@@ -146,6 +148,8 @@
 #define CELL_SNAP_COMMENT_CELL @"snapCommentCell"
 #define CELL_SNAP_CATEGORY @"snapCategoryCell"
 #define CELL_TWEET @"tweetCell"
+#define CELL_SELECT_ULIST_MAP @"selectUListMapCell"
+#define CELL_SELECT_ULIST_LISTING_CELL @"selectUListListingCell"
 
 
 #pragma mark CONTROLLER IDS

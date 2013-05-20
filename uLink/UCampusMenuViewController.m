@@ -21,6 +21,7 @@
 @interface UCampusMenuViewController () {
     UIView *overlay;
     NSMutableArray *data;
+    NSArray *sectionTitles;
     UIFont *cellFont;
     UIFont *cellFontBold;
 }
@@ -100,14 +101,14 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
+{    
     UITableViewCell *cell = nil;
     int section = [indexPath section];
     
     //NSLog(@"%@", mode);
     
     if ([mode isEqualToString:@"uCampus"]) {
+        static NSString *CellIdentifier = @"Cell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UCampusMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -137,6 +138,7 @@
         [(UCampusMenuCell*)cell setEnabled:YES];
     }
     else if ([mode isEqualToString:@"uList"]) {
+        static NSString *CellIdentifier = @"uListCell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -145,8 +147,7 @@
         NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
         NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
         UListCategory *category = [categories objectAtIndex:indexPath.row];
-        //((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
-        ((UListMenuCell*)cell).iconImage = nil;
+        ((UListMenuCell*)cell).iconImage = [UIImage alloc];
         ((UListMenuCell*)cell).textLabel.text = category.name;
         [(UListMenuCell*)cell layoutSubviews];
         [(UListMenuCell*)cell setEnabled:YES];
@@ -175,6 +176,11 @@
     
     if ([mode isEqualToString:@"uList"]) {
         UListSchoolHomeMenuViewController *uListSchoolHomeController = (UListSchoolHomeMenuViewController*)[UAppDelegate getUListSchoolHomeViewController];
+        
+        // we can hydrate the list cache here
+        // hydrate listings cache prior to rendering view
+        [UDataCache hydrateUListListingsCache];
+        
         //NSLog(@"%@", [UAppDelegate getUListSchoolHomeViewController]);
         if ([(id)uListSchoolHomeController respondsToSelector:@selector(performSegue:)]) {
             [(id)uListSchoolHomeController performSegue:selectedCell.tag];
@@ -184,9 +190,40 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *view = nil;
-    view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
+    if ([mode isEqualToString:@"uList"]) {
+        view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
+    }
+    else {
+        view = [[UIView alloc] initWithFrame:CGRectZero];
+    }
     return view;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    CGFloat headerHeight;
+    if ([mode isEqualToString:@"uList"]) {
+        headerHeight = 18.0;
+    }
+    else {
+        headerHeight = 0.0;
+    }
+    return headerHeight;
+}
+
+/*
+ TODO: Get this to work...
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *headerTitle = nil;
+    NSLog(@"setting title: %@", headerTitle);
+    if ([mode isEqualToString:@"uList"]) {
+        headerTitle = (NSString*)[UDataCache.uListCategorySections objectAtIndex:section];
+    }
+    else {
+        headerTitle = [[NSString alloc] init];
+    }
+    return headerTitle;
+}
+ */
 
 - (UIView*)createSectionView:(NSString*)category {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 10)];

@@ -9,6 +9,7 @@
 #import "DataCache.h"
 #import "School.h"
 #import "UListCategory.h"
+#import "Listing.h"
 #import "TextUtil.h"
 #import "SnapshotCategory.h"
 #import "SnapshotUtil.h"
@@ -24,6 +25,7 @@
 }
 - (void) buildSchoolList:(id)schoolsRaw;
 - (void) buildUListCategoryList:(NSArray*)json;
+- (void) buildUListListingList:(NSArray*)json;
 - (void) retrieveSnapshots:(NSString*)categoryId;
 - (void) buildTrends:(id)trendsRaw;
 - (void) buildTweets:(id)tweetsRaw;
@@ -51,6 +53,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 @synthesize schoolSections;
 @synthesize uListCategories = _uListCategories;
 @synthesize uListCategorySections = _uListCategorySections;
+@synthesize uListListings = _uListListings;
 @synthesize sessionUser;
 @synthesize topSnapper;
 @synthesize events;
@@ -218,6 +221,25 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         [self decrementActiveProcesses];
     }
 }
+- (void) rehydrateUListListingsCache:(BOOL)checkAge {
+    BOOL rehydrate = TRUE;
+    
+    if (checkAge) {
+        if ([self.uListListings count] > 0) {
+            Listing *listing = [self.uListListings objectAtIndex:0];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:listing.cacheAge];
+            if (timeElapsed <= CACHE_AGE_LIMIT_ULIST_CATEGORIES) {
+                rehydrate = FALSE;
+            }
+        }
+    }
+    if (rehydrate) {
+        [self hydrateUListCategoryCache];
+    }
+    else {
+        [self decrementActiveProcesses];
+    }
+}
 - (void) rehydrateEventsCache:(BOOL)checkAge {
     BOOL rehydrate = TRUE;
     // check cache ages and refresh as necessary
@@ -335,7 +357,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 }
 - (void) rehydrateSessionUser {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t userQueue = dispatch_queue_create(DISPATCH_USER, NULL);
         dispatch_async(userQueue, ^{
             NSString *requestData = [URL_SERVER stringByAppendingString:API_USERS_USER];
@@ -369,7 +392,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                         }
                     } else {
                     }
-                    NSLog(@"rehydrateSessionUser complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                    NSDate *end = [NSDate date];
+                    NSLog(@"rehydrateSessionUser complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                 } else {// TODO: report error?
                 }
                 [self decrementActiveProcesses];
@@ -380,7 +404,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 }
 
 - (void) hydrateImageCache {
-    clock_t start = clock();
+    //clock_t start = clock();
+    NSDate *start = [NSDate date];
     // load the default images into the image dictionary
     if (self.images == nil) {
         self.images = [[NSMutableDictionary alloc] init];
@@ -392,11 +417,13 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     [self.images setValue:[UIImage imageNamed:@"default_snap.png"] forKey:KEY_DEFAULT_SNAP_IMAGE];
     [self.images setValue:[UIImage imageNamed:@"default_campus_event.png"] forKey:KEY_DEFAULT_EVENT_IMAGE];
     [self.images setValue:[UIImage imageNamed:@"default_featured_event.png"] forKey:KEY_DEFAULT_FEATURED_EVENT_IMAGE];
-    NSLog(@"hydrateImageCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+    NSDate *end = [NSDate date];
+    NSLog(@"hydrateImageCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
 }
 - (void) hydrateSchoolCache {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t schoolQueue = dispatch_queue_create(DISPATCH_SCHOOL, NULL);
         dispatch_async(schoolQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SCHOOLS_SCHOOL]]];
@@ -428,7 +455,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                         } else {
                             // TODO: report error?
                         }
-                        NSLog(@"hydrateSchoolCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                        NSDate *end = [NSDate date];
+                        NSLog(@"hydrateSchoolCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                     } else {// TODO: report error?
                     }
                  [self decrementActiveProcesses];
@@ -444,14 +472,15 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
  */
 - (void) hydrateUListCategoryCache {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_CATEGORY, NULL);
         dispatch_async(categoryQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_CATEGORIES]]];
             [req setHTTPMethod:HTTP_GET];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-         
+                
                 // if there is valid data
                 if (data)
                 {
@@ -480,8 +509,57 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 
                     } 
                     
-                    // Add logging for performance maintenance
-                    NSLog(@"hydrateUListCategoryCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                    NSDate *end = [NSDate date];
+                    NSLog(@"hydrateUListCategoryCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
+                    [self decrementActiveProcesses];
+                }
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {} // TODO: report error?
+}
+
+/*
+ * NOTE: modify this method to only return a set amount of listings to
+    preserve performance and integrity of ulink app
+ */
+- (void) hydrateUListListingsCache {
+    @try {
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
+        dispatch_queue_t listingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
+        dispatch_async(listingQueue, ^{
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[LOCAL_HOST stringByAppendingString:API_ULIST_LISTINGS]]];
+            [req setHTTPMethod:HTTP_GET];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:kNilOptions
+                                         error:&err];
+                        @synchronized(self) {
+                            if (self.uListListings == nil) {
+                                self.uListListings = [[NSMutableArray alloc] init];
+                            } else{
+                                [self.uListListings removeAllObjects];
+                            }
+                            [self buildUListListingList:json];
+                        }
+                        
+                    }
+                    
+                    NSDate *end = [NSDate date];
+                    NSLog(@"hydrateUListListingsCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
+                    [self decrementActiveProcesses];
                 }
             }]; // end sendAsynchronousRequest
         }); // end dispatch_async
@@ -491,7 +569,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 
 - (void) hydrateEventsCache {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t eventsQueue = dispatch_queue_create(DISPATCH_EVENTS, NULL);
         dispatch_async(eventsQueue, ^{
             NSString *requestData = [URL_SERVER stringByAppendingString:API_EVENTS_EVENTS];
@@ -533,7 +612,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                     }
                 } else {// TODO: report error?
                 }
-                NSLog(@"hydrateEventsCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                NSDate *end = [NSDate date];
+                NSLog(@"hydrateEventsCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                  [self decrementActiveProcesses];
             }];
         });
@@ -543,7 +623,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 
 - (void) hydrateSnapshotCategoriesCache:(BOOL)implicitHydrateSnapshots {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t snapCategoriesQueue = dispatch_queue_create(DISPATCH_SNAPSHOT_CATEGORIES, NULL);
         dispatch_async(snapCategoriesQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER stringByAppendingString:API_SNAPSHOTS_SNAP_CATEGORIES]]];
@@ -574,7 +655,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                     }
                 } else {// TODO: report error?
                 }
-                NSLog(@"hydrateSnapshotCategoriesCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                NSDate *end = [NSDate date];
+                NSLog(@"hydrateSnapshotCategoriesCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                 [self decrementActiveProcesses];
             }];
         });
@@ -600,7 +682,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 
 - (void) hydrateTrendsCache {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t trendsQueue = dispatch_queue_create(DISPATCH_TRENDS, NULL);
         dispatch_async(trendsQueue, ^{
             NSString *requestData = [URL_SERVER stringByAppendingString:API_UCAMPUS_TRENDS];
@@ -629,7 +712,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                         } else {
                             // TODO: report error?
                         }
-                         NSLog(@"hydrateTrendsCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                        NSDate *end = [NSDate date];
+                         NSLog(@"hydrateTrendsCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                     } else {// TODO: report error?
                     }
                 [self decrementActiveProcesses];
@@ -642,7 +726,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 
 - (void) hydrateTweetsCache {
     @try {
-        clock_t start = clock();
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
         dispatch_queue_t tweetsQueue = dispatch_queue_create(DISPATCH_TWEETS, NULL);
         dispatch_async(tweetsQueue, ^{
             NSString *requestData = [URL_SERVER stringByAppendingString:API_UCAMPUS_TWEETS];
@@ -671,7 +756,10 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                         } else {
                             // TODO: report error?
                         }
-                        NSLog(@"hydrateTweetsCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
+                        NSDate *end = [NSDate date];
+                        NSLog(@"hydrateTweetsCache complete: %f ms", (NSTimeInterval)[end timeIntervalSinceDate:start] * 1000);
+                        
+                        //NSLog(@"hydrateTweetsCache complete: %f ms", (double)(clock()-start) / CLOCKS_PER_SEC);
                     } else {// TODO: report error?
                     }
                 [self decrementActiveProcesses];
@@ -784,6 +872,77 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     
     //NSLog(@"section count: %i, cat count: %i", [self.uListCategorySections count], [self.uListCategories count]);
     //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
+}
+
+-(void) buildUListListingList:(NSArray*)json {
+    //NSLog(@"buildUListListingList json: %@", json);
+    
+    /* cycle through list of json objects */
+    for (id object in json) {
+        //NSLog(@"%@", object);
+        Listing *listing = [[Listing alloc] init];
+        
+        listing._id = [(NSString*)object valueForKey:@"_id"];
+        listing.userId = [[(NSString*)object valueForKey:@"user_id"] intValue];
+        listing.schoolId = [[(NSString*)object valueForKey:@"school_id"] intValue];
+        listing.title = [(NSString*)object valueForKey:@"title"];
+        listing.email = [(NSString*)object valueForKey:@"email"];
+        listing.type = [(NSString*)object valueForKey:@"type"];
+        listing.listDescription = [(NSString*)object valueForKey:@"description"];
+        listing.mainCategory = [(NSString*)object valueForKey:@"main_category"];
+        listing.category = [(NSString*)object valueForKey:@"category"];
+        listing.replyTo = [(NSString*)object valueForKey:@"reply_to"];
+        
+        /* Try to extract dates from json data */
+        @try {
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
+            listing.created = [df dateFromString:[(NSString*)object valueForKey:@"created"]];
+            listing.expires = [df dateFromString:[(NSString*)object valueForKey:@"expires"]];
+        } @catch (NSException *exception) {}
+
+        /* Map sub objects: location, meta, tags, images urls */
+        // location
+        Location *loc = [[Location alloc] init];
+        NSArray* listingLocation = [(NSArray*)object valueForKey:@"location"];
+        //NSLog(@"location id: %@, location: %@", listing._id, listingLocation);
+        
+        if (listingLocation)
+        {
+            for (id object in listingLocation) {
+                //NSLog(@"listing location object:%@", object);
+                @try {
+                    if ([(NSString*)object isEqualToString:@"latitude"])
+                        loc.latitude = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"longitude"])
+                        loc.longitude = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"street"])
+                        loc.address1 = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"zip"])
+                        loc.zip = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"city"])
+                        loc.city = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"state"])
+                        loc.state = [listingLocation valueForKey:(NSString*)object];
+                }
+                @catch (NSException *exception) {}
+            }
+        }
+        listing.location = loc;
+    
+        // tags
+        listing.tags = [(NSArray*)object valueForKey:@"tags"];
+        
+        // meta
+        // TODO: figure out how to store meta data
+        
+        // files
+        listing.files = [(NSArray*)object valueForKey:@"file"];
+        
+        // add listing to listings array
+        [self.uListListings addObject:listing];
+    }
+    //NSLog(@"listing object: %@", [self.uListListings description]);
 }
  
 -(void) retrieveSnapshots:(NSString*)categoryId {

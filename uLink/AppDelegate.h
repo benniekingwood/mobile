@@ -14,8 +14,6 @@
 @property (strong, nonatomic) UIWindow *window;
 -(void) activateSideMenu : (NSString*) mode;
 -(void) deactivateSideMenu;
-//-(void) activateUListSideMenu;
-//-(void) deactivateUListSideMenu;
 -(UITabBarController*) getMainTabBarViewController;
 -(UIViewController*) getUListSchoolHomeViewController;
 -(void) showActivityIndicator;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -837,41 +837,43 @@
             <point key="canvasLocation" x="-467" y="-1907"/>
         </scene>
         <!--List School Category View Controller-->
-        <scene sceneID="jFU-PL-44C">
+        <scene sceneID="Vb7-54-s4X">
             <objects>
-                <viewController storyboardIdentifier="UListSchoolCategoryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="aJT-eO-zA6" customClass="UListSchoolCategoryViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Tkz-Cj-vme">
+                <tableViewController storyboardIdentifier="UListSchoolCategoryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5A8-51-CQp" customClass="UListSchoolCategoryViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5sH-Hh-LfI">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9bF-Rd-5Lr">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <connections>
-                                    <segue destination="n6u-GV-1Qa" kind="embed" id="Kpv-dV-ETm"/>
-                                </connections>
-                            </containerView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4Sj-wv-cXv">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="163" id="OAw-P8-Th3"/>
-                                </constraints>
-                            </mapView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="9bF-Rd-5Lr" firstAttribute="trailing" secondItem="Tkz-Cj-vme" secondAttribute="trailing" type="default" id="4uG-hO-Ejd"/>
-                            <constraint firstItem="4Sj-wv-cXv" firstAttribute="top" secondItem="Tkz-Cj-vme" secondAttribute="top" type="default" id="LQQ-fn-tTr"/>
-                            <constraint firstItem="4Sj-wv-cXv" firstAttribute="leading" secondItem="Tkz-Cj-vme" secondAttribute="leading" type="default" id="Pgu-gg-QAm"/>
-                            <constraint firstItem="4Sj-wv-cXv" firstAttribute="bottom" secondItem="9bF-Rd-5Lr" secondAttribute="bottom" type="default" id="Ric-lJ-3Fa"/>
-                            <constraint firstItem="4Sj-wv-cXv" firstAttribute="trailing" secondItem="Tkz-Cj-vme" secondAttribute="trailing" type="default" id="i9n-Fm-qaL"/>
-                            <constraint firstItem="9bF-Rd-5Lr" firstAttribute="leading" secondItem="Tkz-Cj-vme" secondAttribute="leading" type="default" id="jb7-F5-kRV"/>
-                            <constraint firstItem="9bF-Rd-5Lr" firstAttribute="top" secondItem="Tkz-Cj-vme" secondAttribute="top" type="default" id="kEX-67-HOA"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="UDd-r7-yPO"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="giZ-hf-fGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectMapCell" rowHeight="118" id="z7g-cc-Syd">
+                                <rect key="frame" x="0.0" y="22" width="320" height="118"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="117"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="selectListingCell" rowHeight="61" id="aTs-wY-3Ep">
+                                <rect key="frame" x="0.0" y="140" width="320" height="61"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="5A8-51-CQp" id="iom-jI-xYV"/>
+                            <outlet property="delegate" destination="5A8-51-CQp" id="9Qr-s4-m1w"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="r3X-gJ-Y5X"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OWa-TS-y1n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3200" y="-2109"/>
+            <point key="canvasLocation" x="-3204" y="-2159"/>
         </scene>
         <!--UList School Home View-->
         <scene sceneID="Hlb-kb-BdA">
@@ -889,30 +891,23 @@
                                     <tabBarItem title="Me" id="aKE-xP-0u6"/>
                                 </items>
                             </tabBar>
-                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qmz-qg-9KC">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Qmz-qg-9KC" firstAttribute="trailing" secondItem="6bH-7B-Xg9" secondAttribute="trailing" type="default" id="2mt-Uy-9Wy"/>
                             <constraint firstItem="EW9-fY-jyc" firstAttribute="trailing" secondItem="6bH-7B-Xg9" secondAttribute="trailing" type="default" id="44C-0U-Glx"/>
-                            <constraint firstItem="Qmz-qg-9KC" firstAttribute="bottom" secondItem="EW9-fY-jyc" secondAttribute="top" type="default" id="BKt-8C-ZsN"/>
-                            <constraint firstItem="Qmz-qg-9KC" firstAttribute="top" secondItem="6bH-7B-Xg9" secondAttribute="top" constant="365" id="BU7-8S-9Ya"/>
                             <constraint firstItem="EW9-fY-jyc" firstAttribute="leading" secondItem="6bH-7B-Xg9" secondAttribute="leading" type="default" id="Q7h-Jf-VAq"/>
                             <constraint firstItem="EW9-fY-jyc" firstAttribute="bottom" secondItem="6bH-7B-Xg9" secondAttribute="bottom" type="default" id="Wf1-c6-AOW"/>
-                            <constraint firstItem="Qmz-qg-9KC" firstAttribute="leading" secondItem="6bH-7B-Xg9" secondAttribute="leading" type="default" id="mrX-T5-CAb"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="sEs-JO-9jh"/>
                     <navigationItem key="navigationItem" title="uList" id="hqM-dY-bXU"/>
                     <connections>
-                        <segue destination="aJT-eO-zA6" kind="push" identifier="ShowUListSchoolListingsViewController" id="FJw-ay-9Bg"/>
+                        <segue destination="5A8-51-CQp" kind="push" identifier="ShowUListSchoolListingsViewController" id="0j7-5Z-f9X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y57-vL-ezg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2729" y="-2369"/>
+            <point key="canvasLocation" x="-2657" y="-2384"/>
         </scene>
         <!--List Home View Controller - uList-->
         <scene sceneID="okt-Kd-kZz">
@@ -985,7 +980,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAq-25-DRM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2210" y="-2356"/>
+            <point key="canvasLocation" x="-2058" y="-2384"/>
         </scene>
         <!--UCampus View Controller-->
         <scene sceneID="dr1-4e-LXl">
@@ -6180,20 +6175,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dvr-At-ugo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1482" y="-3225"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="8Xc-oF-G8U">
-            <objects>
-                <viewController id="n6u-GV-1Qa" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="3cm-Ux-xaw">
-                        <rect key="frame" x="0.0" y="20" width="0.0" height="0.0"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4AQ-uG-xO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
