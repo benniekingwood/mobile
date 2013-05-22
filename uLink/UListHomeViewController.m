@@ -112,7 +112,8 @@
     cell.textLabel.font = cellFont;
     NSString *schoolKey = [sections objectAtIndex:section];
     NSMutableArray *schools = [UDataCache.schools objectForKey:schoolKey];
-    cell.school = [schools objectAtIndex:indexPath.row];
+    cell.school= [schools objectAtIndex:indexPath.row];
+    [cell initialize];
     return cell;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
