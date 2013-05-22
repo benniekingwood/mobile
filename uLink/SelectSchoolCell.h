@@ -13,11 +13,11 @@
 @interface SelectSchoolCell : UITableViewCell {
     NSString *schoolId;
     NSString *schoolName;
-    School *school;
-    
+    School *_school;
 }
 @property (nonatomic, strong) NSString *schoolId;
 @property (nonatomic, strong) NSString *schoolName;
 @property (nonatomic, strong) School *school;
 -(void)initialize:(UlinkButton*)suggestBtn;
+-(void) initialize;
 @end
