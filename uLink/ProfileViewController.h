@@ -13,4 +13,5 @@
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet UILabel *eventsCountLabel;
 @property (strong, nonatomic) IBOutlet UILabel *snapCountLabel;
+@property (strong, nonatomic) IBOutlet UILabel *listingCountLabel;
 @end

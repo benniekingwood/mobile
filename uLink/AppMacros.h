@@ -111,6 +111,7 @@
 #define DISPATCH_SCHOOL "school"
 #define DISPATCH_ULIST_CATEGORY "ulist_category"
 #define DISPATCH_ULIST_LISTING "ulist_listing"
+#define DISPATCH_MY_LISTING "my_listing"
 #define DISPATCH_LOGIN "log_in"
 #define DISPATCH_UPDATE_PASSWORD "update_password"
 #define DISPATCH_UPDATE_USER "update_user"

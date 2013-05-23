@@ -56,6 +56,7 @@
 - (void) hydrateImageCache;
 - (void) hydrateUListCategoryCache;
 - (void) hydrateUListListingsCache;
+- (void) hydrateSessionUserListings;
 - (void) rehydrateSessionUser;
 - (void) rehydrateSchoolCache:(BOOL)checkAge;
 - (void) rehydrateEventsCache:(BOOL)checkAge;
@@ -64,7 +65,7 @@
 - (void) rehydrateTweetsCache:(BOOL)checkAge;
 - (void) rehydrateTrendsCache:(BOOL)checkAge;
 - (void) rehydrateImageCache:(BOOL)checkAge;
-- (void) rehydrateUListCategories:(BOOL)checkAge;
+- (void) rehydrateUListCategoriesCache:(BOOL)checkAge;
 - (void) rehydrateUListListingsCache:(BOOL)checkAge;
 - (void) incrementActiveProcesses:(int)processCount;
 - (void) decrementActiveProcesses;

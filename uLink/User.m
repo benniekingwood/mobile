@@ -20,6 +20,7 @@ userId,username,firstname,lastname,password,email,schoolId,major,year,schoolStat
 @synthesize bio,twitterEnabled,twitterUsername, profileImage, userImgURL;
 @synthesize events;
 @synthesize snaps;
+@synthesize listings;
 
 -(id)init {
     if (self = [super init]) {

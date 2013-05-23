@@ -19,6 +19,7 @@
 }
 - (void)loadSessionUserData:(NSDictionary*)rawData;
 - (void) hydrateCaches;
+- (void) loadSessionUserListings;
 @end
 
 @implementation LoginViewController
@@ -250,7 +251,11 @@
     UDataCache.sessionUser = [[User alloc] init];
     // set the current password since it's valid
     UDataCache.sessionUser.password = currentPassword;
-    [UDataCache.sessionUser hydrateUser:rawData isSessionUser:YES];    
+    [UDataCache.sessionUser hydrateUser:rawData isSessionUser:YES];
+    [self loadSessionUserListings];
+}
+- (void) loadSessionUserListings {
+    [UDataCache hydrateSessionUserListings];
 }
 - (void) hydrateCaches {
      [UDataCache hydrateCaches];

@@ -18,7 +18,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize snapCountLabel, eventsCountLabel;
+@synthesize snapCountLabel, eventsCountLabel, listingCountLabel;
 @synthesize containerView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,6 +48,8 @@
     self.snapCountLabel.textAlignment = NSTextAlignmentRight;
     self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
     self.eventsCountLabel.textAlignment = NSTextAlignmentRight;
+    self.listingCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
+    self.listingCountLabel.textAlignment = NSTextAlignmentRight;
     // Register an observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(notificationViewUpdate:) name:NOTIFICATION_PROFILE_VIEW_CONTROLLER
@@ -64,6 +66,7 @@
     self.tabBarController.navigationItem.rightBarButtonItem = settingsButton;
     self.snapCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.snaps count]];
     self.eventsCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.events count]];
+    self.listingCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.listings count]];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
