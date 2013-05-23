@@ -28,6 +28,7 @@
 @property (strong, nonatomic) UIImage *profileImage;
 @property (strong, nonatomic) NSMutableArray *events;
 @property (strong, nonatomic) NSMutableArray *snaps;
+@property (strong, nonatomic) NSMutableArray *listings;
 @property (nonatomic) NSDate *cacheAge;
 - (void) hydrateUser:(NSDictionary*)rawData isSessionUser:(BOOL)isSessionUser;
 @end

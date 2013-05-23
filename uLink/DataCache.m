@@ -25,7 +25,7 @@
 }
 - (void) buildSchoolList:(id)schoolsRaw;
 - (void) buildUListCategoryList:(NSArray*)json;
-- (void) buildUListListingList:(NSArray*)json;
+- (void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser;
 - (void) retrieveSnapshots:(NSString*)categoryId;
 - (void) buildTrends:(id)trendsRaw;
 - (void) buildTweets:(id)tweetsRaw;
@@ -358,6 +358,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 - (void) rehydrateSessionUser {
     @try {
         //clock_t start = clock();
+        [self performSelectorInBackground:@selector(hydrateSessionUserListings:) withObject:self];
         NSDate *start = [NSDate date];
         dispatch_queue_t userQueue = dispatch_queue_create(DISPATCH_USER, NULL);
         dispatch_async(userQueue, ^{
@@ -552,7 +553,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                             } else{
                                 [self.uListListings removeAllObjects];
                             }
-                            [self buildUListListingList:json];
+                            [self buildUListListingList:json forSessionUser:NO];
                         }
                         
                     }
@@ -561,6 +562,58 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
                     NSLog(@"hydrateUListListingsCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
                     [self decrementActiveProcesses];
                 }
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {} // TODO: report error?
+}
+
+/*
+ * This function will load the listings based on the passed in 
+ * user id.
+ */
+- (void) hydrateSessionUserListings {
+    @try {
+        //clock_t start = clock();
+        NSDate *start = [NSDate date];
+        dispatch_queue_t myListingQueue = dispatch_queue_create(DISPATCH_MY_LISTING, NULL);
+        dispatch_async(myListingQueue, ^{
+            
+            NSString *requestData = @"?qt=u";
+            requestData = [requestData stringByAppendingString:[@"&uid=" stringByAppendingString:self.sessionUser.userId]];
+            NSString *fullURL = [[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS] stringByAppendingString:requestData];
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:fullURL]];
+            [req setHTTPMethod:HTTP_GET];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:kNilOptions
+                                         error:&err];
+                        @synchronized(self) {
+                            if (self.sessionUser.listings == nil) {
+                                self.sessionUser.listings = [[NSMutableArray alloc] init];
+                            } else{
+                                [self.sessionUser.listings removeAllObjects];
+                            }
+                            [self buildUListListingList:json forSessionUser:YES];
+                        }
+                        
+                    }
+                    
+                    NSDate *end = [NSDate date];
+                    NSLog(@"hydrateSessionUserListings complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
+                    [self decrementActiveProcesses];
+                } else {}
             }]; // end sendAsynchronousRequest
         }); // end dispatch_async
     }
@@ -874,7 +927,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
 }
 
--(void) buildUListListingList:(NSArray*)json {
+-(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {
     //NSLog(@"buildUListListingList json: %@", json);
     
     /* cycle through list of json objects */
@@ -940,7 +993,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         listing.files = [(NSArray*)object valueForKey:@"file"];
         
         // add listing to listings array
-        [self.uListListings addObject:listing];
+        if(forSessionUser) {[self.sessionUser.listings addObject:listing];}
+        else {[self.uListListings addObject:listing];}
     }
     //NSLog(@"listing object: %@", [self.uListListings description]);
 }
