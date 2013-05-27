@@ -694,6 +694,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="YR6-5w-1Y8" kind="push" id="UQI-Ph-Zti"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWp-fe-mOg">
                                         <constraints>
@@ -748,9 +751,6 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nw2-rn-IK1">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="65" id="U8i-QC-D4S"/>
-                                        </constraints>
                                         <attributedString key="attributedText">
                                             <fragment content="Listings">
                                                 <attributes>
@@ -766,7 +766,7 @@
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="nw2-rn-IK1" firstAttribute="trailing" secondItem="DC9-Ka-LwF" secondAttribute="trailing" type="default" id="0k4-nW-8hp"/>
-                                    <constraint firstItem="nw2-rn-IK1" firstAttribute="top" secondItem="sBu-If-RTd" secondAttribute="top" constant="128" id="1Hg-Ga-TmV"/>
+                                    <constraint firstItem="nw2-rn-IK1" firstAttribute="bottom" secondItem="NLO-6h-vO0" secondAttribute="bottom" type="default" id="1v0-4e-rgY"/>
                                     <constraint firstAttribute="trailing" secondItem="jXp-th-w3x" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="3Et-j8-C8F"/>
                                     <constraint firstAttribute="bottom" secondItem="NLO-6h-vO0" secondAttribute="bottom" constant="45" id="3u0-eT-2wD"/>
                                     <constraint firstItem="XzD-9K-yaR" firstAttribute="centerX" secondItem="sBu-If-RTd" secondAttribute="centerX" type="default" id="5cf-fk-fw1"/>
@@ -774,24 +774,25 @@
                                     <constraint firstItem="MTY-JI-f8K" firstAttribute="trailing" secondItem="NLO-6h-vO0" secondAttribute="trailing" type="default" id="68R-NE-kOc"/>
                                     <constraint firstItem="DC9-Ka-LwF" firstAttribute="leading" secondItem="nw2-rn-IK1" secondAttribute="leading" type="default" id="8YU-wQ-SP4"/>
                                     <constraint firstItem="iWp-fe-mOg" firstAttribute="trailing" secondItem="MTY-JI-f8K" secondAttribute="trailing" type="default" id="BYC-VU-0bZ"/>
-                                    <constraint firstItem="MTY-JI-f8K" firstAttribute="bottom" secondItem="DC9-Ka-LwF" secondAttribute="bottom" type="default" id="EMY-JP-UOd"/>
+                                    <constraint firstItem="jXp-th-w3x" firstAttribute="centerY" secondItem="NLO-6h-vO0" secondAttribute="centerY" type="default" id="Da6-ZQ-pKf"/>
                                     <constraint firstItem="XzD-9K-yaR" firstAttribute="leading" secondItem="sBu-If-RTd" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="GWj-OJ-cUI"/>
                                     <constraint firstAttribute="trailing" secondItem="XzD-9K-yaR" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Lzn-z4-9Mw"/>
-                                    <constraint firstItem="XzD-9K-yaR" firstAttribute="centerY" secondItem="MTY-JI-f8K" secondAttribute="centerY" type="default" id="Mew-Fb-6av"/>
                                     <constraint firstItem="22M-bh-v9J" firstAttribute="centerY" secondItem="iWp-fe-mOg" secondAttribute="centerY" type="default" id="Mta-iT-ZKc"/>
                                     <constraint firstItem="jXp-th-w3x" firstAttribute="leading" secondItem="sBu-If-RTd" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="PUR-nr-Kad"/>
                                     <constraint firstItem="NLO-6h-vO0" firstAttribute="leading" secondItem="MTY-JI-f8K" secondAttribute="leading" type="default" id="Pfo-kf-mDF"/>
+                                    <constraint firstItem="DC9-Ka-LwF" firstAttribute="top" secondItem="MTY-JI-f8K" secondAttribute="top" type="default" id="SRj-Re-cGX"/>
                                     <constraint firstItem="jXp-th-w3x" firstAttribute="top" secondItem="XzD-9K-yaR" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="SqO-ID-xvz"/>
                                     <constraint firstAttribute="trailing" secondItem="22M-bh-v9J" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="UGI-UA-pd5"/>
+                                    <constraint firstItem="nw2-rn-IK1" firstAttribute="top" secondItem="NLO-6h-vO0" secondAttribute="top" type="default" id="Xn5-0E-1OY"/>
                                     <constraint firstItem="iWp-fe-mOg" firstAttribute="leading" secondItem="MTY-JI-f8K" secondAttribute="leading" type="default" id="avK-Ef-KBR"/>
-                                    <constraint firstItem="NLO-6h-vO0" firstAttribute="centerY" secondItem="jXp-th-w3x" secondAttribute="centerY" type="default" id="cYf-Yh-BNq"/>
                                     <constraint firstItem="GNY-MA-6R1" firstAttribute="leading" secondItem="DC9-Ka-LwF" secondAttribute="leading" type="default" id="cnp-kg-P0l"/>
+                                    <constraint firstItem="DC9-Ka-LwF" firstAttribute="centerY" secondItem="XzD-9K-yaR" secondAttribute="centerY" type="default" id="dxJ-V6-Ju6"/>
                                     <constraint firstItem="GNY-MA-6R1" firstAttribute="leading" secondItem="sBu-If-RTd" secondAttribute="leading" constant="144" id="e2E-ef-3QV"/>
                                     <constraint firstItem="DC9-Ka-LwF" firstAttribute="trailing" secondItem="GNY-MA-6R1" secondAttribute="trailing" type="default" id="emp-k3-3Gz"/>
                                     <constraint firstItem="iWp-fe-mOg" firstAttribute="leading" secondItem="sBu-If-RTd" secondAttribute="leading" constant="28" id="o54-Ee-5Fa"/>
-                                    <constraint firstItem="MTY-JI-f8K" firstAttribute="top" secondItem="DC9-Ka-LwF" secondAttribute="top" type="default" id="oTH-kJ-9qW"/>
                                     <constraint firstItem="iWp-fe-mOg" firstAttribute="top" secondItem="sBu-If-RTd" secondAttribute="top" constant="8" id="rew-pV-lBo"/>
                                     <constraint firstItem="XzD-9K-yaR" firstAttribute="top" secondItem="22M-bh-v9J" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="v2i-Ew-xu0"/>
+                                    <constraint firstItem="DC9-Ka-LwF" firstAttribute="bottom" secondItem="MTY-JI-f8K" secondAttribute="bottom" type="default" id="xmY-CZ-PFN"/>
                                     <constraint firstItem="GNY-MA-6R1" firstAttribute="top" secondItem="iWp-fe-mOg" secondAttribute="top" type="default" id="xz7-NT-dFo"/>
                                 </constraints>
                             </scrollView>
@@ -4784,6 +4785,36 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             </objects>
             <point key="canvasLocation" x="595" y="-970"/>
         </scene>
+        <!--My Listings View Controller - My Listings-->
+        <scene sceneID="Gvo-Ga-UUB">
+            <objects>
+                <tableViewController storyboardIdentifier="MyListingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YR6-5w-1Y8" customClass="MyListingsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="yjT-FZ-5rd">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="myListingCell" rowHeight="59" id="hEA-kc-qFZ" customClass="MyListingCell">
+                                <rect key="frame" x="0.0" y="22" width="320" height="59"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="58"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YR6-5w-1Y8" id="WxY-vr-lq8"/>
+                            <outlet property="delegate" destination="YR6-5w-1Y8" id="GAH-cf-9Hk"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="My Listings" id="SFP-hW-j94"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Eb-dW-Rpq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="618" y="-448"/>
+        </scene>
         <!--Edit Event View Controller - Event-->
         <scene sceneID="HBd-AI-2Mb">
             <objects>
@@ -6341,6 +6372,12 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <class className="MyEventsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MyEventsViewController.h"/>
         </class>
+        <class className="MyListingCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyListingCell.h"/>
+        </class>
+        <class className="MyListingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyListingsViewController.h"/>
+        </class>
         <class className="MyProfileAccountHelpViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MyProfileAccountHelpViewController.h"/>
             <relationships>
@@ -6592,6 +6629,9 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UListHomeViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UListHomeViewController.h"/>

@@ -145,6 +145,7 @@
 #define CELL_SNAP_CELL @"snapcell"
 #define CELL_MY_SNAP_CELL @"mySnapCell"
 #define CELL_MY_EVENT_CELL @"myEventCell"
+#define CELL_MY_LISTING_CELL @"myListingCell"
 #define CELL_EVENT_CELL @"eventCell"
 #define CELL_SNAP_COMMENT_CELL @"snapCommentCell"
 #define CELL_SNAP_CATEGORY @"snapCategoryCell"

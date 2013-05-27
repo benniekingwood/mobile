@@ -44,11 +44,11 @@
     profilePicView.frame = profilePicViewFrame;
     profilePicView.userInteractionEnabled = YES;
     settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ulink-mobile-settings-icon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettingsViewController)];
-    self.snapCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
+    self.snapCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
     self.snapCountLabel.textAlignment = NSTextAlignmentRight;
-    self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
+    self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
     self.eventsCountLabel.textAlignment = NSTextAlignmentRight;
-    self.listingCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:60.0f];
+    self.listingCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
     self.listingCountLabel.textAlignment = NSTextAlignmentRight;
     // Register an observer
     [[NSNotificationCenter defaultCenter] addObserver:self
