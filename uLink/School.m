@@ -9,5 +9,5 @@
 #import "School.h"
 
 @implementation School
-@synthesize schoolId,name, shortName, year, attendance, imageURL, cacheAge;
+@synthesize schoolId,name, shortName, year, attendance, imageURL, cacheAge, latitude, longitude, shortDescription;
 @end
