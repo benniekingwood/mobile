@@ -15,5 +15,8 @@
 @property (nonatomic) NSString *year;
 @property (nonatomic) NSString *attendance;
 @property (nonatomic) NSString *imageURL;
+@property (nonatomic) NSString *latitude;
+@property (nonatomic) NSString *longitude;
+@property (nonatomic) NSString *shortDescription;
 @property (nonatomic) NSDate *cacheAge;
 @end

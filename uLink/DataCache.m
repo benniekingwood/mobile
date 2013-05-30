@@ -829,20 +829,11 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     }
 }
 -(void) buildSchoolList:(id)schoolsRaw {
-    // iterate over list of schools
-    NSEnumerator *e = [schoolsRaw keyEnumerator];
-    id schoolId;
     NSString *schoolSectionKey = nil;
-    while (schoolId = [e nextObject]) {
-        NSString *schoolName;
-        NSString *schoolShortName;
-        NSDictionary* schoolDict = [(NSDictionary*)schoolsRaw valueForKey:schoolId];
-        for (NSString* shortNameKey in schoolDict) {
-            id name = [schoolDict objectForKey:shortNameKey];
-            schoolName = (NSString*)name;
-            schoolShortName = shortNameKey;
-            break;
-        }
+    // iterate over list of schools
+    for (NSDictionary *schoolDict in schoolsRaw) {
+        NSString *schoolName = [schoolDict objectForKey:@"name"];
+        NSString *schoolShortName = [schoolDict objectForKey:@"short_name"];
         // captialize the first letter of school name
         schoolName = [textUtil capitalizeString:schoolName];
         schoolSectionKey = [schoolName substringToIndex:1];
@@ -854,10 +845,14 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         }
         // create school object, and add it to the retreived array
         School *school = [[School alloc] init];
-        // set the name, shortName and id for the school
+        // set the needed properties for the school
         school.name = schoolName;
         school.shortName = schoolShortName;
-        school.schoolId = schoolId;
+        school.schoolId = [schoolDict objectForKey:@"id"];;
+        school.latitude = [schoolDict objectForKey:@"latitude"];
+        school.longitude = [schoolDict objectForKey:@"longitude"];
+        school.imageURL = ([[schoolDict objectForKey:@"image_url"] isKindOfClass:[NSNull class]] || [[schoolDict objectForKey:@"image_url"] isEqualToString:@"<null>"]) ? nil : [schoolDict objectForKey:@"image_url"];
+        school.shortDescription = [schoolDict objectForKey:@"short_description"];
         school.cacheAge = [NSDate date];
         [sectionSchools addObject:school];
         [self.schools setObject:sectionSchools forKey:schoolSectionKey];
