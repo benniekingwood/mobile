@@ -873,22 +873,11 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     }
 }
 -(void) buildSchoolList:(id)schoolsRaw {
-    // iterate over list of schools
-    NSEnumerator *e = [schoolsRaw keyEnumerator];
-    id schoolId;
     NSString *schoolSectionKey = nil;
-    while (schoolId = [e nextObject]) {
-        NSString *schoolName;
-        NSString *schoolShortName;
-        NSDictionary* schoolDict = [(NSDictionary*)schoolsRaw valueForKey:schoolId];
-        if ([schoolDict count] > 0) {
-            for (NSString* shortNameKey in schoolDict) {
-                id name = [schoolDict objectForKey:shortNameKey];
-                schoolName = (NSString*)name;
-                schoolShortName = shortNameKey;
-                break;
-            }
-        }
+    // iterate over list of schools
+    for (NSDictionary *schoolDict in schoolsRaw) {
+        NSString *schoolName = [schoolDict objectForKey:@"name"];
+        NSString *schoolShortName = [schoolDict objectForKey:@"short_name"];
         // captialize the first letter of school name
         schoolName = [textUtil capitalizeString:schoolName];
         schoolSectionKey = [schoolName substringToIndex:1];
@@ -900,7 +889,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         }
         // create school object, and add it to the retreived array
         School *school = [[School alloc] init];
-        // set the name, shortName and id for the school
+        // set the needed properties for the school
         school.name = schoolName;
         school.shortName = schoolShortName;
         school.schoolId = [schoolDict objectForKey:@"id"];;
