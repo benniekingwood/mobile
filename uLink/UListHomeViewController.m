@@ -139,6 +139,7 @@
         SelectSchoolCell *cell = (SelectSchoolCell *)sender;
         UListSchoolHomeViewController *schoolHomeViewController = [segue destinationViewController];
         schoolHomeViewController.school = cell.school;
+        schoolHomeViewController.school.schoolId = cell.schoolId;
     }
 }
 

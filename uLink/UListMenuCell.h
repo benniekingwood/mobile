@@ -16,4 +16,7 @@
 @property(nonatomic,strong) UIImageView *glowView;
 @property(nonatomic,strong) UIImage *iconImage;
 @property(nonatomic) BOOL enabled;
+@property(nonatomic) NSString *schoolId;
+@property(nonatomic) NSString *mainCat;
+@property(nonatomic) NSString *subCat;
 @end

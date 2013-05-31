@@ -14,14 +14,19 @@
 #pragma mark MISC CONSTANTS
 #define SLEEP_TIME_LOGIN 0
 #define SLEEP_TIME_APP_LOAD 1.5
+#define SLEEP_TIME_QUERY 1.0
 #define AUTO_SCROLL_EVENT_TIME 6
 #define AUTO_SCROLL_UCAMPUS_HOME_TIME 7
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
+#define ULIST_LISTING_BATCH_SIZE 10
+#define MIN_RETRIES 5
+#define EMPTY_STRING @""
 #define VERSION_NUMBER @"0.2.7"
 
 #pragma mark APPEARANCE CONSTANTS
 #define ALPHA_HIGH 1.00
+#define ALPHA_MED_HIGH 0.8
 #define ALPHA_MED 0.6
 #define ALPHA_LOW 0.2
 #define ALPHA_ZERO 0.00
@@ -211,6 +216,8 @@
 
 #pragma mark ALERTS
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
+
+#pragma mark QUERY_PARAMS
 
 #pragma mark TEXTFIELDS
 typedef enum {

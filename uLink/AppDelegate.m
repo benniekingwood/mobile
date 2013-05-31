@@ -124,8 +124,6 @@
 }
 
 -(UIViewController*)getUListSchoolHomeViewController {
-    NSLog(@"In getUlistSchoolHOmeViewController");
-    //NSLog(@"%@",[[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:3]);
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:3];
 }
 

@@ -10,9 +10,7 @@
 #import "AppMacros.h"
 
 @implementation UListMenuCell
-@synthesize glowView;
-@synthesize iconImage;
-@synthesize enabled;
+@synthesize glowView, iconImage, enabled, mainCat, subCat, schoolId;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

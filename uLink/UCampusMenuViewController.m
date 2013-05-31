@@ -147,6 +147,8 @@
         NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
         NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
         UListCategory *category = [categories objectAtIndex:indexPath.row];
+        ((UListMenuCell*)cell).mainCat = categoryKey;
+        ((UListMenuCell*)cell).subCat = category.name;
         ((UListMenuCell*)cell).iconImage = [UIImage alloc];
         ((UListMenuCell*)cell).textLabel.text = category.name;
         [(UListMenuCell*)cell layoutSubviews];
@@ -177,13 +179,9 @@
     if ([mode isEqualToString:@"uList"]) {
         UListSchoolHomeMenuViewController *uListSchoolHomeController = (UListSchoolHomeMenuViewController*)[UAppDelegate getUListSchoolHomeViewController];
         
-        // we can hydrate the list cache here
-        // hydrate listings cache prior to rendering view
-        [UDataCache hydrateUListListingsCache];
-        
-        //NSLog(@"%@", [UAppDelegate getUListSchoolHomeViewController]);
         if ([(id)uListSchoolHomeController respondsToSelector:@selector(performSegue:)]) {
-            [(id)uListSchoolHomeController performSegue:selectedCell.tag];
+            //[(id)uListSchoolHomeController performSegue:selectedCell.];
+            [(id)uListSchoolHomeController performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:selectedCell];
         }
     }
 }

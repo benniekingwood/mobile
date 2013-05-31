@@ -10,5 +10,6 @@
 #import "Listing.h"
 
 @interface UListListingCell : UITableViewCell
-@property (nonatomic) Listing *uListListing;
+@property (nonatomic, strong) Listing *uListListing;
+-(void)initialize;
 @end

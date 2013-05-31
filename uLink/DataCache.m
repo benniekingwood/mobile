@@ -140,6 +140,29 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         self.times = [[NSArray alloc] initWithObjects:@"",@"12:00 AM",@"12:15 AM",@"12:30 AM",@"12:45 AM",@"01:00 AM",@"01:15 AM",@"01:30 AM",@"01:45 AM",@"02:00 AM",@"02:15 AM",@"02:30 AM",@"02:45 AM",@"03:00 AM",@"03:15 AM",@"03:30 AM",@"03:45 AM",@"04:00 AM",@"04:15 AM",@"04:30 AM",@"04:45 AM",@"05:00 AM",@"05:15 AM",@"05:30 AM",@"05:45 AM",@"06:00 AM",@"06:15 AM",@"06:30 AM",@"06:45 AM",@"07:00 AM",@"07:15 AM",@"07:30 AM",@"07:45 AM",@"08:00 AM",@"08:15 AM",@"08:30 AM",@"08:45 AM",@"09:00 AM",@"09:15 AM",@"09:30 AM",@"09:45 AM",@"10:00 AM",@"10:15 AM",@"10:30 AM",@"10:45 AM",@"11:00 AM",@"11:15 AM",@"11:30 AM",@"11:45 AM",@"12:00 PM",@"12:15 PM",@"12:30 PM",@"12:45 PM",@"01:00 PM",@"01:15 PM",@"01:30 PM",@"01:45 PM",@"02:00 PM",@"02:15 PM",@"02:30 PM",@"02:45 PM",@"03:00 PM",@"03:15 PM",@"03:30 PM",@"03:45 PM",@"04:00 PM",@"04:15 PM",@"04:30 PM",@"04:45 PM",@"05:00 PM",@"05:15 PM",@"05:30 PM",@"05:45 PM",@"06:00 PM",@"06:15 PM",@"06:30 PM",@"06:45 PM",@"07:00 PM",@"07:15 PM",@"07:30 PM",@"07:45 PM",@"08:00 PM",@"08:15 PM",@"08:30 PM",@"08:45 PM",@"09:00 PM",@"09:15 PM",@"09:30 PM",@"09:45 PM",@"10:00 PM",@"10:15 PM",@"10:30 PM",@"10:45 PM",@"11:00 PM",@"11:15 PM",@"11:30 PM",@"11:45 PM", nil];
     }
 }
+- (NSURL*)buildURL:(NSString*)server api:(NSString*)api query:(NSString*)query {
+
+    NSString *URLString = [[NSString alloc] initWithFormat:@"%@%@%@%@", server, api, [query length] ? @"?" : EMPTY_STRING, [query length] ? [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] : EMPTY_STRING];
+    NSURL *URL = [NSURL URLWithString:URLString];
+    //NSLog(@"%@", URL);
+    return URL;
+}
+- (NSURL*)buildURLWithDictionary:(NSString*)server api:(NSString*)api query:(NSDictionary*)query {
+    
+    int valuePairCount = [query count];
+    NSString *URLString = [[NSString alloc] initWithFormat:@"%@%@%@", server, api, [query count] ? @"?" : @""];
+    
+    /* append each key-value pair in the dictionary */
+    for (id queryStr in query) {
+        [URLString stringByAppendingFormat:@"%@=%@%@", queryStr, [query objectForKey:queryStr], (valuePairCount > 1) ? @"&" : @""];
+        valuePairCount--;
+    }
+
+    /* build url with url string */
+    NSURL *URL = [NSURL URLWithString:URLString];
+    NSLog(@"%@", URLString);
+    return URL;
+}
 - (void) incrementActiveProcesses:(int)processCount {
     @synchronized(self) {
         activeProcesses+=processCount;
@@ -234,7 +257,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         }
     }
     if (rehydrate) {
-        [self hydrateUListCategoryCache];
+        [self hydrateUListListingsCache:@""];
     }
     else {
         [self decrementActiveProcesses];
@@ -521,17 +544,38 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 }
 
 /*
- * NOTE: modify this method to only return a set amount of listings to
-    preserve performance and integrity of ulink app
+    NOTE: modify this method to only return a set amount of listings to
+    preserve performance and integrity of ulink app; add query parameters
+ 
+     qt - query type
+     can have values of "s", "c", or "u"
+     "s" is for searching
+     "c" is for category loading
+     "u" is for user listing retrieval
+     if you do qt=s, then you have to pass the following params: sid, t
+     sid = school id
+     t = is the search text
+     for qt=c (category searching)
+     you need, mc, c, and sid
+     mc="main category text"
+     c="sub category text"
+     sid=school id
+     finally qt=u, you just need uid=user id
  */
-- (void) hydrateUListListingsCache {
+- (void) hydrateUListListingsCache:(NSString*) query {
     @try {
         //clock_t start = clock();
         NSDate *start = [NSDate date];
         dispatch_queue_t listingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
         dispatch_async(listingQueue, ^{
-            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS]]];
+            /* build the url w/ or w/o query string */
+            //NSURL *URL = [[NSURL alloc] init];
+        
+            //URL = [self buildURL:URL_SERVER_3737 api:API_ULIST_LISTINGS query:query];
+            //NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS]]];
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[self buildURL:URL_SERVER_3737 api:API_ULIST_LISTINGS query:query]];
             [req setHTTPMethod:HTTP_GET];
+            NSLog(@"ulist listing request: %@", req.URL);
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 
@@ -829,11 +873,22 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     }
 }
 -(void) buildSchoolList:(id)schoolsRaw {
-    NSString *schoolSectionKey = nil;
     // iterate over list of schools
-    for (NSDictionary *schoolDict in schoolsRaw) {
-        NSString *schoolName = [schoolDict objectForKey:@"name"];
-        NSString *schoolShortName = [schoolDict objectForKey:@"short_name"];
+    NSEnumerator *e = [schoolsRaw keyEnumerator];
+    id schoolId;
+    NSString *schoolSectionKey = nil;
+    while (schoolId = [e nextObject]) {
+        NSString *schoolName;
+        NSString *schoolShortName;
+        NSDictionary* schoolDict = [(NSDictionary*)schoolsRaw valueForKey:schoolId];
+        if ([schoolDict count] > 0) {
+            for (NSString* shortNameKey in schoolDict) {
+                id name = [schoolDict objectForKey:shortNameKey];
+                schoolName = (NSString*)name;
+                schoolShortName = shortNameKey;
+                break;
+            }
+        }
         // captialize the first letter of school name
         schoolName = [textUtil capitalizeString:schoolName];
         schoolSectionKey = [schoolName substringToIndex:1];
@@ -845,7 +900,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         }
         // create school object, and add it to the retreived array
         School *school = [[School alloc] init];
-        // set the needed properties for the school
+        // set the name, shortName and id for the school
         school.name = schoolName;
         school.shortName = schoolShortName;
         school.schoolId = [schoolDict objectForKey:@"id"];;

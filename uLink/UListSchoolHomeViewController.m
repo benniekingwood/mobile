@@ -12,6 +12,7 @@
 #import "AppMacros.h"
 #import "DataCache.h"
 #import "SelectCategoryCell.h"
+#import "UListMenuCell.h"
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
@@ -86,10 +87,11 @@
 {
     if ([[segue identifier] isEqualToString:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER])
     {
-        SelectCategoryCell *cell = (SelectCategoryCell *)sender;
+        UListMenuCell *menuCell = (UListMenuCell*)sender;
         UListSchoolCategoryViewController *categoryViewController = [segue destinationViewController];
-        //categoryViewController.categoryId = cell.categoryId;
-        //categoryViewController.categoryName = cell.categoryName;
+        categoryViewController.mainCat = menuCell.mainCat;
+        categoryViewController.subCat = menuCell.subCat;
+        categoryViewController.schoolId = school.schoolId;
     }
 }
 

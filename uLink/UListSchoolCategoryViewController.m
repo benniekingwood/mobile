@@ -11,6 +11,7 @@
 #import "AppMacros.h"
 #import "DataCache.h"
 #import "DataLoader.h"
+#import "UListMapCell.h"
 #import "UListListingCell.h"
 #import <Foundation/Foundation.h>
 
@@ -22,13 +23,10 @@
 @end
 
 @implementation UListSchoolCategoryViewController
-@synthesize categoryId, categoryName, locationManager, uListMapView_;
 
-/* Synthesize for lazy loading properties */
-@synthesize searchResultOfSets;
-@synthesize fetchBatch;
-@synthesize loading;
-@synthesize noMoreResultsAvail;
+@synthesize mainCat, subCat, schoolId, locationManager, uListMapView_;
+@synthesize searchResultOfSets, fetchBatch, loading, noMoreResultsAvail, retries;
+@synthesize activityIndicatorView = _activityIndicatorView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,16 +60,27 @@
     
     /****** Setup Lazy Loading (Initial) **********/
     fetchBatch = 0;
+    retries = 0;
     noMoreResultsAvail = NO;
     searchResultOfSets = [[NSMutableArray alloc] init];
+    
+    // build query string
+    // qt=c&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch
+    NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.schoolId, fetchBatch];
+    [UDataCache hydrateUListListingsCache:query];
+    /*
     if ([UDataCache.uListListings count] > 0) {
-        for (int i = 0; i<10 ; i++) {
+        for (int i = 0; (i<ULIST_LISTING_BATCH_SIZE && i<[UDataCache.uListListings count]) ; i++) {
+            NSLog(@"listing object: %@", [UDataCache.uListListings objectAtIndex:i]);
             [self.searchResultOfSets addObject:[UDataCache.uListListings objectAtIndex:i]];
         }
     }
+    */
     [self loadRequest];
     /****** End Lazy Loading ***********/
     
+    self.tableView.separatorColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.901 green:0.882 blue:0.89 alpha:1.0];
     self.tabBarController.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = nil;
     mapFrame = CGRectMake(0, 70, 320, 120);
@@ -83,6 +92,12 @@
     mapView.backgroundColor = [UIColor blackColor];
     mapView.frame = mViewFrame;
     mapView.userInteractionEnabled = YES;
+    
+    // Setting Up Activity Indicator View
+    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicatorView.hidesWhenStopped = YES;
+    //self.tableView.tableFooterView = self.activityIndicatorView;
+    //[self.activityIndicatorView startAnimating];
     
     /* set up map view */
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.uListMapView_.myLocation.coordinate.latitude
@@ -109,7 +124,7 @@
 {
     [super viewWillDisappear:animated];
     [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
-    self.searchResultOfSets = nil;
+    [self.searchResultOfSets removeAllObjects];
 }
 
 - (void)didReceiveMemoryWarning
@@ -134,18 +149,19 @@
             
         case 1:
             // Return the number of rows in the section.
-            // If data source is yet empty, then return 0 cell.
+            // If data source is yet empty, then return 1 cell (to display no data 
+            // message).
             // If data source is not empty, then return one more cell space.
             // (for displaying the "Loading More..." text)
             if (searchResultOfSets.count == 0) {
-                retVal =  0;
+                retVal =  1;
             } else {
                 retVal = ([searchResultOfSets count]+1);
+                //retVal = [searchResultOfSets count];
             }
-            //retVal = [UDataCache.uListListings count];
             break;
     }
-    NSLog(@"number of rows in section retVal: %i", retVal);
+    //NSLog(@"number of rows in section retVal: %i", retVal);
     return retVal;
 }
 
@@ -155,14 +171,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int section = [indexPath section];
-    UITableViewCell *cell = nil;//[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = nil;
     
     // map section
     if (section == 0) {
         static NSString *CellIdentifier = CELL_SELECT_ULIST_MAP;
-        //cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = [[UListMapCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         // add google maps to cell view
@@ -171,14 +186,14 @@
         [cell.contentView addSubview:mapView];
     } else {
         static NSString *CellIdentifier = CELL_SELECT_ULIST_LISTING_CELL;
-        //cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         // If scrolled beyond two thirds of the table, load next batch of data.
-        if (indexPath.row >= (searchResultOfSets.count /3 *2)) {
-            if (!loading) {
+        // Make sure that our set data count exceeds the batch size
+        if (indexPath.row >= ((searchResultOfSets.count*2)/3)) {
+            if (!loading && !noMoreResultsAvail) {
                 NSLog(@"at 2/3 of page.. loading next 10 results");
                 loading = YES;
                 // loadRequest is the method that loads the next batch of data.
@@ -189,50 +204,39 @@
         
         // Only starts populating the table if data source is not empty.
         if (searchResultOfSets.count != 0) {
-            // If the currently requested cell is not the last one, display normal data.
-            // Else dispay @"Loading More..." or @"(No More Results Available)"
-            if (indexPath.row < searchResultOfSets.count) {
-                cell.textLabel.text = ((Listing*)[searchResultOfSets objectAtIndex:indexPath.row]).title;
+            if ((indexPath.row < searchResultOfSets.count)) {
+                Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
+                ((UListListingCell*)cell).uListListing = list;
+                [(UListListingCell*)cell initialize];
                 return cell;
             } else {
                 // The currently requested cell is the last cell.
                 if (!noMoreResultsAvail) {
-                    // If there are results available, display @"Loading More..." in the last cell
-
-                    cell.textLabel.text = @"Loading More...";
-                    cell.textLabel.font = [UIFont systemFontOfSize:18];
-                    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
-                                                               green:0.65f
-                                                                blue:0.65f
-                                                               alpha:1.00f];
-                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                    self.activityIndicatorView.center = cell.center;
+                    [cell addSubview:self.activityIndicatorView];
+                    [self.activityIndicatorView startAnimating];
                     return cell;
                 } else {
-                    // If there are no results available, display @"(No More Results Available)" in the last cell
-                    cell.textLabel.font = [UIFont systemFontOfSize:16];
-                    cell.textLabel.text = @"(No More Results Available)";
-                    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
-                                                               green:0.65f
-                                                                blue:0.65f
-                                                               alpha:1.00f];
-                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                    return cell;
+                    //[self.activityIndicatorView removeFromSuperview];
+                    [self.activityIndicatorView stopAnimating];
+                    return ([self getNoMoreResultsCell]);
                 }
             }
         } else {
-            [self.tableView reloadData];
+            if (noMoreResultsAvail) {
+                [self.activityIndicatorView stopAnimating];
+                return ([self getNoMoreResultsCell]);
+            }
+            else
+                [self.tableView reloadData];
         }
-        
-        /*
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        Listing *list = [UDataCache.uListListings objectAtIndex:indexPath.row];
-        ((UListListingCell*)cell).uListListing = list;
-        ((UListListingCell*)cell).textLabel.text = list.title;
-        */
     }
     
     return cell;
 }
+
+#pragma mark - Table view delegate
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -240,26 +244,22 @@
     if (section == 0) {
         return 120.0;
     } else {
-        return 50.0;
+        /* grab the type of listing to determine the height of the row  */
+        if (indexPath.row < searchResultOfSets.count) {
+            Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
+            if ([list.type isEqualToString:@"headline"]) {
+                return 180.0;
+            } else if ([list.type isEqualToString:@"bold"]) {
+                return 80.0;
+            } else {
+                return 60.0;
+            }
+        }
+
+        /* here, we will return the height to display loading, or no more results.. */
+        return 60.0;
     }
 }
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -281,5 +281,16 @@
     }
 }
 
+- (UITableViewCell*)getNoMoreResultsCell {
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_SELECT_ULIST_LISTING_CELL];
+    cell.textLabel.font = [UIFont systemFontOfSize:10];
+    cell.textLabel.text = @"Well, this is embarrassing.. (Get the word out, we need more listings!)";
+    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
+                                               green:0.65f
+                                                blue:0.65f
+                                               alpha:1.00f];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    return cell;
+}
 
 @end

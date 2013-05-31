@@ -15,6 +15,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 260, 1)];
+        bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
+        [self.textLabel.superview addSubview:bottomLine];
     }
     return self;
 }
