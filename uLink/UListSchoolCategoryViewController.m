@@ -24,28 +24,36 @@
 
 @implementation UListSchoolCategoryViewController
 
-@synthesize mainCat, subCat, schoolId, locationManager, uListMapView_;
+@synthesize mainCat, subCat, school, locationManager, uListMapView_;
 @synthesize searchResultOfSets, fetchBatch, loading, noMoreResultsAvail, retries;
-@synthesize activityIndicatorView = _activityIndicatorView;
+@synthesize textPull, textRelease, textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
+@synthesize moreResultsSpinner = _moreResultsSpinner;
+@synthesize initializeSpinner = _initializeSpinner;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self setupStrings];
     }
     return self;
 }
-/*
-- (id)initWithStyle:(UITableViewStyle)style
-{
+
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
+    if (self != nil) {
+        [self setupStrings];
     }
     return self;
 }
-*/
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self != nil) {
+        [self setupStrings];
+    }
+    return self;
+}
 
 - (void)loadRequest
 {
@@ -57,6 +65,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addPullToRefreshHeader];
     
     /****** Setup Lazy Loading (Initial) **********/
     fetchBatch = 0;
@@ -66,16 +75,9 @@
     
     // build query string
     // qt=c&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch
-    NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.schoolId, fetchBatch];
+    NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.school.schoolId, fetchBatch];
     [UDataCache hydrateUListListingsCache:query];
-    /*
-    if ([UDataCache.uListListings count] > 0) {
-        for (int i = 0; (i<ULIST_LISTING_BATCH_SIZE && i<[UDataCache.uListListings count]) ; i++) {
-            NSLog(@"listing object: %@", [UDataCache.uListListings objectAtIndex:i]);
-            [self.searchResultOfSets addObject:[UDataCache.uListListings objectAtIndex:i]];
-        }
-    }
-    */
+    self.loading = YES;
     [self loadRequest];
     /****** End Lazy Loading ***********/
     
@@ -93,27 +95,27 @@
     mapView.frame = mViewFrame;
     mapView.userInteractionEnabled = YES;
     
-    // Setting Up Activity Indicator View
-    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicatorView.hidesWhenStopped = YES;
-    //self.tableView.tableFooterView = self.activityIndicatorView;
-    //[self.activityIndicatorView startAnimating];
+    // set up spinner when loading initial data
+    _initializeSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGRect frame = self.tableView.frame;
+    _initializeSpinner.center = CGPointMake(frame.size.width/2, frame.size.height/2);
+    [self.tableView addSubview:_initializeSpinner];
+    [_initializeSpinner startAnimating];
+    
+    // Setup more results spinner (don't activate yet)
+    self.moreResultsSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.moreResultsSpinner.hidesWhenStopped = YES;
+
     
     /* set up map view */
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.uListMapView_.myLocation.coordinate.latitude
-                                                            longitude:self.uListMapView_.myLocation.coordinate.longitude
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue]
                                                                  zoom:14];
     uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
     uListMapView_.myLocationEnabled = YES;
-    
-    // Creates a marker in the center of the map.
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = CLLocationCoordinate2DMake(camera.target.latitude,camera.target.longitude);
-    marker.animated = YES;
-    marker.title = @"MyLocation";
-    marker.snippet = @"Me";
-    marker.map = uListMapView_;
+    uListMapView_.camera = camera;
 }
+
+
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -123,8 +125,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    self.searchResultOfSets = nil;
     [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
-    [self.searchResultOfSets removeAllObjects];
 }
 
 - (void)didReceiveMemoryWarning
@@ -157,7 +159,6 @@
                 retVal =  1;
             } else {
                 retVal = ([searchResultOfSets count]+1);
-                //retVal = [searchResultOfSets count];
             }
             break;
     }
@@ -192,7 +193,7 @@
         
         // If scrolled beyond two thirds of the table, load next batch of data.
         // Make sure that our set data count exceeds the batch size
-        if (indexPath.row >= ((searchResultOfSets.count*2)/3)) {
+        if ((indexPath.row >= ((searchResultOfSets.count*2)/3))) {
             if (!loading && !noMoreResultsAvail) {
                 NSLog(@"at 2/3 of page.. loading next 10 results");
                 loading = YES;
@@ -208,27 +209,39 @@
                 Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
                 ((UListListingCell*)cell).uListListing = list;
                 [(UListListingCell*)cell initialize];
+                
+                // Creates a marker at the listing location (if available)
+                GMSMarker *marker = [[GMSMarker alloc] init];
+                marker.position = CLLocationCoordinate2DMake([list.location.latitude doubleValue], [list.location.longitude doubleValue]);
+                marker.animated = YES;
+                marker.title = list.title;
+                marker.snippet = list.shortDescription;
+                marker.map = uListMapView_;
                 return cell;
             } else {
                 // The currently requested cell is the last cell.
                 if (!noMoreResultsAvail) {
-                    self.activityIndicatorView.center = cell.center;
-                    [cell addSubview:self.activityIndicatorView];
-                    [self.activityIndicatorView startAnimating];
+                    self.moreResultsSpinner.center = cell.center;
+                    [cell addSubview:self.moreResultsSpinner];
+                    [self.moreResultsSpinner startAnimating];
                     return cell;
                 } else {
                     //[self.activityIndicatorView removeFromSuperview];
-                    [self.activityIndicatorView stopAnimating];
+                    [self.moreResultsSpinner stopAnimating];
+                    if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
                     return ([self getNoMoreResultsCell]);
                 }
             }
         } else {
             if (noMoreResultsAvail) {
-                [self.activityIndicatorView stopAnimating];
+                [self.moreResultsSpinner stopAnimating];
+                if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
                 return ([self getNoMoreResultsCell]);
             }
-            else
+            else {
+                //NSLog(@"Reloading listing table data..");
                 [self.tableView reloadData];
+            }
         }
     }
     
@@ -248,11 +261,11 @@
         if (indexPath.row < searchResultOfSets.count) {
             Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
             if ([list.type isEqualToString:@"headline"]) {
-                return 180.0;
+                return 220.0;
             } else if ([list.type isEqualToString:@"bold"]) {
-                return 80.0;
+                return 140.0;
             } else {
-                return 60.0;
+                return 140.0;
             }
         }
 
@@ -271,12 +284,14 @@
     }
 }
 
+/* This message is sent to the receiver when the value at the specified key path relative to the given object has changed. */
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    NSLog(@"%@", keyPath);
     if ([keyPath isEqualToString:@"myLocation"] && [object isKindOfClass:[GMSMapView class]])
     {
-        [self.uListMapView_ animateToCameraPosition:[GMSCameraPosition cameraWithLatitude:self.uListMapView_.myLocation.coordinate.latitude
-                                                                                 longitude:self.uListMapView_.myLocation.coordinate.longitude
+        [self.uListMapView_ animateToCameraPosition:[GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]
+                                                                                 longitude:[self.school.longitude doubleValue]
                                                                                       zoom:self.uListMapView_.camera.zoom]];
     }
 }
@@ -291,6 +306,136 @@
                                                alpha:1.00f];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     return cell;
+}
+
+#pragma mark - Refresh Header Code
+
+- (void)setupStrings{
+    self.textPull = @"Pull down to update...";
+    self.textRelease = @"Release to update...";
+    self.textLoading = @"Updating...";
+}
+
+- (void)addPullToRefreshHeader {
+    refreshHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - REFRESH_HEADER_HEIGHT, 320, REFRESH_HEADER_HEIGHT)];
+    refreshHeaderView.backgroundColor = [UIColor clearColor];
+    
+    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 270, REFRESH_HEADER_HEIGHT)];
+    refreshLabel.backgroundColor = [UIColor clearColor];
+    refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    refreshLabel.textAlignment = NSTextAlignmentLeft;
+    
+    refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"todo_add_an_arrow.png"]];
+    refreshArrow.frame = CGRectMake(floorf((REFRESH_HEADER_HEIGHT - 27) / 2),
+                                    (floorf(REFRESH_HEADER_HEIGHT - 44) / 2),
+                                    27, 44);
+    
+    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    refreshSpinner.frame = CGRectMake(floorf(floorf(REFRESH_HEADER_HEIGHT - 20) / 2), floorf((REFRESH_HEADER_HEIGHT - 20) / 2), 20, 20);
+    refreshSpinner.hidesWhenStopped = YES;
+    
+    [refreshHeaderView addSubview:refreshLabel];
+    [refreshHeaderView addSubview:refreshArrow];
+    [refreshHeaderView addSubview:refreshSpinner];
+    [self.tableView addSubview:refreshHeaderView];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (isLoading || loading) return;
+    isDragging = YES;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (isLoading) {
+        // Update the content inset, good for section headers
+        if (scrollView.contentOffset.y > 0)
+            self.tableView.contentInset = UIEdgeInsetsZero;
+        else if (scrollView.contentOffset.y >= -REFRESH_HEADER_HEIGHT)
+            self.tableView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+    } else if (isDragging && scrollView.contentOffset.y < 0) {
+        // Update the arrow direction and label
+        [UIView animateWithDuration:0.25 animations:^{
+            if (scrollView.contentOffset.y < -REFRESH_HEADER_HEIGHT) {
+                // User is scrolling above the header
+                refreshLabel.text = self.textRelease;
+                [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+            } else {
+                // User is scrolling somewhere within the header
+                refreshLabel.text = self.textPull;
+                [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
+            }
+        }];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (isLoading) return;
+    isDragging = NO;
+    if (scrollView.contentOffset.y <= -REFRESH_HEADER_HEIGHT) {
+        // Released above the header
+        [self startLoading];
+    }
+}
+
+- (void)startLoading {
+    NSLog(@"Refreshing from the pull down on the the header...");
+    
+    isLoading = YES;
+    
+    // Show the header
+    [UIView animateWithDuration:0.3 animations:^{
+        self.tableView.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
+        refreshLabel.text = self.textLoading;
+        refreshArrow.hidden = YES;
+        [refreshSpinner startAnimating];
+    }];
+    
+    // Refresh action!
+    [self refresh];
+}
+
+- (void)stopLoading {
+    isLoading = NO;
+    
+    // Hide the header
+    [UIView animateWithDuration:0.3 animations:^{
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
+    }
+                     completion:^(BOOL finished) {
+                         [self performSelector:@selector(stopLoadingComplete)];
+                     }];
+}
+
+- (void)stopLoadingComplete {
+    // Reset the header
+    refreshLabel.text = self.textPull;
+    refreshArrow.hidden = NO;
+    [refreshSpinner stopAnimating];
+}
+
+- (void)refresh {
+    
+    NSLog(@"refreshing the listings...");
+    [_initializeSpinner startAnimating];
+    
+    // let's refresh all of our listings
+    fetchBatch = 0;
+    retries = 0;
+    noMoreResultsAvail = NO;
+    [searchResultOfSets removeAllObjects];
+    
+    // build query string
+    // qt=c&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch
+    NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.school.schoolId, fetchBatch];
+    [UDataCache hydrateUListListingsCache:query];
+    //[self loadRequest];
+
+    // stop loading
+    [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+    
+    NSLog(@"loading request w/ new data...");
+    [self loadRequest];
 }
 
 @end

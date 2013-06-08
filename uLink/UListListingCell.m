@@ -36,10 +36,14 @@
         UIView* bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 180)];
         bgView.backgroundColor = [UIColor colorWithRed:0.901 green:0.882 blue:0.89 alpha:1.0];
         
+        UIView *bgView2 = [[UIView alloc] initWithFrame:CGRectMake(15, 10, 290, 220)];
+        bgView2.backgroundColor = [UIColor whiteColor];
+        bgView2.layer.cornerRadius = 3;
+        
         /* add image to list view background */
-        UIImageView *listView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 310, 170)];
+        UIImageView *listView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 30, 310, 180)];
         listView.image = [UIImage imageNamed:@"wisc_splash.png"];
-        listView.layer.cornerRadius = 3;
+        listView.layer.cornerRadius = 0.5;
         listView.layer.masksToBounds = YES;
         
         /* add alpha black background to list view */
@@ -63,6 +67,7 @@
         /* add subviews */
         [listDetailBG addSubview:uListTitle];
         [listView addSubview:listDetailBG];
+        [bgView addSubview:bgView2];
         [bgView addSubview:listView];
         [self addSubview:bgView];
     } else if ([uListListing.type isEqualToString:@"bold"]) {

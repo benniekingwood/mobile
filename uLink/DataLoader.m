@@ -33,27 +33,22 @@
     
     /* 
      * Grab the next set of listings from database
-     * Set up hydrate to only grab 10 new listings @ 1 time
-     * simply to test...
+     * Set up hydrate to only grab X new listings @ 1 time
      */
     if ([UDataCache.uListListings count] > 0) {
         uListDelegate.retries = 0;
         for (int i = 0; (i<ULIST_LISTING_BATCH_SIZE && i<[UDataCache.uListListings count]); i++) {
             [array addObject:[UDataCache.uListListings objectAtIndex:i]];
         }
-    }
-    [uListDelegate.searchResultOfSets addObjectsFromArray:array];
-    
-    /* 
-     * determine if there no more available results
-     * (i.e. result set is < BATCH_SIZE
-     */
-    if ([UDataCache.uListListings count] < ULIST_LISTING_BATCH_SIZE) {
-        if (uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] == 0)
+        [uListDelegate.searchResultOfSets addObjectsFromArray:array];
+        
+        if (uListDelegate.initializeSpinner) [uListDelegate.initializeSpinner stopAnimating];
+        
+    } else if ([UDataCache.uListListings count] < ULIST_LISTING_BATCH_SIZE) {
+        if (uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] <= 0)
             uListDelegate.retries++;
         else
             uListDelegate.noMoreResultsAvail = YES;
-            
     }
     
     /* 
@@ -69,7 +64,7 @@
         /*
          * grab the next batch of listing data (if there is any...)
          */
-        NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.subCat, uListDelegate.schoolId, uListDelegate.fetchBatch];
+        NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.subCat, uListDelegate.school.schoolId, uListDelegate.fetchBatch];
         [UDataCache hydrateUListListingsCache:query];
     }
     

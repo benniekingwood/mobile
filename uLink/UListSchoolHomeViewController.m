@@ -91,7 +91,7 @@
         UListSchoolCategoryViewController *categoryViewController = [segue destinationViewController];
         categoryViewController.mainCat = menuCell.mainCat;
         categoryViewController.subCat = menuCell.subCat;
-        categoryViewController.schoolId = school.schoolId;
+        categoryViewController.school = school;
     }
 }
 
