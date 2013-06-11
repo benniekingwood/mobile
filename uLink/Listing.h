@@ -14,6 +14,7 @@
 @property (nonatomic) NSString *_id;
 @property (nonatomic) NSInteger userId;
 @property (nonatomic) NSInteger schoolId;
+@property (nonatomic) NSString *username;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSString *replyTo;
@@ -22,6 +23,7 @@
 @property (nonatomic) NSString *mainCategory;
 @property (nonatomic) NSString *category;
 @property (nonatomic) NSString *email;
+@property (nonatomic) double price;
 @property (strong, nonatomic) Location *location;
 @property (strong, nonatomic) NSMutableArray *imageUrls;
 @property (strong, nonatomic) NSMutableArray *tags;

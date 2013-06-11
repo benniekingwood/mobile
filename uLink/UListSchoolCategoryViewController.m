@@ -13,6 +13,7 @@
 #import "DataLoader.h"
 #import "UListMapCell.h"
 #import "UListListingCell.h"
+#import "ListingDetailViewController.h"
 #import <Foundation/Foundation.h>
 
 @interface UListSchoolCategoryViewController () {
@@ -280,7 +281,8 @@
     if (section == 0) {
         /* if we select the map, then expand map to display larger */
     } else {
-        
+        UListListingCell *cell = (UListListingCell*)[tableView cellForRowAtIndexPath:indexPath];
+        [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:cell];
     }
 }
 
@@ -438,4 +440,11 @@
     [self loadRequest];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER]) {
+        UListListingCell *cell = (UListListingCell *)sender;
+        ListingDetailViewController *detailViewController = [segue destinationViewController];
+        detailViewController.listing = cell.uListListing;
+    }
+}
 @end

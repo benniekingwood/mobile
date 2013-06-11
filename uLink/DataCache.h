@@ -38,6 +38,8 @@
 @property (strong, nonatomic) NSMutableDictionary *snapImageMedium;
 @property (strong, nonatomic) NSMutableDictionary *userImageMedium;
 @property (strong, nonatomic) NSMutableDictionary *tweetUserImages;
+@property (strong, nonatomic) NSMutableDictionary *listingImageThumbs;
+@property (strong, nonatomic) NSMutableDictionary *listingImageMedium;
 @property (strong, nonatomic) NSMutableDictionary *uListCategories;
 @property (strong, nonatomic) NSMutableArray *uListCategorySections;
 @property (strong, nonatomic) NSMutableArray *uListListings;
