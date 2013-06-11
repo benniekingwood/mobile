@@ -46,7 +46,8 @@ const double CACHE_AGE_LIMIT_TWEETS = 900;  // 15 minutes
 const double CACHE_AGE_LIMIT_EVENTS = 86400;  // 1 days
 const double CACHE_AGE_LIMIT_SCHOOLS = 604800;  // 7 days
 const double CACHE_AGE_LIMIT_IMAGES = 2419200; // 28 days
-const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
+const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 604800; // 7 days
+const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
 
 #pragma mark
 @synthesize schools;
@@ -67,6 +68,7 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
 @synthesize snapImageMedium, snapImageThumbs;
 @synthesize userImageThumbs, userImageMedium;
 @synthesize tweetUserImages;
+@synthesize listingImageMedium, listingImageThumbs;
 + (DataCache*) instance {
     static DataCache* _one = nil;
     
@@ -107,6 +109,8 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     self.snapImageMedium = nil;
     self.userImageMedium = nil;
     self.tweetUserImages = nil;
+    self.listingImageThumbs = nil;
+    self.listingImageMedium = nil;
 }
 - (void) initImageCaches {
     if(self.userImageThumbs == nil) {
@@ -133,6 +137,9 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
     }
     if (self.tweetUserImages == nil) {
         self.tweetUserImages = [[NSMutableDictionary alloc] init];
+    }
+    if (self.listingImageMedium == nil) {
+        self.listingImageMedium = [[NSMutableDictionary alloc] init];
     }
 }
 - (void) buildTimes {
@@ -251,12 +258,15 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         if ([self.uListListings count] > 0) {
             Listing *listing = [self.uListListings objectAtIndex:0];
             double timeElapsed = [[NSDate date] timeIntervalSinceDate:listing.cacheAge];
-            if (timeElapsed <= CACHE_AGE_LIMIT_ULIST_CATEGORIES) {
+            if (timeElapsed <= CACHE_AGE_LIMIT_LISTINGS) {
                 rehydrate = FALSE;
             }
         }
     }
     if (rehydrate) {
+        // clear out the image cache to maintain memory
+        [self.listingImageMedium removeAllObjects];
+        [self.listingImageThumbs removeAllObjects];
         [self hydrateUListListingsCache:@""];
     }
     else {
@@ -978,13 +988,15 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         listing.userId = [[(NSString*)object valueForKey:@"user_id"] intValue];
         listing.schoolId = [[(NSString*)object valueForKey:@"school_id"] intValue];
         listing.title = [(NSString*)object valueForKey:@"title"];
+        listing.username = [(NSString*)object valueForKey:@"username"];
         listing.email = [(NSString*)object valueForKey:@"email"];
         listing.type = [(NSString*)object valueForKey:@"type"];
         listing.listDescription = [(NSString*)object valueForKey:@"description"];
         listing.mainCategory = [(NSString*)object valueForKey:@"main_category"];
         listing.category = [(NSString*)object valueForKey:@"category"];
         listing.replyTo = [(NSString*)object valueForKey:@"reply_to"];
-        
+        NSString *priceValue = [(NSString*)object valueForKey:@"price"];
+        listing.price = (![[object valueForKey:@"price"] isKindOfClass:[NSNull class]]) ? [priceValue doubleValue]  : -37;
         /* Try to extract dates from json data */
         @try {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -996,9 +1008,15 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         /* Map sub objects: location, meta, tags, images urls */
         // location
         Location *loc = [[Location alloc] init];
-        NSArray* listingLocation = [(NSArray*)object valueForKey:@"location"];
+        NSDictionary* listingLocation = [(NSArray*)object valueForKey:@"location"];
         //NSLog(@"location id: %@, location: %@", listing._id, listingLocation);
-        
+        // default all the locational info to the empty string
+        loc.street = EMPTY_STRING;
+        loc.address1 = EMPTY_STRING;
+        loc.address2 = EMPTY_STRING;
+        loc.zip = EMPTY_STRING;
+        loc.city = EMPTY_STRING;
+        loc.state = EMPTY_STRING;
         if (listingLocation)
         {
             for (id object in listingLocation) {
@@ -1027,6 +1045,9 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         
         // meta
         // TODO: figure out how to store meta data
+        
+        // image_urls
+        listing.imageUrls = [(NSArray*)object valueForKey:@"image_urls"];
         
         // files
         listing.files = [(NSArray*)object valueForKey:@"file"];
@@ -1181,8 +1202,13 @@ const double CACHE_AGE_LIMIT_ULIST_CATEGORIES = 1800; // 30 minutes
         [self.tweetUserImages removeObjectForKey:cacheKey];
     } else if ([cacheModel isEqualToString:IMAGE_CACHE]) {
         [self.images removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_LISTING_MEDIUM]) {
+        [self.listingImageMedium removeObjectForKey:cacheKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_LISTING_THUMBS]) {
+        [self.listingImageThumbs removeObjectForKey:cacheKey];
     }
 }
+#pragma mark -
 
 - (BOOL) userIsLoggedIn {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

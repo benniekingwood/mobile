@@ -16,6 +16,7 @@
 #define SLEEP_TIME_APP_LOAD 1.5
 #define SLEEP_TIME_QUERY 1.0
 #define AUTO_SCROLL_EVENT_TIME 6
+#define AUTO_SCROLL_LISTING_PIC_TIME 6
 #define AUTO_SCROLL_UCAMPUS_HOME_TIME 7
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
@@ -45,6 +46,11 @@
 #define URL_DEFAULT_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_featured_event.png"
 #define URL_SCHOOL_IMAGE @"http://localhost:8888/img/files/schools/"
+// TODO: Once we get Add/Edit Listings working, we can then change these URLS to point to listings instead of events
+#define URL_LISTING_IMAGE_THUMB @"http://localhost:8888/img/files/events/thumbs/"
+#define URL_LISTING_IMAGE_MEDIUM @"http://localhost:8888/img/files/events/medium/"
+#define URL_DEFAULT_LISTING_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
+
 /*
 #pragma mark PROD_URLS
 #define URL_SERVER @"http://www.theulink.com/"
@@ -59,12 +65,16 @@
 #define URL_DEFAULT_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_featured_event.png"
 #define URL_SCHOOL_IMAGE @"https://s3.amazonaws.com/ulink_images/img/files/schools/"
+#define URL_LISTING_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/files/events/thumbs/"
+#define URL_LISTING_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/events/medium/"
+#define URL_DEFAULT_LISTING_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 */
 #pragma mark IMAGE CACHE KEYS
 #define KEY_DEFAULT_USER_IMAGE @"KEY_DEFAULT_USER_IMAGE"
 #define KEY_DEFAULT_SNAP_IMAGE @"KEY_DEFAULT_SNAP_IMAGE"
 #define KEY_DEFAULT_EVENT_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
 #define KEY_DEFAULT_FEATURED_EVENT_IMAGE @"KEY_DEFAULT_FEATURED_EVENT_IMAGE"
+#define KEY_DEFAULT_LISTING_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
 #define KEY_SESSION_USER_SCHOOL @"KEY_SESSION_USER_SCHOOL"
 #define IMAGE_CACHE_EVENT_THUMBS @"IMAGE_CACHE_EVENT_THUMBS"
 #define IMAGE_CACHE_SNAP_THUMBS @"IMAGE_CACHE_SNAP_THUMBS"
@@ -74,6 +84,8 @@
 #define IMAGE_CACHE_USER_MEDIUM @"IMAGE_CACHE_USER_MEDIUM"
 #define IMAGE_CACHE_TWEET_PROFILE @"IMAGE_CACHE_TWEET_PROFILE"
 #define IMAGE_CACHE @"IMAGE_CACHE_SCHOOL"
+#define IMAGE_CACHE_LISTING_THUMBS @"IMAGE_CACHE_LISTING_THUMBS"
+#define IMAGE_CACHE_LISTING_MEDIUM @"IMAGE_CACHE_LISTING_MEDIUM"
 
 #pragma mark API FUNCTIONS
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
@@ -104,6 +116,8 @@
 #pragma mark HTTP 
 #define HTTP_POST @"POST"
 #define HTTP_GET @"GET"
+#define HTTP_PUT @"PUT"
+#define HTTP_DELETE @"DELETE"
 
 #pragma mark JSON
 #define JSON_KEY_RESULT @"result"
@@ -190,6 +204,7 @@
 #define SEGUE_SHOW_SNAPSHOTS_VIEW_CONTROLLER @"ShowSnapshotsViewController"
 #define SEGUE_SHOW_ULIST_SCHOOL_HOME_VIEW_CONTROLLER @"ShowUListSchoolHomeViewController"
 #define SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER @"ShowUListSchoolListingsViewController"
+#define SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER @"ShowListingDetailViewController"
 
 #pragma mark NOTIFICATIONS
 #define NOTIFICATION_PROFILE_VIEW_CONTROLLER @"NOTIFICATION_PROFILE_VIEW_CONTROLLER"
@@ -203,6 +218,8 @@
 #define BTN_TAKE_PHOTO @"Take photo..."
 #define BTN_CHOOSE_PHOTO @"Choose photo from library..."
 #define BTN_REPORT_INAPPROPRIATE @"Report Inappropriate"
+#define BTN_REPORT_SPAM @"Report Spam"
+#define BTN_REPORT_MISCATEGORIZED @"Report Miscategorized"
 
 #pragma mark STRINGS
 #define SCHOOL_STATUS_CURRENT_STUDENT @"Current Student"

@@ -9,7 +9,7 @@
 #import "Listing.h"
 
 @implementation Listing
-@synthesize _id, userId, schoolId, title, type, mainCategory, category, email, location, imageUrls, tags, meta, created, listDescription, shortDescription, replyTo, files, expires;
+@synthesize _id, userId, schoolId, title, type, mainCategory, category, email, location, imageUrls, tags, meta, created, listDescription, shortDescription, replyTo, files, expires, price, username;
 @synthesize cacheAge;
 
 /* override description method to print out */
@@ -24,12 +24,14 @@
     [desc appendFormat:@"user_id:%i\r",self.userId];
     [desc appendFormat:@"school_id:%i\r",self.schoolId];
     [desc appendFormat:@"title:%@\r",self.title];
+    [desc appendFormat:@"username:%@\r",self.username];
     [desc appendFormat:@"description:%@\r",self.listDescription];
     [desc appendFormat:@"short_description:%@\r",self.shortDescription];
     [desc appendFormat:@"type:%@\r",self.type];
     [desc appendFormat:@"main_category:%@\r", self.mainCategory];
     [desc appendFormat:@"category:%@\r", self.category];
     [desc appendFormat:@"reply_to:%@\r", self.replyTo];
+    [desc appendFormat:@"price:%f\r", self.price];
     
     [desc appendFormat:@"location: {\r"];
     [desc appendFormat:@"address1:%@\r", self.location.address1];
