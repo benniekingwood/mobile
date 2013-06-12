@@ -20,7 +20,7 @@
     UIView *mapView;
     CGRect mapFrame;
 }
-
+-(void)buildCategoryHeaderView;
 @end
 
 @implementation UListSchoolCategoryViewController
@@ -66,6 +66,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.title = @"Listings";
     [self addPullToRefreshHeader];
     
     /****** Setup Lazy Loading (Initial) **********/
@@ -114,6 +115,9 @@
     uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
     uListMapView_.myLocationEnabled = YES;
     uListMapView_.camera = camera;
+    
+    // add the category's title header view
+    [self buildCategoryHeaderView];
 }
 
 
@@ -134,6 +138,20 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void) buildCategoryHeaderView {
+    UIView *catHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+    catHeaderBg.backgroundColor = [UIColor blackColor];
+    catHeaderBg.alpha = ALPHA_MED;
+    catHeaderBg.userInteractionEnabled = NO;
+    [self.view addSubview:catHeaderBg];
+    UILabel *catTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 2, 310, 18)];
+    catTitleLabel.userInteractionEnabled = NO;
+    catTitleLabel.font = [UIFont fontWithName:FONT_GLOBAL size:13];
+    catTitleLabel.textColor = [UIColor whiteColor];
+    catTitleLabel.backgroundColor = [UIColor clearColor];
+    catTitleLabel.text = self.subCat;
+    [self.view addSubview:catTitleLabel];
 }
 
 #pragma mark - Table view data source
