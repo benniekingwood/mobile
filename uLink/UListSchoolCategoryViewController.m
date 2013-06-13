@@ -19,8 +19,14 @@
 @interface UListSchoolCategoryViewController () {
     UIView *mapView;
     CGRect mapFrame;
+    UISearchBar *searchBar;
+    UIView *modalOverlay;
 }
 -(void)buildCategoryHeaderView;
+-(void)showSearchView;
+-(void)hideSearchView;
+-(void)buildSearchBar;
+-(void)executeSearch;
 @end
 
 @implementation UListSchoolCategoryViewController
@@ -66,7 +72,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // set the title of the navigation bar 
     self.navigationItem.title = @"Listings";
+    // add the "Search" button
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchView)];
+    self.navigationItem.rightBarButtonItem = btnSearch;
+    
     [self addPullToRefreshHeader];
     
     /****** Setup Lazy Loading (Initial) **********/
@@ -118,6 +129,9 @@
     
     // add the category's title header view
     [self buildCategoryHeaderView];
+    
+    // create the search bar
+    [self buildSearchBar];
 }
 
 
@@ -139,6 +153,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+/**
+ * This function will build up the category header view
+ */
 - (void) buildCategoryHeaderView {
     UIView *catHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
     catHeaderBg.backgroundColor = [UIColor blackColor];
@@ -153,6 +170,80 @@
     catTitleLabel.text = self.subCat;
     [self.view addSubview:catTitleLabel];
 }
+/**
+ * This function will build all of the search bar related
+ * views.
+ */
+- (void) buildSearchBar {
+    // build the modal overlay that will show when the user clicks the search button
+    modalOverlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    modalOverlay.backgroundColor = [UIColor blackColor];
+    modalOverlay.userInteractionEnabled = YES;
+    // add a tap gesture recognizer to just the modal overlay that will cancel the search keyboard
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleModalTap:)];
+    [modalOverlay addGestureRecognizer:singleFingerTap];
+    // now create the search bar
+    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)];
+    searchBar.delegate = self;
+    searchBar.showsCancelButton = YES;
+    // initially have the search bar and modal overlay hidden
+    searchBar.alpha = ALPHA_ZERO;
+    modalOverlay.alpha = ALPHA_ZERO;
+    [self.view addSubview:modalOverlay];
+    [self.view addSubview:searchBar];
+}
+
+/**
+ * This method will perform all necessary steps to
+ * show the search bar view
+ */
+- (void) showSearchView {
+    [UIView animateWithDuration:0.2f
+             animations:^{
+                 // show the search bar, and make show the modal overlay
+                 modalOverlay.alpha = ALPHA_MED;
+                 searchBar.alpha = ALPHA_HIGH;
+             }
+     ];
+    modalOverlay.userInteractionEnabled = YES;
+    // disable the scroll view
+    self.tableView.scrollEnabled = NO;
+    [searchBar becomeFirstResponder];
+}
+/**
+ * This method will perform all necessary steps to 
+ * hiding the search bar view 
+ */
+- (void) hideSearchView {
+    searchBar.alpha = ALPHA_ZERO;
+    modalOverlay.alpha = ALPHA_ZERO;
+    // re-enable the tableview scroll
+    self.tableView.scrollEnabled = YES;
+    if([searchBar isFirstResponder]) {
+        [searchBar resignFirstResponder];
+    }
+}
+
+/**
+ * This method will handle the tap of the modal overlay.  I will only
+ * hide the keyboard for the search bar.
+ */
+- (void)handleModalTap:(UITapGestureRecognizer *)recognizer {
+    [self hideSearchView];
+}
+
+#pragma mark - Search Bar Delegate
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    // hide the search view and perform the search
+    [self hideSearchView];
+    [self executeSearch];
+}
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self hideSearchView];
+}
+#pragma mark -
 
 #pragma mark - Table view data source
 
@@ -465,4 +556,27 @@
         detailViewController.listing = cell.uListListing;
     }
 }
+
+#pragma mark - Actions
+-(void) executeSearch {
+    NSLog(@"starting the search");
+    [_initializeSpinner startAnimating];
+    
+    // let's refresh all of our listings
+    fetchBatch = 0;
+    retries = 0;
+    noMoreResultsAvail = NO;
+    [searchResultOfSets removeAllObjects];
+    
+    // build query string
+    // qt=s&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch&t=search_text
+    NSString *query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [self.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.school.schoolId, fetchBatch, searchBar.text];
+    [UDataCache hydrateUListListingsCache:query];    
+    // stop loading
+    [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+    
+    NSLog(@"reloading with the search result data?...");
+    [self loadRequest];
+}
+#pragma mark -
 @end

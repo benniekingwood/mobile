@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "School.h"
 
-@interface UListSchoolCategoryViewController : UITableViewController {
+@interface UListSchoolCategoryViewController : UITableViewController <UISearchBarDelegate> {
     UIActivityIndicatorView *moreResultsSpinner;
     UIActivityIndicatorView *refreshSpinner;
     UIActivityIndicatorView *initializeSpinner;

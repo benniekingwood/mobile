@@ -76,6 +76,9 @@
     // Change the appearance of other navigation button
     UIImage *barButtonImage = [[UIImage imageNamed:@"ulink-mobile-button-normal-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     [[UIBarButtonItem appearance] setBackgroundImage:barButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    // style the search bars
+    [[UISearchBar appearance] setBackgroundImage:navBackgroundImage];
     return YES;
 }
 
