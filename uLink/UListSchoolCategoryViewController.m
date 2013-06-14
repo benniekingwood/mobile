@@ -5,6 +5,7 @@
 //  Created by Christopher Cerwinski on 5/7/13.
 //  Copyright (c) 2013 uLink, Inc. All rights reserved.
 //
+//
 
 #import "UListSchoolCategoryViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
@@ -21,7 +22,9 @@
     CGRect mapFrame;
     UISearchBar *searchBar;
     UIView *modalOverlay;
+    UIButton *closeMap;
 }
+-(void)shrinkMap:(id)sender;
 -(void)buildCategoryHeaderView;
 -(void)showSearchView;
 -(void)hideSearchView;
@@ -31,7 +34,7 @@
 
 @implementation UListSchoolCategoryViewController
 
-@synthesize mainCat, subCat, school, locationManager, uListMapView_;
+@synthesize mainCat, subCat, school, locationManager, uListMapView_, selectedRowIndex;
 @synthesize searchResultOfSets, fetchBatch, loading, noMoreResultsAvail, retries;
 @synthesize textPull, textRelease, textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
 @synthesize moreResultsSpinner = _moreResultsSpinner;
@@ -95,7 +98,9 @@
     /****** End Lazy Loading ***********/
     
     self.tableView.separatorColor = [UIColor clearColor];
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.901 green:0.882 blue:0.89 alpha:1.0];
+    //self.tableView.backgroundColor = [UIColor colorWithRed:0.901 green:0.882 blue:0.89 alpha:1.0];
+    //self.tableView.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.9411 green:0.9372 blue:0.9215 alpha:1.0];
     self.tabBarController.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = nil;
     mapFrame = CGRectMake(0, 70, 320, 120);
@@ -107,6 +112,7 @@
     mapView.backgroundColor = [UIColor blackColor];
     mapView.frame = mViewFrame;
     mapView.userInteractionEnabled = YES;
+    mapView.clipsToBounds = YES;
     
     // set up spinner when loading initial data
     _initializeSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -118,14 +124,31 @@
     // Setup more results spinner (don't activate yet)
     self.moreResultsSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.moreResultsSpinner.hidesWhenStopped = YES;
-
     
-    /* set up map view */
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue]
-                                                                 zoom:14];
+    /* initial map view */
+    GMSUISettings *uListMapSettings = [[GMSUISettings alloc] init];
+    [uListMapSettings setScrollGestures:NO];
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:13];
     uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
     uListMapView_.myLocationEnabled = YES;
+    //uListMapView_.settings = uListMapSettings;
     uListMapView_.camera = camera;
+    
+    // create closeMap uibarbutton
+    closeMap = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 30, 30, 40)];
+    [closeMap setHidden:YES];
+    [closeMap addTarget:self action:@selector(shrinkMap:) forControlEvents:UIControlEventTouchUpInside];
+    [closeMap setTitle:@"X" forState:UIControlStateNormal];
+    [closeMap setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [closeMap setBackgroundColor:[UIColor orangeColor]];
+    [closeMap.titleLabel setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:24.0f]];
+    [closeMap.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [closeMap.layer setShadowOffset:CGSizeMake(.5f, .5f)];
+    [closeMap.layer setShadowColor:[[UIColor blackColor] CGColor]];
+    [closeMap.layer setShadowOpacity:0.5f];
+    [closeMap.layer setCornerRadius:2.0f];
+    [self.view addSubview:closeMap];
     
     // add the category's title header view
     [self buildCategoryHeaderView];
@@ -134,18 +157,25 @@
     [self buildSearchBar];
 }
 
-
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
 }
 
+/** 
+ * Cache the current listing data first.  We will re-use
+ * this data when/if we re-enter screen.  Caching will be set
+ * for 5 minutes initially.  Obviously, cache results before
+ * we clear the search result set
+ */
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     self.searchResultOfSets = nil;
-    [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
+    //self.uListMapView_ = nil; // NOTE: BAD way... should remove observer (if there is one)
+    @try {
+        [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
+    } @catch (NSException *exception){}
 }
 
 - (void)didReceiveMemoryWarning
@@ -208,6 +238,7 @@
              }
      ];
     modalOverlay.userInteractionEnabled = YES;
+    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     // disable the scroll view
     self.tableView.scrollEnabled = NO;
     [searchBar becomeFirstResponder];
@@ -291,10 +322,34 @@
             cell = [[UListMapCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
+        UIView *bottomLine = [[UIView alloc] init];
+        
         // add google maps to cell view
+        if (selectedRowIndex && selectedRowIndex.row == indexPath.row) {
+            cell.frame = CGRectMake(0, 0, 320, 460);
+            
+            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 120, 320, 1)];
+            bottomLine.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.25];
+            [bottomLine.layer setShadowOffset:CGSizeMake(2.0f, 2.0f)];
+            [bottomLine.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            [bottomLine.layer setShadowOpacity:0.5];
+        }
+        else {
+            cell.frame = CGRectMake(0, 0, 320, 120);
+            
+            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 120, 320, 1)];
+            bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
+            [bottomLine.layer setShadowOffset:CGSizeMake(2.0f, 2.0f)];
+            [bottomLine.layer setShadowColor:[[UIColor blackColor] CGColor]];
+            [bottomLine.layer setShadowOpacity:0.5];
+            [bottomLine.layer setShadowRadius:2.0f];
+        }
+        
         mapView = uListMapView_;
-        cell.frame = CGRectMake(0, 0, 320, 120);
+        //cell.clipsToBounds = YES;
+        //cell.layer.masksToBounds = YES;
         [cell.contentView addSubview:mapView];
+        [cell.contentView addSubview:bottomLine];
     } else {
         static NSString *CellIdentifier = CELL_SELECT_ULIST_LISTING_CELL;
         if (cell == nil) {
@@ -365,13 +420,16 @@
 {
     int section = [indexPath section];
     if (section == 0) {
-        return 120.0;
+        if (self.selectedRowIndex && self.selectedRowIndex.row == indexPath.row)
+            return 460.0; // 480 = full screen
+        else
+            return 120.0;
     } else {
         /* grab the type of listing to determine the height of the row  */
         if (indexPath.row < searchResultOfSets.count) {
             Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
             if ([list.type isEqualToString:@"headline"]) {
-                return 220.0;
+                return 320.0;
             } else if ([list.type isEqualToString:@"bold"]) {
                 return 140.0;
             } else {
@@ -389,13 +447,33 @@
     int section = [indexPath section];
     if (section == 0) {
         /* if we select the map, then expand map to display larger */
+        self.selectedRowIndex = indexPath;
+        [tableView beginUpdates];
+        
+        //self.navigationItem.rightBarButtonItem = closeMap;
+        //self.navigationItem.rightBarButtonItem.enabled = YES;
+        [closeMap setHidden:NO];
+        
+        /* remove any observers if they exist */
+        @try {
+            [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
+        } @catch (NSException *exception){}
+        
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:14];
+        uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 460) camera:camera];
+        [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
+        
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [tableView endUpdates];
     } else {
         UListListingCell *cell = (UListListingCell*)[tableView cellForRowAtIndexPath:indexPath];
         [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:cell];
     }
 }
 
-/* This message is sent to the receiver when the value at the specified key path relative to the given object has changed. */
+/* This message is sent to the receiver when the value at the specified key path relative to the given object has changed. (i.e user is walking with device) */
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     NSLog(@"%@", keyPath);
@@ -407,15 +485,13 @@
     }
 }
 
+/* display ulink logo when no more results */
 - (UITableViewCell*)getNoMoreResultsCell {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_SELECT_ULIST_LISTING_CELL];
-    cell.textLabel.font = [UIFont systemFontOfSize:10];
-    cell.textLabel.text = @"Well, this is embarrassing.. (Get the word out, we need more listings!)";
-    cell.textLabel.textColor = [UIColor colorWithRed:0.65f
-                                               green:0.65f
-                                                blue:0.65f
-                                               alpha:1.00f];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    UIImageView *endListing = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    endListing.contentMode = UIViewContentModeScaleAspectFit;
+    endListing.image = [UIImage imageNamed:@"ulink_short_logo.png"];
+    [cell addSubview:endListing];
     return cell;
 }
 
@@ -578,5 +654,30 @@
     NSLog(@"reloading with the search result data?...");
     [self loadRequest];
 }
-#pragma mark -
+
+/* return map to original state */
+-(void)shrinkMap:(id)sender {
+    if (self.selectedRowIndex && self.selectedRowIndex.section == 0) {
+        [self.tableView beginUpdates];
+        [closeMap setHidden:YES];
+        
+        /* remove any observers if they exist */
+        @try {
+            [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
+        } @catch (NSException *exception){}
+        
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:13];
+        uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
+        [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
+        
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.selectedRowIndex.row inSection:self.selectedRowIndex.section]] withRowAnimation:UITableViewRowAnimationFade];
+        
+        /* reset when we close the map view */
+        self.selectedRowIndex = nil;
+        [self.tableView endUpdates];
+    }
+}
+
+
+
 @end

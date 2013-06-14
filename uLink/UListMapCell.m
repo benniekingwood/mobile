@@ -7,6 +7,7 @@
 //
 
 #import "UListMapCell.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation UListMapCell
 
@@ -15,9 +16,14 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 260, 1)];
+        /*
+        UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 119, 320, 2)];
         bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
-        [self.textLabel.superview addSubview:bottomLine];
+        bottomLine.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+        bottomLine.layer.shadowColor = [[UIColor blackColor] CGColor];
+        bottomLine.layer.shadowOpacity = 0.5;
+        [super addSubview:bottomLine];
+        */
     }
     return self;
 }

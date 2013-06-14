@@ -12,4 +12,5 @@
 @interface UListListingCell : UITableViewCell
 @property (nonatomic, strong) Listing *uListListing;
 -(void)initialize;
+-(void)emailLister;
 @end

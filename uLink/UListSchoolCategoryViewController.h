@@ -35,6 +35,7 @@
 @property (nonatomic) BOOL loading;
 @property (nonatomic) BOOL noMoreResultsAvail;
 @property (nonatomic) int retries;
+@property (nonatomic, strong) NSIndexPath *selectedRowIndex;
 
 /* pull down refresh */
 @property (nonatomic, strong) UIView *refreshHeaderView;

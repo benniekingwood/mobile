@@ -995,6 +995,8 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         listing.mainCategory = [(NSString*)object valueForKey:@"main_category"];
         listing.category = [(NSString*)object valueForKey:@"category"];
         listing.replyTo = [(NSString*)object valueForKey:@"reply_to"];
+        listing.shortDescription = [(NSString*)object valueForKey:@"short_description"];
+        
         NSString *priceValue = [(NSString*)object valueForKey:@"price"];
         listing.price = (![[object valueForKey:@"price"] isKindOfClass:[NSNull class]]) ? [priceValue doubleValue]  : -37;
         /* Try to extract dates from json data */
