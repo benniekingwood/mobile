@@ -230,6 +230,8 @@
  * show the search bar view
  */
 - (void) showSearchView {
+    // scroll to the top of the view
+    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [UIView animateWithDuration:0.2f
              animations:^{
                  // show the search bar, and make show the modal overlay
