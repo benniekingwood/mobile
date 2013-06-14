@@ -33,12 +33,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // TODO: use school short_name here
+    //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
     
-    // Generate search button using custom created button from AppDelegate
-    //searchButton = [[UIBarButtonItem alloc] initWithCustomView:[UAppDelegate createUIButtonNoBorder:@"options.png" method:@selector(showSearchViewController) target:self]];
+    // add the "Search" button
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchViewController)];
+    self.navigationItem.rightBarButtonItem = btnSearch;
     
     // Activate side menu with uList 
     [UAppDelegate activateSideMenu:@"uList"];
@@ -55,7 +56,7 @@
 }
 
 -(void) showSearchViewController {
-    //[self performSegueWithIdentifier:SEGUE_SHOW_SETTINGS_VIEW_CONTROLLER sender:self];
+    [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER sender:self];
 }
 
 - (void)didReceiveMemoryWarning {
