@@ -21,7 +21,7 @@
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
 #define ULIST_LISTING_BATCH_SIZE 10
-#define MIN_RETRIES 3
+#define MIN_RETRIES 0
 #define EMPTY_STRING @""
 #define REFRESH_HEADER_HEIGHT 52.0f
 #define VERSION_NUMBER @"0.2.7"
@@ -183,7 +183,7 @@
 #define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
 #define CONTROLLER_TERMS_VIEW_CONTROLLER_ID @"TermsViewController"
 
-#pragma mark SEQUES
+#pragma mark SEGUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"
 #define SEGUE_SHOW_SUGGEST_SCHOOL_VIEW_CONTROLLER @"ShowSuggestSchoolViewController"
 #define SEGUE_SHOW_MAIN_TAB_BAR_VIEW_CONTROLLER @"ShowMainTabBarViewController"
@@ -208,6 +208,9 @@
 #define SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER @"ShowListingDetailViewController"
 #define SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER @"ShowListingSearchViewController"
 
+#pragma mark EMBEDDED SEGUES
+#define SEGUE_LISTING_RESULTS_VIEW_CONTROLLER_EMBED @"ListingResultsViewController_Embed"
+
 #pragma mark NOTIFICATIONS
 #define NOTIFICATION_PROFILE_VIEW_CONTROLLER @"NOTIFICATION_PROFILE_VIEW_CONTROLLER"
 #define NOTIFICATION_UCAMPUS_VIEW_CONTROLLER @"NOTIFICATION_UCAMPUS_VIEW_CONTROLLER"
@@ -222,6 +225,7 @@
 #define BTN_REPORT_INAPPROPRIATE @"Report Inappropriate"
 #define BTN_REPORT_SPAM @"Report Spam"
 #define BTN_REPORT_MISCATEGORIZED @"Report Miscategorized"
+#define BTN_REPLY @"Reply"
 
 #pragma mark STRINGS
 #define SCHOOL_STATUS_CURRENT_STUDENT @"Current Student"
@@ -237,6 +241,15 @@
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
 
 #pragma mark QUERY_PARAMS
+
+#pragma mark LISTING_QUERY_TYPES
+typedef enum {
+    kListingQueryTypeSearch = 999,
+    kListingQueryTypeSubCategorySearch,
+    kListingQueryTypeSubCategory,
+    kListingQueryTypeMainCategory
+} ListingQueryType;
+
 
 #pragma mark TEXTFIELDS
 typedef enum {

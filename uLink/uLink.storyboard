@@ -882,48 +882,6 @@
             </objects>
             <point key="canvasLocation" x="-467" y="-1907"/>
         </scene>
-        <!--List School Category View Controller-->
-        <scene sceneID="Vb7-54-s4X">
-            <objects>
-                <tableViewController storyboardIdentifier="UListSchoolCategoryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5A8-51-CQp" customClass="UListSchoolCategoryViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5sH-Hh-LfI">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectMapCell" rowHeight="118" id="z7g-cc-Syd">
-                                <rect key="frame" x="0.0" y="22" width="320" height="118"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="117"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
-                            </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="selectListingCell" rowHeight="61" id="aTs-wY-3Ep">
-                                <rect key="frame" x="0.0" y="140" width="320" height="61"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
-                                <connections>
-                                    <segue destination="GT3-Cf-iwY" kind="push" identifier="ShowListingDetailViewController" id="4f6-AS-0a3"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="5A8-51-CQp" id="iom-jI-xYV"/>
-                            <outlet property="delegate" destination="5A8-51-CQp" id="9Qr-s4-m1w"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="r3X-gJ-Y5X"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OWa-TS-y1n" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3198" y="-2151"/>
-        </scene>
         <!--Listing Detail View Controller - Listing-->
         <scene sceneID="7gQ-et-b5S">
             <objects>
@@ -976,6 +934,38 @@
             </objects>
             <point key="canvasLocation" x="-2694" y="-1751"/>
         </scene>
+        <!--Listing Results Table View Controller-->
+        <scene sceneID="Uy5-ii-xcR">
+            <objects>
+                <tableViewController id="RND-Lb-DF8" customClass="ListingResultsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4At-hm-kin">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectUListListingCell" id="oeS-SU-ES0">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="RND-Lb-DF8" id="aU8-fZ-Br2"/>
+                            <outlet property="delegate" destination="RND-Lb-DF8" id="K3L-zb-1DD"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="GT3-Cf-iwY" kind="push" identifier="ShowListingDetailViewController" id="r3c-VB-sya"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qUx-fH-jFw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3670" y="-2621"/>
+        </scene>
         <!--Listing Search View Controller-->
         <scene sceneID="XLv-UL-jae">
             <objects>
@@ -983,13 +973,56 @@
                     <view key="view" contentMode="scaleToFill" id="sT6-4e-ACr">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V7X-uY-8i9">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="RND-Lb-DF8" kind="embed" identifier="ListingResultsViewController_Embed" id="eaY-Kh-AON"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="V7X-uY-8i9" firstAttribute="trailing" secondItem="sT6-4e-ACr" secondAttribute="trailing" type="default" id="YmT-zP-e66"/>
+                            <constraint firstItem="V7X-uY-8i9" firstAttribute="bottom" secondItem="sT6-4e-ACr" secondAttribute="bottom" type="default" id="p9q-6n-joE"/>
+                            <constraint firstItem="V7X-uY-8i9" firstAttribute="top" secondItem="sT6-4e-ACr" secondAttribute="top" constant="44" id="tWZ-6a-qEZ"/>
+                            <constraint firstItem="V7X-uY-8i9" firstAttribute="leading" secondItem="sT6-4e-ACr" secondAttribute="leading" type="default" id="xDl-SQ-pHZ"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PWY-hf-dG9"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hbq-Cb-jIt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3088" y="-2891"/>
+        </scene>
+        <!--List School Category View Controller-->
+        <scene sceneID="TRu-FA-b3N">
+            <objects>
+                <viewController storyboardIdentifier="UListSchoolCategoryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Hzd-ri-Jbq" customClass="UListSchoolCategoryViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uoF-3C-2zS">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ael-dO-VRj">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="RND-Lb-DF8" kind="embed" identifier="ListingResultsViewController_Embed" id="tMz-hi-Bq9"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ael-dO-VRj" firstAttribute="leading" secondItem="uoF-3C-2zS" secondAttribute="leading" type="default" id="EVc-Lx-D4B"/>
+                            <constraint firstItem="Ael-dO-VRj" firstAttribute="top" secondItem="uoF-3C-2zS" secondAttribute="top" type="default" id="swG-PY-HD0"/>
+                            <constraint firstItem="Ael-dO-VRj" firstAttribute="bottom" secondItem="uoF-3C-2zS" secondAttribute="bottom" type="default" id="vPL-RC-Nui"/>
+                            <constraint firstItem="Ael-dO-VRj" firstAttribute="trailing" secondItem="uoF-3C-2zS" secondAttribute="trailing" type="default" id="zwv-Nc-Wqh"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rFr-8D-APX"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WU4-8L-85Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3402" y="-1893"/>
         </scene>
         <!--UList School Home View-->
         <scene sceneID="Hlb-kb-BdA">
@@ -1036,7 +1069,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="sEs-JO-9jh"/>
                     <navigationItem key="navigationItem" title="uList" id="hqM-dY-bXU"/>
                     <connections>
-                        <segue destination="5A8-51-CQp" kind="push" identifier="ShowUListSchoolListingsViewController" id="0j7-5Z-f9X"/>
+                        <segue destination="Hzd-ri-Jbq" kind="push" identifier="ShowUListSchoolListingsViewController" id="K6v-6e-cWw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y57-vL-ezg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -6362,6 +6395,34 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
             </objects>
             <point key="canvasLocation" x="1482" y="-3225"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="sWB-f8-bbw">
+            <objects>
+                <viewController id="ixG-W9-VgD" sceneMemberID="viewController">
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="aPt-r1-P8Z">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DaW-Sg-Mzq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="kJM-qa-DgU">
+            <objects>
+                <viewController id="0ZD-NH-qea" sceneMemberID="viewController">
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="xJz-R0-jXm">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tH6-3h-QwB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
     <resources>
         <image name="black-striped-bg.png" width="640" height="1136"/>
@@ -6395,9 +6456,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
     <classes>
         <class className="AboutViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AboutViewController.h"/>
-        </class>
-        <class className="CLLocationManager" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CLLocationManager.h"/>
         </class>
         <class className="CampusEventsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CampusEventsViewController.h"/>
@@ -6469,6 +6527,9 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <relationship kind="outlet" name="contactListerBackground" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="contactListerButton" candidateClass="UlinkButton"/>
             </relationships>
+        </class>
+        <class className="ListingResultsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ListingResultsTableViewController.h"/>
         </class>
         <class className="ListingSearchViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ListingSearchViewController.h"/>
@@ -6759,11 +6820,8 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <relationship kind="outlet" name="schoolsTableView" candidateClass="UITableView"/>
             </relationships>
         </class>
-        <class className="UListSchoolCategoryViewController" superclassName="UITableViewController">
+        <class className="UListSchoolCategoryViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UListSchoolCategoryViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="locationManager" candidateClass="CLLocationManager"/>
-            </relationships>
         </class>
         <class className="UListSchoolHomeViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UListSchoolHomeViewController.h"/>
@@ -6789,6 +6847,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="eaY-Kh-AON"/>
         <segue reference="7AH-dB-mE2"/>
         <segue reference="aW1-Y9-rEi"/>
     </inferredMetricsTieBreakers>

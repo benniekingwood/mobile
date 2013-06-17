@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ListingSearchViewController : UIViewController <UISearchBarDelegate>
-
+#import "School.h"
+@interface ListingSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate>
+@property (nonatomic) School *school;
 @end

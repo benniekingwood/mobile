@@ -142,7 +142,7 @@
         username.font = [UIFont fontWithName:FONT_GLOBAL size:16];
         username.frame = CGRectMake(20, 190, 200, 50);
     } else {
-        username.frame = CGRectMake(20, 170, 200, 50);
+        username.frame = CGRectMake(20, 160, 200, 50);
         // add the username, make it a bit larger since there is no price
         username.font = [UIFont fontWithName:FONT_GLOBAL size:26];
     }
