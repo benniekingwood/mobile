@@ -13,6 +13,7 @@
 #import "DataCache.h"
 #import "SelectCategoryCell.h"
 #import "UListMenuCell.h"
+#import "ListingSearchViewController.h"
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
@@ -93,6 +94,9 @@
         categoryViewController.mainCat = menuCell.mainCat;
         categoryViewController.subCat = menuCell.subCat;
         categoryViewController.school = school;
+    } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER]) {
+        ListingSearchViewController *searchViewController = [segue destinationViewController];
+        searchViewController.school = self.school;
     }
 }
 

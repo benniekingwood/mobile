@@ -43,6 +43,7 @@
         self.schoolName = self.school.name;
         self.textLabel.text = self.school.name;
     }
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 - (void)layoutSubviews {
     [super layoutSubviews];

@@ -7,12 +7,15 @@
 //
 
 #import "ListingSearchViewController.h"
+#import "ListingResultsTableViewController.h"
 #import "AppMacros.h"
+#import "DataCache.h"
 
 @interface ListingSearchViewController ()
 {
     UISearchBar *searchBar;
     UIView *modalOverlay;
+    ListingResultsTableViewController *resultsTableViewController;
 }
 -(void)showSearchView;
 -(void)hideSearchView;
@@ -21,7 +24,7 @@
 @end
 
 @implementation ListingSearchViewController
-
+@synthesize school;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -34,15 +37,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     // set the title of the navigation bar
     self.navigationItem.title = @"Search";
-
+    
     // create the search bar
     [self buildSearchBar];
     
     // initally show the search view
     [self showSearchView];
+    
+    // initialize the listing results table
+    resultsTableViewController.school = self.school;
+    resultsTableViewController.queryType = kListingQueryTypeSearch;
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,8 +73,7 @@
     // now create the search bar
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)];
     searchBar.delegate = self;
-    // initially have the search bar and modal overlay hidden
-   // searchBar.alpha = ALPHA_ZERO;
+    // initially have the modal overlay hidden
     modalOverlay.alpha = ALPHA_ZERO;
     [self.view addSubview:modalOverlay];
     [self.view addSubview:searchBar];
@@ -81,25 +86,20 @@
 - (void) showSearchView {
     [UIView animateWithDuration:0.2f
                      animations:^{
-                         // show the search bar, and make show the modal overlay
+                         // show the modal overlay
                          modalOverlay.alpha = ALPHA_MED;
-                        // searchBar.alpha = ALPHA_HIGH;
                      }
      ];
-    modalOverlay.userInteractionEnabled = YES;
-    // disable the scroll view
-    //self.tableView.scrollEnabled = NO;
-    [searchBar becomeFirstResponder];
+    if(![searchBar isFirstResponder]) {
+        [searchBar becomeFirstResponder];
+    }
 }
 /**
  * This method will perform all necessary steps to
  * hiding the search bar view
  */
 - (void) hideSearchView {
-  //  searchBar.alpha = ALPHA_ZERO;
     modalOverlay.alpha = ALPHA_ZERO;
-    // re-enable the tableview scroll
-   // self.tableView.scrollEnabled = YES;
     if([searchBar isFirstResponder]) {
         [searchBar resignFirstResponder];
     }
@@ -112,17 +112,31 @@
 - (void)handleModalTap:(UITapGestureRecognizer *)recognizer {
     [self hideSearchView];
 }
-
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    if ([segueName isEqualToString:SEGUE_LISTING_RESULTS_VIEW_CONTROLLER_EMBED]) {
+        resultsTableViewController = (ListingResultsTableViewController *) [segue destinationViewController];
+        resultsTableViewController.noMoreResultsAvail = YES;
+    }
+}
 #pragma mark - Search Bar Delegate
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     // hide the search view and perform the search
     [self hideSearchView];
     [self executeSearch];
 }
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar*)searchBar {
+    modalOverlay.alpha = ALPHA_MED;
+    return YES;
+}
 #pragma mark -
 #pragma mark - Actions
 -(void) executeSearch {
-    NSLog(@"starting the search");
+    [resultsTableViewController.tableView reloadData];
+    resultsTableViewController.fetchBatch = 0;
+    resultsTableViewController.searchText = searchBar.text;
+    [resultsTableViewController refresh];
 }
 #pragma mark -
 @end

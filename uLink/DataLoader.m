@@ -60,11 +60,19 @@
     
     if (!uListDelegate.noMoreResultsAvail) {
         NSLog(@"ulist data -- fetching batch #: %i; retries: %i", uListDelegate.fetchBatch, uListDelegate.retries);
-        
-        /*
-         * grab the next batch of listing data (if there is any...)
-         */
-        NSString *query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.subCat, uListDelegate.school.schoolId, uListDelegate.fetchBatch];
+        NSString *query;
+        if (uListDelegate.queryType == kListingQueryTypeSearch) {
+            // qt=s&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch&t=search_text
+            query = [[NSString alloc] initWithFormat:@"qt=s&sid=%@&b=%i&t=%@", uListDelegate.school.schoolId, uListDelegate.fetchBatch, uListDelegate.searchText];
+        } else if (uListDelegate.queryType == kListingQueryTypeSubCategory) {
+            /*
+             * grab the next batch of listing data (if there is any...)
+             */
+            query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.subCat, uListDelegate.school.schoolId, uListDelegate.fetchBatch];
+        } else if (uListDelegate.queryType == kListingQueryTypeSubCategorySearch) {
+            query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [uListDelegate.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.school.schoolId, uListDelegate.fetchBatch, uListDelegate.searchText];
+        }
+     
         [UDataCache hydrateUListListingsCache:query];
     }
     

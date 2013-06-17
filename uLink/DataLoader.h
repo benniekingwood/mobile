@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 
 // Import view controllers using data loader
-#import "UListSchoolCategoryViewController.h"
-
+//#import "UListSchoolCategoryViewController.h"
+#import "ListingResultsTableViewController.h"
 @interface DataLoader : NSObject
 
 // create a new delegate and method for each view controller
 // utilizing data loader
-@property (strong, nonatomic) UListSchoolCategoryViewController *uListDelegate;
+@property (strong, nonatomic) ListingResultsTableViewController *uListDelegate;
 - (void)loadUListListingData;
 
 @end
