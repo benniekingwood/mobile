@@ -20,6 +20,7 @@
 @implementation ProfileViewController
 @synthesize snapCountLabel, eventsCountLabel, listingCountLabel;
 @synthesize containerView;
+@synthesize eventsButton, listingButton, snapsButton;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -54,6 +55,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(notificationViewUpdate:) name:NOTIFICATION_PROFILE_VIEW_CONTROLLER
                                                object:nil];
+    // style the buttons
+    self.snapsButton.backgroundColor = [UIColor colorWithRed:(19.0 / 255.0) green:(122.0 / 255.0) blue:(188.0 / 255.0) alpha: 1];
+    self.eventsButton.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(146.0 / 255.0) blue:(23.0 / 255.0) alpha: 1];
 }
 
 // Handle the notification
