@@ -51,7 +51,7 @@
                                                             otherButtonTitles:@"View Profile Photo", @"Edit Profile",nil];
 
     
-    scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,100)];
+    scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,165)];
     scroll.delegate = self;
     scroll.pagingEnabled = YES;
     scroll.contentSize = CGSizeMake(640, 100);
@@ -66,25 +66,29 @@
     profilePicView.backgroundColor = [UIColor clearColor];
     profilePicView.frame = profilePicFrame;
     profilePicThumb = [[UIImageView alloc] init];
-    CGRect proThumbFrame = CGRectMake(30, 20, 80, 80);
+    CGRect proThumbFrame = CGRectMake(120, 20, 80, 80);
     profilePicThumb.frame = proThumbFrame;
-    profilePicThumb.layer.cornerRadius = 5;
+    profilePicThumb.layer.cornerRadius = 40;
     profilePicThumb.layer.masksToBounds = YES;
     profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
+    profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
+    profilePicThumb.layer.borderWidth = 3.0f;
     [profilePicView addSubview:profilePicThumb];
     // create the user's full name label
-    CGRect labelFrame = CGRectMake( 140, 25, 200, 30 );
+    CGRect labelFrame = CGRectMake( 0, 105, 320, 30 );
     nameLabel = [[UILabel alloc] initWithFrame: labelFrame];
     [nameLabel setTextColor: [UIColor whiteColor]];
     [nameLabel setBackgroundColor:[UIColor clearColor]];
-     nameLabel.font = [UIFont fontWithName:FONT_GLOBAL size:15.0];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+     nameLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0];
     [profilePicView addSubview:nameLabel];
     // create the user's username label
-    CGRect usernameFrame = CGRectMake( 140, 50, 200, 30 );
+    CGRect usernameFrame = CGRectMake( 0, 123, 320, 30 );
     username = [[UILabel alloc] initWithFrame: usernameFrame];
     [username setBackgroundColor:[UIColor clearColor]];
     username.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
     username.textColor = [UIColor whiteColor];
+    username.textAlignment = NSTextAlignmentCenter;
     
     [profilePicView addSubview: username];
     

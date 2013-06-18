@@ -10,6 +10,9 @@
 #import "ProfilePictureViewController.h"
 #import "EditProfileViewController.h"
 @interface ProfileViewController : UIViewController <ProfilePictureViewControllerDelegate>
+@property (strong, nonatomic) IBOutlet UIButton *listingButton;
+@property (strong, nonatomic) IBOutlet UIButton *eventsButton;
+@property (strong, nonatomic) IBOutlet UIButton *snapsButton;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet UILabel *eventsCountLabel;
 @property (strong, nonatomic) IBOutlet UILabel *snapCountLabel;
