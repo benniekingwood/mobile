@@ -267,7 +267,6 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         // clear out the image cache to maintain memory
         [self.listingImageMedium removeAllObjects];
         [self.listingImageThumbs removeAllObjects];
-        [self hydrateUListListingsCache:@""];
     }
     else {
         [self decrementActiveProcesses];
@@ -572,17 +571,12 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
      sid=school id
      finally qt=u, you just need uid=user id
  */
-- (void) hydrateUListListingsCache:(NSString*) query {
+- (void) hydrateUListListingsCache:(NSString*) query notification:(NSString*)notification {
     @try {
-        //clock_t start = clock();
         NSDate *start = [NSDate date];
         dispatch_queue_t listingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
         dispatch_async(listingQueue, ^{
             /* build the url w/ or w/o query string */
-            //NSURL *URL = [[NSURL alloc] init];
-        
-            //URL = [self buildURL:URL_SERVER_3737 api:API_ULIST_LISTINGS query:query];
-            //NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS]]];
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[self buildURL:URL_SERVER_3737 api:API_ULIST_LISTINGS query:query]];
             [req setHTTPMethod:HTTP_GET];
             NSLog(@"ulist listing request: %@", req.URL);
@@ -608,6 +602,12 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
                                 [self.uListListings removeAllObjects];
                             }
                             [self buildUListListingList:json forSessionUser:NO];
+                
+                            // Send a notification to observer if necessary to notify a view that the listings are ready
+                            if(notification != nil && ![notification isEqualToString:EMPTY_STRING]){
+                                NSLog(@"DataCache - done building listings, sending notificaiton.");
+                                [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+                            }
                         }
                         
                     }
@@ -928,22 +928,15 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
  * hydrateUListCategories
  */
 -(void) buildUListCategoryList:(NSArray*)json {
-    //NSLog(@"%@", json);
-
     NSString *uListCategorySectionKey = nil;
     for (id object in json) {
-        //NSLog(@"%@", object);
-        NSString* uListCategoryName = [(NSString*)object valueForKey:@"name"];
-        //NSLog(@"Main Category Name: %@", uListCategoryName);
-        
+        NSString* uListCategoryName = [(NSString*)object valueForKey:@"name"];        
         uListCategorySectionKey = uListCategoryName;
 
         // create array for the sub categories of the main category
         NSMutableArray *sectionCategories = [[NSMutableArray alloc] init];
         
         NSArray* uListSubCategories = [(NSArray*)object valueForKey:@"subcategories"];
-        //NSLog(@"Subcategories: %@", uListSubCategories);
-        //NSArray* subCategories = [uListSubCategories objectAtIndex:0];
         
         for (id object in uListSubCategories) {
         
@@ -954,8 +947,6 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
             subCategory.name = (NSString*)object;
             subCategory.cacheAge = [NSDate date];
         
-            //NSLog(@"ulist subcat: %@", category.name);
-            
             // add sub-category to categories array
             [sectionCategories addObject:subCategory];
             [self.uListCategories setObject:sectionCategories forKey:uListCategoryName];
@@ -971,17 +962,11 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
     while (key = [ee nextObject]) {
         [self.uListCategorySections addObject:(NSString*)key];
     }
-    
-    //NSLog(@"section count: %i, cat count: %i", [self.uListCategorySections count], [self.uListCategories count]);
-    //NSLog(@"section: %@, cat: %@", self.uListCategorySections, self.uListCategories);
 }
 
--(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {
-    //NSLog(@"buildUListListingList json: %@", json);
-    
+-(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {    
     /* cycle through list of json objects */
     for (id object in json) {
-        //NSLog(@"%@", object);
         Listing *listing = [[Listing alloc] init];
         
         listing._id = [(NSString*)object valueForKey:@"_id"];
@@ -1011,7 +996,6 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         // location
         Location *loc = [[Location alloc] init];
         NSDictionary* listingLocation = [(NSArray*)object valueForKey:@"location"];
-        //NSLog(@"location id: %@, location: %@", listing._id, listingLocation);
         // default all the locational info to the empty string
         loc.street = EMPTY_STRING;
         loc.address1 = EMPTY_STRING;
@@ -1022,7 +1006,6 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         if (listingLocation)
         {
             for (id object in listingLocation) {
-                //NSLog(@"listing location object:%@", object);
                 @try {
                     if ([(NSString*)object isEqualToString:@"latitude"])
                         loc.latitude = [listingLocation valueForKey:(NSString*)object];

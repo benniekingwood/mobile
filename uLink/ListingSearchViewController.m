@@ -73,6 +73,7 @@
     // now create the search bar
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)];
     searchBar.delegate = self;
+    searchBar.placeholder = @"Search Listings";
     // initially have the modal overlay hidden
     modalOverlay.alpha = ALPHA_ZERO;
     [self.view addSubview:modalOverlay];
@@ -133,10 +134,11 @@
 #pragma mark -
 #pragma mark - Actions
 -(void) executeSearch {
+    [resultsTableViewController.searchResultOfSets removeAllObjects];
     [resultsTableViewController.tableView reloadData];
     resultsTableViewController.fetchBatch = 0;
     resultsTableViewController.searchText = searchBar.text;
-    [resultsTableViewController refresh];
+    [resultsTableViewController loadListings:NOTIFICATION_LISTING_SEARCH_VIEW_CONTROLLER];
 }
 #pragma mark -
 @end

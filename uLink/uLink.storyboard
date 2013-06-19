@@ -97,11 +97,11 @@
                             </label>
                             <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k6F-g3-RZO">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="8af-hW-bEd"/>
+                                    <constraint firstAttribute="height" constant="31" id="muD-x7-wX3"/>
                                     <constraint firstAttribute="width" constant="251" id="s04-Lq-b54"/>
                                 </constraints>
                                 <attributedString key="attributedText">
-                                    <fragment content="Find out what's happening on your campus, right now.">
+                                    <fragment content="Your college everything.">
                                         <attributes>
                                             <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="12" name="KhmerSangamMN"/>
@@ -6401,20 +6401,6 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dvr-At-ugo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1482" y="-3225"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="sWB-f8-bbw">
-            <objects>
-                <viewController id="ixG-W9-VgD" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="aPt-r1-P8Z">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DaW-Sg-Mzq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
         <!--View Controller-->
         <scene sceneID="kJM-qa-DgU">

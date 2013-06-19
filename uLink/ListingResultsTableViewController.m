@@ -20,6 +20,9 @@
     DataLoader *loader;
 }
 -(void)shrinkMap:(id)sender;
+-(void)basicFinishedLoadingListings;
+-(void)dataLoaderFinishedLoadingListings;
+-(void)reloadTableView;
 @end
 
 @implementation ListingResultsTableViewController
@@ -35,7 +38,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"listing result view did load");
     self.tableView.showsVerticalScrollIndicator = NO;
     loader = [[DataLoader alloc] init];
     [self setupStrings];
@@ -44,17 +46,11 @@
     /****** Setup Lazy Loading (Initial) **********/
     fetchBatch = 0;
     retries = 0;
-    // this is now set by the parent view
-   // noMoreResultsAvail = NO;
     searchResultOfSets = [[NSMutableArray alloc] init];
     
     self.noMoreResultsAvail = YES;
     self.tableView.separatorColor = [UIColor clearColor];
-    //self.tableView.backgroundColor = [UIColor colorWithRed:0.901 green:0.882 blue:0.89 alpha:1.0];
-    //self.tableView.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
     self.tableView.backgroundColor = [UIColor colorWithRed:0.9411 green:0.9372 blue:0.9215 alpha:1.0];
-    //self.tabBarController.navigationItem.hidesBackButton = YES;
-   // self.navigationItem.leftBarButtonItem = nil;
     mapFrame = CGRectMake(0, 70, 320, 120);
     CGRect mViewFrame;
     mViewFrame.origin.x = 0;
@@ -101,6 +97,21 @@
     [closeMap.layer setShadowOpacity:0.5f];
     [closeMap.layer setCornerRadius:5.0f];
     [self.tableView addSubview:closeMap];
+    
+    // Register an observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(basicFinishedLoadingListings) name:NOTIFICATION_LISTING_SEARCH_VIEW_CONTROLLER
+                                               object:nil];
+    // Register an observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(basicFinishedLoadingListings) name:NOTIFICATION_ULIST_SCHOOL_CATEGORY_VIEW_CONTROLLER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(basicFinishedLoadingListings) name:NOTIFICATION_LISTING_RESULTS_TABLEVIEW_CONTROLLER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dataLoaderFinishedLoadingListings) name:NOTIFICATION_DATALOADER_LISTINGS
+                                               object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -129,7 +140,10 @@
     [loader loadUListListingData];
 }
 
-
+- (void) reloadTableView {
+    [self.tableView reloadData];
+    self.loading = NO;
+}
 /* return map to original state */
 -(void)shrinkMap:(id)sender {
     if (self.selectedRowIndex && self.selectedRowIndex.section == 0) {
@@ -230,8 +244,6 @@
         }
         
         mapView = uListMapView_;
-        //cell.clipsToBounds = YES;
-        //cell.layer.masksToBounds = YES;
         [cell.contentView addSubview:mapView];
         [cell.contentView addSubview:bottomLine];
     } else {
@@ -239,12 +251,13 @@
         if (cell == nil) {
             cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
-        
         // If scrolled beyond two thirds of the table, load next batch of data.
         // Make sure that our set data count exceeds the batch size
-        if ((indexPath.row >= ((searchResultOfSets.count*2)/3))) {
+        float count = (searchResultOfSets.count*2)/3;
+        if ((indexPath.row >= count) && (count > 0)) {
             if (!loading && !noMoreResultsAvail) {
-                NSLog(@"at 2/3 of page.. loading next 10 results");
+                NSLog(@"at 2/3 of results.. loading next set of results");
+                NSLog(@"Row is %i and count condition is %i", indexPath.row, ((searchResultOfSets.count*2)/3));
                 loading = YES;
                 // loadRequest is the method that loads the next batch of data.
                 // This needs your implementation to load the data into searchResultOfSets
@@ -275,7 +288,6 @@
                     [self.moreResultsSpinner startAnimating];
                     return cell;
                 } else {
-                    //[self.activityIndicatorView removeFromSuperview];
                     [self.moreResultsSpinner stopAnimating];
                     if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
                     return ([self getNoMoreResultsCell]);
@@ -288,7 +300,6 @@
                 return ([self getNoMoreResultsCell]);
             }
             else {
-                //NSLog(@"Reloading listing table data..");
                 [self.tableView reloadData];
             }
         }
@@ -454,7 +465,7 @@
     }];
     
     // Refresh action!
-    [self refresh];
+    [self loadListings:NOTIFICATION_LISTING_RESULTS_TABLEVIEW_CONTROLLER];
 }
 
 - (void)stopLoading {
@@ -477,10 +488,8 @@
     [refreshSpinner stopAnimating];
 }
 
-- (void)refresh {
-    
-    NSLog(@"ListingResultsTableViewController - starting the search");
-    [_initializeSpinner startAnimating];
+- (void) loadListings:(NSString*)notificationHandler {
+    //[_initializeSpinner startAnimating];
     
     // let's refresh all of our listings
     fetchBatch = 0;
@@ -500,13 +509,42 @@
         query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [self.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.school.schoolId, self.fetchBatch, self.searchText];
     }
 
-    [UDataCache hydrateUListListingsCache:query];
+    [UDataCache hydrateUListListingsCache:query notification:notificationHandler];
+    
+    // TODO: kill this and put in function for notif
     // stop loading
-    [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+   // [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
     // ensure that the Data loader doesn't try to reload while we are already loading
-    self.loading = YES;
-    [self loadRequest];
-
+   
 }
+- (void) dataLoaderFinishedLoadingListings {
+     NSLog(@"Listing Results TV - Recieved notification, data loader has finished loading.");
+    /*
+     * Since this function gets called when we receive a notification, and since it is
+     * possible that the notification comes in on a different sub thread, we
+     * need to ensure that the code in this function is executed on the main thread so
+     * that it doesn't hold up the UI.
+     */
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadTableView];
+    });
+}
+  - (void) basicFinishedLoadingListings {
+       // if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
+      NSLog(@"Listing Results TV - Recieved notification, loading request again.");
+      /*
+       * Since this function gets called when we receive a notification, and since it is 
+       * possible that the notification comes in on a different sub thread, we 
+       * need to ensure that the code in this function is executed on the main thread so 
+       * that it doesn't hold up the UI.
+       */
+      dispatch_async(dispatch_get_main_queue(), ^{
+          [self stopLoading];
+          self.loading = YES;
+          // self.searchResultOfSets = UDataCache.uListListings;
+          [self loadRequest];
+      });
+     
+  }
 #pragma mark -
 @end
