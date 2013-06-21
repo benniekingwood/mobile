@@ -47,7 +47,7 @@
     // initially load the category data
     resultsTableViewController.fetchBatch = 0;
     resultsTableViewController.retries = 0;
-    resultsTableViewController.noMoreResultsAvail = NO;
+    resultsTableViewController.noMoreResultsAvail = YES;
     resultsTableViewController.mainCat = self.mainCat;
     resultsTableViewController.subCat = self.subCat;
     resultsTableViewController.queryType = kListingQueryTypeSubCategory;
@@ -174,6 +174,14 @@
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar*)searchBar {
     modalOverlay.alpha = ALPHA_MED;
     return YES;
+}
+-(BOOL) searchBar:(UISearchBar *)curSearchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    BOOL retVal = YES;
+    // this is to make sure that the first character is not a space
+    if ([curSearchBar.text length] == 0 && [text isEqualToString:@" "]) {
+        retVal = NO;
+    }
+    return retVal;
 }
 #pragma mark -
 #pragma mark - Actions

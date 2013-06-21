@@ -131,6 +131,14 @@
     modalOverlay.alpha = ALPHA_MED;
     return YES;
 }
+-(BOOL) searchBar:(UISearchBar *)curSearchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    BOOL retVal = YES;
+    // this is to make sure that the first character is not a space
+    if ([curSearchBar.text length] == 0 && [text isEqualToString:@" "]) {
+        retVal = NO;
+    }
+    return retVal;
+}
 #pragma mark -
 #pragma mark - Actions
 -(void) executeSearch {

@@ -67,7 +67,7 @@
     CGRect frame = self.tableView.frame;
     _initializeSpinner.center = CGPointMake(frame.size.width/2, frame.size.height/2);
     [self.tableView addSubview:_initializeSpinner];
-    [_initializeSpinner startAnimating];
+    //[_initializeSpinner startAnimating];
     
     // Setup more results spinner (don't activate yet)
     self.moreResultsSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -98,11 +98,10 @@
     [closeMap.layer setCornerRadius:5.0f];
     [self.tableView addSubview:closeMap];
     
-    // Register an observer
+    // Register the observers that will be used when hydrating the listings
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(basicFinishedLoadingListings) name:NOTIFICATION_LISTING_SEARCH_VIEW_CONTROLLER
                                                object:nil];
-    // Register an observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(basicFinishedLoadingListings) name:NOTIFICATION_ULIST_SCHOOL_CATEGORY_VIEW_CONTROLLER
                                                object:nil];
@@ -489,12 +488,10 @@
 }
 
 - (void) loadListings:(NSString*)notificationHandler {
-    //[_initializeSpinner startAnimating];
-    
     // let's refresh all of our listings
     fetchBatch = 0;
     retries = 0;
-    noMoreResultsAvail = NO;
+   // noMoreResultsAvail = NO;
     [searchResultOfSets removeAllObjects];
     NSString *query;
     if (self.queryType == kListingQueryTypeSearch) {
@@ -509,13 +506,8 @@
         query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [self.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.school.schoolId, self.fetchBatch, self.searchText];
     }
 
+    // now we grab the listings based on the query, while passing in the notification string 
     [UDataCache hydrateUListListingsCache:query notification:notificationHandler];
-    
-    // TODO: kill this and put in function for notif
-    // stop loading
-   // [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
-    // ensure that the Data loader doesn't try to reload while we are already loading
-   
 }
 - (void) dataLoaderFinishedLoadingListings {
      NSLog(@"Listing Results TV - Recieved notification, data loader has finished loading.");

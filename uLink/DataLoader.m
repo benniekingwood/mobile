@@ -40,7 +40,7 @@
         if (uListDelegate.initializeSpinner) [uListDelegate.initializeSpinner stopAnimating];
         uListDelegate.noMoreResultsAvail = ([UDataCache.uListListings count] < ULIST_LISTING_BATCH_SIZE);
     } else {
-        if (uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] <= 0)
+        if ((MIN_RETRIES > 0) && uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] <= 0)
             uListDelegate.retries++;
         else
             uListDelegate.noMoreResultsAvail = TRUE;
