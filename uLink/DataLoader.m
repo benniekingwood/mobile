@@ -13,18 +13,13 @@
 @implementation DataLoader
 @synthesize uListDelegate;
 
-- (void)loadUListListingData
-{
-    [self performSelector:@selector(loadUListListingDataDelayed) withObject:nil afterDelay:3];
-}
-
 /*
  * Set this method up to load the next set
  * of result data from the cache.  Later on
  * down the line, we may even decide to only
  * load next 10-30 rows of data from the db...
  */
-- (void)loadUListListingDataDelayed
+- (void)loadUListListingData
 {
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:ULIST_LISTING_BATCH_SIZE];
     
@@ -43,12 +38,12 @@
         [uListDelegate.searchResultOfSets addObjectsFromArray:array];
         
         if (uListDelegate.initializeSpinner) [uListDelegate.initializeSpinner stopAnimating];
-        
-    } else if ([UDataCache.uListListings count] < ULIST_LISTING_BATCH_SIZE) {
-        if (uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] <= 0)
+        uListDelegate.noMoreResultsAvail = ([UDataCache.uListListings count] < ULIST_LISTING_BATCH_SIZE);
+    } else {
+        if ((MIN_RETRIES > 0) && uListDelegate.retries <= MIN_RETRIES && [UDataCache.uListListings count] <= 0)
             uListDelegate.retries++;
         else
-            uListDelegate.noMoreResultsAvail = YES;
+            uListDelegate.noMoreResultsAvail = TRUE;
     }
     
     /* 
@@ -73,7 +68,9 @@
             query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [uListDelegate.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [uListDelegate.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], uListDelegate.school.schoolId, uListDelegate.fetchBatch, uListDelegate.searchText];
         }
      
-        [UDataCache hydrateUListListingsCache:query];
+        [UDataCache hydrateUListListingsCache:query notification:NOTIFICATION_DATALOADER_LISTINGS];
+    } else {
+         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DATALOADER_LISTINGS object:nil];
     }
     
     /* use reload data for right now, down the line, we have to switch this
@@ -81,8 +78,8 @@
      * EX. Every time a new batch is loaded make that a new section (keep
      *     track of the sections in table
      */
-    [uListDelegate.tableView reloadData];
-    uListDelegate.loading = NO;
+   // [uListDelegate.tableView reloadData];
+   // uListDelegate.loading = NO;
 }
 
 @end

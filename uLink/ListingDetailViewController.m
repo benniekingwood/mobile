@@ -112,7 +112,7 @@
     
     // load the listing data onto the view
     // listing title
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 103, 320, 50)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 103, 280, 50)];
     title.numberOfLines = 2;
     title.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:17];
     title.textColor = [UIColor whiteColor];

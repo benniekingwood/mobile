@@ -57,7 +57,7 @@
 - (void) hydrateTrendsCache;
 - (void) hydrateImageCache;
 - (void) hydrateUListCategoryCache;
-- (void) hydrateUListListingsCache:(NSString*)query;
+- (void) hydrateUListListingsCache:(NSString*)query notification:(NSString*)notification;
 - (void) hydrateSessionUserListings;
 - (void) rehydrateSessionUser;
 - (void) rehydrateSchoolCache:(BOOL)checkAge;

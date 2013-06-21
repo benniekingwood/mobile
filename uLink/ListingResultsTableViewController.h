@@ -50,5 +50,5 @@
 - (void)addPullToRefreshHeader;
 - (void)startLoading;
 - (void)stopLoading;
-- (void)refresh;
+- (void)loadListings:(NSString*)notificationHandler;
 @end
