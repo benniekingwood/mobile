@@ -172,6 +172,7 @@
 #define CELL_TWEET @"tweetCell"
 #define CELL_SELECT_ULIST_MAP @"selectUListMapCell"
 #define CELL_SELECT_ULIST_LISTING_CELL @"selectUListListingCell"
+#define CELL_LISTING_CATEGORY_CELL @"listingCategoryCell"
 
 
 #pragma mark CONTROLLER IDS
@@ -182,6 +183,7 @@
 #define CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID @"UserProfileViewController"
 #define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
 #define CONTROLLER_TERMS_VIEW_CONTROLLER_ID @"TermsViewController"
+#define CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID @"AddListingNavigationViewController"
 
 #pragma mark SEGUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"
@@ -207,6 +209,7 @@
 #define SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER @"ShowUListSchoolListingsViewController"
 #define SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER @"ShowListingDetailViewController"
 #define SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER @"ShowListingSearchViewController"
+#define SEGUE_SHOW_ADD_LISTING_VIEW_CONTROLLER @"ShowAddListingViewController"
 
 #pragma mark EMBEDDED SEGUES
 #define SEGUE_LISTING_RESULTS_VIEW_CONTROLLER_EMBED @"ListingResultsViewController_Embed"
@@ -295,3 +298,9 @@ typedef enum {
     kEventHydrationFeatured,
     kEventHydrationAll
 } EventHydrationType;
+
+#define mark ULIST CATEGORY CELL TYPE 
+typedef enum {
+    kListingCategoryTypeLight = 400,
+    kListingCategoryTypeDark
+} ListingCategoryCellType;

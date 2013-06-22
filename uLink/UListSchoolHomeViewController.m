@@ -11,7 +11,6 @@
 #import "AppDelegate.h"
 #import "AppMacros.h"
 #import "DataCache.h"
-#import "SelectCategoryCell.h"
 #import "UListMenuCell.h"
 #import "ListingSearchViewController.h"
 

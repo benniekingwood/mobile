@@ -139,7 +139,7 @@
     }
     else if ([mode isEqualToString:@"uList"]) {
         static NSString *CellIdentifier = @"uListCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        cell = (UListMenuCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
@@ -147,10 +147,12 @@
         NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
         NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
         UListCategory *category = [categories objectAtIndex:indexPath.row];
+        ((UListMenuCell*)cell).type = kListingCategoryTypeDark;
         ((UListMenuCell*)cell).mainCat = categoryKey;
         ((UListMenuCell*)cell).subCat = category.name;
         ((UListMenuCell*)cell).iconImage = [UIImage alloc];
         ((UListMenuCell*)cell).textLabel.text = category.name;
+        [((UListMenuCell*)cell) initialize];
         [(UListMenuCell*)cell layoutSubviews];
         [(UListMenuCell*)cell setEnabled:YES];
     }

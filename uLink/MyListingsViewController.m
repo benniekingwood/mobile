@@ -10,6 +10,7 @@
 #import "DataCache.h"
 #import "AppMacros.h"
 #import "MyListingCell.h"
+
 @interface MyListingsViewController ()
 -  (void)applyUlinkTableFooter;
 - (void)addListingClick:(id)sender;
@@ -95,7 +96,9 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 #pragma mark - 
 #pragma mark Actions
 - (void)addListingClick:(id)sender {
-    NSLog(@"Add Listing click");
+    UIStoryboard *storyboard = self.storyboard;
+    UIViewController *svc = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID];
+    [self presentViewController:svc animated:YES completion:nil];
 }
 #pragma mark -
 @end

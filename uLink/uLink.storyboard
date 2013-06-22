@@ -1031,6 +1031,76 @@
             </objects>
             <point key="canvasLocation" x="-3402" y="-1893"/>
         </scene>
+        <!--Add Listing Select Category Table View Controller - Select a category-->
+        <scene sceneID="OO5-vG-1mU">
+            <objects>
+                <tableViewController storyboardIdentifier="AddListingSelectCategoryTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="k0u-qy-oPW" customClass="AddListingSelectCategoryTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Qqz-Rf-Fnz">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="listingCategoryCell" id="J6c-gO-TPM" customClass="UListMenuCell">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <segue destination="PdU-9u-kKi" kind="push" identifier="ShowAddListingViewController" id="Jg1-7T-M1K"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="k0u-qy-oPW" id="hre-ln-Wxz"/>
+                            <outlet property="delegate" destination="k0u-qy-oPW" id="RPw-XL-LnU"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Select a category" id="ZVZ-Tw-Ml9">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="s0g-Xk-Dna">
+                            <connections>
+                                <action selector="cancelClick:" destination="k0u-qy-oPW" id="jle-fp-rgG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gx5-S1-b4R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4174" y="-557"/>
+        </scene>
+        <!--Add Listing View Controller-->
+        <scene sceneID="J7q-hb-ufJ">
+            <objects>
+                <viewController storyboardIdentifier="AddListingViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PdU-9u-kKi" customClass="AddListingViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nB1-uS-1Kl">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="YDE-j6-kcG"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hM8-Wd-rvW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3734" y="-557"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hiA-Vr-ZUL">
+            <objects>
+                <navigationController storyboardIdentifier="AddListingNavigationViewController" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kqS-GQ-Egs" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uDf-x2-5d1">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.0" green="0.23137254900000001" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="k0u-qy-oPW" kind="relationship" relationship="rootViewController" id="Sz0-5X-Q2i"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YIh-KT-b7u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4670" y="-557"/>
+        </scene>
         <!--UList School Home View-->
         <scene sceneID="Hlb-kb-BdA">
             <objects>
@@ -6449,6 +6519,15 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <class className="AboutViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AboutViewController.h"/>
         </class>
+        <class className="AddListingSelectCategoryTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AddListingSelectCategoryTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelClick:" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="AddListingViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AddListingViewController.h"/>
+        </class>
         <class className="CampusEventsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CampusEventsViewController.h"/>
             <relationships>
@@ -6806,11 +6885,17 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
+        </class>
         <class className="UListHomeViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UListHomeViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="schoolsTableView" candidateClass="UITableView"/>
             </relationships>
+        </class>
+        <class className="UListMenuCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UListMenuCell.h"/>
         </class>
         <class className="UListSchoolCategoryViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UListSchoolCategoryViewController.h"/>

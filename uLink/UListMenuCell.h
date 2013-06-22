@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppMacros.h"
 
 @interface UListMenuCell : UITableViewCell {
     UIImageView *glowView;
@@ -19,4 +20,7 @@
 @property(nonatomic) NSString *schoolId;
 @property(nonatomic) NSString *mainCat;
 @property(nonatomic) NSString *subCat;
+@property (nonatomic) ListingCategoryCellType type;
+
+- (void) initialize;
 @end
