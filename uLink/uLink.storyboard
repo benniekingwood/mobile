@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -1042,9 +1042,9 @@
                             <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EW9-fY-jyc">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="uList" id="FQg-d2-6ii"/>
-                                    <tabBarItem title="uCampus" id="9VK-is-p96"/>
-                                    <tabBarItem title="Me" id="aKE-xP-0u6"/>
+                                    <tabBarItem title="uList" image="ulist-icon.png" id="FQg-d2-6ii"/>
+                                    <tabBarItem title="uCampus" image="ucampus-icon.png" id="9VK-is-p96"/>
+                                    <tabBarItem title="Me" image="user-icon.png" id="aKE-xP-0u6"/>
                                 </items>
                             </tabBar>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fBy-tg-SLv">

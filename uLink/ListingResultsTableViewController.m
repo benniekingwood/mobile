@@ -13,16 +13,20 @@
 #import "UListMapCell.h"
 #import "UListListingCell.h"
 #import "ListingDetailViewController.h"
+#import "MapOverlayView.h"
+#import <QuartzCore/QuartzCore.h>
 @interface ListingResultsTableViewController() {
     UIView *mapView;
     CGRect mapFrame;
     UIButton *closeMap;
     DataLoader *loader;
+    NSMutableArray *mapMarkerList;
 }
 -(void)shrinkMap:(id)sender;
 -(void)basicFinishedLoadingListings;
 -(void)dataLoaderFinishedLoadingListings;
 -(void)reloadTableView;
+-(void)initializeMapWithFrame:(CGRect)frame withZoom:(CGFloat)zoom;
 @end
 
 @implementation ListingResultsTableViewController
@@ -40,8 +44,10 @@
     [super viewDidLoad];
     self.tableView.showsVerticalScrollIndicator = NO;
     loader = [[DataLoader alloc] init];
+    mapMarkerList = [NSMutableArray arrayWithCapacity:ULIST_MAX_MAP_MARKERS];
     [self setupStrings];
     [self addPullToRefreshHeader];
+    [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
     
     /****** Setup Lazy Loading (Initial) **********/
     fetchBatch = 0;
@@ -73,15 +79,14 @@
     self.moreResultsSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.moreResultsSpinner.hidesWhenStopped = YES;
     
-    /* initial map view */
-    // GMSUISettings *uListMapSettings = [[GMSUISettings alloc] init];
-    // [uListMapSettings setScrollGestures:NO];
-    
+    /*
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:13];
     uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
     uListMapView_.myLocationEnabled = YES;
-    //uListMapView_.settings = uListMapSettings;
     uListMapView_.camera = camera;
+    uListMapView_.settings.rotateGestures = NO;
+    uListMapView_.delegate = self;
+    */
     
     // create closeMap uibarbutton
     closeMap = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 30, 30, 30)];
@@ -143,6 +148,16 @@
     [self.tableView reloadData];
     self.loading = NO;
 }
+-(void)initializeMapWithFrame:(CGRect)frame withZoom:(CGFloat)zoom {
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:zoom];
+    uListMapView_ = [GMSMapView  mapWithFrame:frame camera:camera];
+    uListMapView_.myLocationEnabled = YES;
+    uListMapView_.camera = camera;
+    uListMapView_.settings.rotateGestures = NO;
+    uListMapView_.delegate = self;
+    [uListMapView_ animateToZoom:zoom];
+}
+
 /* return map to original state */
 -(void)shrinkMap:(id)sender {
     if (self.selectedRowIndex && self.selectedRowIndex.section == 0) {
@@ -154,14 +169,22 @@
             [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
         } @catch (NSException *exception){}
         
+        /*
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:13];
         uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 120) camera:camera];
+        uListMapView_.settings.rotateGestures = NO;
+        uListMapView_.delegate = self;
+        */
+        [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
         [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
-        
+         
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.selectedRowIndex.row inSection:self.selectedRowIndex.section]] withRowAnimation:UITableViewRowAnimationFade];
         
         /* reset when we close the map view */
         self.selectedRowIndex = nil;
+        
+        // turn scrolling back on
+        self.tableView.scrollEnabled = YES;
         [self.tableView endUpdates];
     }
 }
@@ -225,11 +248,14 @@
         if (selectedRowIndex && selectedRowIndex.row == indexPath.row) {
             cell.frame = CGRectMake(0, 0, 320, 460);
             
-            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 120, 320, 1)];
+            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 460, 320, 1)];
             bottomLine.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.25];
             [bottomLine.layer setShadowOffset:CGSizeMake(2.0f, 2.0f)];
             [bottomLine.layer setShadowColor:[[UIColor whiteColor] CGColor]];
             [bottomLine.layer setShadowOpacity:0.5];
+            
+            // add markers to map
+            
         }
         else {
             cell.frame = CGRectMake(0, 0, 320, 120);
@@ -275,9 +301,16 @@
                 GMSMarker *marker = [[GMSMarker alloc] init];
                 marker.position = CLLocationCoordinate2DMake([list.location.latitude doubleValue], [list.location.longitude doubleValue]);
                 marker.animated = YES;
+                marker.tappable = YES;
                 marker.title = list.title;
                 marker.snippet = list.shortDescription;
+                marker.userData = indexPath; // use this property to store listing data
                 marker.map = uListMapView_;
+            
+                // add map marker to list if it doesn't already exist
+                if (![mapMarkerList containsObject:marker])
+                    [mapMarkerList addObject:marker];
+                
                 return cell;
             } else {
                 // The currently requested cell is the last cell.
@@ -345,16 +378,46 @@
             [self.uListMapView_ removeObserver:self forKeyPath:@"myLocation"];
         } @catch (NSException *exception){}
         
+        /*
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.school.latitude doubleValue]                                                            longitude:[self.school.longitude doubleValue] zoom:14];
         uListMapView_ = [GMSMapView  mapWithFrame: CGRectMake(0, 0, 320, 460) camera:camera];
+        uListMapView_.settings.rotateGestures = NO;
+        uListMapView_.delegate = self;
+        */
+        [self initializeMapWithFrame:CGRectMake(0, 0, 320, 460) withZoom:14];
         [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
+        
+        // add markers for all listings in searchofresultset array
+        int listCounter = 0;
+        for (id listing in self.searchResultOfSets) {
+            if (![mapMarkerList containsObject:(Listing*)listing]) {
+                // Creates a marker at the listing location (if available)
+                GMSMarker *marker = [[GMSMarker alloc] init];
+                marker.position = CLLocationCoordinate2DMake([((Listing*)listing).location.latitude doubleValue], [((Listing*)listing).location.longitude doubleValue]);
+                marker.animated = YES;
+                marker.tappable = YES;
+                marker.title = ((Listing*)listing).title;
+                marker.snippet = ((Listing*)listing).shortDescription;
+                marker.userData = [NSIndexPath indexPathForRow:listCounter inSection:1];
+                //marker.userData = (Listing*)listing; // use this property to store listing data
+                marker.map = uListMapView_;
+                
+                [mapMarkerList addObject:marker];
+            }
+            listCounter++;
+        }
         
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         
+        // turn off scrolling
+        self.tableView.scrollEnabled = NO;
+        
         [tableView endUpdates];
-    } else {
-        UListListingCell *cell = (UListListingCell*)[tableView cellForRowAtIndexPath:indexPath];
-        [super performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:cell];
+    } else { // section 1
+        if (indexPath.row != (self.searchResultOfSets.count)) {
+            UListListingCell *cell = (UListListingCell*)[tableView cellForRowAtIndexPath:indexPath];
+            [super performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:cell];
+        }
     }
 }
 
@@ -376,10 +439,10 @@
     UIImageView *endListing = [[UIImageView alloc] initWithFrame:CGRectMake(0, 5, 320, 56)];
     endListing.contentMode = UIViewContentModeScaleAspectFit;
     endListing.image = [UIImage imageNamed:@"ulink_short_logo.png"];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [cell addSubview:endListing];
     return cell;
 }
-#pragma mark -
 
 #pragma mark - Refresh Header Code
 
@@ -493,6 +556,11 @@
     retries = 0;
    // noMoreResultsAvail = NO;
     [searchResultOfSets removeAllObjects];
+    
+    // remove all current map markers
+    [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
+    [mapMarkerList removeAllObjects];
+    
     NSString *query;
     if (self.queryType == kListingQueryTypeSearch) {
         // qt=s&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch&t=search_text
@@ -539,4 +607,42 @@
      
   }
 #pragma mark -
+
+#pragma mark - GMSMapViewDelegate (map view)
+
+// create our custom ui view when a marker is tapped
+- (UIView*) mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
+    //NSLog(@"creating custom marker view...");
+
+    UListListingCell *cell = (UListListingCell*)[self.tableView cellForRowAtIndexPath:(NSIndexPath*)marker.userData];
+    if (cell == nil) {
+        cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_SELECT_ULIST_LISTING_CELL];
+        Listing *list = (Listing*)[searchResultOfSets objectAtIndex:((NSIndexPath*)marker.userData).row];
+
+        MapOverlayView *overlay = [[MapOverlayView alloc] initWithListing:list withFrame:CGRectMake(0, -5, 225, 150)];
+        return overlay;
+    }
+    
+    // this will invoke the standard google item view to pop up
+    return nil;
+}
+
+// when user taps info window inside marker segue to detail view controller
+- (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker {
+    //NSLog(@"Did tap info window of marker");
+    UListListingCell *cell = (UListListingCell*)[self.tableView cellForRowAtIndexPath:(NSIndexPath*)marker.userData];
+    if (cell == nil) {
+        cell = [[UListListingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_SELECT_ULIST_LISTING_CELL];
+        Listing *list = (Listing*)[searchResultOfSets objectAtIndex:((NSIndexPath*)marker.userData).row];
+        ((UListListingCell*)cell).uListListing = list;
+    }
+    [super performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:cell];
+}
+
+- (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
+    NSLog(@"Did tap gmsmapview marker");
+    return NO;
+}
+
+
 @end

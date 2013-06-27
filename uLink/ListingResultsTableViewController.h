@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "School.h"
-@interface ListingResultsTableViewController : UITableViewController
+@interface ListingResultsTableViewController : UITableViewController <GMSMapViewDelegate>
 {
     UIActivityIndicatorView *moreResultsSpinner;
     UIActivityIndicatorView *refreshSpinner;

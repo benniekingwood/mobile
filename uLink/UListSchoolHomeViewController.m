@@ -37,7 +37,7 @@
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
-    
+
     // add the "Search" button
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchViewController)];
     self.navigationItem.rightBarButtonItem = btnSearch;
