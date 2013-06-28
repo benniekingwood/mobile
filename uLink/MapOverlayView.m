@@ -98,7 +98,7 @@
 - (CGRect)overlayFrame {
 	CGRect overlayFrame;
     
-    NSLog(@"overlayframe: CGRectMake(2.0, %f, %f, %f)", targetPoint.y-pointerSize-overlaySize.height, overlaySize.width, overlaySize.height);
+    /*NSLog(@"overlayframe: CGRectMake(2.0, %f, %f, %f)", targetPoint.y-pointerSize-overlaySize.height, overlaySize.width, overlaySize.height);*/
     overlayFrame = CGRectMake(0, targetPoint.y-pointerSize-overlaySize.height, overlaySize.width, overlaySize.height);
 	
     return overlayFrame;
