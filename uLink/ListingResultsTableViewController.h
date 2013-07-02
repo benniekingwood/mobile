@@ -37,16 +37,6 @@
 @property (nonatomic) int retries;
 @property (nonatomic, strong) NSIndexPath *selectedRowIndex;
 
-/* pull down refresh */
-@property (nonatomic, strong) UIView *refreshHeaderView;
-@property (nonatomic, strong) UILabel *refreshLabel;
-@property (nonatomic, strong) UIImageView *refreshArrow;
-@property (nonatomic, strong) UIActivityIndicatorView *refreshSpinner;
-@property (nonatomic) NSString *textPull;
-@property (nonatomic) NSString *textRelease;
-@property (nonatomic) NSString *textLoading;
-
-- (void)setupStrings;
 - (void)addPullToRefreshHeader;
 - (void)startLoading;
 - (void)stopLoading;

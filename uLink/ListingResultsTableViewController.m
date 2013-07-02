@@ -14,6 +14,7 @@
 #import "UListListingCell.h"
 #import "ListingDetailViewController.h"
 #import "MapOverlayView.h"
+#import "ColorConverterUtil.h"
 #import <QuartzCore/QuartzCore.h>
 @interface ListingResultsTableViewController() {
     UIView *mapView;
@@ -33,7 +34,6 @@
 @implementation ListingResultsTableViewController
 @synthesize uListMapView_, selectedRowIndex;
 @synthesize searchResultOfSets, fetchBatch, loading, noMoreResultsAvail, retries;
-@synthesize textPull, textRelease, textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
 @synthesize moreResultsSpinner = _moreResultsSpinner;
 @synthesize initializeSpinner = _initializeSpinner;
 @synthesize searchText;
@@ -46,11 +46,10 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     loader = [[DataLoader alloc] init];
     mapMarkerList = [NSMutableArray arrayWithCapacity:ULIST_MAX_MAP_MARKERS];
-    [self setupStrings];
     [self addPullToRefreshHeader];
-    [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
+    [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT) withZoom:13];
     
-    /****** Setup Lazy Loading (Initial) **********/
+    /* Setup Lazy Loading (Initial) */
     fetchBatch = 0;
     retries = 0;
     searchResultOfSets = [[NSMutableArray alloc] init];
@@ -165,7 +164,7 @@
         } @catch (NSException *exception){}
         
         // bring map back to its original state
-        [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
+        [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT) withZoom:13];
         [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
          
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.selectedRowIndex.row inSection:self.selectedRowIndex.section]] withRowAnimation:UITableViewRowAnimationFade];
@@ -225,7 +224,7 @@
         } @catch (NSException *exception){}
         
         
-        [self initializeMapWithFrame:CGRectMake(0, 0, 320, 460) withZoom:14];
+        [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, self.view.frame.size.height) withZoom:14];
         [self.uListMapView_ addObserver:self forKeyPath:@"myLocation" options:NSKeyValueObservingOptionNew context: nil];
         
         // add markers for all listings in searchofresultset array
@@ -254,6 +253,8 @@
         // turn off scrolling
         self.tableView.scrollEnabled = NO;
         [uListMapView_.settings setAllGesturesEnabled:YES];
+        [uListMapView_.settings setRotateGestures:NO];
+        [uListMapView_.settings setMyLocationButton:YES];
         isMapExpanded = YES;
         
         [self.tableView endUpdates];
@@ -310,9 +311,8 @@
         
         // add google maps to cell view
         if (selectedRowIndex && selectedRowIndex.row == indexPath.row) {
-            cell.frame = CGRectMake(0, 0, 320, 460);
-            
-            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 460, 320, 1)];
+            cell.frame = CGRectMake(0, 0, SCREEN_WIDTH, self.view.frame.size.height);
+            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, SCREEN_WIDTH, 1)];
             bottomLine.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.25];
             [bottomLine.layer setShadowOffset:CGSizeMake(2.0f, 2.0f)];
             [bottomLine.layer setShadowColor:[[UIColor whiteColor] CGColor]];
@@ -322,9 +322,9 @@
             
         }
         else {
-            cell.frame = CGRectMake(0, 0, 320, 120);
+            cell.frame = CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT);
             
-            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 120, 320, 1)];
+            bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, MAP_SMALL_HEIGHT, SCREEN_WIDTH, 1)];
             bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
             [bottomLine.layer setShadowOffset:CGSizeMake(2.0f, 2.0f)];
             [bottomLine.layer setShadowColor:[[UIColor blackColor] CGColor]];
@@ -413,17 +413,17 @@
     int section = [indexPath section];
     if (section == 0) {
         if (self.selectedRowIndex && self.selectedRowIndex.row == indexPath.row)
-            return 460.0; // 480 = full screen
+            return self.view.frame.size.height; // 480 = full screen
         else
-            return 120.0;
+            return MAP_SMALL_HEIGHT;
     } else {
         /* grab the type of listing to determine the height of the row  */
         if (indexPath.row < searchResultOfSets.count) {
             Listing *list = (Listing*)[searchResultOfSets objectAtIndex:indexPath.row];
             if ([list.type isEqualToString:@"highlight"]) {
-                return 285.0;
+                return ULIST_HIGHLIGHT_HEIGHT;
             } else {
-                return 140.0;
+                return ULIST_LISTING_HEIGHT;
             }
         }
         
@@ -472,85 +472,21 @@
 
 #pragma mark - Refresh Header Code
 
-- (void)setupStrings{
-    self.textPull = @"Pull down to update...";
-    self.textRelease = @"Release to update...";
-    self.textLoading = @"Updating...";
-}
-
 - (void)addPullToRefreshHeader {
-    refreshHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - REFRESH_HEADER_HEIGHT, 320, REFRESH_HEADER_HEIGHT)];
-    refreshHeaderView.backgroundColor = [UIColor clearColor];
+    /* add iOS6 refresh control */
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [UIColor grayColor];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    [refreshControl addTarget:self action:@selector(startLoading) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
     
-    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 270, REFRESH_HEADER_HEIGHT)];
-    refreshLabel.backgroundColor = [UIColor clearColor];
-    refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    refreshLabel.textAlignment = NSTextAlignmentLeft;
-    
-    refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"todo_add_an_arrow.png"]];
-    refreshArrow.frame = CGRectMake(floorf((REFRESH_HEADER_HEIGHT - 27) / 2),
-                                    (floorf(REFRESH_HEADER_HEIGHT - 44) / 2),
-                                    27, 44);
-    
-    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    refreshSpinner.frame = CGRectMake(floorf(floorf(REFRESH_HEADER_HEIGHT - 20) / 2), floorf((REFRESH_HEADER_HEIGHT - 20) / 2), 20, 20);
-    refreshSpinner.hidesWhenStopped = YES;
-    
-    [refreshHeaderView addSubview:refreshLabel];
-    [refreshHeaderView addSubview:refreshArrow];
-    [refreshHeaderView addSubview:refreshSpinner];
-    [self.tableView addSubview:refreshHeaderView];
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (isLoading || loading) return;
-    isDragging = YES;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (isLoading) {
-        // Update the content inset, good for section headers
-        if (scrollView.contentOffset.y > 0)
-            self.tableView.contentInset = UIEdgeInsetsZero;
-        else if (scrollView.contentOffset.y >= -REFRESH_HEADER_HEIGHT)
-            self.tableView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
-    } else if (isDragging && scrollView.contentOffset.y < 0) {
-        // Update the arrow direction and label
-        [UIView animateWithDuration:0.25 animations:^{
-            if (scrollView.contentOffset.y < -REFRESH_HEADER_HEIGHT) {
-                // User is scrolling above the header
-                refreshLabel.text = self.textRelease;
-                [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
-            } else {
-                // User is scrolling somewhere within the header
-                refreshLabel.text = self.textPull;
-                [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
-            }
-        }];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (isLoading) return;
-    isDragging = NO;
-    if (scrollView.contentOffset.y <= -REFRESH_HEADER_HEIGHT) {
-        // Released above the header
-        [self startLoading];
-    }
 }
 
 - (void)startLoading {
     NSLog(@"Refreshing from the pull down on the the header...");
     
     isLoading = YES;
-    
-    // Show the header
-    [UIView animateWithDuration:0.3 animations:^{
-        self.tableView.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
-        refreshLabel.text = self.textLoading;
-        refreshArrow.hidden = YES;
-        [refreshSpinner startAnimating];
-    }];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing listings..."];
     
     // Refresh action!
     [self loadListings:NOTIFICATION_LISTING_RESULTS_TABLEVIEW_CONTROLLER];
@@ -558,33 +494,37 @@
 
 - (void)stopLoading {
     isLoading = NO;
-    
-    // Hide the header
-    [UIView animateWithDuration:0.3 animations:^{
-        self.tableView.contentInset = UIEdgeInsetsZero;
-        [refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
-    }
-                     completion:^(BOOL finished) {
-                         [self performSelector:@selector(stopLoadingComplete)];
-                     }];
+    [self stopLoadingComplete];
 }
 
 - (void)stopLoadingComplete {
-    // Reset the header
-    refreshLabel.text = self.textPull;
-    refreshArrow.hidden = NO;
-    [refreshSpinner stopAnimating];
+    // show when data was last updated?
+    // Leave commented out for now (keep code clean)
+    //NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    //[formatter setDateFormat:@"MMM d, h:mm a"];
+    //NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",
+    //[formatter stringFromDate:[NSDate date]]];
+    
+    // tell refresh control that loading has ended
+    [UIView animateWithDuration:1.0 animations:^{
+        [self.refreshControl endRefreshing];
+    }];
+    
+    // reset the attributed title to pull to refresh
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"]; 
+   
+    
 }
 
 - (void) loadListings:(NSString*)notificationHandler {
     // let's refresh all of our listings
     fetchBatch = 0;
     retries = 0;
-   // noMoreResultsAvail = NO;
+    //noMoreResultsAvail = NO;
     [searchResultOfSets removeAllObjects];
     
     // remove all current map markers
-    [self initializeMapWithFrame:CGRectMake(0, 0, 320, 120) withZoom:13];
+    [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT) withZoom:13];
     [mapMarkerList removeAllObjects];
     
     NSString *query;

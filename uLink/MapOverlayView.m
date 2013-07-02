@@ -45,10 +45,10 @@
         
 		self.titleFont = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14.0];
         self.titleColor = [UIColor blackColor];
-        self.titleAlignment = NSTextAlignmentCenter;
+        self.titleAlignment = NSTextAlignmentLeft;
 		self.textFont = [UIFont fontWithName:FONT_GLOBAL size:12.0];
 		self.textColor = [UIColor whiteColor];
-		self.textAlignment = NSTextAlignmentCenter;
+		self.textAlignment = NSTextAlignmentLeft;
 		self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         self.borderColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         
@@ -62,6 +62,20 @@
 
 - (id)initWithListing:(Listing*)listing withFrame:(CGRect)frame
 {
+    /* determine frame height */
+    CGSize titleSize = [listing.title sizeWithFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:14.0] constrainedToSize:CGSizeMake(frame.size.width, frame.size.height) lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    CGSize sdSize = [listing.shortDescription sizeWithFont:[UIFont fontWithName:FONT_GLOBAL size:12.0] constrainedToSize:CGSizeMake(frame.size.width, frame.size.height) lineBreakMode:NSLineBreakByWordWrapping ];
+    
+    CGFloat txtHeight = titleSize.height + sdSize.height;
+    //NSLog(@"text height total: %f", txtHeight);
+    
+    if (txtHeight < frame.size.height) {
+        frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, txtHeight+14.0+10.0);
+    }
+    
+    //NSLog(@"frame: %f", frame.size.height);
+    
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -69,23 +83,26 @@
         
 		cornerRadius = 4.0;
 		topMargin = 2.0;
-		pointerSize = 12.0;
+		pointerSize = 10.0;
 		sidePadding = 2.0;
         borderWidth = 2.0;
         spacer = 4.0;
         
         self.titleFont = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14.0];
         self.titleColor = [UIColor blackColor];
-        self.titleAlignment = NSTextAlignmentCenter;
+        self.titleAlignment = NSTextAlignmentLeft;
 		self.textFont = [UIFont fontWithName:FONT_GLOBAL size:12.0];
 		self.textColor = [UIColor blackColor];
-		self.textAlignment = NSTextAlignmentCenter;
+		self.textAlignment = NSTextAlignmentLeft;
 		self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         self.borderColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         
+        /* set up overlay */
         overlaySize = CGSizeMake(frame.size.width, frame.size.height-(pointerSize+topMargin+borderWidth));
         
         CGFloat fullHeight = overlaySize.height + pointerSize + 4.0;
+        
+        /* set target point: this will start at the tip of the point */
         targetPoint = CGPointMake(overlaySize.width/2, fullHeight-2.0);
         
         // set up listing joints

@@ -41,11 +41,11 @@
         UIView *bgView2 = [[UIView alloc] initWithFrame:CGRectMake(5, 10, 310, 265)];
         bgView2.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1.0];
         bgView2.layer.borderColor = [[UIColor colorWithRed:0.95 green:0.94 blue:0.93 alpha:1.0] CGColor];
-        bgView2.layer.borderWidth = 0.75f;
+        bgView2.layer.borderWidth = 0.5f;
         bgView2.layer.cornerRadius = 5;
-        [bgView2.layer setShadowOffset:CGSizeMake(.25f, .25f)];
+        [bgView2.layer setShadowOffset:CGSizeMake(0,0)];
         [bgView2.layer setShadowColor:[[UIColor blackColor] CGColor]];
-        [bgView2.layer setShadowOpacity:0.25];
+        [bgView2.layer setShadowOpacity:0.15];
         
         /* highlight listing header */
         UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 304, 40)];
@@ -99,20 +99,23 @@
         
         /* create view for listing actions (will include instant reply, etc.) */
         UIView *listingActions = [[UIView alloc] initWithFrame:CGRectMake(0, 230, 310, 36)];
-        listingActions.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
+        //listingActions.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
+        listingActions.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1.0];;
         listingActions.layer.masksToBounds = YES;
-        listingActions.layer.borderWidth = 2.0f;
+        listingActions.layer.borderWidth = 0.0f;
+        listingActions.layer.cornerRadius = 5;
         listingActions.layer.borderColor = [[UIColor whiteColor] CGColor];
         listingActions.layer.opacity = ALPHA_LOW;
         
         /* add reply to button */
         UIButton *replyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         replyBtn.layer.masksToBounds = YES;
-        replyBtn.layer.borderWidth = 2.0f;
+        replyBtn.layer.borderWidth = 4.0f;
+        replyBtn.layer.cornerRadius = 5;
         replyBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
         replyBtn.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12.0f];
         replyBtn.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
-        [replyBtn setFrame:CGRectMake(0, 0, 304, 36)];
+        [replyBtn setFrame:CGRectMake(0, 0, 310, 36)];
         [replyBtn setTitle:BTN_REPLY forState:UIControlStateNormal];
         [replyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [replyBtn setImage:[UIImage imageNamed:@"options.png"] forState:UIControlStateNormal];
@@ -153,9 +156,9 @@
         //listView.layer.masksToBounds = YES;
         listView.layer.borderColor = [[UIColor colorWithRed:0.95 green:0.94 blue:0.93 alpha:1.0] CGColor];
         listView.layer.borderWidth = 0.5f;
-        [listView.layer setShadowOffset:CGSizeMake(.25f, .25f)];
+        [listView.layer setShadowOffset:CGSizeMake(0,0)];
         [listView.layer setShadowColor:[[UIColor blackColor] CGColor]];
-        [listView.layer setShadowOpacity:.25];
+        [listView.layer setShadowOpacity:0.15];
         
         /* highlight listing header */
         UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 310, 20)];
@@ -196,16 +199,19 @@
 
         /* create view for listing actions (will include instant reply, etc.) */
         UIView *listingActions = [[UIView alloc] initWithFrame:CGRectMake(0, 85, 310, 36)];
-        listingActions.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
+        //listingActions.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
+        listingActions.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1.0];
         listingActions.layer.masksToBounds = YES;
         listingActions.layer.borderWidth = 2.0f;
+        listingActions.layer.cornerRadius = 5;
         listingActions.layer.borderColor = [[UIColor whiteColor] CGColor];
         listingActions.layer.opacity = ALPHA_LOW;
         
         /* add reply to button */
         UIButton *replyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         replyBtn.layer.masksToBounds = YES;
-        replyBtn.layer.borderWidth = 2.0f;
+        replyBtn.layer.borderWidth = 4.0f;
+        replyBtn.layer.cornerRadius = 5;
         replyBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
         replyBtn.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12.0f];
         replyBtn.backgroundColor = [UIColor colorWithHexString:@"#D8D8D8"];
