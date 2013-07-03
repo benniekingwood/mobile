@@ -7,16 +7,16 @@
 //
 
 #import "AddListingViewController.h"
+#import "AppMacros.h"
 
-@interface AddListingViewController ()
-
+@interface AddListingViewController () 
 @end
 
 @implementation AddListingViewController
 @synthesize mainCategory, subCategory;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
     }
@@ -26,9 +26,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    self.navigationItem.title = @"Add Listing";
-    NSLog(@"%@, %@", self.mainCategory, self.subCategory);
+    // create the basic info table
+    self.tableView.backgroundColor = [UIColor blackColor];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -37,4 +38,6 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)nextClick:(id)sender {
+}
 @end

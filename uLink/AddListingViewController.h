@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddListingViewController : UIViewController
+@interface AddListingViewController : UITableViewController
 @property (nonatomic) NSString *mainCategory;
 @property (nonatomic) NSString *subCategory;
+- (IBAction)nextClick:(id)sender;
 @end
