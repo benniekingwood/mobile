@@ -13,6 +13,7 @@
     UIButton *closeButton;
     UIView *parentView;
     UIView *mainView;
+    UIColor *defaultBgColor;
 }
 - (void) initialize;
 @end
@@ -22,14 +23,24 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        defaultBgColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
+        [self initialize];
+    }
+    return self;
+}
+- (id)initWithBackgroundColor:(UIColor*)backgroundColor frame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        defaultBgColor = backgroundColor;
         [self initialize];
     }
     return self;
 }
 - (void) initialize {
     mainView = [[UIView alloc] initWithFrame:self.frame];
-    mainView.backgroundColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
+    mainView.backgroundColor = defaultBgColor;
+
     CGRect frame = self.frame;
     frame.origin.x = 5;
     frame.origin.y = 5;

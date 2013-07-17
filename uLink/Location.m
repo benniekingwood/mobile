@@ -9,5 +9,5 @@
 #import "Location.h"
 
 @implementation Location
-@synthesize address1, address2, street, city, state, zip, latitude, longitude;
+@synthesize address1, address2, street, city, state, zip, latitude, longitude, discloseLocation;
 @end

@@ -19,7 +19,7 @@
 @end
 
 @implementation AddListingSelectCategoryTableViewController
-
+@synthesize dismissImmediately;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -32,6 +32,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // this will be set when a user submits a listing.  We will dismiss here right away
+    if(self.dismissImmediately) {
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -42,6 +46,7 @@
          [UDataCache hydrateUListCategoryCache];
         [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(reloadTableData) userInfo:nil repeats:NO];
     }
+    NSLog(@"view did load.");
 }
 
 - (void)didReceiveMemoryWarning
@@ -50,7 +55,6 @@
     // Dispose of any resources that can be recreated.
 }
 - (void) reloadTableData {
-    NSLog(@"reloading data.");
     [self.tableView reloadData];
 }
 #pragma mark - Table view data source
@@ -114,19 +118,6 @@
     UIView *view = nil;
     view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
     return view;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-   // UListMenuCell *selectedCell = (UListMenuCell*)[tableView cellForRowAtIndexPath:indexPath];
-   // [self performSegueWithIdentifier:SEGUE_SHOW_ADD_LISTING_VIEW_CONTROLLER sender:selectedCell];
 }
 #pragma mark -
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

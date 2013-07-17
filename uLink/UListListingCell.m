@@ -55,7 +55,7 @@
         created.backgroundColor = [UIColor clearColor];
         created.text = [dateFormatter stringFromDate:uListListing.created];
         created.textColor = [UIColor blackColor];
-        created.font = [UIFont fontWithName:FONT_GLOBAL size:12.0];
+        created.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12.0];
         created.textAlignment = NSTextAlignmentRight;
         
         /* add labels to header */
@@ -70,7 +70,6 @@
         listView.layer.masksToBounds = YES;
         listView.layer.borderWidth = 1.0f;
         listView.layer.borderColor = [[UIColor blackColor] CGColor];
-        listView.backgroundColor = [UIColor yellowColor];
         
         /* add alpha black background to list view */
         UIView *listDetailBG = [[UIView alloc] initWithFrame:CGRectMake(0, 150, 310, 55)];

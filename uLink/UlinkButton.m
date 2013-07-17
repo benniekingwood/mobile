@@ -8,6 +8,7 @@
 
 #import "UlinkButton.h"
 #import <QuartzCore/QuartzCore.h>
+
 @interface UlinkButton ()
 -(void) removeHighlight;
 -(void) applyDefaultWhiteFontAttrs:(UlinkButton*)btn;
@@ -15,9 +16,11 @@
 -(void) applyDefaultBlackSmallFontAttrs:(UlinkButton*)btn;
 -(void) applyDefaultBlackFontAttrs:(UlinkButton*)btn;
 -(void) buildOrangeButton:(UlinkButton*)btn;
--(void) buildDefaultButton:(UlinkButton*)btn;
+-(void) buildDefaultButton:(UlinkButton*)btn type:(int)type;
 @end
 @implementation UlinkButton : UIButton
+const int kDefaultButtonTypeRegular = 1;
+const int kDefaultButtonTypeSmall = 2;
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame])
@@ -87,9 +90,9 @@
     [btn setBackgroundColor:[UIColor clearColor]];
     
     // Add Custom Font settings
-    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL size:16.0f]];
-    [[btn titleLabel] setShadowColor:[UIColor blackColor]];
-    [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
+    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:16.0f]];
+   // [[btn titleLabel] setShadowColor:[UIColor blackColor]];
+   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultWhiteSmallFontAttrs:(UlinkButton*)btn {
@@ -100,9 +103,9 @@
     [btn setBackgroundColor:[UIColor clearColor]];
     
     // Add Custom Font settings
-    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL size:13.0f]];
-    [[btn titleLabel] setShadowColor:[UIColor blackColor]];
-    [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
+    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:13.0f]];
+   // [[btn titleLabel] setShadowColor:[UIColor blackColor]];
+   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultBlackFontAttrs:(UlinkButton*)btn {
@@ -113,9 +116,9 @@
     [btn setBackgroundColor:[UIColor clearColor]];
     
     // Add Custom Font settings
-    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL size:16.0f]];
-    [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
-    [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
+    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:16.0f]];
+  //  [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
+  //  [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultBlackSmallFontAttrs:(UlinkButton*)btn {
@@ -126,9 +129,9 @@
     [btn setBackgroundColor:[UIColor clearColor]];
     
     // Add Custom Font settings
-    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL size:13.0f]];
-    [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
-    [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
+    [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:13.0f]];
+   // [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
+   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 - (void) buildOrangeButton:(UlinkButton*)btn {
     // Draw a custom gradient
@@ -201,7 +204,12 @@
     [btnLayer setBorderWidth:0.2f];
     [btnLayer setBorderColor:[[UIColor redColor] CGColor]];
 }
-- (void)buildDefaultButton:(UlinkButton*)btn {
+- (void)buildDefaultButton:(UlinkButton*)btn type:(int)type {
+    if(type == kDefaultButtonTypeRegular) {
+        [self applyDefaultBlackFontAttrs:btn];
+    } else if (type == kDefaultButtonTypeSmall) {
+        [self applyDefaultBlackSmallFontAttrs:btn];
+    }
     // Draw a custom gradient
     CAGradientLayer *btnGradient = [CAGradientLayer layer];
     btnGradient.frame = btn.bounds;
@@ -209,8 +217,7 @@
                           (id)[[UIColor colorWithRed:250.0f / 255.0f green:250.0f / 255.0f blue:250.0f / 255.0f alpha:1.0f] CGColor],
                           (id)[[UIColor colorWithRed:230.0f / 255.0f green:230.0f / 255.0f blue:230.0f / 255.0f alpha:1.0f] CGColor],
                           nil];
-    [btn.layer addSublayer:btnGradient];
-    //[btn.layer insertSublayer:btnGradient atIndex:btn.layer.sublayers.count];
+     [btn.layer insertSublayer:btnGradient atIndex:0];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
@@ -238,13 +245,11 @@
    // [btnLayer setBorderColor:[[UIColor darkGrayColor] CGColor]];
 }
 - (void) createDefaultButton:(UlinkButton*)btn {
-    [self applyDefaultBlackFontAttrs:btn];
-    [self buildDefaultButton:btn];
+    [self buildDefaultButton:btn type:kDefaultButtonTypeRegular];
 }
 
 - (void) createDefaultSmallButton:(UlinkButton*)btn {
-    [self applyDefaultBlackSmallFontAttrs:btn];
-    [self buildDefaultButton:btn];
+    [self buildDefaultButton:btn type:kDefaultButtonTypeSmall];
 }
 
 - (void)dealloc

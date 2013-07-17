@@ -974,7 +974,6 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         listing.schoolId = [[(NSString*)object valueForKey:@"school_id"] intValue];
         listing.title = [(NSString*)object valueForKey:@"title"];
         listing.username = [(NSString*)object valueForKey:@"username"];
-        listing.email = [(NSString*)object valueForKey:@"email"];
         listing.type = [(NSString*)object valueForKey:@"type"];
         listing.listDescription = [(NSString*)object valueForKey:@"description"];
         listing.mainCategory = [(NSString*)object valueForKey:@"main_category"];
@@ -1003,6 +1002,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         loc.zip = EMPTY_STRING;
         loc.city = EMPTY_STRING;
         loc.state = EMPTY_STRING;
+        loc.discloseLocation = EMPTY_STRING;
         if (listingLocation)
         {
             for (id object in listingLocation) {
@@ -1019,6 +1019,8 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
                         loc.city = [listingLocation valueForKey:(NSString*)object];
                     if ([(NSString*)object isEqualToString:@"state"])
                         loc.state = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"discloseLocation"])
+                        loc.discloseLocation = [listingLocation valueForKey:(NSString*)object];
                 }
                 @catch (NSException *exception) {}
             }
@@ -1029,13 +1031,12 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         listing.tags = [(NSArray*)object valueForKey:@"tags"];
         
         // meta
-        // TODO: figure out how to store meta data
+        // TODO: Meta is a dictionary we need to store it that way
+        listing.meta = [(NSArray*)object valueForKey:@"meta"];
         
         // image_urls
         listing.imageUrls = [(NSArray*)object valueForKey:@"image_urls"];
         
-        // files
-        listing.files = [(NSArray*)object valueForKey:@"file"];
         
         // add listing to listings array
         if(forSessionUser) {[self.sessionUser.listings addObject:listing];}

@@ -216,6 +216,13 @@
 #define SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER @"ShowListingDetailViewController"
 #define SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER @"ShowListingSearchViewController"
 #define SEGUE_SHOW_ADD_LISTING_VIEW_CONTROLLER @"ShowAddListingViewController"
+#define SEGUE_SHOW_ADD_LISTING_TEXT_VIEW_CONTROLLER @"ShowAddListingTextViewController"
+#define SEGUE_SHOW_ADD_LISTING_TEXT_VIEW_CONTROLLER_2 @"ShowAddListingTextViewController_2"
+#define SEGUE_SHOW_ADD_LISTING_TEXT_VIEW_CONTROLLER_3 @"ShowAddListingTextViewController_3"
+#define SEGUE_SHOW_ADD_LISTING_TEXT_VIEW_CONTROLLER_4 @"ShowAddListingTextViewController_4"
+#define SEGUE_SHOW_ADD_LISTING_LOCATION_VIEW_CONTROLLER @"ShowAddListingLocationViewController"
+#define SEGUE_SHOW_ADD_LISTING_ADDON_VIEW_CONTROLLER @"ShowAddListingAddOnViewController"
+#define SEGUE_SHOW_ADD_LISTING_PHOTO_VIEW_CONTROLLER @"ShowAddListingPhotoViewController"
 
 #pragma mark EMBEDDED SEGUES
 #define SEGUE_LISTING_RESULTS_VIEW_CONTROLLER_EMBED @"ListingResultsViewController_Embed"
@@ -305,8 +312,24 @@ typedef enum {
     kEventHydrationAll
 } EventHydrationType;
 
-#define mark ULIST CATEGORY CELL TYPE 
+#pragma mark ULIST CATEGORY CELL TYPE 
 typedef enum {
     kListingCategoryTypeLight = 400,
     kListingCategoryTypeDark
 } ListingCategoryCellType;
+
+#pragma mark ULIST ADD LISTING TEXT MODE
+typedef enum {
+    kAddListingTextModeTitle = 500,
+    kAddListingTextModePrice,
+    kAddListingTextModeDescription,
+    kAddListingTextModeTags
+} AddListingTextMode;
+
+#pragma mark ULIST ADD LISTING LOCATIONS
+typedef enum {
+    kAddListingLocationAddress= 550,
+    kAddListingLocationCity,
+    kAddListingLocationState,
+    kAddListingLocationZip
+} AddListingLocation;

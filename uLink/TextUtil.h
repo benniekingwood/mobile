@@ -23,4 +23,5 @@ typedef enum  {
 - (NSString *) capitalizeString:(NSString*)text;
 - (PasswordStrength) evaluatePasswordStrength:(NSString*)password;
 - (BOOL) isDigitsOnly:(NSString*)text;
+- (NSString*) trimWhitespace:(NSString*)text;
 @end

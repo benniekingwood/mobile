@@ -22,14 +22,14 @@
 @property (nonatomic) NSString *shortDescription;
 @property (nonatomic) NSString *mainCategory;
 @property (nonatomic) NSString *category;
-@property (nonatomic) NSString *email;
 @property (nonatomic) double price;
 @property (strong, nonatomic) Location *location;
 @property (strong, nonatomic) NSMutableArray *imageUrls;
+@property (strong, nonatomic) NSMutableArray *images;
 @property (strong, nonatomic) NSMutableArray *tags;
-@property (strong, nonatomic) NSMutableArray *meta;
-@property (strong, nonatomic) NSMutableArray *files;
+@property (strong, nonatomic) NSMutableDictionary *meta;
 @property (nonatomic) NSDate *created;
 @property (nonatomic) NSDate *expires;
 @property (nonatomic) NSDate *cacheAge;
+- (NSString*) getJSON;
 @end

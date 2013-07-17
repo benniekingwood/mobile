@@ -17,4 +17,5 @@
 @property (nonatomic) NSString* zip;
 @property (nonatomic) NSString* latitude;
 @property (nonatomic) NSString* longitude;
+@property (nonatomic) NSString* discloseLocation;
 @end

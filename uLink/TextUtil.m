@@ -130,4 +130,8 @@
     }
     return retVal;
 }
+- (NSString*) trimWhitespace:(NSString *)text {
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    return [text stringByTrimmingCharactersInSet:whitespace];
+}
 @end

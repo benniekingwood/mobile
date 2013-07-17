@@ -10,5 +10,5 @@
 
 @interface AddListingSelectCategoryTableViewController : UITableViewController
 - (IBAction)cancelClick:(UIBarButtonItem *)sender;
-
+@property (nonatomic) BOOL dismissImmediately;
 @end
