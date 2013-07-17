@@ -7,6 +7,8 @@
 //
 
 #import "Listing.h"
+#import "Base64.h"
+#import "ImageUtil.h"
 
 @implementation Listing
 @synthesize _id, userId, schoolId, title, type, mainCategory, category, location, imageUrls, tags, meta, created, listDescription, shortDescription, replyTo, expires, price, username;
@@ -124,7 +126,18 @@
     json = [json stringByAppendingString:[df stringFromDate:expireDate]];
     json = [json stringByAppendingString:@"\""];
     
-    // build the location
+    // build the location for the JSON
+    json = [self buildLocationJSON:json];
+    // set the images on the JSON
+    json = [self buildImageJSON:json];
+    // set the tags on the JSON 
+    json = [self buildTagsJSON:json];
+    // set the meta data on the JSON
+    json = [self buildMetaJSON:json];
+    return json;
+}
+
+- (NSString*) buildLocationJSON:(NSString*)json {
     if(self.location != nil) {
         json = [json stringByAppendingString:@",\"location\": {"];
         
@@ -170,27 +183,9 @@
         json = [json stringByAppendingString:@"\""];
         json = [json stringByAppendingString:@"}"];
     }
-
-    // TODO: add image data
-   /// image_urls: [
-    //             "http://amazon.thethe.com",
-     //            "http://amazon.thethe.com"
-     //            ],
-    
-    if(self.tags != nil) {
-        json = [json stringByAppendingString:@",\"tags\": ["];
-        for (int y=0; y<[self.tags count]; y++) {
-            if(y > 0) {
-                json = [json stringByAppendingString:@","];
-            }
-            json = [json stringByAppendingString:@"\""];
-            json = [json stringByAppendingString:[self.tags objectAtIndex:y]];
-            json = [json stringByAppendingString:@"\""];
-        }
-        json = [json stringByAppendingString:@"]"];
-    }
-    
-    // set the meta data on the form
+    return json;
+}
+- (NSString*) buildMetaJSON:(NSString*)json {
     if(self.meta != nil) {
         json = [json stringByAppendingString:@",\"meta\": {"];
         BOOL firstItem = TRUE;
@@ -210,8 +205,43 @@
         }
         json = [json stringByAppendingString:@"}"];
     }
-
+    
     json = [json stringByAppendingString:@"}"];
+    return json;
+}
+
+- (NSString*) buildImageJSON:(NSString*)json {
+    if(self.images != nil) {
+        [Base64 initialize];
+        json = [json stringByAppendingString:@",\"images\": ["];
+        // iterate over the images creating base64 strings for each image
+        for (int x=0; x < [self.images count]; x++) {
+            NSData *imageData = [UImageUtil compressImageToData:[self.images objectAtIndex:x]];
+            if(x > 0) {
+                json = [json stringByAppendingString:@","];
+            }
+            json = [json stringByAppendingString:@"\""];
+            json = [json stringByAppendingString:[Base64 encode:imageData]];
+            json = [json stringByAppendingString:@"\""];
+        }
+        json = [json stringByAppendingString:@"]"];
+    }
+    return json;
+}
+
+- (NSString*) buildTagsJSON:(NSString*)json {
+    if(self.tags != nil) {
+        json = [json stringByAppendingString:@",\"tags\": ["];
+        for (int y=0; y<[self.tags count]; y++) {
+            if(y > 0) {
+                json = [json stringByAppendingString:@","];
+            }
+            json = [json stringByAppendingString:@"\""];
+            json = [json stringByAppendingString:[self.tags objectAtIndex:y]];
+            json = [json stringByAppendingString:@"\""];
+        }
+        json = [json stringByAppendingString:@"]"];
+    }
     return json;
 }
 @end

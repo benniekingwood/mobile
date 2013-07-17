@@ -349,12 +349,12 @@
     self.listing.type = @"bold";
 }
 -(void) regularButtonClick {
-    self.listing.type = @"regular";
-    NSString *listingJSON = [self.listing getJSON];
-    NSLog(@"%@", listingJSON);
- 
     @try {
+        self.view.userInteractionEnabled = NO;
         [activityIndicator showActivityIndicator:self.view];
+        self.listing.type = @"regular";
+        
+        NSString *listingJSON = [self.listing getJSON];
         regularButton.enabled = FALSE;
         highlightButton.enabled = FALSE;
         boldButton.enabled = FALSE;
@@ -379,9 +379,7 @@
                         NSDictionary* json = [NSJSONSerialization
                                               JSONObjectWithData:data
                                               options:kNilOptions
-                                              error:&err];
-                        NSLog(@"%@", json);
- 
+                                              error:&err]; 
                         if(((NSHTTPURLResponse*)response).statusCode == 200) {
                             // TODO: update the user's session listings
                             // move the success view to the front and show it
@@ -394,6 +392,7 @@
                             // clear the titles
                             self.navigationItem.title = EMPTY_STRING;
                         } else {
+                            self.view.userInteractionEnabled = YES;
                             regularButton.enabled = TRUE;
                             highlightButton.enabled = TRUE;
                             boldButton.enabled = TRUE;
