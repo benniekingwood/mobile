@@ -16,7 +16,14 @@
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
+    CGFloat screenWidth;
+    CGFloat screenHeight;
+    BOOL isIPhone4;
 }
+- (void) buildCategorySection;
+- (void) buildRecentListingSection;
+- (void) buildTrendingTagsSection;
+- (void) categoryClick;
 @end
 
 @implementation UListSchoolHomeViewController
@@ -33,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor blackColor];
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
@@ -44,10 +52,139 @@
     // Activate side menu with uList 
     [UAppDelegate activateSideMenu:@"uList"];
     
+    // grab the dimensions of the screen
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    screenWidth = screenRect.size.width;
+    screenHeight = screenRect.size.height;
+    NSLog(@"%f", screenHeight);
+    isIPhone4 = screenHeight < 568;
+    
+    // build the "hot" or "featured" category section
+    [self buildCategorySection];
+    // build the recent listing section
+    [self buildRecentListingSection];
+    // build the trending tags section
+    [self buildTrendingTagsSection];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self updateView];
+}
+
+- (void) buildCategorySection {
+    // build main container button view
+    UIButton *categoryViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [categoryViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
+    categoryViewButton.backgroundColor = [UIColor darkGrayColor];
+    if(isIPhone4) {
+        categoryViewButton.frame = CGRectMake(0, 0, 320, 150);
+    } else {
+        categoryViewButton.frame = CGRectMake(0, 0, 320, 200);
+    }
+    // build header view
+    
+    UIView *categoryHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    categoryHeaderBg.backgroundColor = [UIColor orangeColor];
+    UILabel *categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
+    categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL size:14];
+    categoryHeader.backgroundColor = [UIColor clearColor];
+    categoryHeader.textColor = [UIColor whiteColor];
+    categoryHeader.textAlignment = NSTextAlignmentLeft;
+    // determine "Hot" or "Featured"
+    if(true) {
+        categoryHeader.text = @"Hot Category";
+    } else {
+        categoryHeader.text = @"Featured Category";
+    }
+    [categoryHeaderBg addSubview:categoryHeader];
+    
+    // build category name view label
+    UILabel *categoryName = [[UILabel alloc] init];
+    if(isIPhone4) {
+        categoryName.frame = CGRectMake(10,30,300,120);
+    } else {
+        categoryName.frame = CGRectMake(10,30,300,170);
+    }
+    categoryName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
+    categoryName.backgroundColor = [UIColor clearColor];
+    categoryName.textColor = [UIColor whiteColor];
+    categoryName.textAlignment = NSTextAlignmentCenter;
+    categoryName.text = @"TUTORS";
+    categoryName.numberOfLines = 3;
+    
+    [categoryViewButton addSubview:categoryHeaderBg];
+    [categoryViewButton addSubview:categoryName];
+    [self.view addSubview:categoryViewButton];
+    
+    // send request for categories
+
+}
+- (void) buildRecentListingSection {
+    // build main container button view
+    UIButton *listingViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [listingViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
+    listingViewButton.backgroundColor = [UIColor brownColor];
+    if(isIPhone4) {
+        listingViewButton.frame = CGRectMake(0, 150, 320, 150);
+    } else {
+        listingViewButton.frame = CGRectMake(0, 200, 320, 200);
+    }
+    // build header view
+    UIView *listingHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    listingHeaderBg.backgroundColor = [UIColor purpleColor];
+    UILabel *listingHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
+    listingHeader.font = [UIFont fontWithName:FONT_GLOBAL size:14];
+    listingHeader.backgroundColor = [UIColor clearColor];
+    listingHeader.textColor = [UIColor whiteColor];
+    listingHeader.textAlignment = NSTextAlignmentLeft;
+    listingHeader.text = @"Recent Listing";
+    [listingHeaderBg addSubview:listingHeader];
+    
+    // build category name view label
+    UILabel *listingName = [[UILabel alloc] init];
+    if(isIPhone4) {
+        listingName.frame = CGRectMake(10,30,300,120);
+    } else {
+        listingName.frame = CGRectMake(10,30,300,170);
+    }
+    listingName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
+    listingName.backgroundColor = [UIColor clearColor];
+    listingName.textColor = [UIColor whiteColor];
+    listingName.textAlignment = NSTextAlignmentCenter;
+    listingName.text = @"This is the listing title here";
+    listingName.numberOfLines = 3;
+    
+    [listingViewButton addSubview:listingHeaderBg];
+    [listingViewButton addSubview:listingName];
+    [self.view addSubview:listingViewButton];
+    
+}
+- (void) buildTrendingTagsSection {
+    UIView *trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
+    trendingBg.backgroundColor = [UIColor darkGrayColor];
+    
+    // Build the trending label
+    UILabel *trendingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,100,40)];
+    trendingLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
+    trendingLabel.backgroundColor = [UIColor clearColor];
+    trendingLabel.textColor = [UIColor whiteColor];
+    trendingLabel.textAlignment = NSTextAlignmentLeft;
+    trendingLabel.text = @"Trending";
+    
+    // build the tags label
+    UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0,50,40)];
+    tagsLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12];
+    tagsLabel.backgroundColor = [UIColor clearColor];
+    tagsLabel.textColor = [UIColor redColor];
+    tagsLabel.textAlignment = NSTextAlignmentLeft;
+    tagsLabel.text = @"Tags";
+    
+    [trendingBg addSubview:trendingLabel];
+    [trendingBg addSubview:tagsLabel];
+    [self.view addSubview:trendingBg];
+    
+    // retrieve trends 
 }
 
 - (void)updateView {
@@ -111,4 +248,9 @@
     }
 }
 
+#pragma mark Actions
+-(void) categoryClick {
+    
+}
+#pragma mark -
 @end

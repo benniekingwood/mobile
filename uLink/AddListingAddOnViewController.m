@@ -344,15 +344,21 @@
 #pragma mark Actions
 -(void) highlightButtonClick {
     self.listing.type = @"highlight";
+    // TODO: go to payment controller where they select 3 or 7 days and we set meta there
 }
 -(void) boldButtonClick {
     self.listing.type = @"bold";
+     // TODO: go to payment controller where they pay and we set meta there
 }
 -(void) regularButtonClick {
     @try {
         self.view.userInteractionEnabled = NO;
         [activityIndicator showActivityIndicator:self.view];
         self.listing.type = @"regular";
+        if(self.listing.meta == nil) {
+            self.listing.meta = [[NSMutableDictionary alloc] init];
+        }
+        [self.listing.meta setObject:@"7" forKey:@"duration"];
         
         NSString *listingJSON = [self.listing getJSON];
         regularButton.enabled = FALSE;

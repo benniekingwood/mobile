@@ -108,23 +108,20 @@
     // add in the date related JSON
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
-    NSDate *now = [NSDate date];
-    json = [json stringByAppendingString:@",\"created\":"];
-    json = [json stringByAppendingString:@"\""];
-    json = [json stringByAppendingString:[df stringFromDate:now]];
-    json = [json stringByAppendingString:@"\""];
-
-    // set the default days to add to 1 week
-    int daysToAdd = 7;
-    if([self.type isEqualToString:@"highlight"]) {
-        // based on the what they paid, 
-    }
     
-    NSDate *expireDate = [now dateByAddingTimeInterval:60*60*24*daysToAdd];
-    json = [json stringByAppendingString:@",\"expires\":"];
-    json = [json stringByAppendingString:@"\""];
-    json = [json stringByAppendingString:[df stringFromDate:expireDate]];
-    json = [json stringByAppendingString:@"\""];
+    if(self.created != nil) {
+        json = [json stringByAppendingString:@",\"created\":"];
+        json = [json stringByAppendingString:@"\""];
+        json = [json stringByAppendingString:[df stringFromDate:self.created]];
+        json = [json stringByAppendingString:@"\""];
+    }
+
+    if(self.expires != nil) {
+        json = [json stringByAppendingString:@",\"expires\":"];
+        json = [json stringByAppendingString:@"\""];
+        json = [json stringByAppendingString:[df stringFromDate:self.expires]];
+        json = [json stringByAppendingString:@"\""];
+    }
     
     // build the location for the JSON
     json = [self buildLocationJSON:json];
