@@ -88,7 +88,7 @@
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_MAIN_NAVIGATION_CONTROLLER_ID];
 
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled
-    |MFSideMenuOptionShadowEnabled;
+    | MFSideMenuOptionShadowEnabled;
     MFSideMenuPanMode panMode = MFSideMenuPanModeNavigationBar | MFSideMenuPanModeNavigationController;
     
     MFSideMenu *sideMenu = [MFSideMenu menuWithNavigationController:navigationController

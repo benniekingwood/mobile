@@ -307,6 +307,8 @@
             cell = [[UListMapCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
+        
+        
         UIView *bottomLine = [[UIView alloc] init];
         
         // add google maps to cell view
@@ -524,8 +526,10 @@
     [searchResultOfSets removeAllObjects];
     
     // remove all current map markers
-    [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT) withZoom:13];
-    [mapMarkerList removeAllObjects];
+    if (!isMapExpanded) {
+        [self initializeMapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, MAP_SMALL_HEIGHT) withZoom:13];
+        [mapMarkerList removeAllObjects];
+    }
     
     NSString *query;
     if (self.queryType == kListingQueryTypeSearch) {

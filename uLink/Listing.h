@@ -32,4 +32,5 @@
 @property (nonatomic) NSDate *expires;
 @property (nonatomic) NSDate *cacheAge;
 - (NSString*) getJSON;
+- (id)initWithDictionary:(NSDictionary*)json;
 @end

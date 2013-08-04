@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "User.h"
+#import "UListCache.h"
 #define UDataCache ((DataCache *)[DataCache instance])
 @interface DataCache : NSObject {
     NSMutableDictionary *schools;
@@ -18,6 +19,7 @@
     User *sessionUser;
     User *topSnapper;
     NSMutableDictionary *images;
+    NSMutableDictionary *_uListCache;
 }
 @property (strong, nonatomic) NSMutableDictionary *schools;
 @property (strong, nonatomic) NSMutableArray *schoolSections;
@@ -43,6 +45,7 @@
 @property (strong, nonatomic) NSMutableDictionary *uListCategories;
 @property (strong, nonatomic) NSMutableArray *uListCategorySections;
 @property (strong, nonatomic) NSMutableArray *uListListings;
+@property (strong, nonatomic) NSMutableDictionary *uListCache;
 + (DataCache*) instance;
 - (UIImage*) imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
 - (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;

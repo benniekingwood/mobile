@@ -9,11 +9,88 @@
 #import "Listing.h"
 #import "Base64.h"
 #import "ImageUtil.h"
+#import "AppMacros.h"
 
 @implementation Listing
 @synthesize _id, userId, schoolId, title, type, mainCategory, category, location, imageUrls, tags, meta, created, listDescription, shortDescription, replyTo, expires, price, username;
 @synthesize images;
 @synthesize cacheAge;
+
+/**
+ *  Initialize the listing object with dictionary built from json
+ */
+-(id)initWithDictionary:(NSDictionary*)json {
+    if (self = [super init]) {
+        self._id = [(NSString*)json valueForKey:@"_id"];
+        self.userId = [[(NSString*)json valueForKey:@"user_id"] intValue];
+        self.schoolId = [[(NSString*)json valueForKey:@"school_id"] intValue];
+        self.title = [(NSString*)json valueForKey:@"title"];
+        self.username = [(NSString*)json valueForKey:@"username"];
+        self.type = [(NSString*)json valueForKey:@"type"];
+        self.listDescription = [(NSString*)json valueForKey:@"description"];
+        self.mainCategory = [(NSString*)json valueForKey:@"main_category"];
+        self.category = [(NSString*)json valueForKey:@"category"];
+        self.replyTo = [(NSString*)json valueForKey:@"reply_to"];
+        self.shortDescription = [(NSString*)json valueForKey:@"short_description"];
+        
+        NSString *priceValue = [(NSString*)json valueForKey:@"price"];
+        self.price = (![[json valueForKey:@"price"] isKindOfClass:[NSNull class]]) ? [priceValue doubleValue]  : -37;
+        /* Try to extract dates from json data */
+        @try {
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
+            self.created = [df dateFromString:[(NSString*)json valueForKey:@"created"]];
+            self.expires = [df dateFromString:[(NSString*)json valueForKey:@"expires"]];
+        } @catch (NSException *exception) {}
+        
+        /* Map sub objects: location, meta, tags, images urls */
+        // location
+        Location *loc = [[Location alloc] init];
+        NSDictionary* listingLocation = [(NSArray*)json valueForKey:@"location"];
+        // default all the locational info to the empty string
+        loc.street = EMPTY_STRING;
+        loc.address1 = EMPTY_STRING;
+        loc.address2 = EMPTY_STRING;
+        loc.zip = EMPTY_STRING;
+        loc.city = EMPTY_STRING;
+        loc.state = EMPTY_STRING;
+        loc.discloseLocation = EMPTY_STRING;
+        if (listingLocation)
+        {
+            for (id object in listingLocation) {
+                @try {
+                    if ([(NSString*)object isEqualToString:@"latitude"])
+                        loc.latitude = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"longitude"])
+                        loc.longitude = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"street"])
+                        loc.address1 = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"zip"])
+                        loc.zip = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"city"])
+                        loc.city = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"state"])
+                        loc.state = [listingLocation valueForKey:(NSString*)object];
+                    if ([(NSString*)object isEqualToString:@"discloseLocation"])
+                        loc.discloseLocation = [listingLocation valueForKey:(NSString*)object];
+                }
+                @catch (NSException *exception) {}
+            }
+        }
+        self.location = loc;
+        
+        // tags
+        self.tags = [(NSArray*)json valueForKey:@"tags"];
+        
+        // meta
+        // TODO: Meta is a dictionary we need to store it that way
+        self.meta = [(NSArray*)json valueForKey:@"meta"];
+        
+        // image_urls
+        self.imageUrls = [(NSArray*)json valueForKey:@"image_urls"];
+    }
+    return self;
+}
 
 /* override description method to print out */
 -(NSString*) description {

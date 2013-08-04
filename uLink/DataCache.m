@@ -98,6 +98,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
     self.tweets = nil;
     self.trends = nil;
     self.snapshotCategories = nil;
+    self.uListListings = nil;
     [self clearAllModelImageCaches];
 }
 
@@ -964,6 +965,9 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
     }
 }
 
+//
+// TODO: Add caching down the line?
+//
 -(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {    
     /* cycle through list of json objects */
     for (id object in json) {

@@ -8,10 +8,12 @@
 
 #import "UListSchoolHomeViewController.h"
 #import "UListSchoolCategoryViewController.h"
+#import "ListingDetailViewController.h"
 #import "AppDelegate.h"
 #import "AppMacros.h"
 #import "DataCache.h"
 #import "UListMenuCell.h"
+#import "Listing.h"
 #import "ListingSearchViewController.h"
 #import "ImageActivityIndicatorView.h"
 #import "ColorConverterUtil.h"
@@ -20,15 +22,18 @@
     UIBarButtonItem *searchButton;
     UIButton *categoryViewButton;
     UILabel *categoryHeader;
+    UILabel *listingName;
     CGFloat screenWidth;
     CGFloat screenHeight;
     BOOL isIPhone4;
     UIButton *tags1Button;
     UIButton *tags2Button;
     UIButton *tags3Button;
+    Listing *current;
 }
 - (void) buildCategorySection;
 - (void) retreiveTopCategories:(UILabel*)categoryName;
+- (void) retreiveRecentListings;
 - (void) buildRecentListingSection;
 - (void) buildTrendingTagsSection;
 - (void) categoryClick;
@@ -142,7 +147,7 @@
     [listingHeaderBg addSubview:listingHeader];
     
     // build category name view label
-    UILabel *listingName = [[UILabel alloc] init];
+    listingName = [[UILabel alloc] init];
     if(isIPhone4) {
         listingName.frame = CGRectMake(10,30,300,120);
     } else {
@@ -152,13 +157,15 @@
     listingName.backgroundColor = [UIColor clearColor];
     listingName.textColor = [UIColor whiteColor];
     listingName.textAlignment = NSTextAlignmentCenter;
-    listingName.text = @"This is the listing title here";
+    //listingName.text = @"This is the listing title here";
     listingName.numberOfLines = 3;
     
     [listingViewButton addSubview:listingHeaderBg];
     [listingViewButton addSubview:listingName];
     [self.view addSubview:listingViewButton];
     
+    // send request for recent listings
+    [self retreiveRecentListings];
 }
 - (void) buildTrendingTagsSection {
     UIView *trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
@@ -251,6 +258,7 @@
  */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSLog(@"Preparing for segue with identifier: %@", [segue identifier]);
     if ([[segue identifier] isEqualToString:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER])
     {
         UListMenuCell *menuCell = (UListMenuCell*)sender;
@@ -261,6 +269,9 @@
     } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER]) {
         ListingSearchViewController *searchViewController = [segue destinationViewController];
         searchViewController.school = self.school;
+    } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER]) {
+        ListingDetailViewController *detailViewController = [segue destinationViewController];
+        detailViewController.listing = current;
     }
 }
 
@@ -339,13 +350,74 @@
     @catch (NSException *exception) {} 
 }
 
+/*
+ * Retreive the recent listings
+ * for this school
+ */
+- (void) retreiveRecentListings {
+    @try {
+        /*
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        if (!iActivityIndicator)
+        {
+            iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+            [iActivityIndicator largeModeOn];
+            [iActivityIndicator showActivityIndicator:categoryViewButton];
+            categoryViewButton.userInteractionEnabled = NO;
+        }*/
+        // TODO: Show medium size activity indicator
+        dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
+        dispatch_async(categoryQueue, ^{
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS_RECENT]]];
+            NSString *json = [NSString stringWithFormat:@"{ \"limit\": %i, \"sid\":%@ }", 1, school.schoolId];
+            NSLog(@"%@", json);
+            NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [req setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
+            [req setHTTPBody: requestData];
+            [req setHTTPMethod:HTTP_POST];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:kNilOptions
+                                         error:&err];
+                        
+                        NSLog(@"recent listings json: %@", json);
+                        
+                        NSDictionary *listing = json[0];
+                        current = [[Listing alloc] initWithDictionary:listing];
+                        listingName.text = (NSString*)[listing objectForKey:@"title"];
+                        NSLog(@"recent listing txt: %@", listingName.text);
+                        
+                    } else {
+                        listingName.text = @"No Recent Listings?!";
+                    }
+                }
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {}
+}
+
 
 #pragma mark Actions
 -(void) categoryClick {
     NSLog(@"category click");
 }
 -(void) recentListingClick {
-    NSLog(@"recent listing click");
+    NSLog(@"recent listing click: segueing to detail view controller");
+    [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:current];
 }
 -(void) tagClick:(id)sender {
     NSLog(@"tag click");

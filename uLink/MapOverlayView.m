@@ -68,7 +68,7 @@
     CGSize sdSize = [listing.shortDescription sizeWithFont:[UIFont fontWithName:FONT_GLOBAL size:12.0] constrainedToSize:CGSizeMake(frame.size.width, frame.size.height) lineBreakMode:NSLineBreakByWordWrapping ];
     
     CGFloat txtHeight = titleSize.height + sdSize.height;
-    //NSLog(@"text height total: %f", txtHeight);
+    NSLog(@"text height total: %f", txtHeight);
     
     if (txtHeight < frame.size.height) {
         frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, txtHeight+14.0+10.0);
@@ -287,7 +287,7 @@
         CGRect titleFrame = [self contentFrame];
         [self.title drawInRect:titleFrame
                       withFont:self.titleFont
-                 lineBreakMode:NSLineBreakByClipping
+                 lineBreakMode:NSLineBreakByTruncatingTail
                      alignment:self.titleAlignment];
     }
     
@@ -299,7 +299,7 @@
         if (self.title) {
             textFrame.origin.y += [self.title sizeWithFont:self.titleFont
                                          constrainedToSize:CGSizeMake(textFrame.size.width, 99999.0)
-                                             lineBreakMode:NSLineBreakByClipping].height;
+                                             lineBreakMode:NSLineBreakByTruncatingTail].height;
         }
         
         [self.message drawInRect:textFrame

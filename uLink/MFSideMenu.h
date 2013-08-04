@@ -29,7 +29,7 @@
 
 #import "UINavigationController+MFSideMenu.h"
 #import "MainNavigationViewController.h"
-static const CGFloat kMFSideMenuSidebarWidth = 230.0f;
+static const CGFloat kMFSideMenuSidebarWidth = 265.0f;
 static const CGFloat kMFSideMenuShadowWidth = 8.0f;
 static const CGFloat kMFSideMenuAnimationDuration = 0.4f;
 static const CGFloat kMFSideMenuAnimationMaxDuration = 0.4f;

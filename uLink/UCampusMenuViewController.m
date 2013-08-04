@@ -91,10 +91,17 @@
         retVal = 3;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
-        NSMutableArray *subcategories = [UDataCache.uListCategories mutableArrayValueForKey:key];
-        //NSLog(@"%@", subcategories);
-        retVal = [subcategories count];
+        //if (section == 0) {
+            // add listing button
+        //    retVal = 1;
+        //}
+        //else {
+            NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
+            NSMutableArray *subcategories = [UDataCache.uListCategories mutableArrayValueForKey:key];
+            //NSLog(@"%@", subcategories);
+            retVal = [subcategories count];
+        //}
+            
     }
 
     return retVal;
@@ -139,22 +146,32 @@
     }
     else if ([mode isEqualToString:@"uList"]) {
         static NSString *CellIdentifier = @"uListCell";
-        cell = (UListMenuCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
         
-        NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
-        NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
-        UListCategory *category = [categories objectAtIndex:indexPath.row];
-        ((UListMenuCell*)cell).type = kListingCategoryTypeDark;
-        ((UListMenuCell*)cell).mainCat = categoryKey;
-        ((UListMenuCell*)cell).subCat = category.name;
-        ((UListMenuCell*)cell).iconImage = [UIImage alloc];
-        ((UListMenuCell*)cell).textLabel.text = category.name;
-        [((UListMenuCell*)cell) initialize];
-        [(UListMenuCell*)cell layoutSubviews];
-        [(UListMenuCell*)cell setEnabled:YES];
+        /*if (section == 0) {
+            cell = (UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            
+        } else {*/
+            cell = (UListMenuCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
+            NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
+            UListCategory *category = [categories objectAtIndex:indexPath.row];
+            ((UListMenuCell*)cell).type = kListingCategoryTypeDark;
+            ((UListMenuCell*)cell).mainCat = categoryKey;
+            ((UListMenuCell*)cell).subCat = category.name;
+            ((UListMenuCell*)cell).iconImage = [UIImage alloc];
+            ((UListMenuCell*)cell).textLabel.text = category.name;
+            [((UListMenuCell*)cell) initialize];
+            [(UListMenuCell*)cell layoutSubviews];
+            [(UListMenuCell*)cell setEnabled:YES];
+        //}
     }
     
     return cell;
@@ -226,10 +243,11 @@
  */
 
 - (UIView*)createSectionView:(NSString*)category {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 10)];
-    view.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.6f];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 18)];
+    //view.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
+    view.backgroundColor = [UIColor grayColor];
     UILabel *sectionLabel = [[UILabel alloc] init];
-    sectionLabel.frame = CGRectMake(0, 0, 300, 15);
+    sectionLabel.frame = CGRectMake(5, 0, 300, 18);
     sectionLabel.textColor = [UIColor whiteColor];
     sectionLabel.font = cellFontBold;
     sectionLabel.backgroundColor = [UIColor clearColor];
