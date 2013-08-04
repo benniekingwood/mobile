@@ -19,6 +19,7 @@
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
     UIButton *categoryViewButton;
+    UILabel *categoryHeader;
     CGFloat screenWidth;
     CGFloat screenHeight;
     BOOL isIPhone4;
@@ -89,20 +90,13 @@
         categoryViewButton.frame = CGRectMake(0, 0, 320, 200);
     }
     // build header view
-    
     UIView *categoryHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
     categoryHeaderBg.backgroundColor = [UIColor colorWithHexString:@"#990000"];
-    UILabel *categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
+    categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
     categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
     categoryHeader.backgroundColor = [UIColor clearColor];
     categoryHeader.textColor = [UIColor whiteColor];
     categoryHeader.textAlignment = NSTextAlignmentLeft;
-    // determine "Hot" or "Featured"
-    if(true) {
-        categoryHeader.text = @"Hot Category";
-    } else {
-        categoryHeader.text = @"Featured Category";
-    }
     [categoryHeaderBg addSubview:categoryHeader];
     
     // build category name view label
@@ -331,8 +325,12 @@
                         NSDictionary *category = json[0];
                         NSDictionary *name = [category objectForKey:@"_id"];
                         categoryName.text = (NSString*)[name objectForKey:@"category"];
+                        /* Determine if there are listings, if so we will say "Hot" if not "Featured' for the category header label title
+                         */
+                        int count = [((NSString*)[category objectForKey:@"count"]) intValue];
+                        categoryHeader.text = (count > 0) ? @"Hot Category" : @"Featured Category";
                     } else {
-                        categoryName.text = @"Oh no, there's to top category.";
+                        categoryName.text = @"Oh no, where's your category?!";
                     }
                 }
             }]; // end sendAsynchronousRequest
