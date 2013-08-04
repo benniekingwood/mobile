@@ -13,14 +13,21 @@
 #import "DataCache.h"
 #import "UListMenuCell.h"
 #import "ListingSearchViewController.h"
+#import "ImageActivityIndicatorView.h"
+#import "ColorConverterUtil.h"
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
+    UIButton *categoryViewButton;
     CGFloat screenWidth;
     CGFloat screenHeight;
     BOOL isIPhone4;
+    UIButton *tags1Button;
+    UIButton *tags2Button;
+    UIButton *tags3Button;
 }
 - (void) buildCategorySection;
+- (void) retreiveTopCategories:(UILabel*)categoryName;
 - (void) buildRecentListingSection;
 - (void) buildTrendingTagsSection;
 - (void) categoryClick;
@@ -56,7 +63,6 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
     screenHeight = screenRect.size.height;
-    NSLog(@"%f", screenHeight);
     isIPhone4 = screenHeight < 568;
     
     // build the "hot" or "featured" category section
@@ -74,9 +80,9 @@
 
 - (void) buildCategorySection {
     // build main container button view
-    UIButton *categoryViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    categoryViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [categoryViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
-    categoryViewButton.backgroundColor = [UIColor darkGrayColor];
+    categoryViewButton.backgroundColor = [UIColor blackColor];
     if(isIPhone4) {
         categoryViewButton.frame = CGRectMake(0, 0, 320, 150);
     } else {
@@ -85,9 +91,9 @@
     // build header view
     
     UIView *categoryHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    categoryHeaderBg.backgroundColor = [UIColor orangeColor];
+    categoryHeaderBg.backgroundColor = [UIColor colorWithHexString:@"#990000"];
     UILabel *categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
-    categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL size:14];
+    categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
     categoryHeader.backgroundColor = [UIColor clearColor];
     categoryHeader.textColor = [UIColor whiteColor];
     categoryHeader.textAlignment = NSTextAlignmentLeft;
@@ -110,7 +116,6 @@
     categoryName.backgroundColor = [UIColor clearColor];
     categoryName.textColor = [UIColor whiteColor];
     categoryName.textAlignment = NSTextAlignmentCenter;
-    categoryName.text = @"TUTORS";
     categoryName.numberOfLines = 3;
     
     [categoryViewButton addSubview:categoryHeaderBg];
@@ -118,13 +123,14 @@
     [self.view addSubview:categoryViewButton];
     
     // send request for categories
+    [self retreiveTopCategories:categoryName];
 
 }
 - (void) buildRecentListingSection {
     // build main container button view
     UIButton *listingViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [listingViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
-    listingViewButton.backgroundColor = [UIColor brownColor];
+    [listingViewButton addTarget:self action:@selector(recentListingClick) forControlEvents:UIControlEventTouchUpInside];
+    listingViewButton.backgroundColor = [UIColor blackColor];
     if(isIPhone4) {
         listingViewButton.frame = CGRectMake(0, 150, 320, 150);
     } else {
@@ -132,9 +138,9 @@
     }
     // build header view
     UIView *listingHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    listingHeaderBg.backgroundColor = [UIColor purpleColor];
+    listingHeaderBg.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(146.0 / 255.0) blue:(23.0 / 255.0) alpha: 1];
     UILabel *listingHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
-    listingHeader.font = [UIFont fontWithName:FONT_GLOBAL size:14];
+    listingHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
     listingHeader.backgroundColor = [UIColor clearColor];
     listingHeader.textColor = [UIColor whiteColor];
     listingHeader.textAlignment = NSTextAlignmentLeft;
@@ -183,10 +189,38 @@
     [trendingBg addSubview:trendingLabel];
     [trendingBg addSubview:tagsLabel];
     [self.view addSubview:trendingBg];
-    
-    // retrieve trends 
-}
 
+    
+    // scrolling tags view
+    UIView *scrollingTagsView = [[UIView alloc] initWithFrame:CGRectMake(100, screenHeight-172, 220, 60)];
+    scrollingTagsView.backgroundColor = [UIColor blueColor];
+    scrollingTagsView.clipsToBounds = YES;
+
+    // tag1
+    tags1Button = [UIButton buttonWithType:UIButtonTypeCustom];
+    tags1Button.frame = CGRectMake(320,0,100,60);
+    tags1Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL size:12];
+    tags1Button.backgroundColor = [UIColor clearColor];
+    tags1Button.titleLabel.textColor = [UIColor whiteColor];
+    tags1Button.titleLabel.textAlignment = NSTextAlignmentLeft;
+    [tags1Button setTitle:@"#BigTimeStory" forState:UIControlStateNormal];
+    [scrollingTagsView addSubview:tags1Button];
+    // retrieve tags (3)
+    [self.view addSubview:scrollingTagsView];
+    // begin the animations after the tags are retrieved
+    [self animateTag1];
+}
+- (void) animateTag1 {
+    [UIView animateWithDuration:15.0f
+         animations:^{
+             tags1Button.frame = CGRectMake(-220,0,100,60);
+         }completion:^(BOOL finished){
+             tags1Button.frame = CGRectMake(320,0,100,60);
+             // WAIT A few seconds then animate again
+             [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(animateTag1) userInfo:nil repeats:NO];
+             //[self animateTag1:tags1Button];
+         }];
+}
 - (void)updateView {
     self.navigationItem.title = [self.school.shortName stringByAppendingString:@" uList"];
     //self.navigationItem.rightBarButtonItem = searchButton;
@@ -248,9 +282,75 @@
     }
 }
 
+/*
+ * Retreive the top categories 
+ * for this school
+ */
+- (void) retreiveTopCategories:(UILabel*)categoryName {
+    @try {
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        if (!iActivityIndicator)
+        {
+            iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+            [iActivityIndicator largeModeOn];
+            [iActivityIndicator showActivityIndicator:categoryViewButton];
+            categoryViewButton.userInteractionEnabled = NO;
+        }
+        // TODO: Show medium size activity indicator
+        dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_CATEGORY, NULL);
+        dispatch_async(categoryQueue, ^{
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_CATEGORIES_TOP]]];
+            NSString *json = @"{ \"limit\": 1,\"sid\":";
+            json = [json stringByAppendingString:self.school.schoolId];
+            json = [json stringByAppendingString:@"}"];
+            NSLog(@"%@", json);
+            NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [req setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
+            [req setHTTPBody: requestData];
+            [req setHTTPMethod:HTTP_POST];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                [iActivityIndicator hideActivityIndicator:categoryViewButton];
+                iActivityIndicator = nil;
+                categoryViewButton.userInteractionEnabled = YES;
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:kNilOptions
+                                         error:&err];
+    
+                        NSDictionary *category = json[0];
+                        NSDictionary *name = [category objectForKey:@"_id"];
+                        categoryName.text = (NSString*)[name objectForKey:@"category"];
+                    } else {
+                        categoryName.text = @"Oh no, there's to top category.";
+                    }
+                }
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {} 
+}
+
+
 #pragma mark Actions
 -(void) categoryClick {
-    
+    NSLog(@"category click");
+}
+-(void) recentListingClick {
+    NSLog(@"recent listing click");
+}
+-(void) tagClick:(id)sender {
+    NSLog(@"tag click");
 }
 #pragma mark -
 @end

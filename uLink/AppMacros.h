@@ -98,6 +98,7 @@
 #define API_SCHOOLS_SUGGESTION @"schools/suggestion"
 #define API_SCHOOLS_SCHOOL @"schools/school"
 #define API_ULIST_CATEGORIES @"api/categories/"
+#define API_ULIST_CATEGORIES_TOP @"api/categories/top/"
 #define API_ULIST_LISTINGS @"api/listings/"
 #define API_USERS_RESET_PASSWORD @"users/reset_password"
 #define API_USERS_SIGN_UP @"users/sign_up"
