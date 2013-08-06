@@ -17,10 +17,12 @@
 #import "ListingSearchViewController.h"
 #import "ImageActivityIndicatorView.h"
 #import "ColorConverterUtil.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
     UIButton *categoryViewButton;
+    UIButton *listingViewButton;
     UILabel *categoryHeader;
     UILabel *listingName;
     CGFloat screenWidth;
@@ -29,11 +31,16 @@
     UIButton *tags1Button;
     UIButton *tags2Button;
     UIButton *tags3Button;
+    UIView *scrollingTagsView;
     Listing *current;
+    UILabel *hotCategoryName;
+    NSString *mainHotCategoryName;
+    BOOL hotCategoryClick;
 }
 - (void) buildCategorySection;
-- (void) retreiveTopCategories:(UILabel*)categoryName;
+- (void) retreiveTopCategories;
 - (void) retreiveRecentListings;
+- (void) retreiveTrendingTags;
 - (void) buildRecentListingSection;
 - (void) buildTrendingTagsSection;
 - (void) categoryClick;
@@ -52,8 +59,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.view.backgroundColor = [UIColor blackColor];
+    hotCategoryClick = FALSE;
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
@@ -77,7 +84,6 @@
     [self buildRecentListingSection];
     // build the trending tags section
     [self buildTrendingTagsSection];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -105,29 +111,27 @@
     [categoryHeaderBg addSubview:categoryHeader];
     
     // build category name view label
-    UILabel *categoryName = [[UILabel alloc] init];
+    hotCategoryName = [[UILabel alloc] init];
     if(isIPhone4) {
-        categoryName.frame = CGRectMake(10,30,300,120);
+        hotCategoryName.frame = CGRectMake(10,30,300,120);
     } else {
-        categoryName.frame = CGRectMake(10,30,300,170);
+        hotCategoryName.frame = CGRectMake(10,30,300,170);
     }
-    categoryName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
-    categoryName.backgroundColor = [UIColor clearColor];
-    categoryName.textColor = [UIColor whiteColor];
-    categoryName.textAlignment = NSTextAlignmentCenter;
-    categoryName.numberOfLines = 3;
+    hotCategoryName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
+    hotCategoryName.backgroundColor = [UIColor clearColor];
+    hotCategoryName.textColor = [UIColor whiteColor];
+    hotCategoryName.textAlignment = NSTextAlignmentCenter;
+    hotCategoryName.numberOfLines = 3;
     
     [categoryViewButton addSubview:categoryHeaderBg];
-    [categoryViewButton addSubview:categoryName];
+    [categoryViewButton addSubview:hotCategoryName];
     [self.view addSubview:categoryViewButton];
-    
     // send request for categories
-    [self retreiveTopCategories:categoryName];
-
+    [self performSelectorInBackground:@selector(retreiveTopCategories) withObject:self];
 }
 - (void) buildRecentListingSection {
     // build main container button view
-    UIButton *listingViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    listingViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [listingViewButton addTarget:self action:@selector(recentListingClick) forControlEvents:UIControlEventTouchUpInside];
     listingViewButton.backgroundColor = [UIColor blackColor];
     if(isIPhone4) {
@@ -165,7 +169,7 @@
     [self.view addSubview:listingViewButton];
     
     // send request for recent listings
-    [self retreiveRecentListings];
+    [self performSelectorInBackground:@selector(retreiveRecentListings) withObject:self];
 }
 - (void) buildTrendingTagsSection {
     UIView *trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
@@ -173,7 +177,7 @@
     
     // Build the trending label
     UILabel *trendingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,100,40)];
-    trendingLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
+    trendingLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15];
     trendingLabel.backgroundColor = [UIColor clearColor];
     trendingLabel.textColor = [UIColor whiteColor];
     trendingLabel.textAlignment = NSTextAlignmentLeft;
@@ -181,7 +185,7 @@
     
     // build the tags label
     UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0,50,40)];
-    tagsLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12];
+    tagsLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
     tagsLabel.backgroundColor = [UIColor clearColor];
     tagsLabel.textColor = [UIColor redColor];
     tagsLabel.textAlignment = NSTextAlignmentLeft;
@@ -193,34 +197,77 @@
 
     
     // scrolling tags view
-    UIView *scrollingTagsView = [[UIView alloc] initWithFrame:CGRectMake(100, screenHeight-172, 220, 60)];
+    scrollingTagsView = [[UIView alloc] initWithFrame:CGRectMake(100, screenHeight-172, 220, 60)];
     scrollingTagsView.backgroundColor = [UIColor blueColor];
     scrollingTagsView.clipsToBounds = YES;
 
     // tag1
     tags1Button = [UIButton buttonWithType:UIButtonTypeCustom];
     tags1Button.frame = CGRectMake(320,0,100,60);
-    tags1Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL size:12];
+    tags1Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
     tags1Button.backgroundColor = [UIColor clearColor];
     tags1Button.titleLabel.textColor = [UIColor whiteColor];
     tags1Button.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [tags1Button setTitle:@"#BigTimeStory" forState:UIControlStateNormal];
     [scrollingTagsView addSubview:tags1Button];
-    // retrieve tags (3)
+    // tag2
+    tags2Button = [UIButton buttonWithType:UIButtonTypeCustom];
+    tags2Button.frame = CGRectMake(320,0,100,60);
+    tags2Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
+    tags2Button.backgroundColor = [UIColor clearColor];
+    tags2Button.titleLabel.textColor = [UIColor whiteColor];
+    tags2Button.titleLabel.textAlignment = NSTextAlignmentLeft;
+    [scrollingTagsView addSubview:tags2Button];
+    // tag3
+    tags3Button = [UIButton buttonWithType:UIButtonTypeCustom];
+    tags3Button.frame = CGRectMake(320,0,100,60);
+    tags3Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
+    tags3Button.backgroundColor = [UIColor clearColor];
+    tags3Button.titleLabel.textColor = [UIColor whiteColor];
+    tags3Button.titleLabel.textAlignment = NSTextAlignmentLeft;
+    [scrollingTagsView addSubview:tags3Button];
+    // finally add the scroll view to the main view
     [self.view addSubview:scrollingTagsView];
-    // begin the animations after the tags are retrieved
-    [self animateTag1];
+    
+    // send the request off to the server
+    [self performSelectorInBackground:@selector(retreiveTrendingTags) withObject:self];
 }
 - (void) animateTag1 {
-    [UIView animateWithDuration:15.0f
-         animations:^{
-             tags1Button.frame = CGRectMake(-220,0,100,60);
-         }completion:^(BOOL finished){
-             tags1Button.frame = CGRectMake(320,0,100,60);
-             // WAIT A few seconds then animate again
-             [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(animateTag1) userInfo:nil repeats:NO];
-             //[self animateTag1:tags1Button];
-         }];
+        [UIView animateWithDuration:15.0f
+                              delay:0.0f
+                            options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
+                         animations:^{
+                             tags1Button.frame = CGRectMake(-150,0,100,60);
+                         }
+                         completion:^(BOOL completed) {
+                             tags1Button.frame = CGRectMake(320,0,100,60);
+
+                         }];
+    [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag2) userInfo:FALSE repeats:NO];
+}
+- (void) animateTag2{
+        [UIView animateWithDuration:15.0f
+                         delay:0.0f
+                         options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
+                         animations:^{
+                             tags2Button.frame = CGRectMake(-150,0,100,60);
+                         }
+                         completion:^(BOOL completed) {
+                             tags2Button.frame = CGRectMake(320,0,100,60);
+                         }];
+        [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag3) userInfo:FALSE repeats:NO];
+}
+- (void) animateTag3 {
+        [UIView animateWithDuration:15.0f
+                        delay:0.0f
+                        options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
+                         animations:^{
+                             tags3Button.frame = CGRectMake(-150,0,100,60);
+                         }
+                         completion:^(BOOL completed) {
+                             tags3Button.frame = CGRectMake(320,0,100,60);
+                         }];
+     [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag1) userInfo:FALSE repeats:NO];
+
 }
 - (void)updateView {
     self.navigationItem.title = [self.school.shortName stringByAppendingString:@" uList"];
@@ -234,6 +281,27 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint touchLocation = [touch locationInView:self.view];
+    NSLog(@"touch point %f,%f", touchLocation.x, touchLocation.y);
+    NSLog(@"Tag1 point: %f, %f:", tags1Button.layer.position.x, tags1Button.layer.position.y);
+        if ([tags1Button.layer.presentationLayer hitTest:touchLocation])
+        {
+            // This button was hit whilst moving - do something with it here
+            NSLog(@"tag click %@", tags1Button.titleLabel.text);
+        } else if ([tags2Button.layer.presentationLayer hitTest:touchLocation])
+        {
+            // This button was hit whilst moving - do something with it here
+            NSLog(@"tag click %@", tags2Button.titleLabel.text);
+        } else if ([tags3Button.layer.presentationLayer hitTest:touchLocation])
+        {
+            // This button was hit whilst moving - do something with it here
+            NSLog(@"tag click %@", tags3Button.titleLabel.text);
+        }
 }
 
 -(void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
@@ -258,14 +326,18 @@
  */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"Preparing for segue with identifier: %@", [segue identifier]);
     if ([[segue identifier] isEqualToString:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER])
     {
         UListMenuCell *menuCell = (UListMenuCell*)sender;
         UListSchoolCategoryViewController *categoryViewController = [segue destinationViewController];
-        categoryViewController.mainCat = menuCell.mainCat;
-        categoryViewController.subCat = menuCell.subCat;
         categoryViewController.school = school;
+        if(hotCategoryClick) {
+            categoryViewController.mainCat = mainHotCategoryName;
+            categoryViewController.subCat = hotCategoryName.text;
+        } else {
+            categoryViewController.mainCat = menuCell.mainCat;
+            categoryViewController.subCat = menuCell.subCat;
+        }        
     } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER]) {
         ListingSearchViewController *searchViewController = [segue destinationViewController];
         searchViewController.school = self.school;
@@ -291,9 +363,9 @@
  * Retreive the top categories 
  * for this school
  */
-- (void) retreiveTopCategories:(UILabel*)categoryName {
+- (void) retreiveTopCategories {
     @try {
-        __block ImageActivityIndicatorView *iActivityIndicator;
+         __block ImageActivityIndicatorView *iActivityIndicator;
         if (!iActivityIndicator)
         {
             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
@@ -301,7 +373,6 @@
             [iActivityIndicator showActivityIndicator:categoryViewButton];
             categoryViewButton.userInteractionEnabled = NO;
         }
-        // TODO: Show medium size activity indicator
         dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_CATEGORY, NULL);
         dispatch_async(categoryQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_CATEGORIES_TOP]]];
@@ -317,6 +388,7 @@
             [req setHTTPMethod:HTTP_POST];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
                 [iActivityIndicator hideActivityIndicator:categoryViewButton];
                 iActivityIndicator = nil;
                 categoryViewButton.userInteractionEnabled = YES;
@@ -335,15 +407,17 @@
     
                         NSDictionary *category = json[0];
                         NSDictionary *name = [category objectForKey:@"_id"];
-                        categoryName.text = (NSString*)[name objectForKey:@"category"];
+                        hotCategoryName.text = (NSString*)[name objectForKey:@"category"];
+                        mainHotCategoryName = (NSString*)[name objectForKey:@"main_category"];
                         /* Determine if there are listings, if so we will say "Hot" if not "Featured' for the category header label title
                          */
                         int count = [((NSString*)[category objectForKey:@"count"]) intValue];
                         categoryHeader.text = (count > 0) ? @"Hot Category" : @"Featured Category";
                     } else {
-                        categoryName.text = @"Oh no, where's your category?!";
+                        hotCategoryName.text = @"Oh no, where's your category?!";
                     }
                 }
+            });
             }]; // end sendAsynchronousRequest
         }); // end dispatch_async
     }
@@ -356,18 +430,17 @@
  */
 - (void) retreiveRecentListings {
     @try {
-        /*
+        
         __block ImageActivityIndicatorView *iActivityIndicator;
         if (!iActivityIndicator)
         {
             iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
             [iActivityIndicator largeModeOn];
-            [iActivityIndicator showActivityIndicator:categoryViewButton];
-            categoryViewButton.userInteractionEnabled = NO;
-        }*/
-        // TODO: Show medium size activity indicator
-        dispatch_queue_t categoryQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
-        dispatch_async(categoryQueue, ^{
+            [iActivityIndicator showActivityIndicator:listingViewButton];
+            listingViewButton.userInteractionEnabled = NO;
+        }
+        dispatch_queue_t recentListingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
+        dispatch_async(recentListingQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS_RECENT]]];
             NSString *json = [NSString stringWithFormat:@"{ \"limit\": %i, \"sid\":%@ }", 1, school.schoolId];
             NSLog(@"%@", json);
@@ -379,7 +452,10 @@
             [req setHTTPMethod:HTTP_POST];
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                [iActivityIndicator hideActivityIndicator:listingViewButton];
+                iActivityIndicator = nil;
+                listingViewButton.userInteractionEnabled = YES;
                 // if there is valid data
                 if (data)
                 {
@@ -393,34 +469,102 @@
                                          options:kNilOptions
                                          error:&err];
                         
-                        NSLog(@"recent listings json: %@", json);
-                        
                         NSDictionary *listing = json[0];
                         current = [[Listing alloc] initWithDictionary:listing];
                         listingName.text = (NSString*)[listing objectForKey:@"title"];
-                        NSLog(@"recent listing txt: %@", listingName.text);
-                        
                     } else {
                         listingName.text = @"No Recent Listings?!";
                     }
                 }
+            });
             }]; // end sendAsynchronousRequest
         }); // end dispatch_async
     }
     @catch (NSException *exception) {}
 }
 
+- (void) retreiveTrendingTags {
+    @try {
+        __block ImageActivityIndicatorView *iActivityIndicator;
+        if (!iActivityIndicator)
+        {
+            iActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+            [iActivityIndicator showActivityIndicator:scrollingTagsView];
+            scrollingTagsView.userInteractionEnabled = NO;
+        }
+        dispatch_queue_t trendingTagsQueue = dispatch_queue_create(DISPATCH_ULIST_TOPTAGS, NULL);
+        dispatch_async(trendingTagsQueue, ^{
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS_TOPTAGS]]];
+            NSString *json = @"{ \"limit\": 3,\"sid\":";
+            json = [json stringByAppendingString:self.school.schoolId];
+            json = [json stringByAppendingString:@"}"];
+            NSLog(@"%@", json);
+            NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [req setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
+            [req setHTTPBody: requestData];
+            [req setHTTPMethod:HTTP_POST];
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                [iActivityIndicator hideActivityIndicator:scrollingTagsView];
+                iActivityIndicator = nil;
+                scrollingTagsView.userInteractionEnabled = YES;
+                // if there is valid data
+                if (data)
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                    
+                    if (httpResponse.statusCode==200)
+                    {
+                        NSError* err;
+                        NSArray* json = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:kNilOptions
+                                         error:&err];
+                        for (int idx=0; idx<[json count]; idx++) {
+                            NSDictionary *category = json[idx];
+                            NSDictionary *tag = [category objectForKey:@"_id"];
+                            NSString *tagName = @"#";
+                            tagName = [tagName stringByAppendingString:(NSString*)[tag objectForKey:@"tags"]];
+                            switch (idx) {
+                                case 0:
+                                    [tags1Button setTitle:tagName forState:UIControlStateNormal];
+                                    [self animateTag1];
+                                    break;
+                                case 1:
+                                    [tags2Button setTitle:tagName forState:UIControlStateNormal];
+                                    break;
+                                case 2:
+                                    [tags3Button setTitle:tagName forState:UIControlStateNormal];
+                                    break;
+                            }
+                           
+                        }
+                    } else {
+                        // just set the first tag
+                        [tags1Button setTitle:@"#whereisthelove" forState:UIControlStateNormal];
+                    }
+                }
+            });
+            }]; // end sendAsynchronousRequest
+        }); // end dispatch_async
+    }
+    @catch (NSException *exception) {}
+}
 
 #pragma mark Actions
 -(void) categoryClick {
-    NSLog(@"category click");
+    hotCategoryClick = TRUE;
+    [self performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:self];
 }
 -(void) recentListingClick {
     NSLog(@"recent listing click: segueing to detail view controller");
     [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:current];
 }
 -(void) tagClick:(id)sender {
-    NSLog(@"tag click");
+    NSLog(@"tag click %@", ((UIButton*)sender).titleLabel.text);
 }
 #pragma mark -
 @end
