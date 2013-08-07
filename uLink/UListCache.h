@@ -29,7 +29,7 @@
 /*
     Add listing result to the data cache
  */
--(void) addToCache:(NSInteger) schoolId categoryId:(NSString*)category listingData:(NSMutableArray*)listingData;
+-(void) addToCache:(NSInteger) schoolId category:(NSString*)category listingData:(NSMutableArray*)listingData;
 
 /*
     Get cached data by school id and category

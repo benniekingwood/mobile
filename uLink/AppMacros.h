@@ -215,6 +215,7 @@
 #define SEGUE_SHOW_CAMPUS_EVENTS_VIEW_CONTROLLER @"ShowCampusEventsViewController"
 #define SEGUE_SHOW_SOCIAL_VIEW_CONTROLLER @"ShowSocialViewController"
 #define SEGUE_SHOW_SNAPSHOTS_VIEW_CONTROLLER @"ShowSnapshotsViewController"
+#define SEGUE_SHOW_ULIST_HOME_VIEW_CONTROLLER @"ShowUListHomeViewController"
 #define SEGUE_SHOW_ULIST_SCHOOL_HOME_VIEW_CONTROLLER @"ShowUListSchoolHomeViewController"
 #define SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER @"ShowUListSchoolListingsViewController"
 #define SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER @"ShowListingDetailViewController"

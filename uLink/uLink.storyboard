@@ -946,7 +946,7 @@
             <objects>
                 <tableViewController id="RND-Lb-DF8" customClass="ListingResultsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4At-hm-kin">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -1502,14 +1502,6 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EW9-fY-jyc">
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <items>
-                                    <tabBarItem title="uList" image="ulist-icon.png" id="FQg-d2-6ii"/>
-                                    <tabBarItem title="uCampus" image="ucampus-icon.png" id="9VK-is-p96"/>
-                                    <tabBarItem title="Me" image="user-icon.png" id="aKE-xP-0u6"/>
-                                </items>
-                            </tabBar>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fBy-tg-SLv">
                                 <constraints>
                                     <constraint firstAttribute="width" id="eXQ-xo-mMp"/>
@@ -1529,10 +1521,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="EW9-fY-jyc" firstAttribute="trailing" secondItem="6bH-7B-Xg9" secondAttribute="trailing" type="default" id="44C-0U-Glx"/>
                             <constraint firstItem="fBy-tg-SLv" firstAttribute="top" secondItem="6bH-7B-Xg9" secondAttribute="top" constant="93" id="8QT-EI-6kt"/>
-                            <constraint firstItem="EW9-fY-jyc" firstAttribute="leading" secondItem="6bH-7B-Xg9" secondAttribute="leading" type="default" id="Q7h-Jf-VAq"/>
-                            <constraint firstItem="EW9-fY-jyc" firstAttribute="bottom" secondItem="6bH-7B-Xg9" secondAttribute="bottom" type="default" id="Wf1-c6-AOW"/>
                             <constraint firstItem="fBy-tg-SLv" firstAttribute="leading" secondItem="6bH-7B-Xg9" secondAttribute="leading" constant="82" id="pOv-2r-EbD"/>
                         </constraints>
                     </view>
@@ -1611,6 +1600,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="uList" image="ulist-icon.png" id="Ftk-9g-39X"/>
+                    <navigationItem key="navigationItem" id="Dw5-5K-OTh"/>
                     <connections>
                         <outlet property="schoolsTableView" destination="qc7-j3-9fG" id="ImH-Uq-rWC"/>
                         <segue destination="ert-Lm-yBf" kind="push" identifier="ShowUListSchoolHomeViewController" id="jLX-Bs-ZZv"/>

@@ -7,6 +7,7 @@
 //
 
 #import "UListSchoolHomeViewController.h"
+#import "UListHomeViewController.h"
 #import "UListSchoolCategoryViewController.h"
 #import "ListingDetailViewController.h"
 #import "AppDelegate.h"
@@ -23,6 +24,7 @@
     UIBarButtonItem *searchButton;
     UIButton *categoryViewButton;
     UIButton *listingViewButton;
+    UIView *trendingBg;
     UILabel *categoryHeader;
     UILabel *listingName;
     CGFloat screenWidth;
@@ -43,7 +45,10 @@
 - (void) retreiveTrendingTags;
 - (void) buildRecentListingSection;
 - (void) buildTrendingTagsSection;
+- (void) buildUListHomeButton;
 - (void) categoryClick;
+- (void) swipeHandler:(UISwipeGestureRecognizer *)swipe;
+- (void) back;
 @end
 
 @implementation UListSchoolHomeViewController
@@ -64,6 +69,11 @@
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
+    
+    // add swipe gesture to go back to main home view
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [swipeLeft setDirection:(UISwipeGestureRecognizerDirectionRight)];
+    [self.view addGestureRecognizer:swipeLeft];
 
     // add the "Search" button
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchViewController)];
@@ -84,10 +94,23 @@
     [self buildRecentListingSection];
     // build the trending tags section
     [self buildTrendingTagsSection];
+    // build button to navigate back to uList home
+    [self buildUListHomeButton];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self updateView];
+}
+
+- (void)swipeHandler:(UISwipeGestureRecognizer *)swipe {
+    NSLog(@"Swipe received.");
+    [self back];
+}
+
+- (void) back {
+    // navigate back to ulist home view
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) buildCategorySection {
@@ -172,7 +195,7 @@
     [self performSelectorInBackground:@selector(retreiveRecentListings) withObject:self];
 }
 - (void) buildTrendingTagsSection {
-    UIView *trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
+    trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
     trendingBg.backgroundColor = [UIColor darkGrayColor];
     
     // Build the trending label
@@ -231,6 +254,23 @@
     // send the request off to the server
     [self performSelectorInBackground:@selector(retreiveTrendingTags) withObject:self];
 }
+- (void) buildUListHomeButton {
+    // build main container button view
+    UIButton *uListHomeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [uListHomeButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    uListHomeButton.backgroundColor = [UIColor whiteColor];
+    uListHomeButton.frame = CGRectMake(0, trendingBg.frame.origin.y+trendingBg.frame.size.height, 320, 50);
+    
+    UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,uListHomeButton.frame.size.height)];
+    backLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
+    backLabel.backgroundColor = [UIColor clearColor];
+    backLabel.textColor = [UIColor blackColor];
+    backLabel.textAlignment = NSTextAlignmentCenter;
+    backLabel.text = @"Browse More Universities";
+    [uListHomeButton addSubview:backLabel];
+    
+    [self.view addSubview:uListHomeButton];
+}
 - (void) animateTag1 {
         [UIView animateWithDuration:15.0f
                               delay:0.0f
@@ -271,7 +311,13 @@
 }
 - (void)updateView {
     self.navigationItem.title = [self.school.shortName stringByAppendingString:@" uList"];
-    //self.navigationItem.rightBarButtonItem = searchButton;
+    
+    // Cerwinski - 20130806 - have to explicitly set
+    //  user interaction; at some point between entering
+    //  the listing results view page, and popping that view (back click)
+    //  controller, the school home view controller interaction looks
+    //  to be disabled
+    [self.view setUserInteractionEnabled:YES];
 }
 
 -(void) showSearchViewController {
@@ -302,23 +348,6 @@
             // This button was hit whilst moving - do something with it here
             NSLog(@"tag click %@", tags3Button.titleLabel.text);
         }
-}
-
--(void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    if([[item title] isEqualToString:@"uCampus"]) {
-        self.navigationItem.title = @"uCampus";
-        self.navigationItem.rightBarButtonItem = nil;
-        [UAppDelegate activateSideMenu : @"uCampus"];
-    } else if([[item title] isEqualToString:@"Me"]) {
-        self.navigationItem.title = @"Me";
-        [UAppDelegate deactivateSideMenu];
-        // Send a notification
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PROFILE_VIEW_CONTROLLER object:nil];
-    } else if([[item title] isEqualToString:@"uList"]) {
-        self.navigationItem.title = @"uList";
-        self.navigationItem.rightBarButtonItem = nil;
-        [UAppDelegate deactivateSideMenu];
-    }
 }
 
 /*
@@ -405,16 +434,25 @@
                                          options:kNilOptions
                                          error:&err];
     
-                        NSDictionary *category = json[0];
-                        NSDictionary *name = [category objectForKey:@"_id"];
-                        hotCategoryName.text = (NSString*)[name objectForKey:@"category"];
-                        mainHotCategoryName = (NSString*)[name objectForKey:@"main_category"];
-                        /* Determine if there are listings, if so we will say "Hot" if not "Featured' for the category header label title
-                         */
-                        int count = [((NSString*)[category objectForKey:@"count"]) intValue];
-                        categoryHeader.text = (count > 0) ? @"Hot Category" : @"Featured Category";
+                        if (json != nil && [json count] > 0) {
+                            NSDictionary *category = json[0];
+                            NSDictionary *name = [category objectForKey:@"_id"];
+                            hotCategoryName.text = (NSString*)[name objectForKey:@"category"];
+                            mainHotCategoryName = (NSString*)[name objectForKey:@"main_category"];
+                            /* Determine if there are listings, if so we will say "Hot" if not "Featured' for the category header label title
+                             */
+                            int count = [((NSString*)[category objectForKey:@"count"]) intValue];
+                            categoryHeader.text = (count > 0) ? @"Hot Category" : @"Featured Category";
+                        }
+                        else {
+                            hotCategoryName.text = @"Oh no, where's your category?!";
+                            [categoryViewButton setUserInteractionEnabled:YES];
+                            [categoryViewButton setEnabled:NO];
+                        }
                     } else {
                         hotCategoryName.text = @"Oh no, where's your category?!";
+                        [categoryViewButton setUserInteractionEnabled:YES];
+                        [categoryViewButton setEnabled:NO];
                     }
                 }
             });
@@ -469,11 +507,23 @@
                                          options:kNilOptions
                                          error:&err];
                         
-                        NSDictionary *listing = json[0];
-                        current = [[Listing alloc] initWithDictionary:listing];
-                        listingName.text = (NSString*)[listing objectForKey:@"title"];
+                        NSLog(@"recent listings json: %@", json);
+                        
+                        if (json != nil && [json count] > 0) {
+                            NSDictionary *listing = json[0];
+                            current = [[Listing alloc] initWithDictionary:listing];
+                            listingName.text = (NSString*)[listing objectForKey:@"title"];
+                            NSLog(@"recent listing txt: %@", listingName.text);
+                        }
+                        else {
+                            listingName.text = @"No Recent Listing?!";
+                            [listingViewButton setUserInteractionEnabled:YES];
+                            [listingViewButton setEnabled:NO];
+                        }
                     } else {
-                        listingName.text = @"No Recent Listings?!";
+                        listingName.text = @"No Recent Listing?!";
+                        [listingViewButton setUserInteractionEnabled:YES];
+                        [listingViewButton setEnabled:NO];
                     }
                 }
             });
@@ -523,25 +573,26 @@
                                          JSONObjectWithData:data
                                          options:kNilOptions
                                          error:&err];
-                        for (int idx=0; idx<[json count]; idx++) {
-                            NSDictionary *category = json[idx];
-                            NSDictionary *tag = [category objectForKey:@"_id"];
-                            NSString *tagName = @"#";
-                            tagName = [tagName stringByAppendingString:(NSString*)[tag objectForKey:@"tags"]];
-                            switch (idx) {
-                                case 0:
-                                    [tags1Button setTitle:tagName forState:UIControlStateNormal];
-                                    [self animateTag1];
-                                    break;
-                                case 1:
-                                    [tags2Button setTitle:tagName forState:UIControlStateNormal];
-                                    break;
-                                case 2:
-                                    [tags3Button setTitle:tagName forState:UIControlStateNormal];
-                                    break;
-                            }
-                           
-                        }
+                        if (json != nil && [json count] > 0) {
+                            for (int idx=0; idx<[json count]; idx++) {
+                                NSDictionary *category = json[idx];
+                                NSDictionary *tag = [category objectForKey:@"_id"];
+                                NSString *tagName = @"#";
+                                tagName = [tagName stringByAppendingString:(NSString*)[tag objectForKey:@"tags"]];
+                                switch (idx) {
+                                    case 0:
+                                        [tags1Button setTitle:tagName forState:UIControlStateNormal];
+                                        [self animateTag1];
+                                        break;
+                                    case 1:
+                                        [tags2Button setTitle:tagName forState:UIControlStateNormal];
+                                        break;
+                                    case 2:
+                                        [tags3Button setTitle:tagName forState:UIControlStateNormal];
+                                        break;
+                                } // end switch
+                            } // end for
+                        }   // end if
                     } else {
                         // just set the first tag
                         [tags1Button setTitle:@"#whereisthelove" forState:UIControlStateNormal];
