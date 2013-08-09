@@ -37,7 +37,9 @@
     Listing *current;
     UILabel *hotCategoryName;
     NSString *mainHotCategoryName;
+    NSString *searchTxt;
     BOOL hotCategoryClick;
+    BOOL trendingTagClick;
 }
 - (void) buildCategorySection;
 - (void) retreiveTopCategories;
@@ -66,6 +68,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     hotCategoryClick = FALSE;
+    trendingTagClick = FALSE;
+    searchTxt = nil;
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
     self.navigationItem.hidesBackButton = YES;
@@ -276,9 +280,15 @@
                               delay:0.0f
                             options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
                          animations:^{
+                             /*CGRect r = [tags1Button frame];
+                             r.origin.x -= 150;
+                             [tags1Button setFrame: r];*/
                              tags1Button.frame = CGRectMake(-150,0,100,60);
                          }
                          completion:^(BOOL completed) {
+                             /*CGRect r = [tags1Button frame];
+                             r.origin.x += 320;
+                             [tags1Button setFrame: r];*/
                              tags1Button.frame = CGRectMake(320,0,100,60);
 
                          }];
@@ -329,25 +339,32 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSMutableCharacterSet *trimSet = [[NSCharacterSet characterSetWithCharactersInString:@"#"] mutableCopy];
+    
     UITouch *touch = [touches anyObject];
-    CGPoint touchLocation = [touch locationInView:self.view];
+    CGPoint touchLocation = [touch locationInView:scrollingTagsView.viewForBaselineLayout];
     NSLog(@"touch point %f,%f", touchLocation.x, touchLocation.y);
     NSLog(@"Tag1 point: %f, %f:", tags1Button.layer.position.x, tags1Button.layer.position.y);
-        if ([tags1Button.layer.presentationLayer hitTest:touchLocation])
-        {
-            // This button was hit whilst moving - do something with it here
-            NSLog(@"tag click %@", tags1Button.titleLabel.text);
-        } else if ([tags2Button.layer.presentationLayer hitTest:touchLocation])
-        {
-            // This button was hit whilst moving - do something with it here
-            NSLog(@"tag click %@", tags2Button.titleLabel.text);
-        } else if ([tags3Button.layer.presentationLayer hitTest:touchLocation])
-        {
-            // This button was hit whilst moving - do something with it here
-            NSLog(@"tag click %@", tags3Button.titleLabel.text);
-        }
+
+    if ([tags1Button.layer.presentationLayer hitTest:touchLocation]) {
+        //NSLog(@"tag click %@", tags1Button.titleLabel.text);
+        searchTxt = [[NSString alloc] initWithString:[tags1Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+    } else if ([tags2Button.layer.presentationLayer hitTest:touchLocation]) {
+        //NSLog(@"tag click %@", tags2Button.titleLabel.text);
+        searchTxt = [[NSString alloc] initWithString:[tags2Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+    } else if ([tags3Button.layer.presentationLayer hitTest:touchLocation]) {
+        //NSLog(@"tag click %@", tags3Button.titleLabel.text);
+        searchTxt = [[NSString alloc] initWithString:[tags3Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+    }
+    
+    // if we have search text, then perform search action on trending tag
+    if (searchTxt) {
+        NSLog(@"search text: %@", searchTxt);
+        trendingTagClick = TRUE;
+        [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER sender:self];
+    }
+    
 }
 
 /*
@@ -370,6 +387,12 @@
     } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER]) {
         ListingSearchViewController *searchViewController = [segue destinationViewController];
         searchViewController.school = self.school;
+        
+        // if user clicks on trending tag, then execute search
+        if (trendingTagClick) {
+            searchViewController.searchTxt = searchTxt;
+            searchViewController.executeSearchOnLoad = TRUE;
+        }
     } else if ([[segue identifier] isEqualToString:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER]) {
         ListingDetailViewController *detailViewController = [segue destinationViewController];
         detailViewController.listing = current;

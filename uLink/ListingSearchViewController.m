@@ -24,7 +24,7 @@
 @end
 
 @implementation ListingSearchViewController
-@synthesize school;
+@synthesize school, executeSearchOnLoad, searchTxt;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -44,11 +44,25 @@
     [self buildSearchBar];
     
     // initally show the search view
-    [self showSearchView];
+    if (!executeSearchOnLoad)
+        [self showSearchView];
     
     // initialize the listing results table
     resultsTableViewController.school = self.school;
     resultsTableViewController.queryType = kListingQueryTypeSearch;
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+        
+    // if execute search immediately has been set, then perform
+    // search with search text provided
+    if (executeSearchOnLoad) {
+        if (searchTxt) {
+            [searchBar setText:searchTxt];
+            [self executeSearch];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning

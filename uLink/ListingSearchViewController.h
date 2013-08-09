@@ -10,4 +10,6 @@
 #import "School.h"
 @interface ListingSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate>
 @property (nonatomic) School *school;
+@property (nonatomic) NSString *searchTxt;
+@property (nonatomic) BOOL *executeSearchOnLoad;
 @end
