@@ -213,6 +213,12 @@
         // return if map is already expanded and we "select" the row again
         if (isMapExpanded) return;
         
+        // Cerwinski - 20130808 - found issue where if user scrolled
+        // down table a little (enough to still see map), then click on
+        // map, it would not display properly
+        // scroll to top of table first, so we can see entire map
+        [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        
         /* if we select the map, then expand map to display larger */
         self.selectedRowIndex = tappedIndexPath;
         [self.tableView beginUpdates];

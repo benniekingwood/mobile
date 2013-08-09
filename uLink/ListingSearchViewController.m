@@ -62,6 +62,7 @@
             [searchBar setText:searchTxt];
             [self executeSearch];
         }
+        executeSearchOnLoad = FALSE;
     }
 }
 
