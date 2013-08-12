@@ -431,7 +431,6 @@
             NSString *json = @"{ \"limit\": 1,\"sid\":";
             json = [json stringByAppendingString:self.school.schoolId];
             json = [json stringByAppendingString:@"}"];
-            NSLog(@"%@", json);
             NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
             [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

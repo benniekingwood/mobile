@@ -33,4 +33,5 @@
 @property (nonatomic) NSDate *cacheAge;
 - (NSString*) getJSON;
 - (id)initWithDictionary:(NSDictionary*)json;
+- (void) deleteListing;
 @end

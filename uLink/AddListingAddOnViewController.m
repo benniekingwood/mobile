@@ -24,6 +24,7 @@
     AlertView *errorAlertView;
     ActivityIndicatorView *activityIndicator;
     UIBarButtonItem *btnDone;
+    NSDictionary *paymentConfirmation;
 }
 -(void) buildHighlightSection;
 -(void) buildBoldSection;
@@ -95,6 +96,15 @@
                target:self
                action:@selector(doneClick:)];
 }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // "pre" connect to the pay pay servers
+    // Start out working with the test environment! When you are ready, remove this line to switch to live.
+    [PayPalPaymentViewController setEnvironment:PayPalEnvironmentNoNetwork];
+    [PayPalPaymentViewController prepareForPaymentUsingClientId:PAYPAL_CLIENT_ID];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     // reset the custom Alert view
     [errorAlertView resetAlert:@""];
@@ -340,31 +350,150 @@
     [boldButton addTarget:self action:@selector(boldButtonClick) forControlEvents:UIControlEventTouchDown];
     [scrollView addSubview:boldButton];
 }
+- (void) pay:(NSString*)price {
+    // Create a PayPalPayment
+    PayPalPayment *payment = [[PayPalPayment alloc] init];
+    payment.amount = [[NSDecimalNumber alloc] initWithString:price];
+    payment.currencyCode = @"USD";
+    payment.shortDescription = [@"Listing Add On - " stringByAppendingString:self.listing.type];
+    
+    // Check whether payment is processable.
+    if (!payment.processable) {
+        // If, for example, the amount was negative or the shortDescription was empty, then
+        // this payment would not be processable. You would want to handle that here.
+    }
+    
+    // Start out working with the test environment! When you are ready, remove this line to switch to live.
+    [PayPalPaymentViewController setEnvironment:PayPalEnvironmentSandbox];
+    
+    // Provide a payerId that uniquely identifies a user within the scope of your system,
+    // such as an email address or user ID.
+    NSString *aPayerId = UDataCache.sessionUser.username;
+    
+    // Create a PayPalPaymentViewController with the credentials and payerId, the PayPalPayment
+    // from the previous step, and a PayPalPaymentDelegate to handle the results.
+    PayPalPaymentViewController *paymentViewController;
+    paymentViewController = [[PayPalPaymentViewController alloc] initWithClientId:PAYPAL_SANDBOX_CLIENT_ID
+                                                                    receiverEmail:PAYPAL_SANDBOX_RECEIVER_EMAIL
+                                                                          payerId:aPayerId
+                                                                          payment:payment
+                                                                         delegate:self];
+    
+    // Present the PayPalPaymentViewController.
+    [self presentViewController:paymentViewController animated:YES completion:nil];
+}
+
+-(void) finalizePostListingSuccess {
+    // TODO: update the user's session listings
+    // move the success view to the front and show it
+    [self.view bringSubviewToFront:self.submitSuccessView];
+    self.submitSuccessView.alpha = ALPHA_HIGH;
+    // show the done button
+    self.navigationItem.rightBarButtonItem = btnDone;
+    // hide the back button
+    self.navigationItem.hidesBackButton = TRUE;
+    // clear the titles
+    self.navigationItem.title = EMPTY_STRING;
+
+}
+#pragma mark - PayPalPaymentDelegate methods
+
+- (void)payPalPaymentDidComplete:(PayPalPayment *)completedPayment {
+    // Payment was processed successfully; send to server for verification and fulfillment.
+    [self verifyCompletedPayment:completedPayment];
+    
+    // Dismiss the PayPalPaymentViewController.
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)payPalPaymentDidCancel {
+    // delete the listing
+    [self.listing deleteListing];
+    
+    // The payment was canceled; dismiss the PayPalPaymentViewController.
+    [self dismissViewControllerAnimated:YES completion:^{
+        // re-enable the buttons
+        dispatch_async(dispatch_get_main_queue(), ^{
+            regularButton.enabled = TRUE;
+            highlightButton.enabled = TRUE;
+            boldButton.enabled = TRUE;
+        });
+      
+    }];
+}
+- (void)verifyCompletedPayment:(PayPalPayment *)completedPayment {
+    NSLog(@"%@", completedPayment.confirmation);
+    paymentConfirmation = completedPayment.confirmation;
+    
+    // TODO: Send confirmation to your server; your server should verify the proof of payment,
+    // and also post the Listing if the payment was good
+    BOOL validPayment = TRUE;
+    // TEMP work, just verify here for now
+    NSDictionary *payment = [paymentConfirmation objectForKey:@"payment"];
+
+    NSString *currencyCode = [payment objectForKey:@"currency_code"];
+    if(![currencyCode isEqualToString:@"USD"]) {
+        validPayment = FALSE;
+    }
+    NSDictionary *proofOfPayment = [paymentConfirmation objectForKey:@"proof_of_payment"];
+    NSDictionary *adaptive = [proofOfPayment objectForKey:@"adaptive_payment"];
+    NSDictionary *rest = [proofOfPayment objectForKey:@"rest_api"];
+    // if paypal payment
+    if(adaptive != nil) {
+        NSString *execStatus = [adaptive objectForKey:@"payment_exec_status"];
+        if(![execStatus isEqualToString:@"COMPLETED"]) {
+            validPayment = FALSE;
+        }
+    } else if(rest != nil) { // else if credit card paymentb 
+        NSString *state = [rest objectForKey:@"state"];
+        if(![state isEqualToString:@"approved"]) {
+            validPayment = FALSE;
+        }
+    }
+    
+    // if the payment was good, show the successview
+    if(validPayment) {
+        [self finalizePostListingSuccess];
+    } else { // if it's not a valid payment, notify the user with error dialog, and delete listing
+        errorAlertView.message = @"There was a problem submitting the payment for your listing.  Please try again later or contact help@theulink.com.";
+        [errorAlertView show];
+    }
+}
+#pragma mark -
 
 #pragma mark Actions
 -(void) highlightButtonClick {
+    // set the listing type to be highlighted
     self.listing.type = @"highlight";
-    // TODO: go to payment controller where they select 3 or 7 days and we set meta there
+    if(self.listing.meta == nil) {
+        self.listing.meta = [[NSMutableDictionary alloc] init];
+    }
+    [self.listing.meta setObject:@"7" forKey:@"duration"];
+    // then post the listing, and forward to the paypal controller
+    [self postListing];
 }
 -(void) boldButtonClick {
+    // set the listing type to be bold
     self.listing.type = @"bold";
-     // TODO: go to payment controller where they pay and we set meta there
+    if(self.listing.meta == nil) {
+        self.listing.meta = [[NSMutableDictionary alloc] init];
+    }
+    [self.listing.meta setObject:@"7" forKey:@"duration"];
+    // then post the listing, and forward to the paypal controller
+    [self postListing];
 }
--(void) regularButtonClick {
+
+
+-(void) postListing {
     @try {
         self.view.userInteractionEnabled = NO;
         [activityIndicator showActivityIndicator:self.view];
-        self.listing.type = @"regular";
-        if(self.listing.meta == nil) {
-            self.listing.meta = [[NSMutableDictionary alloc] init];
-        }
-        [self.listing.meta setObject:@"7" forKey:@"duration"];
         
         NSString *listingJSON = [self.listing getJSON];
         regularButton.enabled = FALSE;
         highlightButton.enabled = FALSE;
         boldButton.enabled = FALSE;
-
+        
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS]]];
         NSData *requestData = [NSData dataWithBytes:[listingJSON UTF8String] length:[listingJSON length]];
         [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
@@ -372,10 +501,9 @@
         [req setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
         [req setHTTPBody: requestData];
         [req setHTTPMethod:HTTP_POST];
-       // [req setHTTPBody:[req dataUsingEncoding:NSUTF8StringEncoding]];
         // how we stop refresh from freezing the main UI thread
-        dispatch_queue_t updateSocialQueue = dispatch_queue_create(DISPATCH_UPDATE_SOCIAL, NULL);
-        dispatch_async(updateSocialQueue, ^{
+        dispatch_queue_t postListingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
+        dispatch_async(postListingQueue, ^{
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -385,18 +513,23 @@
                         NSDictionary* json = [NSJSONSerialization
                                               JSONObjectWithData:data
                                               options:kNilOptions
-                                              error:&err]; 
+                                              error:&err];
                         if(((NSHTTPURLResponse*)response).statusCode == 200) {
-                            // TODO: update the user's session listings
-                            // move the success view to the front and show it
-                            [self.view bringSubviewToFront:self.submitSuccessView];
-                            self.submitSuccessView.alpha = ALPHA_HIGH;
-                            // show the done button
-                            self.navigationItem.rightBarButtonItem = btnDone;
-                            // hide the back button
-                            self.navigationItem.hidesBackButton = TRUE;
-                            // clear the titles
-                            self.navigationItem.title = EMPTY_STRING;
+                            // set the new id on the listing
+                            self.listing._id = [json objectForKey:@"_id"];
+                            // if this is a regular posting
+                            if([self.listing.type isEqualToString:@"regular"]) {
+                                [self finalizePostListingSuccess];
+                            } else {
+                                NSString *price;
+                                // determine the price
+                                if([self.listing.type isEqualToString:@"highlight"]) {
+                                    price = @"1.99";
+                                } else if ([self.listing.type isEqualToString:@"bold"]) {
+                                    price = @"0.75";
+                                }
+                                [self pay:price];
+                            }
                         } else {
                             self.view.userInteractionEnabled = YES;
                             regularButton.enabled = TRUE;
@@ -424,9 +557,21 @@
     }
     @catch (NSException *exception) {
         self.view.userInteractionEnabled = YES;
+        regularButton.enabled = TRUE;
+        highlightButton.enabled = TRUE;
+        boldButton.enabled = TRUE;
         // show alert to user
         [errorAlertView show];
     }
+}
+
+-(void) regularButtonClick {
+    self.listing.type = @"regular";
+    if(self.listing.meta == nil) {
+        self.listing.meta = [[NSMutableDictionary alloc] init];
+    }
+    [self.listing.meta setObject:@"7" forKey:@"duration"];
+    [self postListing];
 }
 - (void) doneClick:(id)sender {
     NSArray *viewControllers = self.navigationController.viewControllers;

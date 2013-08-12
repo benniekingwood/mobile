@@ -270,7 +270,7 @@
             } else {
                 json = [json stringByAppendingString:@","];
             }
-            json = [json stringByAppendingString:@",\""];
+            json = [json stringByAppendingString:@"\""];
             json = [json stringByAppendingString:key];
             json = [json stringByAppendingString:@"\":"];
             json = [json stringByAppendingString:@"\""];
@@ -317,5 +317,37 @@
         json = [json stringByAppendingString:@"]"];
     }
     return json;
+}
+
+- (void) deleteListing {
+    @try {
+        NSString *url = [URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS];
+        url = [url stringByAppendingString:self._id];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+        [req setHTTPMethod:HTTP_DELETE];
+        // how we stop refresh from freezing the main UI thread
+        dispatch_queue_t deleteListingQueue = dispatch_queue_create(DISPATCH_ULIST_LISTING, NULL);
+        dispatch_async(deleteListingQueue, ^{
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [NSURLConnection sendAsynchronousRequest:req queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([data length] > 0 && error == nil) {
+                       // NSError* err;
+                       /* NSDictionary* json = [NSJSONSerialization
+                                              JSONObjectWithData:data
+                                              options:kNilOptions
+                                              error:&err];*/
+                        if(((NSHTTPURLResponse*)response).statusCode == 200) {
+                            self._id = nil;
+                        } 
+                    } else {
+                       
+                    }
+                });
+            }];
+        });
+    }
+    @catch (NSException *exception) {
+    }
 }
 @end
