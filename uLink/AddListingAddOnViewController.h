@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Listing.h"
-@interface AddListingAddOnViewController : UIViewController <UIScrollViewDelegate>
+#import "PayPalMobile.h"
+@interface AddListingAddOnViewController : UIViewController <UIScrollViewDelegate,PayPalPaymentDelegate>
 @property (strong, nonatomic) IBOutlet UIView *submitSuccessView;
 @property (nonatomic, strong) Listing *listing;
 @end

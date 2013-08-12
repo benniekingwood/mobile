@@ -265,6 +265,15 @@
 #pragma mark ALERTS
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
 
+#pragma mark PAYPAL
+#define PAYPAL_SANDBOX_CLIENT_ID @"ASee0xDSnauZi1fuP_XyN3aocl76BhdRbdSXtoUW8sn04pFVBrKyk6rryNzE"
+#define PAYPAL_SANDBOX_SECRET @"EK5iyhCsRGPQJNFtOCkCsxl9UXyJ5CpPFYu0FbGxvVBvw67JpSKSjB2SeCyX"
+#define PAYPAL_SANDBOX_RECEIVER_EMAIL @"bennie.kingwood-facilitator@theulink.com"
+#define PAYPAL_CLIENT_ID @"ASee0xDSnauZi1fuP_XyN3aocl76BhdRbdSXtoUW8sn04pFVBrKyk6rryNzE"
+#define PAYPAL_SECRET @"EK5iyhCsRGPQJNFtOCkCsxl9UXyJ5CpPFYu0FbGxvVBvw67JpSKSjB2SeCyX"
+// todo change this to payments@theulink.com?
+#define PAYPAL_RECEIVER_EMAIL @"bennie.kingwood@theulink.com"
+
 #pragma mark QUERY_PARAMS
 
 #pragma mark LISTING_QUERY_TYPES
