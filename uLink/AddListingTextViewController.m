@@ -280,16 +280,21 @@ const int kListingTagLimit = 3;
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     btnSave.enabled = TRUE;
     BOOL retVal = NO;
-    if([string isEqualToString:@""]) {
+    if([string isEqualToString:@" "]) {
+        retVal = !(self.mode == kAddListingTextModeTags);
+    } else if([string isEqualToString:EMPTY_STRING]) {
         retVal = YES;
     } else {
-        switch (mode) {
+        switch (self.mode) {
             case kAddListingTextModeDescription:
-                break;
             case kAddListingTextModeTitle:
+                retVal = textField.text.length < 255;
+                break;
             case kAddListingTextModePrice:
+                retVal = textField.text.length < 8;
+                break;
             case kAddListingTextModeTags:
-                retVal = listingTextField.text.length < 255;
+                retVal = textField.text.length < 25;
                 break;
         }
     }
@@ -304,7 +309,7 @@ const int kListingTagLimit = 3;
 #pragma mark TextView delegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     if ([descriptionTextView.text isEqualToString:@"Description"]) {
-        descriptionTextView.text = @"";
+        descriptionTextView.text = EMPTY_STRING;
     }
     btnSave.enabled = TRUE;
     return TRUE;
@@ -314,7 +319,7 @@ const int kListingTagLimit = 3;
     if([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
     }
-    if([text isEqualToString:@""]) {
+    if([text isEqualToString:EMPTY_STRING]) {
         retVal = YES;
     } else {
         retVal = descriptionTextView.text.length < 751;
