@@ -42,6 +42,7 @@
     BOOL hotCategoryClick;
     BOOL trendingTagClick;
     UIImageView *schoolImageView;
+    BOOL activeTagButtons;
 }
 - (void) buildCategorySection;
 - (void) retreiveTopCategories;
@@ -232,15 +233,17 @@
 
     // tag1
     tags1Button = [UIButton buttonWithType:UIButtonTypeCustom];
-    tags1Button.frame = CGRectMake(320,0,100,60);
+    tags1Button.frame = CGRectMake(320,0,210,60);
     tags1Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
     tags1Button.backgroundColor = [UIColor clearColor];
     tags1Button.titleLabel.textColor = [UIColor whiteColor];
     tags1Button.titleLabel.textAlignment = NSTextAlignmentLeft;
+    tags1Button.titleLabel.numberOfLines = 0;
+    tags1Button.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
     [scrollingTagsView addSubview:tags1Button];
     // tag2
     tags2Button = [UIButton buttonWithType:UIButtonTypeCustom];
-    tags2Button.frame = CGRectMake(320,0,100,60);
+    tags2Button.frame = CGRectMake(320,0,210,60);
     tags2Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
     tags2Button.backgroundColor = [UIColor clearColor];
     tags2Button.titleLabel.textColor = [UIColor whiteColor];
@@ -248,7 +251,7 @@
     [scrollingTagsView addSubview:tags2Button];
     // tag3
     tags3Button = [UIButton buttonWithType:UIButtonTypeCustom];
-    tags3Button.frame = CGRectMake(320,0,100,60);
+    tags3Button.frame = CGRectMake(320,0,210,60);
     tags3Button.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:13];
     tags3Button.backgroundColor = [UIColor clearColor];
     tags3Button.titleLabel.textColor = [UIColor whiteColor];
@@ -277,34 +280,54 @@
     
     [self.view addSubview:uListHomeButton];
 }
-- (void) animateTag1 {
-        [UIView animateWithDuration:15.0f
+- (void) animateTag1:(BOOL)isDefaultTag {
+    // if there are no tags (meaning isDefaultTag is true), then just animate the first tag only
+    if(isDefaultTag && !activeTagButtons) {
+        [UIView animateWithDuration:18.0f
+                              delay:0.0f
+                            options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
+                         animations:^{
+                             /*CGRect r = [tags1Button frame];
+                              r.origin.x -= 150;
+                              [tags1Button setFrame: r];*/
+                             tags1Button.frame = CGRectMake(-210,0,210,60);
+                         }
+                         completion:^(BOOL completed) {
+                             /*CGRect r = [tags1Button frame];
+                              r.origin.x += 320;
+                              [tags1Button setFrame: r];*/
+                             tags1Button.frame = CGRectMake(320,0,210,60);
+                             [self animateTag1:TRUE];
+                         }];
+    } else {
+        [UIView animateWithDuration:18.0f
                               delay:0.0f
                             options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
                          animations:^{
                              /*CGRect r = [tags1Button frame];
                              r.origin.x -= 150;
                              [tags1Button setFrame: r];*/
-                             tags1Button.frame = CGRectMake(-150,0,100,60);
+                             tags1Button.frame = CGRectMake(-210,0,210,60);
                          }
                          completion:^(BOOL completed) {
                              /*CGRect r = [tags1Button frame];
                              r.origin.x += 320;
                              [tags1Button setFrame: r];*/
-                             tags1Button.frame = CGRectMake(320,0,100,60);
+                             tags1Button.frame = CGRectMake(320,0,210,60);
 
                          }];
-    [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag2) userInfo:FALSE repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag2) userInfo:FALSE repeats:NO];
+    }
 }
 - (void) animateTag2{
-        [UIView animateWithDuration:15.0f
+        [UIView animateWithDuration:18.0f
                          delay:0.0f
                          options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
                          animations:^{
-                             tags2Button.frame = CGRectMake(-150,0,100,60);
+                             tags2Button.frame = CGRectMake(-210,0,210,60);
                          }
                          completion:^(BOOL completed) {
-                             tags2Button.frame = CGRectMake(320,0,100,60);
+                             tags2Button.frame = CGRectMake(320,0,210,60);
                          }];
         [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag3) userInfo:FALSE repeats:NO];
 }
@@ -313,12 +336,12 @@
                         delay:0.0f
                         options: (UIViewAnimationOptionAllowUserInteraction |UIViewAnimationOptionCurveLinear)
                          animations:^{
-                             tags3Button.frame = CGRectMake(-150,0,100,60);
+                             tags3Button.frame = CGRectMake(-150,0,210,60);
                          }
                          completion:^(BOOL completed) {
-                             tags3Button.frame = CGRectMake(320,0,100,60);
+                             tags3Button.frame = CGRectMake(320,0,210,60);
                          }];
-     [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag1) userInfo:FALSE repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(animateTag1:) userInfo:FALSE repeats:NO];
 
 }
 - (void)updateView {
@@ -346,27 +369,33 @@
     
     UITouch *touch = [touches anyObject];
     CGPoint touchLocation = [touch locationInView:scrollingTagsView.viewForBaselineLayout];
-    NSLog(@"touch point %f,%f", touchLocation.x, touchLocation.y);
-    NSLog(@"Tag1 point: %f, %f:", tags1Button.layer.position.x, tags1Button.layer.position.y);
+    /* 
+     * If the tag buttons are active then we can perform a search.  The only time
+     * the buttons would not be active is if there are not tags in the listings for
+     * the current school
+     */
+    if(activeTagButtons) {
+        NSLog(@"touch point %f,%f", touchLocation.x, touchLocation.y);
+        NSLog(@"Tag1 point: %f, %f:", tags1Button.layer.position.x, tags1Button.layer.position.y);
 
-    if ([tags1Button.layer.presentationLayer hitTest:touchLocation]) {
-        //NSLog(@"tag click %@", tags1Button.titleLabel.text);
-        searchTxt = [[NSString alloc] initWithString:[tags1Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
-    } else if ([tags2Button.layer.presentationLayer hitTest:touchLocation]) {
-        //NSLog(@"tag click %@", tags2Button.titleLabel.text);
-        searchTxt = [[NSString alloc] initWithString:[tags2Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
-    } else if ([tags3Button.layer.presentationLayer hitTest:touchLocation]) {
-        //NSLog(@"tag click %@", tags3Button.titleLabel.text);
-        searchTxt = [[NSString alloc] initWithString:[tags3Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+        if ([tags1Button.layer.presentationLayer hitTest:touchLocation]) {
+            //NSLog(@"tag click %@", tags1Button.titleLabel.text);
+            searchTxt = [[NSString alloc] initWithString:[tags1Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+        } else if ([tags2Button.layer.presentationLayer hitTest:touchLocation]) {
+            //NSLog(@"tag click %@", tags2Button.titleLabel.text);
+            searchTxt = [[NSString alloc] initWithString:[tags2Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+        } else if ([tags3Button.layer.presentationLayer hitTest:touchLocation]) {
+            //NSLog(@"tag click %@", tags3Button.titleLabel.text);
+            searchTxt = [[NSString alloc] initWithString:[tags3Button.titleLabel.text stringByTrimmingCharactersInSet:trimSet]];
+        }
+        
+        // if we have search text, then perform search action on trending tag
+        if (searchTxt) {
+            NSLog(@"search text: %@", searchTxt);
+            trendingTagClick = TRUE;
+            [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER sender:self];
+        }
     }
-    
-    // if we have search text, then perform search action on trending tag
-    if (searchTxt) {
-        NSLog(@"search text: %@", searchTxt);
-        trendingTagClick = TRUE;
-        [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_SEARCH_VIEW_CONTROLLER sender:self];
-    }
-    
 }
 
 /*
@@ -646,6 +675,8 @@
                                          options:kNilOptions
                                          error:&err];
                         if (json != nil && [json count] > 0) {
+                            // activate the tag buttons since there is data
+                            activeTagButtons = YES;
                             for (int idx=0; idx<[json count]; idx++) {
                                 NSDictionary *category = json[idx];
                                 NSDictionary *tag = [category objectForKey:@"_id"];
@@ -654,7 +685,7 @@
                                 switch (idx) {
                                     case 0:
                                         [tags1Button setTitle:tagName forState:UIControlStateNormal];
-                                        [self animateTag1];
+                                        [self animateTag1:FALSE];
                                         break;
                                     case 1:
                                         [tags2Button setTitle:tagName forState:UIControlStateNormal];
@@ -664,10 +695,17 @@
                                         break;
                                 } // end switch
                             } // end for
-                        }   // end if
+                        } else {
+                            // set the default tag, and make sure the buttons are not active
+                            [tags1Button setTitle:@"#tolistornottolist" forState:UIControlStateNormal];
+                            activeTagButtons = NO;
+                            [self animateTag1:TRUE];
+                        }
                     } else {
-                        // just set the first tag
-                        [tags1Button setTitle:@"#whereisthelove" forState:UIControlStateNormal];
+                         // set the default tag, and make sure the buttons are not active
+                        [tags1Button setTitle:@"#tolistornottolist" forState:UIControlStateNormal];
+                        activeTagButtons = NO;
+                        [self animateTag1:TRUE];
                     }
                 }
             });
