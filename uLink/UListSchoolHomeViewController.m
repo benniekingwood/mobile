@@ -526,7 +526,6 @@
                 if (data)
                 {
                     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-                    
                     if (httpResponse.statusCode==200)
                     {
                         NSError* err;
@@ -534,7 +533,6 @@
                                          JSONObjectWithData:data
                                          options:kNilOptions
                                          error:&err];
-    
                         if (json != nil && [json count] > 0) {
                             NSDictionary *category = json[0];
                             NSDictionary *name = [category objectForKey:@"_id"];
@@ -546,11 +544,13 @@
                             categoryHeader.text = (count > 0) ? @"Hot Category" : @"Featured Category";
                         }
                         else {
-                            hotCategoryName.text = @"Oh no, where's your category?!";
-                            [categoryViewButton setUserInteractionEnabled:YES];
-                            [categoryViewButton setEnabled:NO];
+                            // since there are no listings yet..let's default it to For Sale -> Books
+                            hotCategoryName.text = @"Books";
+                            mainHotCategoryName = @"For Sale";
+                            categoryHeader.text = @"Featured Category";
                         }
                     } else {
+                        // TODO[future]: if it reaches here, it means we have a server error and we should log
                         hotCategoryName.text = @"Oh no, where's your category?!";
                         [categoryViewButton setUserInteractionEnabled:YES];
                         [categoryViewButton setEnabled:NO];
