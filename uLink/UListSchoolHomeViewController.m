@@ -19,6 +19,7 @@
 #import "ImageActivityIndicatorView.h"
 #import "ColorConverterUtil.h"
 #import <QuartzCore/QuartzCore.h>
+#import <SDWebImage/SDWebImageDownloader.h>
 
 @interface UListSchoolHomeViewController () {
     UIBarButtonItem *searchButton;
@@ -40,6 +41,7 @@
     NSString *searchTxt;
     BOOL hotCategoryClick;
     BOOL trendingTagClick;
+    UIImageView *schoolImageView;
 }
 - (void) buildCategorySection;
 - (void) retreiveTopCategories;
@@ -410,6 +412,54 @@
             break;
     }
 }
+-(void) buildSchoolImageView {
+    // add the campus image
+    if(isIPhone4) {
+        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 150, 320, 150)];
+    } else {
+        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+    }
+    schoolImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:schoolImageView];
+    [self loadSchoolImage];
+}
+-(void) loadSchoolImage {
+    NSString *cacheKey = [KEY_SCHOOL_ID_PREPEND stringByAppendingString:self.school.schoolId];
+    // grab the school image from the images cache
+    UIImage *schoolImage = [UDataCache imageExists:cacheKey cacheModel:IMAGE_CACHE];
+    if (schoolImage == nil || [schoolImage isKindOfClass:[NSNull class]]) {
+        if(![self.school.imageURL isKindOfClass:[NSNull class]] && self.school.imageURL != nil && ![self.school.imageURL isEqualToString:@""]) {
+            // set the key in the cache to let other processes know that this key is in work
+            [UDataCache.images setValue:[NSNull null] forKey:cacheKey];
+            // lazy load the image from the web
+            NSURL *url = [NSURL URLWithString:[URL_SCHOOL_IMAGE stringByAppendingString:self.school.imageURL]];
+            __block ImageActivityIndicatorView *sActivityIndicator;
+            SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
+            [imageDownloader downloadImageWithURL:url
+                                          options:SDWebImageDownloaderProgressiveDownload
+                                         progress:^(NSUInteger receivedSize, long long expectedSize) {
+                                             if (!sActivityIndicator)
+                                             {
+                                                 sActivityIndicator = [[ImageActivityIndicatorView alloc] init];
+                                                 [sActivityIndicator showActivityIndicator:schoolImageView];
+                                             }
+                                         }
+                                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished){
+                                            if (image && finished)
+                                            {
+                                                // add the school's image to the image cache
+                                                [UDataCache.images setValue:image forKey:cacheKey];
+                                                // set the picture in the view
+                                                schoolImageView.image = image;
+                                                [sActivityIndicator hideActivityIndicator:schoolImageView];
+                                                sActivityIndicator = nil;
+                                            }
+                                        }];
+        }
+    } else if (![schoolImage isKindOfClass:[NSNull class]]) {
+        schoolImageView.image = schoolImage;
+    }
+}
 
 /*
  * Retreive the top categories 
@@ -538,14 +588,14 @@
                             NSLog(@"recent listing txt: %@", listingName.text);
                         }
                         else {
-                            listingName.text = @"No Recent Listing?!";
-                            [listingViewButton setUserInteractionEnabled:YES];
-                            [listingViewButton setEnabled:NO];
+                            // show the school image instead
+                            [listingViewButton removeFromSuperview];
+                            [self buildSchoolImageView];
                         }
                     } else {
-                        listingName.text = @"No Recent Listing?!";
-                        [listingViewButton setUserInteractionEnabled:YES];
-                        [listingViewButton setEnabled:NO];
+                        // show the school image instead
+                        [listingViewButton removeFromSuperview];
+                        [self buildSchoolImageView];
                     }
                 }
             });
