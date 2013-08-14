@@ -32,10 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // this will be set when a user submits a listing.  We will dismiss here right away
-    if(self.dismissImmediately) {
-        [self dismissViewControllerAnimated:NO completion:nil];
-    }
+
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -46,7 +43,20 @@
          [UDataCache hydrateUListCategoryCache];
         [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(reloadTableData) userInfo:nil repeats:NO];
     }
-    NSLog(@"view did load.");
+    //NSLog(@"view did load.");
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // this will be set when a user submits a listing.  We will dismiss here right away
+    if(self.dismissImmediately) {
+        NSLog(@"dismiss immediately: returned from adding a listing");
+        
+        // dismiss add listing completion view controller
+        [UDataCache rehydrateSessionUser];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning

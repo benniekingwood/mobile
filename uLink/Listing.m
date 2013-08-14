@@ -265,6 +265,11 @@
         BOOL firstItem = TRUE;
         for (NSString* key in self.meta) {
             NSString *value = (NSString*)[self.meta objectForKey:key];
+            
+            // check if string value is empty, or nil
+            if (value == nil || [value length] <= 0)
+                continue;
+            
             if(firstItem) {
                 firstItem = FALSE;
             } else {

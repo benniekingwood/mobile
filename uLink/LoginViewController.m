@@ -255,7 +255,7 @@
     [self loadSessionUserListings];
 }
 - (void) loadSessionUserListings {
-    [UDataCache hydrateSessionUserListings];
+    [UDataCache hydrateSessionUserListings:nil];
 }
 - (void) hydrateCaches {
      [UDataCache hydrateCaches];

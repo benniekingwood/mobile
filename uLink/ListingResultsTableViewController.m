@@ -313,8 +313,6 @@
             cell = [[UListMapCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        
-        
         UIView *bottomLine = [[UIView alloc] init];
         
         // add google maps to cell view

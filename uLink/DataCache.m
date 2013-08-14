@@ -252,6 +252,29 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         [self decrementActiveProcesses];
     }
 }
+- (void) rehydrateSessionUserListings:(BOOL)checkAge notification:(NSString*)notification {
+    BOOL rehydrate = TRUE;
+    
+    if (checkAge) {
+        if ([self.sessionUser.listings count] > 0) {
+            Listing *listing = [self.sessionUser.listings objectAtIndex:0];
+            double timeElapsed = [[NSDate date] timeIntervalSinceDate:listing.cacheAge];
+            if (timeElapsed <= CACHE_AGE_LIMIT_LISTINGS) {
+                rehydrate = FALSE;
+            }
+        }
+    }
+    if (rehydrate) {
+        // clear out the image cache to maintain memory
+        [self.listingImageMedium removeAllObjects];
+        [self.listingImageThumbs removeAllObjects];
+        
+        [self hydrateSessionUserListings:notification];
+    }
+    else {
+        [self decrementActiveProcesses];
+    }
+}
 - (void) rehydrateUListListingsCache:(BOOL)checkAge {
     BOOL rehydrate = TRUE;
     
@@ -268,6 +291,8 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         // clear out the image cache to maintain memory
         [self.listingImageMedium removeAllObjects];
         [self.listingImageThumbs removeAllObjects];
+        
+        // TODO: use listings data cache to rehydrate if possible
     }
     else {
         [self decrementActiveProcesses];
@@ -391,7 +416,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
 - (void) rehydrateSessionUser {
     @try {
         //clock_t start = clock();
-        [self performSelectorInBackground:@selector(hydrateSessionUserListings:) withObject:self];
+        [self performSelectorInBackground:@selector(hydrateSessionUserListings:) withObject:nil];
         NSDate *start = [NSDate date];
         dispatch_queue_t userQueue = dispatch_queue_create(DISPATCH_USER, NULL);
         dispatch_async(userQueue, ^{
@@ -434,7 +459,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
             }];
         });
     }
-    @catch (NSException *exception) {} // TODO: report error?
+    @catch (NSException *exception) { NSLog(@"Exception: %@", [exception reason]); } // TODO: report error?
 }
 
 - (void) hydrateImageCache {
@@ -627,7 +652,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
  * This function will load the listings based on the passed in 
  * user id.
  */
-- (void) hydrateSessionUserListings {
+- (void) hydrateSessionUserListings:(NSString*)notification {
     @try {
         //clock_t start = clock();
         NSDate *start = [NSDate date];
@@ -663,6 +688,11 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
                             [self buildUListListingList:json forSessionUser:YES];
                         }
                         
+                        // Send a notification to observer if necessary to notify a view that the listings are ready
+                        if(notification != nil && ![notification isEqualToString:EMPTY_STRING]){
+                            NSLog(@"DataCache - done building listings for session user, sending notificaiton.");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+                        }
                     }
                     
                     NSDate *end = [NSDate date];
