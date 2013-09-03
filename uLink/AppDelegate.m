@@ -36,6 +36,9 @@
     [UDataCache hydrateSchoolCache];
     [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
     [UDataCache hydrateSnapshotCategoriesCache:NO];
+    // hydrate the UList categories 
+    [UDataCache hydrateUListCategoryCache];
+
     [NSThread sleepForTimeInterval:SLEEP_TIME_APP_LOAD];
     storyboard = [UIStoryboard storyboardWithName:@"uLink" bundle:nil];
     [self setupNavigationControllerApp];
@@ -207,6 +210,8 @@
         [UDataCache rehydrateSchoolCache:YES];
         [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
         [UDataCache hydrateSnapshotCategoriesCache:NO];
+        [UDataCache hydrateUListCategoryCache];
+
     }
     
     [self activateSideMenu : @"uCampus"];
