@@ -274,6 +274,8 @@
          * isn't an image, we need to load it in the background with SDwebImage.
          */
         for (NSString *imageURL in self.listing.imageUrls) {
+            NSArray* tokens = [imageURL componentsSeparatedByString: @"/"];
+            NSString* imageFilename = [tokens objectAtIndex:([tokens count]-1)];
             
             // build the listing photo view
             UIImageView *listingPhotoView = [[UIImageView alloc] init];
@@ -281,12 +283,12 @@
             listingPhotoView.contentMode = UIViewContentModeScaleAspectFill;
             [listingPhotosView addSubview:listingPhotoView];
             
-            // grab the event image from the event cache
-            UIImage *listingImage = [schoolListingImages objectForKey:imageURL];
+            // grab the event image from the listing cache
+            UIImage *listingImage = [schoolListingImages objectForKey:imageFilename];
             if (listingImage == nil) {
                     // set the key in the cache to let other processes know that this key is in work
-                    [schoolListingImages setValue:[NSNull null]  forKey:imageURL];
-                    NSURL *url = [NSURL URLWithString:[URL_LISTING_IMAGE_MEDIUM stringByAppendingString:imageURL]];
+                    [schoolListingImages setValue:[NSNull null]  forKey:imageFilename];
+                    NSURL *url = [NSURL URLWithString:[URL_LISTING_IMAGE_MEDIUM stringByAppendingString:imageFilename]];
                     __block ImageActivityIndicatorView *iActivityIndicator;
                     SDWebImageDownloader *imageDownloader = [SDWebImageDownloader sharedDownloader];
                     [imageDownloader downloadImageWithURL:url
@@ -302,7 +304,7 @@
                                                     if (image && finished)
                                                     {
                                                         // add the event image to the image cache
-                                                        [schoolListingImages setValue:image forKey:imageURL];
+                                                        [schoolListingImages setValue:image forKey:imageFilename];
                                                         // set the picture in the view
                                                         listingPhotoView.image = image;
                                                         [iActivityIndicator hideActivityIndicator:listingPhotoView];
