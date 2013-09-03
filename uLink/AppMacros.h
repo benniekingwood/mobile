@@ -53,9 +53,8 @@
 #define URL_DEFAULT_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://localhost:8888/img/defaults/default_featured_event.png"
 #define URL_SCHOOL_IMAGE @"http://localhost:8888/img/files/schools/"
-// TODO: Once we get Add/Edit Listings working, we can then change these URLS to point to listings instead of events
-#define URL_LISTING_IMAGE_THUMB @"http://localhost:8888/img/files/events/thumbs/"
-#define URL_LISTING_IMAGE_MEDIUM @"http://localhost:8888/img/files/events/medium/"
+#define URL_LISTING_IMAGE_THUMB @"http://localhost:3737/img/listings/thumbs/"
+#define URL_LISTING_IMAGE_MEDIUM @"http://localhost:3737/img/listings/medium/"
 #define URL_DEFAULT_LISTING_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
 
 /*
@@ -72,8 +71,8 @@
 #define URL_DEFAULT_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 #define URL_DEFAULT_FEATURED_EVENT_IMAGE @"http://www.theulink.com/img/defaults/default_featured_event.png"
 #define URL_SCHOOL_IMAGE @"https://s3.amazonaws.com/ulink_images/img/files/schools/"
-#define URL_LISTING_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/files/events/thumbs/"
-#define URL_LISTING_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/files/events/medium/"
+#define URL_LISTING_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/listings/thumbs/"
+#define URL_LISTING_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/listings/medium/"
 #define URL_DEFAULT_LISTING_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
 */
 #pragma mark IMAGE CACHE KEYS
@@ -253,6 +252,7 @@
 #define BTN_REPORT_SPAM @"Report Spam"
 #define BTN_REPORT_MISCATEGORIZED @"Report Miscategorized"
 #define BTN_REPLY @"Reply"
+#define BTN_ADD_LISTING @"Add Listing"
 
 #pragma mark STRINGS
 #define SCHOOL_STATUS_CURRENT_STUDENT @"Current Student"
@@ -331,7 +331,8 @@ typedef enum {
 #pragma mark ULIST CATEGORY CELL TYPE 
 typedef enum {
     kListingCategoryTypeLight = 400,
-    kListingCategoryTypeDark
+    kListingCategoryTypeDark,
+    kListingCategoryTypeAddListingButton
 } ListingCategoryCellType;
 
 #pragma mark ULIST ADD LISTING TEXT MODE

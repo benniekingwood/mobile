@@ -68,12 +68,6 @@
     mapView.userInteractionEnabled = YES;
     mapView.clipsToBounds = YES;
     
-    // set up spinner when loading initial data
-    _initializeSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    CGRect frame = self.tableView.frame;
-    _initializeSpinner.center = CGPointMake(frame.size.width/2, frame.size.height/2);
-    [self.tableView addSubview:_initializeSpinner];
-    
     // Setup more results spinner (don't activate yet)
     self.moreResultsSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.moreResultsSpinner.hidesWhenStopped = YES;
@@ -92,6 +86,18 @@
     [closeMap.layer setShadowOpacity:0.5f];
     [closeMap.layer setCornerRadius:5.0f];
     [self.tableView addSubview:closeMap];
+    
+    // set up spinner when loading initial data
+    self.initializeSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    CGRect frame = self.view.frame;
+    self.initializeSpinner.center=[self tableView].center;
+    [[self tableView] addSubview:initializeSpinner];
+    //self.initializeSpinner.center = CGPointMake(frame.size.width/2, frame.size.height/2);
+    self.initializeSpinner.hidesWhenStopped = YES;
+    NSLog(@"Adding spinner");
+   // [self.view.superview insertSubview:self.initializeSpinner aboveSubview:self.view];
+    //[self.view addSubview:self.initializeSpinner];
+    [self.initializeSpinner startAnimating];
     
     // Register the observers that will be used when hydrating the listings
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -395,14 +401,14 @@
                     return cell;
                 } else {
                     [self.moreResultsSpinner stopAnimating];
-                    if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
+                    if ([self.initializeSpinner isAnimating]) [self.initializeSpinner stopAnimating];
                     return ([self getNoMoreResultsCell]);
                 }
             }
         } else {
             if (noMoreResultsAvail) {
                 [self.moreResultsSpinner stopAnimating];
-                if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
+                if ([self.initializeSpinner isAnimating]) [self.initializeSpinner stopAnimating];
                 return ([self getNoMoreResultsCell]);
             }
             else {
@@ -552,6 +558,7 @@
     [UDataCache hydrateUListListingsCache:query notification:notificationHandler];
 }
 - (void) dataLoaderFinishedLoadingListings {
+    if ([self.initializeSpinner isAnimating]) [self.initializeSpinner stopAnimating];
      NSLog(@"Listing Results TV - Recieved notification, data loader has finished loading.");
     /*
      * Since this function gets called when we receive a notification, and since it is
@@ -564,7 +571,6 @@
     });
 }
   - (void) basicFinishedLoadingListings {
-       // if ([_initializeSpinner isAnimating]) [_initializeSpinner stopAnimating];
       NSLog(@"Listing Results TV - Recieved notification, loading request again.");
       /*
        * Since this function gets called when we receive a notification, and since it is 
