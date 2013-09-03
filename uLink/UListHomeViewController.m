@@ -67,7 +67,6 @@
     
     [UDataCache.schoolSections removeObject:@""];
     sections = UDataCache.schoolSections;
-    [UDataCache hydrateUListCategoryCache];
 }
 
 #pragma mark - Table view data source
