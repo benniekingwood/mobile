@@ -24,6 +24,7 @@
     NSArray *sectionTitles;
     UIFont *cellFont;
     UIFont *cellFontBold;
+    NSMutableArray *sections;
 }
 @end
 
@@ -54,6 +55,11 @@
     self.view.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"side-menu-bg.png"]];
     self.tableView.separatorColor = [UIColor clearColor];
+    
+    // next set the ulist categories to this local mutable array so we can add a cell for the "Add Listing" button
+    [UDataCache.uListCategorySections removeObject:@""];
+    sections = UDataCache.uListCategorySections;
+    [sections insertObject:@"" atIndex:0];
 }
 
 -(void)hideMenu {
@@ -77,7 +83,7 @@
         retVal = 1;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        retVal = [UDataCache.uListCategorySections count];
+        retVal = [sections count];
     }
 
     return retVal;
@@ -91,17 +97,13 @@
         retVal = 3;
     }
     else if ([mode isEqualToString:@"uList"]) {
-        //if (section == 0) {
-            // add listing button
-        //    retVal = 1;
-        //}
-        //else {
-            NSString *key = [UDataCache.uListCategorySections objectAtIndex:section];
+        NSString *key = [sections objectAtIndex:section];
+        if([key isEqualToString:EMPTY_STRING]) {
+            retVal = 1;
+        } else {
             NSMutableArray *subcategories = [UDataCache.uListCategories mutableArrayValueForKey:key];
-            //NSLog(@"%@", subcategories);
             retVal = [subcategories count];
-        //}
-            
+        }
     }
 
     return retVal;
@@ -111,9 +113,6 @@
 {    
     UITableViewCell *cell = nil;
     int section = [indexPath section];
-    
-    //NSLog(@"%@", mode);
-    
     if ([mode isEqualToString:@"uCampus"]) {
         static NSString *CellIdentifier = @"Cell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -146,32 +145,34 @@
     }
     else if ([mode isEqualToString:@"uList"]) {
         static NSString *CellIdentifier = @"uListCell";
-        
-        /*if (section == 0) {
-            cell = (UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            }
-            
-            
-        } else {*/
-            cell = (UListMenuCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            }
-            
+        cell = (UListMenuCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        if (section == 0) {
+            ((UListMenuCell*)cell).mainCat = nil;
+            ((UListMenuCell*)cell).subCat = nil;
+            ((UListMenuCell*)cell).type = kListingCategoryTypeAddListingButton;
+            ((UListMenuCell*)cell).tag = kListingCategoryTypeAddListingButton;
+            ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"mobile-plus-sign"];
+            ((UListMenuCell*)cell).textLabel.text = BTN_ADD_LISTING;
+            [((UListMenuCell*)cell) initialize];
+            [(UListMenuCell*)cell layoutSubviews];
+            [(UListMenuCell*)cell setEnabled:YES];
+        } else {
             NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
             NSMutableArray *categories = [UDataCache.uListCategories objectForKey:categoryKey];
             UListCategory *category = [categories objectAtIndex:indexPath.row];
             ((UListMenuCell*)cell).type = kListingCategoryTypeDark;
+            ((UListMenuCell*)cell).tag = kListingCategoryTypeDark;
             ((UListMenuCell*)cell).mainCat = categoryKey;
             ((UListMenuCell*)cell).subCat = category.name;
-            ((UListMenuCell*)cell).iconImage = [UIImage alloc];
+            ((UListMenuCell*)cell).iconImage = nil;
             ((UListMenuCell*)cell).textLabel.text = category.name;
             [((UListMenuCell*)cell) initialize];
             [(UListMenuCell*)cell layoutSubviews];
             [(UListMenuCell*)cell setEnabled:YES];
-        //}
+        }
     }
     
     return cell;
@@ -199,8 +200,14 @@
         UListSchoolHomeMenuViewController *uListSchoolHomeController = (UListSchoolHomeMenuViewController*)[UAppDelegate getUListSchoolHomeViewController];
         
         if ([(id)uListSchoolHomeController respondsToSelector:@selector(performSegue:)]) {
-            //[(id)uListSchoolHomeController performSegue:selectedCell.];
-            [(id)uListSchoolHomeController performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:selectedCell];
+            if(selectedCell.tag == kListingCategoryTypeAddListingButton) {
+                UIStoryboard *storyboard = (id)uListSchoolHomeController.storyboard;
+                UIViewController *svc = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID];
+                [(id)uListSchoolHomeController presentViewController:svc animated:YES completion:nil];
+            } else {
+                //[(id)uListSchoolHomeController performSegue:selectedCell.];
+                [(id)uListSchoolHomeController performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:selectedCell];
+            }
         }
     }
 }
@@ -208,7 +215,11 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *view = nil;
     if ([mode isEqualToString:@"uList"]) {
-        view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
+        if (section == 0) {
+            view = [self createSectionView:EMPTY_STRING];
+        } else {
+            view = [self createSectionView:[UDataCache.uListCategorySections objectAtIndex:section]];
+        }
     }
     else {
         view = [[UIView alloc] initWithFrame:CGRectZero];
@@ -260,7 +271,4 @@
     [view addSubview:bottomLine];
     return view;
 }
-
-
-
 @end

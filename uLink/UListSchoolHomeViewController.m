@@ -582,7 +582,6 @@
         dispatch_async(recentListingQueue, ^{
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS_RECENT]]];
             NSString *json = [NSString stringWithFormat:@"{ \"limit\": %i, \"sid\":%@ }", 1, school.schoolId];
-            NSLog(@"%@", json);
             NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
             [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -607,14 +606,11 @@
                                          JSONObjectWithData:data
                                          options:kNilOptions
                                          error:&err];
-                        
-                        NSLog(@"recent listings json: %@", json);
-                        
+                                                
                         if (json != nil && [json count] > 0) {
                             NSDictionary *listing = json[0];
                             current = [[Listing alloc] initWithDictionary:listing];
                             listingName.text = (NSString*)[listing objectForKey:@"title"];
-                            NSLog(@"recent listing txt: %@", listingName.text);
                         }
                         else {
                             // show the school image instead
@@ -649,7 +645,6 @@
             NSString *json = @"{ \"limit\": 3,\"sid\":";
             json = [json stringByAppendingString:self.school.schoolId];
             json = [json stringByAppendingString:@"}"];
-            NSLog(@"%@", json);
             NSData *requestData = [NSData dataWithBytes:[json UTF8String] length:[json length]];
             [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -721,7 +716,7 @@
     [self performSegueWithIdentifier:SEGUE_SHOW_ULIST_SCHOOL_LISTINGS_VIEW_CONTROLLER sender:self];
 }
 -(void) recentListingClick {
-    NSLog(@"recent listing click: segueing to detail view controller");
+    //NSLog(@"recent listing click: segueing to detail view controller");
     [self performSegueWithIdentifier:SEGUE_SHOW_LISTING_DETAIL_VIEW_CONTROLLER sender:current];
 }
 -(void) tagClick:(id)sender {

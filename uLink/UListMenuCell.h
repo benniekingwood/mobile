@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AppMacros.h"
+#import "UlinkButton.h"
 
 @interface UListMenuCell : UITableViewCell {
     UIImageView *glowView;
