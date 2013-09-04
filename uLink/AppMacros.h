@@ -183,7 +183,7 @@
 #define CELL_SELECT_ULIST_MAP @"selectUListMapCell"
 #define CELL_SELECT_ULIST_LISTING_CELL @"selectUListListingCell"
 #define CELL_LISTING_CATEGORY_CELL @"listingCategoryCell"
-
+#define CELL_LISTING_SAVE_CELL @"listingSaveCell"
 
 #pragma mark CONTROLLER IDS
 #define CONTROLLER_SELECT_SCHOOL_VIEW_CONTROLLER_ID @"SelectSchoolViewController"
@@ -228,6 +228,7 @@
 #define SEGUE_SHOW_ADD_LISTING_LOCATION_VIEW_CONTROLLER @"ShowAddListingLocationViewController"
 #define SEGUE_SHOW_ADD_LISTING_ADDON_VIEW_CONTROLLER @"ShowAddListingAddOnViewController"
 #define SEGUE_SHOW_ADD_LISTING_PHOTO_VIEW_CONTROLLER @"ShowAddListingPhotoViewController"
+#define SEGUE_SHOW_SAVE_LISTING_VIEW_CONTROLLER @"ShowSaveListingViewController" 
 
 #pragma mark EMBEDDED SEGUES
 #define SEGUE_LISTING_RESULTS_VIEW_CONTROLLER_EMBED @"ListingResultsViewController_Embed"
@@ -334,6 +335,23 @@ typedef enum {
     kListingCategoryTypeDark,
     kListingCategoryTypeAddListingButton
 } ListingCategoryCellType;
+
+#pragma mark ULIST SAVE LISTING TYPE
+typedef enum {
+    kListingSaveTypeAdd = 410,
+    kListingSaveTypeUpdate
+} ListingSaveType;
+
+#pragma mark ULIST SAVE LISTING CELL TYPE
+typedef enum {
+    kListingSaveTitleDescriptionCell = 420,
+    kListingSavePhotosCell,
+    kListingSavePriceCell,
+    kListingSaveLocationCell,
+    kListingSaveTagsCell,
+    kListingSaveAddOnsCell,
+    kListingSaveDeleteCell
+} ListingSaveCellType;
 
 #pragma mark ULIST ADD LISTING TEXT MODE
 typedef enum {

@@ -10,6 +10,7 @@
 #import "DataCache.h"
 #import "AppMacros.h"
 #import "MyListingCell.h"
+#import "SaveListingViewController.h"
 
 @interface MyListingsViewController ()
 - (void)applyUlinkTableFooter;
@@ -110,11 +111,12 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:SEGUE_SHOW_EDIT_EVENT_VIEW_CONTROLLER])
+    if ([[segue identifier] isEqualToString:SEGUE_SHOW_SAVE_LISTING_VIEW_CONTROLLER])
     {
         MyListingCell *cell = (MyListingCell *)sender;
-        // EditEventViewController *editEventViewController = [segue destinationViewController];
-        // editEventViewController.event = cell.event;
+        SaveListingViewController *saveListingViewController = [segue destinationViewController];
+        saveListingViewController.saveMode = kListingSaveTypeUpdate;
+        saveListingViewController.listing = cell.listing;
     }
 }
 #pragma mark - 
