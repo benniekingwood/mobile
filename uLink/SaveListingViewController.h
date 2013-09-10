@@ -10,7 +10,7 @@
 #import "AppMacros.h"
 #import "Listing.h"
 
-@interface SaveListingViewController : UITableViewController
+@interface SaveListingViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate,UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate,UINavigationControllerDelegate>
 @property (nonatomic) ListingSaveType saveMode;
 @property (nonatomic, strong) Listing *listing;
 @end

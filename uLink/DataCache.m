@@ -9,7 +9,6 @@
 #import "DataCache.h"
 #import "School.h"
 #import "UListCategory.h"
-#import "Listing.h"
 #import "TextUtil.h"
 #import "SnapshotCategory.h"
 #import "SnapshotUtil.h"
@@ -90,6 +89,30 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
     }
     return self;
 }
+
+- (void) updateListingCaches:(Listing*)listing type:(ListingSaveType)type {
+    switch(type) {
+        case kListingSaveTypeAdd:
+            // update the user's session listings
+            // [TODO in future when cache is ready] update the listign from the global listings cache
+            break;
+        case kListingSaveTypeDelete:
+            // remove listing from the session user
+            [self.sessionUser.listings removeObject:listing];
+            // remove the old event image since it changed
+            for (int x=0; x<[listing.imageUrls count]; x++) {
+                [self removeListingImage:[listing.imageUrls objectAtIndex:x] schoolId:listing.schoolId cacheModel:IMAGE_CACHE_LISTING_MEDIUM];
+                [self removeListingImage:[listing.imageUrls objectAtIndex:x] schoolId:listing.schoolId cacheModel:IMAGE_CACHE_LISTING_THUMBS];
+            }
+             // [TODO in future when cache is ready] remove the listign from the global listings cache
+            break;
+        case kListingSaveTypeUpdate:
+            // update the user's session listings
+             // [TODO in future when cache is ready] update the listign from the global listings cache
+            break;
+    }
+}
+
 - (void) clearCache {
     self.sessionUser = nil;
     self.topSnapper = nil;
@@ -1028,7 +1051,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         /* Map sub objects: location, meta, tags, images urls */
         // location
         Location *loc = [[Location alloc] init];
-        NSDictionary* listingLocation = [(NSArray*)object valueForKey:@"location"];
+        NSDictionary* listingLocation = [(NSMutableArray*)object valueForKey:@"location"];
         // default all the locational info to the empty string
         loc.street = EMPTY_STRING;
         loc.address1 = EMPTY_STRING;
@@ -1062,21 +1085,19 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         listing.location = loc;
     
         // tags
-        listing.tags = [(NSArray*)object valueForKey:@"tags"];
+        listing.tags = [(NSMutableArray*)object valueForKey:@"tags"];
         
         // meta
-        // TODO: Meta is a dictionary we need to store it that way
-        listing.meta = [(NSArray*)object valueForKey:@"meta"];
+        listing.meta = [(NSMutableArray*)object valueForKey:@"meta"];
         
         // image_urls
-        listing.imageUrls = [(NSArray*)object valueForKey:@"image_urls"];
+        listing.imageUrls = [(NSMutableArray*)object valueForKey:@"image_urls"];
         
         
         // add listing to listings array
         if(forSessionUser) {[self.sessionUser.listings addObject:listing];}
         else {[self.uListListings addObject:listing];}
     }
-    //NSLog(@"listing object: %@", [self.uListListings description]);
 }
  
 -(void) retrieveSnapshots:(NSString*)categoryId {
@@ -1226,6 +1247,22 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         [self.listingImageMedium removeObjectForKey:cacheKey];
     } else if ([cacheModel isEqualToString:IMAGE_CACHE_LISTING_THUMBS]) {
         [self.listingImageThumbs removeObjectForKey:cacheKey];
+    }
+}
+- (void) removeListingImage:(NSString*)cacheKey schoolId:(NSInteger*)schoolId cacheModel:(NSString*)cacheModel {
+    // first grab the listing images for the school
+    NSString *schoolKey = [NSString stringWithFormat:@"%d", (int)schoolId];
+    NSMutableDictionary *schoolListingImages;
+    if ([cacheModel isEqualToString:IMAGE_CACHE_LISTING_MEDIUM]) {
+        schoolListingImages = [self.listingImageMedium objectForKey:schoolKey];
+        [schoolListingImages removeObjectForKey:cacheKey];
+        // set the revised cache back on the main cache
+        [self.listingImageMedium setValue:schoolListingImages forKey:schoolKey];
+    } else if ([cacheModel isEqualToString:IMAGE_CACHE_LISTING_THUMBS]) {
+        schoolListingImages = [self.listingImageThumbs objectForKey:schoolKey];
+        [schoolListingImages removeObjectForKey:cacheKey];
+        // set the revised cache back on the main cache
+        [self.listingImageThumbs setValue:schoolListingImages forKey:schoolKey];
     }
 }
 #pragma mark -

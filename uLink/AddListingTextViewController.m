@@ -460,11 +460,8 @@ const int kListingTagLimit = 3;
             // check to see if there are tags, if so add a tag for each to the listing tags array
             if(tag1TextField.text != nil && ![tag1TextField.text isEqualToString:EMPTY_STRING]) {
                 // check to see if the listing already has items, if so just insert
-                if(self.listing.tags != nil) {
-                    [self.listing.tags removeAllObjects];
-                } else {
-                    self.listing.tags = [[NSMutableArray alloc] init];
-                }
+                self.listing.tags = nil;
+                self.listing.tags = [[NSMutableArray alloc] init];
                 [self.listing.tags addObject:tag1TextField.text];
                 if(tag2TextField.text != nil && ![tag2TextField.text isEqualToString:EMPTY_STRING]) {
                     [self.listing.tags addObject:tag2TextField.text];
