@@ -39,8 +39,9 @@
     self.imageView.layer.cornerRadius = 5;
     self.imageView.layer.masksToBounds = YES;
     
-    // we need to remove the old title from the previous cell since the cell is reused in memory
-    [title removeFromSuperview];
+    // clear any old subviews from the form since they are reused
+    [[self.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     // create the new label that will hold the listing title
     title = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 50)];
     title.numberOfLines = 2;
@@ -49,6 +50,7 @@
     title.backgroundColor = [UIColor clearColor];
     title.text = self.listing.title;
     
+    // we need to remove the old title from the previous cell since the cell is reused in memory
     typeView = [[UIView alloc] initWithFrame:CGRectMake(15, 7, 30, 30)];
     typeView.layer.cornerRadius = 5;
     typeView.layer.masksToBounds = YES;

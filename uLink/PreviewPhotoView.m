@@ -82,7 +82,7 @@
         }
     }
 }
-- (void) hidePreviewPhoto {
+- (void) hidePreviewPhoto {    
     [UIView animateWithDuration:0.5
                           delay: 0.0
                         options: UIViewAnimationCurveLinear
@@ -101,6 +101,8 @@
             }
         }
     }
+    // Send notification that the preview photo was closed
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_PREVIEW_PHOTO_CLOSED object:nil];
 }
 
 @end

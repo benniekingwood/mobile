@@ -241,6 +241,10 @@
 #define NOTIFICATION_DATALOADER_LISTINGS @"NOTIFICATION_DATALOADER_LISTINGS"
 #define NOTIFICATION_LISTING_RESULTS_TABLEVIEW_CONTROLLER @"NOTIFICATION_LISTING_RESULTS_TABLEVIEW_CONTROLLER"
 #define NOTIFICATION_MY_LISTINGS_CONTROLLER @"NOTIFICATION_MY_LISTINGS_CONTROLLER"
+#define NOTIFICATION_PREVIEW_PHOTO_CLOSED @"NOTIFICATION_PREVIEW_PHOTO_CLOSED"
+#define NOTIFICATION_LISTINGS_DELETE @"NOTIFICATION_LISTINGS_DELETE"
+#define NOTIFICATION_LISTINGS_ADD @"NOTIFICATION_LISTINGS_ADD"
+#define NOTIFICATION_LISTINGS_UPDATE @"NOTIFICATION_LISTINGS_UPDATE"
 
 #pragma mark BUTTONS
 #define BTN_SUGGEST_HERE @"Suggest Here"
@@ -306,14 +310,18 @@ typedef enum {
     kTextFieldEventLocation,
     kTextFieldEventTime,
     kTextFieldEventDate,
-    kTextFieldSnapCategory
+    kTextFieldSnapCategory,
+    kTextFieldListingTitle,
+    kTextFieldListingPrice,
+    kTextFieldListingTag
 } TextFieldTypes;
 
 #pragma mark TEXTVIEWS
 typedef enum {
     kTextViewBio = 100,
     kTextViewEventInfo,
-    kTextViewSnapCaption
+    kTextViewSnapCaption,
+    kTextViewListingDescription
 } TextViewTypes;
 
 #pragma mark BUTTON TAGS    
@@ -339,7 +347,8 @@ typedef enum {
 #pragma mark ULIST SAVE LISTING TYPE
 typedef enum {
     kListingSaveTypeAdd = 410,
-    kListingSaveTypeUpdate
+    kListingSaveTypeUpdate,
+    kListingSaveTypeDelete
 } ListingSaveType;
 
 #pragma mark ULIST SAVE LISTING CELL TYPE

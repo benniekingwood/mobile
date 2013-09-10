@@ -304,6 +304,18 @@
             json = [json stringByAppendingString:@"\""];
         }
         json = [json stringByAppendingString:@"]"];
+    } else if (self.imageUrls != nil && [self.imageUrls count] > 0) {
+        json = [json stringByAppendingString:@",\"image_urls\": ["];
+        // since there aren't any image updates, we'll just keep the current images
+        for (int x=0; x < [self.imageUrls count]; x++) {
+            if(x > 0) {
+                json = [json stringByAppendingString:@","];
+            }
+            json = [json stringByAppendingString:@"\""];
+            json = [json stringByAppendingString:[self.imageUrls objectAtIndex:x]];
+            json = [json stringByAppendingString:@"\""];
+        }
+        json = [json stringByAppendingString:@"]"];
     }
     return json;
 }
@@ -344,6 +356,9 @@
                                               error:&err];*/
                         if(((NSHTTPURLResponse*)response).statusCode == 200) {
                             self._id = nil;
+                            // TODO: send notification out to update the caches image, etc.
+                            // for this listing being deleted.
+                          
                         } 
                     } else {
                        

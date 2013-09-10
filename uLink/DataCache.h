@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "User.h"
 #import "UListCache.h"
+#import "Listing.h"
+#import "AppMacros.h"
+
 #define UDataCache ((DataCache *)[DataCache instance])
 @interface DataCache : NSObject {
     NSMutableDictionary *schools;
@@ -49,6 +52,7 @@
 + (DataCache*) instance;
 - (UIImage*) imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
 - (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
+- (void) removeListingImage:(NSString*)cacheKey schoolId:(NSInteger*)schoolId cacheModel:(NSString*)cacheModel;
 - (void) clearCache;
 - (void) rehydrateCaches:(BOOL)checkAge;
 - (void) hydrateCaches;
@@ -79,4 +83,5 @@
 - (void) storeUserLoginInfo;
 - (void) removeLoginInfo;
 - (void) clearAllModelImageCaches;
+- (void) updateListingCaches:(Listing*)listing type:(ListingSaveType)type;
 @end
