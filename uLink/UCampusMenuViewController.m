@@ -230,7 +230,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     CGFloat headerHeight;
     if ([mode isEqualToString:@"uList"]) {
-        headerHeight = 18.0;
+        if (section == 0) {
+            headerHeight = 0.0;
+        }
+        else {
+            headerHeight = 18.0;
+        }
     }
     else {
         headerHeight = 0.0;

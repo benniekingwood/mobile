@@ -68,6 +68,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
 @synthesize userImageThumbs, userImageMedium;
 @synthesize tweetUserImages;
 @synthesize listingImageMedium, listingImageThumbs;
+@synthesize uListCache;
 + (DataCache*) instance {
     static DataCache* _one = nil;
     
@@ -108,7 +109,11 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
             break;
         case kListingSaveTypeUpdate:
             // update the user's session listings
-             // [TODO in future when cache is ready] update the listign from the global listings cache
+            // [TODO in future when cache is ready] update the listign from the global listings cache
+            //[uListListings removeObject:<#(id)#>]
+            
+            // rehydrate the listing cache by grabbing the latest data by school id
+            // and category (maybe search string, # of listings?)
             break;
     }
 }
@@ -1095,8 +1100,20 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         
         
         // add listing to listings array
-        if(forSessionUser) {[self.sessionUser.listings addObject:listing];}
-        else {[self.uListListings addObject:listing];}
+        if(forSessionUser) {
+            [self.sessionUser.listings addObject:listing];
+        }
+        else {
+            [self.uListListings addObject:listing];
+            
+            // if ulist data cache has not been created
+            // then initialize it and store listing data in cache
+            if (uListCache == nil)
+                uListCache = [[UListCache alloc] init];
+            
+            // add listing to cache
+            [uListCache addToCache:listing.schoolId category:listing.category listingData:self.uListListings];
+        }
     }
 }
  

@@ -89,7 +89,7 @@
     
     // set up spinner when loading initial data
     self.initializeSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    CGRect frame = self.view.frame;
+    //CGRect frame = self.view.frame;
     self.initializeSpinner.center=[self tableView].center;
     [[self tableView] addSubview:initializeSpinner];
     //self.initializeSpinner.center = CGPointMake(frame.size.width/2, frame.size.height/2);
