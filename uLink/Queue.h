@@ -8,15 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Queue : NSObject
-@property (nonatomic) NSInteger size;
-@property (nonatomic) NSInteger front;
-@property (nonatomic) NSInteger rear;
-@property (strong, nonatomic) NSMutableArray *queue;
-
--(id) initWithSize:(NSInteger)capacity;
+@interface NSMutableArray(Queue)
 -(void) enqueue:(id)object;
--(void) dequeue;
+-(id) dequeue;
 -(BOOL) empty;
 -(BOOL) full;
 

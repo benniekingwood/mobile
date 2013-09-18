@@ -7,89 +7,47 @@
 //
 
 #import "Queue.h"
+#import "AppMacros.h"
 
-@implementation Queue
-@synthesize size, front, rear, queue;
-
--(id) initWithSize:(NSInteger)capacity {
-    if (self = [super init]) {
-        self.front = 0;
-        self.rear = -1;
-        self.size = capacity;
-        
-        queue = [[NSMutableArray alloc] initWithCapacity:capacity];
-    }
-    return self;
-}
+@implementation NSMutableArray(Queue)
 
 //
 // Push object to the rear of the queue
 // FIFO
 //
 -(void) enqueue:(id)object {
-    if ([self full]) {
-        // if full, then remove the front of queue,
-        // readjust front
-        // rear becomes old front
-        
-        NSInteger newFront = 0;
-        NSInteger newRear = front;
-        
-        // if front is at the end of the queue, then reset
-        if (front != (size-1)) {
-            newFront = front++;
-        }
-
-        // insert object at 
-        [queue insertObject:object atIndex:front];
-        front = newFront;
-        rear = newRear;
-
-        return;
-    }
-
-    // set item to rear + 1
-    [queue addObject:object];
-    rear++;
+    [self addObject:object];
 }
 
 //
 // dequeue the oldest object in the queue
 // front queue element
 //
--(void) dequeue {
+-(id) dequeue {
     // if queue is not empty, then delete
     if (![self empty]) {
-        
-        if (front != (size-1)) {
-            front = 0;
+        // if ([self count] == 0) return nil; // to avoid raising exception (Quinn)
+        id headObject = [self objectAtIndex:0];
+        if (headObject != nil) {
+            [self removeObjectAtIndex:0];
         }
-        else {
-            front++;
-        }
-        
-        // remove object at front
-        [queue removeObjectAtIndex:front];
-        
-        // now if empty then reset rear
-        if ([self empty]) {
-            rear = -1;
-        }
+        return headObject;
     }
+    return nil;
 }
 
 //
 // Determine if queue is empty, or not
 //
 -(BOOL) empty {
-    return (queue.count == 0);
+    return (self.count == 0);
 }
 
 //
-// 
+// if queue has reached max allowance, we're full
 //
 -(BOOL) full {
-    return (queue.count == size);
+    return (self.count == ULIST_CACHE_ALLOWANCE);
 }
 
 @end

@@ -48,7 +48,7 @@
 @property (strong, nonatomic) NSMutableDictionary *uListCategories;
 @property (strong, nonatomic) NSMutableArray *uListCategorySections;
 @property (strong, nonatomic) NSMutableArray *uListListings;
-@property (strong, nonatomic) NSMutableDictionary *uListCache;
+@property (strong, nonatomic) UListCache *uListCache;
 + (DataCache*) instance;
 - (UIImage*) imageExists:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;
 - (void) removeImage:(NSString*)cacheKey cacheModel:(NSString*)cacheModel;

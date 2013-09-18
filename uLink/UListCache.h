@@ -21,15 +21,22 @@
 
 
 #import <Foundation/Foundation.h>
+#import "Queue.h"
 
 @interface UListCache : NSObject
 @property (strong, nonatomic) NSMutableArray *cache;
 @property (nonatomic) NSInteger cachedItems;
+@property (strong, nonatomic) NSMutableArray *listQueue;
 
 /*
     Add listing result to the data cache
  */
 -(void) addToCache:(NSInteger) schoolId category:(NSString*)category listingData:(NSMutableArray*)listingData;
+
+/* 
+    Remove cached data by school id and category 
+*/
+-(void) removeFromCache:(NSInteger)schoolId category:(NSString*)category;
 
 /*
     Get cached data by school id and category
