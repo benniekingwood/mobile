@@ -33,10 +33,10 @@
         //NSLog(@"max school id found is: %i", maxSchoolId);
         
         // initialize cache
-        cache = [NSMutableArray arrayWithCapacity:maxSchoolId];
+        cache = [[NSMutableArray alloc] initWithCapacity:maxSchoolId];
         self.cachedItems = 0;
         
-        for (int idx=0; idx<cache.count; idx++) {
+        for (int idx=0; idx<maxSchoolId; idx++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
             [cache addObject:dict];
         }

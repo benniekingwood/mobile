@@ -1026,7 +1026,11 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
 //
 // TODO: Add caching down the line?
 //
--(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {    
+-(void) buildUListListingList:(NSArray*)json forSessionUser:(BOOL)forSessionUser {
+    NSInteger sid = 0;
+    NSString *cat = nil;
+    BOOL addCache = NO;
+    
     /* cycle through list of json objects */
     for (id object in json) {
         Listing *listing = [[Listing alloc] init];
@@ -1106,17 +1110,31 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
         else {
             [self.uListListings addObject:listing];
             
-            // if ulist data cache has not been created
-            // then initialize it and store listing data in cache
-            if (uListCache == nil)
-                uListCache = [[UListCache alloc] init];
+            // set sid and cat
+            if (sid <= 0)
+                sid = listing.schoolId;
+            if (cat == nil)
+                cat = listing.category;
             
-            // add listing to cache
-            [uListCache addToCache:listing.schoolId category:listing.category listingData:self.uListListings];
+            addCache = YES;
         }
     }
+    
+    if  (addCache) {
+        // add to ulist listing cache
+        // if ulist data cache has not been created
+        // then initialize it and store listing data in cache
+        if (uListCache == nil)
+            uListCache = [[UListCache alloc] init];
+        
+        // add listing to cache
+        [uListCache addToCache:sid category:cat listingData:self.uListListings];
+        
+        // reset add to cache
+        addCache = NO;
+    }
 }
- 
+
 -(void) retrieveSnapshots:(NSString*)categoryId {
     @try {
         dispatch_queue_t snapsQueue = dispatch_queue_create(DISPATCH_SNAPS, NULL);
