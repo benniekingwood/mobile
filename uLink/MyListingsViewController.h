@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AddListingAddOnViewController.h"
 
 @interface MyListingsViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 

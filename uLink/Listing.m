@@ -336,7 +336,7 @@
     return json;
 }
 
-- (void) deleteListing {
+- (void) deleteListing:(NSString*)notification{
     @try {
         NSString *url = [URL_SERVER_3737 stringByAppendingString:API_ULIST_LISTINGS];
         url = [url stringByAppendingString:self._id];
@@ -356,9 +356,12 @@
                                               error:&err];*/
                         if(((NSHTTPURLResponse*)response).statusCode == 200) {
                             self._id = nil;
-                            // TODO: send notification out to update the caches image, etc.
-                            // for this listing being deleted.
-                          
+
+                            // Send a notification to observer if necessary to notify a view that the listings are ready
+                            if(notification != nil && ![notification isEqualToString:EMPTY_STRING]){
+                                NSLog(@"DataCache - done deleting listing, sending notificaiton.");
+                                [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+                            }
                         } 
                     } else {
                        

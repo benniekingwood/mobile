@@ -8,13 +8,16 @@
 
 #import "MyListingsViewController.h"
 #import "DataCache.h"
+#import "AppDelegate.h"
 #import "AppMacros.h"
 #import "MyListingCell.h"
 #import "SaveListingViewController.h"
+#import "AddListingSelectCategoryTableViewController.h"
 
 @interface MyListingsViewController ()
 - (void)applyUlinkTableFooter;
 - (void)addListingClick:(id)sender;
+- (void) rehydrateListingsAfterDelete;
 - (void)finishedDeletingListing;
 @end
 @implementation MyListingsViewController
@@ -30,6 +33,8 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 
 - (void)viewDidLoad
 {
+    NSLog(@"ViewDidLoad MyListings");
+    
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -42,6 +47,10 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
                                 action:@selector(addListingClick:)];
     self.navigationItem.rightBarButtonItem = btnSave;
     
+    // register observer used when refreshing listings after deletion
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(rehydrateListingsAfterDelete) name:NOTIFICATION_MY_LISTINGS_CONTROLLER_REFRESH
+                                               object:nil];
     
     // Register the observer used when deleting listing
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -50,6 +59,7 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"ViewWillAppear MyListings");
     [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
@@ -122,9 +132,18 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 #pragma mark - 
 #pragma mark Actions
 - (void)addListingClick:(id)sender {
+    
     UIStoryboard *storyboard = self.storyboard;
     UIViewController *svc = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID];
+
     [self presentViewController:svc animated:YES completion:nil];
+    
+    /*
+    AddListingSelectCategoryTableViewController *addListVC = [[AddListingSelectCategoryTableViewController alloc] init];
+    addListVC.myListingDelegate = self;
+    UINavigationController *uiNav = [[UINavigationController alloc] initWithRootViewController:addListVC];
+    [self presentViewController:uiNav animated:YES completion:nil];
+     */
 }
 #pragma mark - endpoint calls
 
@@ -134,21 +153,25 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
  */
 - (void) deleteListing:(Listing*)toDelete {
     @try {
-        [toDelete deleteListing];
-        [UDataCache rehydrateSessionUserListings:NO notification:NOTIFICATION_MY_LISTINGS_CONTROLLER];
+        [toDelete deleteListing:NOTIFICATION_MY_LISTINGS_CONTROLLER_REFRESH];
     }
     @catch (NSException *exception) {} 
 }
 
+- (void) rehydrateListingsAfterDelete {
+    NSLog(@"Rehydrate Session User Listings - Recieved notification, listing has been deleted.");
+    [UDataCache rehydrateSessionUserListings:NO notification:NOTIFICATION_MY_LISTINGS_CONTROLLER];
+}
+
 - (void) finishedDeletingListing {
-    NSLog(@"Delete Listing - Recieved notification, listing has been deleted.");
+    NSLog(@"Delete Listing - Recieved notification, session user listings rehydrated.");
     /*
      * Since this function gets called when we receive a notification, and since it is
      * possible that the notification comes in on a different sub thread, we
      * need to ensure that the code in this function is executed on the main thread so
      * that it doesn't hold up the UI.
      */
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_sync(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
 }

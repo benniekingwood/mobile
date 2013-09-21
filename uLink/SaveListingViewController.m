@@ -781,7 +781,7 @@ const int kPhotoButton_3 = 3;
     // reset the custom Alert view
     [errorAlertView resetAlert:defaultValidationMsg];
     if(buttonIndex == 1) {
-        [self.listing deleteListing];
+        [self.listing deleteListing:nil];
         [successNotification setMessage:@"Listing Deleted."];
         [successNotification showNotification:self.view];
         // pop the controller

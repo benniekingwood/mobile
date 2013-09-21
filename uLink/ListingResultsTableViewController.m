@@ -385,6 +385,18 @@
                 marker.title = list.title;
                 marker.snippet = list.shortDescription;
                 marker.userData = indexPath; // use this property to store listing data
+                
+                // ADD WHEN WE CREATE THE IMAGES
+                /*
+                if ([list.type isEqualToString:@"highlight"]) {
+                    marker.icon = [UIImage imageNamed:@""];
+                } else if ([list.type isEqualToString:@"bold"]) {
+                    marker.icon = [UIImage imageNamed:@""];
+                } else if ([list.type isEqualToString:@"regular"]) {
+                    marker.icon = [UIImage imageNamed:@""];
+                }
+                */
+                
                 marker.map = uListMapView_;
             
                 // add map marker to list if it doesn't already exist

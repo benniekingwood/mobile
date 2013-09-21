@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MyListingsViewController.h"
 
 @interface AddListingSelectCategoryTableViewController : UITableViewController
 - (IBAction)cancelClick:(UIBarButtonItem *)sender;

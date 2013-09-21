@@ -12,6 +12,7 @@
 #import "AppMacros.h"
 #import "UListCategory.h"
 #import "AddListingViewController.h"
+#import "MyListingsViewController.h"
 @interface AddListingSelectCategoryTableViewController () {
     UIFont *cellFontBold;
 }
@@ -54,7 +55,16 @@
         NSLog(@"dismiss immediately: returned from adding a listing");
         
         // dismiss add listing completion view controller
-        [UDataCache rehydrateSessionUser];
+        //[UDataCache rehydrateSessionUser];
+        //[myListingDelegate.tableView reloadData];
+        
+        if ([((UINavigationController*)self.presentingViewController).topViewController isKindOfClass:[MyListingsViewController class]]) {
+            MyListingsViewController *myListingsVC = (MyListingsViewController*)((UINavigationController*)self.presentingViewController).topViewController;
+            
+            if (myListingsVC != nil) {
+                [myListingsVC.tableView reloadData];
+            }
+        }
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
