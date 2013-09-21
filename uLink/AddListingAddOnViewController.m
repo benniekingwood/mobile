@@ -95,6 +95,11 @@
                style:UIBarButtonItemStylePlain
                target:self
                action:@selector(doneClick:)];
+    
+    // register observer used when done adding listing
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                 selector:@selector(doneComplete) name:NOTIFICATION_LISTINGS_ADD_ON_DONE
+                   object:nil];
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -408,7 +413,7 @@
 
 - (void)payPalPaymentDidCancel {
     // delete the listing
-    [self.listing deleteListing];
+    [self.listing deleteListing:nil];
     
     // The payment was canceled; dismiss the PayPalPaymentViewController.
     [self dismissViewControllerAnimated:YES completion:^{
@@ -574,10 +579,17 @@
     [self postListing];
 }
 - (void) doneClick:(id)sender {
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    AddListingSelectCategoryTableViewController *rootViewController = (AddListingSelectCategoryTableViewController*)[viewControllers objectAtIndex:0];
-    rootViewController.dismissImmediately = TRUE;
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [UDataCache rehydrateSessionUserListings:NO notification:NOTIFICATION_LISTINGS_ADD_ON_DONE];
+}
+- (void) doneComplete {
+    NSLog(@"Done posting listing - Recieved notification, listing has been posted.");
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        AddListingSelectCategoryTableViewController *rootViewController = (AddListingSelectCategoryTableViewController*)[viewControllers objectAtIndex:0];
+        rootViewController.dismissImmediately = TRUE;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    });
 }
 #pragma mark -
 - (void)didReceiveMemoryWarning
