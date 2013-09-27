@@ -24,7 +24,7 @@
 @property (nonatomic) NSString *category;
 @property (nonatomic) double price;
 @property (strong, nonatomic) Location *location;
-@property (strong, nonatomic) NSMutableArray *imageUrls;
+@property (nonatomic) NSMutableArray *imageUrls;
 @property (strong, nonatomic) NSMutableArray *images;
 @property (strong, nonatomic) NSMutableArray *tags;
 @property (strong, nonatomic) NSMutableDictionary *meta;

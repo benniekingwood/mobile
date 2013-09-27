@@ -195,6 +195,8 @@
 #define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
 #define CONTROLLER_TERMS_VIEW_CONTROLLER_ID @"TermsViewController"
 #define CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID @"AddListingNavigationViewController"
+#define CONTROLLER_ADD_LISTING_ADDON_VIEW_CONTROLLER_ID @"AddListingAddOnViewController"
+
 
 #pragma mark SEGUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"

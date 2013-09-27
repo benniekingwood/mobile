@@ -1085,7 +1085,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
                         loc.city = [listingLocation valueForKey:(NSString*)object];
                     if ([(NSString*)object isEqualToString:@"state"])
                         loc.state = [listingLocation valueForKey:(NSString*)object];
-                    if ([(NSString*)object isEqualToString:@"discloseLocation"])
+                    if ([(NSString*)object isEqualToString:@"disclose"])
                         loc.discloseLocation = [listingLocation valueForKey:(NSString*)object];
                 }
                 @catch (NSException *exception) {}

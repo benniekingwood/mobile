@@ -4,11 +4,6 @@
 //
 //  Created by Bennie Kingwood on 9/2/13.
 //  Copyright (c) 2013 uLink, Inc. All rights reserved.
-//
-// TODO: 
-//       3. Verify all validations
-//       4. Add the segue to the AddListingAddOnViewController for when the saveMode is "Add"
-//
 // 
 #import "SaveListingViewController.h"
 #import "AlertView.h"
@@ -20,12 +15,12 @@
 #import "SuccessNotificationView.h"
 #import "ImageActivityIndicatorView.h"
 #import "DataCache.h"
+#import "AddListingAddOnViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 
 @interface SaveListingViewController () {
     UIBarButtonItem *btnSave;
     AlertView *errorAlertView;
-    AlertView *deleteAlertView;
     NSString *defaultValidationMsg;
     NSHashTable *validationErrors;
     NSNumberFormatter *numberFormatter;
@@ -93,7 +88,6 @@
 -(UITableViewCell*) buildLocationListingFormCell:(UITableViewCell*)cell;
 -(UITableViewCell*) buildTagsListingCell:(UITableViewCell*)cell;
 -(UITableViewCell*) buildTagsListingFormCell:(UITableViewCell*)cell;
--(UITableViewCell*) buildDeleteListingCell:(UITableViewCell*)cell;
 
 -(void) buildTitleTextField;
 -(void) buildDescriptionField;
@@ -110,6 +104,7 @@ const int kPhotoButton_2 = 2;
 const int kPhotoButton_3 = 3;
 @synthesize saveMode;
 @synthesize listing;
+@synthesize mainCategory, subCategory;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -132,6 +127,16 @@ const int kPhotoButton_3 = 3;
     } else {
         self.navigationItem.title = @"Add Listing";
         btnTitle = @"Next";
+        // set up the basic default values for the listing
+        self.listing = [[Listing alloc] init];
+        self.listing.created = [NSDate date];
+        self.listing.price = -37;
+        self.listing.schoolId = [UDataCache.sessionUser.schoolId intValue];
+        self.listing.userId = [UDataCache.sessionUser.userId intValue];
+        self.listing.replyTo = UDataCache.sessionUser.email;
+        self.listing.username = UDataCache.sessionUser.username;
+        self.listing.mainCategory = self.mainCategory;
+        self.listing.category = self.subCategory;
     }
     
     // set the table view's background color to black
@@ -150,8 +155,9 @@ const int kPhotoButton_3 = 3;
                target:self
                action:@selector(saveClick)];
     self.navigationItem.rightBarButtonItem = btnSave;
-    // initially keep the save button disabled.
-    btnSave.enabled = FALSE;
+    // initially keep the save button enabled only in Add mode
+    btnSave.enabled = (self.saveMode == kListingSaveTypeAdd) ? TRUE : FALSE;
+    
     // initially have the listing image changed bool to False
     listingImagesChanged = FALSE;
     
@@ -161,12 +167,7 @@ const int kPhotoButton_3 = 3;
                                              delegate:self
                                     cancelButtonTitle:BTN_OK
                                     otherButtonTitles:nil];
-    // initialize the delete alert view
-    deleteAlertView = [[AlertView alloc] initWithTitle:EMPTY_STRING
-                                               message:@"Are you sure you would like delete this listing?  This action cannot be undone."
-                                              delegate:self
-                                     cancelButtonTitle:BTN_CANCEL
-                                     otherButtonTitles:BTN_DELETE,nil];
+
     validationErrors = [[NSHashTable alloc] init];
     activityIndicator = [[ActivityIndicatorView alloc] init];
     successNotification = [[SuccessNotificationView alloc] init];
@@ -485,6 +486,8 @@ const int kPhotoButton_3 = 3;
     if(self.listing.price > -1) {
         NSNumber *priceNumber = [NSNumber numberWithDouble:self.listing.price];
         listingPriceTextField.text = [priceNumber stringValue];
+    } else {
+        listingPriceTextField.text = EMPTY_STRING;
     }
     listingPriceTextField.keyboardType = UIKeyboardTypeDecimalPad;
 }
@@ -616,28 +619,28 @@ const int kPhotoButton_3 = 3;
     switch (tag) {
         case kTextViewListingDescription:
             if (descriptionTextView.text.length < 2 || [descriptionTextView.text isEqualToString:@"Description"]) {
-                [validationErrors addObject:@"\nPlease enter your description"];
+                [validationErrors addObject:@"\nPlease enter a description"];
             } else {
-                [validationErrors removeObject:@"\nPlease enter your description"];
+                [validationErrors removeObject:@"\nPlease enter a description"];
             }
             break;
         case kTextFieldListingTitle:
             listingTitleTextField.text = [UTextUtil trimWhitespace:listingTitleTextField.text];
             if (listingTitleTextField.text.length < 1 || [listingTitleTextField.text isEqualToString:EMPTY_STRING]) {
-                [validationErrors addObject:@"\nPlease enter your title"];
+                [validationErrors addObject:@"\nPlease enter a title"];
             } else {
-                [validationErrors removeObject:@"\nPlease enter your title"];
+                [validationErrors removeObject:@"\nPlease enter a title"];
             }
             break;
         case kTextFieldListingPrice: {
             // trim the text
             listingPriceTextField.text = [UTextUtil trimWhitespace:listingPriceTextField.text];
             NSNumber *price = [NSNumber numberWithDouble:[listingPriceTextField.text doubleValue]];
-            listingPriceTextField.text = [numberFormatter stringFromNumber:price];
             // validate that the value is a number
-            if (listingPriceTextField.text.length < 1 || [listingPriceTextField.text isEqualToString:EMPTY_STRING] || ![UTextUtil isDigitsOnly:listingPriceTextField.text]) {
+            if (price == nil || listingPriceTextField.text.length < 1 || [listingPriceTextField.text isEqualToString:EMPTY_STRING] || ![UTextUtil isDigitsOnly:listingPriceTextField.text]) {
                 [validationErrors addObject:@"\nPlease enter a valid price"];
             } else {
+                listingPriceTextField.text = [numberFormatter stringFromNumber:price];
                 [validationErrors removeObject:@"\nPlease enter a valid price"];
             }
         }
@@ -917,17 +920,6 @@ const int kPhotoButton_3 = 3;
     return cell;
 }
 
--(UITableViewCell*) buildDeleteListingCell:(UITableViewCell*)cell {
-    // clear any old subviews from the form since they are reused
-    [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#990000"];
-    // add the text properties
-    cell.textLabel.text = @"Delete";
-    // set the cell tag
-    cell.tag = kListingSaveDeleteCell;
-    return cell;
-}
 #pragma mark - 
 #pragma mark - Table view data source
 - (CGFloat) tableView: (UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -974,15 +966,15 @@ const int kPhotoButton_3 = 3;
     int retVal = 1;
     if (self.saveMode == kListingSaveTypeAdd) {
         if(listingHasPrice) {
-            retVal = 11;
+            retVal = 10;
         } else {
-            retVal = 9;
+            retVal = 8;
         }
     } else {
         if(listingHasPrice) {
-            retVal = 11;
+            retVal = 10;
         } else {
-            retVal = 9;
+            retVal = 8;
         }
     }
     return retVal;
@@ -1031,16 +1023,8 @@ const int kPhotoButton_3 = 3;
                     break;
                 case 9: cell = [self buildPriceListingFormCell:cell];
                     break;
-                // finally build the delete listing cell if necessary
-                case 10: cell = [self buildDeleteListingCell:cell];
-                    break;
             }
-        } else {
-            // finally build the delete listing cell if necessary
-            if(indexPath.row == 8) {
-                cell = [self buildDeleteListingCell:cell];
-            }
-        }
+        } 
     } else {
         /* since we are just editing, we will not have the Add Ons here, only for when the user creates a new listing
          */
@@ -1051,16 +1035,8 @@ const int kPhotoButton_3 = 3;
                     break;
                 case 9: cell = [self buildPriceListingFormCell:cell];
                     break;
-                    // finally build the delete listing cell if necessary
-                case 10: cell = [self buildDeleteListingCell:cell];
-                    break;
             }
-        } else {
-            // finally build the delete listing cell if necessary
-            if(indexPath.row == 8) {
-                cell = [self buildDeleteListingCell:cell];
-            }
-        }
+        } 
     }
     return cell;
 }
@@ -1072,23 +1048,13 @@ const int kPhotoButton_3 = 3;
     // first close any open keypads
     [self.view endEditing:YES];
     
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    /*
-     * 2.  If delete cell was clicked, we then show the alert for the user to confirm the deletion
-     */
-    if(cell.tag == kListingSaveDeleteCell) {
-        [deleteAlertView show];
-    } else {
-        if(![indexPath isEqual:previouslySelectedIndexPath]) {
-            // simply toggle the size of the cell based on the cell type
-            // we need these lines below to show the cell change animations, and to rebuild the tableview
-            [self.tableView beginUpdates];
-            [self.tableView endUpdates];
-            previouslySelectedIndexPath = indexPath;
-        } else {
-            
-        }
-    }
+    if(![indexPath isEqual:previouslySelectedIndexPath]) {
+        // simply toggle the size of the cell based on the cell type
+        // we need these lines below to show the cell change animations, and to rebuild the tableview
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+        previouslySelectedIndexPath = indexPath;
+    } 
 }
 #pragma mark Actions
 - (void) discloseChanged:(id)sender {
@@ -1151,9 +1117,7 @@ const int kPhotoButton_3 = 3;
 }
 -(void) saveClick {
     [self.view endEditing:YES];
-    if(self.saveMode == kListingSaveTypeAdd) {
-        // TODO: navigate to the Add Ons screen
-    } else {
+ 
         // validate all necessary fields
         [self validateField:kTextFieldListingTitle];
         [self validateField:kTextViewListingDescription];
@@ -1177,7 +1141,7 @@ const int kPhotoButton_3 = 3;
         self.listing.listDescription = descriptionTextView.text;
         self.listing.title = listingTitleTextField.text;
         if(listingHasPrice) {
-            listing.price = [listingTitleTextField.text doubleValue];
+            self.listing.price = [listingPriceTextField.text doubleValue];
         }
 
         // check to see if there are tags, if so add a tag for each to the listing tags array
@@ -1198,9 +1162,18 @@ const int kPhotoButton_3 = 3;
         if(listingImagesChanged) {
             // Remove all images for this listing from the listing image cache
             for (NSString *imageURL in self.listing.imageUrls) {
-                [UDataCache removeListingImage:imageURL schoolId:self.listing.schoolId cacheModel:IMAGE_CACHE_LISTING_MEDIUM];
-                [UDataCache removeListingImage:imageURL schoolId:self.listing.schoolId cacheModel:IMAGE_CACHE_LISTING_THUMBS];
+                // split the imageURL just to get the image name
+                NSArray* foo = [imageURL componentsSeparatedByString:@"/"];
+                NSString* imageName = [foo objectAtIndex:5];
+                [UDataCache removeListingImage:imageName schoolId:self.listing.schoolId cacheModel:IMAGE_CACHE_LISTING_MEDIUM];
+                [UDataCache removeListingImage:imageName schoolId:self.listing.schoolId cacheModel:IMAGE_CACHE_LISTING_THUMBS];
             }
+            
+            if(self.listing.imageUrls != nil && [self.listing.imageUrls count] > 0) {
+                // now clear out the image urls
+                self.listing.imageUrls = [[NSMutableArray alloc] init];
+            }
+            
             // set each of the images in the preview views on the images array
             if(self.listing.images != nil) {
                 [self.listing.images removeAllObjects];
@@ -1226,26 +1199,31 @@ const int kPhotoButton_3 = 3;
         if (addressTextField != nil) {
             // trim the field
             addressTextField.text = [UTextUtil trimWhitespace:addressTextField.text];
-            listing.location.address1 = addressTextField.text;
+            self.listing.location.address1 = addressTextField.text;
         }
         if (cityTextField != nil) {
             // trim the field
             cityTextField.text = [UTextUtil trimWhitespace:cityTextField.text];
-            listing.location.city = cityTextField.text;
+            self.listing.location.city = cityTextField.text;
         }
         if (stateTextField != nil) {
             // trim the field
             stateTextField.text = [UTextUtil trimWhitespace:stateTextField.text];
-            listing.location.state = stateTextField.text;
+            self.listing.location.state = stateTextField.text;
         }
         if (zipTextField != nil) {
             // trim the field
             zipTextField.text = [UTextUtil trimWhitespace:zipTextField.text];
-            listing.location.zip = zipTextField.text;
+            self.listing.location.zip = zipTextField.text;
         }
         self.listing.location.discloseLocation = (discloseLocationSwitch.on) ? @"TRUE" : @"FALSE";
-        
-        // finally submit the listing
+    
+    // if adding a listing, navigate to the add ons view
+    if(self.saveMode == kListingSaveTypeAdd) {
+        AddListingAddOnViewController *addOnController  = [self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_ADD_LISTING_ADDON_VIEW_CONTROLLER_ID];
+        addOnController.listing = self.listing;
+        [self.navigationController pushViewController:addOnController animated:YES];
+    } else { // else we are updating so just submit the listing
         [self submitListing];
     }
 }
@@ -1277,9 +1255,14 @@ const int kPhotoButton_3 = 3;
                                               JSONObjectWithData:data
                                               options:kNilOptions
                                               error:&err];
-                        if(((NSHTTPURLResponse*)response).statusCode == 200) {
-                            // set the new id on the listing
-                             [successNotification showNotification:self.view];
+                        
+                        if(((NSHTTPURLResponse*)response).statusCode == 200) {                            
+                            // set image urls back on the listing if they changed
+                            if(listingImagesChanged) {
+                                self.listing.imageUrls = (NSMutableArray*)[json objectForKey:@"image_urls"];
+                            }
+                            
+                            [successNotification showNotification:self.view];
                         } else {
                             self.view.userInteractionEnabled = YES;
                             btnSave.enabled = TRUE;
@@ -1302,8 +1285,10 @@ const int kPhotoButton_3 = 3;
         });
     }
     @catch (NSException *exception) {
+        [activityIndicator hideActivityIndicator:self.view];
         self.view.userInteractionEnabled = YES;
         btnSave.enabled = TRUE;
+        errorAlertView.message = @"There was a problem submitting your listing.  Please try again later or contact help@theulink.com.";
         // show alert to user
         [errorAlertView show];
     }
