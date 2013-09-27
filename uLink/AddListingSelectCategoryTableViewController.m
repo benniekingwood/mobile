@@ -11,7 +11,7 @@
 #import "UListMenuCell.h"
 #import "AppMacros.h"
 #import "UListCategory.h"
-#import "AddListingViewController.h"
+#import "SaveListingViewController.h"
 @interface AddListingSelectCategoryTableViewController () {
     UIFont *cellFontBold;
 }
@@ -132,12 +132,13 @@
 #pragma mark -
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:SEGUE_SHOW_ADD_LISTING_VIEW_CONTROLLER])
+    if ([[segue identifier] isEqualToString:SEGUE_SHOW_SAVE_LISTING_VIEW_CONTROLLER])
     {
         UListMenuCell *cell = (UListMenuCell *)sender;
-        AddListingViewController *addListingViewController = [segue destinationViewController];
-        addListingViewController.mainCategory = cell.mainCat;
-        addListingViewController.subCategory  = cell.subCat;
+        SaveListingViewController *saveListingViewController = [segue destinationViewController];
+        saveListingViewController.saveMode = kListingSaveTypeAdd;
+        saveListingViewController.mainCategory = cell.mainCat;
+        saveListingViewController.subCategory  = cell.subCat;
     }
 }
 

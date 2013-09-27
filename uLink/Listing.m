@@ -80,14 +80,13 @@
         self.location = loc;
         
         // tags
-        self.tags = [(NSArray*)json valueForKey:@"tags"];
+        self.tags = [[json valueForKey:@"tags"] mutableCopy];
         
         // meta
-        // TODO: Meta is a dictionary we need to store it that way
-        self.meta = [(NSArray*)json valueForKey:@"meta"];
+        self.meta = [[json valueForKey:@"meta"] mutableCopy];
         
         // image_urls
-        self.imageUrls = [(NSArray*)json valueForKey:@"image_urls"];
+        self.imageUrls = [[json valueForKey:@"image_urls"] mutableCopy];
     }
     return self;
 }
@@ -264,10 +263,16 @@
         json = [json stringByAppendingString:@",\"meta\": {"];
         BOOL firstItem = TRUE;
         for (NSString* key in self.meta) {
-            NSString *value = (NSString*)[self.meta objectForKey:key];
-            
+            NSString *value = nil;
+            id obj = [self.meta objectForKey:key];
+            if(![obj isKindOfClass:[NSString class]]) {
+                value = (NSString*)[obj stringValue];
+            } else {
+                value = obj;
+            }
+
             // check if string value is empty, or nil
-            if (value == nil || [value length] <= 0)
+            if (value == nil)
                 continue;
             
             if(firstItem) {
@@ -279,7 +284,7 @@
             json = [json stringByAppendingString:key];
             json = [json stringByAppendingString:@"\":"];
             json = [json stringByAppendingString:@"\""];
-            json = [json stringByAppendingString:value];
+            json = [json stringByAppendingString:(NSString*)value];
             json = [json stringByAppendingString:@"\""];
         }
         json = [json stringByAppendingString:@"}"];

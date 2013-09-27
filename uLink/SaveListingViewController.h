@@ -13,4 +13,6 @@
 @interface SaveListingViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate,UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate,UINavigationControllerDelegate>
 @property (nonatomic) ListingSaveType saveMode;
 @property (nonatomic, strong) Listing *listing;
+@property (nonatomic) NSString *mainCategory;
+@property (nonatomic) NSString *subCategory;
 @end
