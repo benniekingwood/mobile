@@ -104,8 +104,6 @@ const int kDefaultButtonTypeSmall = 2;
     
     // Add Custom Font settings
     [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:13.0f]];
-   // [[btn titleLabel] setShadowColor:[UIColor blackColor]];
-   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultBlackFontAttrs:(UlinkButton*)btn {
@@ -117,8 +115,6 @@ const int kDefaultButtonTypeSmall = 2;
     
     // Add Custom Font settings
     [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:16.0f]];
-  //  [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
-  //  [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultBlackSmallFontAttrs:(UlinkButton*)btn {
@@ -130,32 +126,22 @@ const int kDefaultButtonTypeSmall = 2;
     
     // Add Custom Font settings
     [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:13.0f]];
-   // [[btn titleLabel] setShadowColor:[UIColor yellowColor]];
-   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
+
 - (void) buildOrangeButton:(UlinkButton*)btn {
-    // Draw a custom gradient
-    CAGradientLayer *btnGradient = [CAGradientLayer layer];
-    btnGradient.frame = btn.bounds;
-    btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:250.0f / 255.0f green:172.0f / 255.0f blue:62.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:248.0f / 255.0f green:150.0f / 255.0f blue:11.0f / 255.0f alpha:1.0f] CGColor],
-                          nil];
-    [btn.layer insertSublayer:btnGradient atIndex:0];
+    btn.backgroundColor = [UIColor colorWithRed:250.0f / 255.0f green:172.0f / 255.0f blue:62.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
     [btnLayer setMasksToBounds:YES];
     [btnLayer setCornerRadius:5.0f];
-    
-    // Apply a 1 pixel, black border around Buy Button
-    [btnLayer setBorderWidth:0.2f];
-    [btnLayer setBorderColor:[[UIColor orangeColor] CGColor]];
 }
+
 - (void) createOrangeButton:(UlinkButton*)btn {
     [self applyDefaultWhiteFontAttrs:btn];
     [self buildOrangeButton:btn];
 }
+
 -(void)createOrangeSmallButton:(UlinkButton *)btn {
     [self applyDefaultWhiteSmallFontAttrs:btn];
     [self buildOrangeButton:btn];
@@ -164,45 +150,25 @@ const int kDefaultButtonTypeSmall = 2;
 - (void) createBlueButton:(UlinkButton*)btn {
     [self applyDefaultWhiteFontAttrs:btn];
     
-    // Draw a custom gradient
-    CAGradientLayer *btnGradient = [CAGradientLayer layer];
-    btnGradient.frame = btn.bounds;
-    btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:0.0f / 255.0f green:130.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:0.0f / 255.0f green:87.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f] CGColor],
-                          nil];
-    [btn.layer insertSublayer:btnGradient atIndex:0];
+    // update the background color
+    btn.backgroundColor = [UIColor colorWithRed:0.0f / 255.0f green:130.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
     [btnLayer setMasksToBounds:YES];
     [btnLayer setCornerRadius:5.0f];
-    
-    // Apply a 1 pixel, black border around Buy Button
-    [btnLayer setBorderWidth:0.2f];
-    [btnLayer setBorderColor:[[UIColor blueColor] CGColor]];
 }
 
 - (void) createRedButton:(UlinkButton*)btn {
     [self applyDefaultWhiteFontAttrs:btn];
     
-    // Draw a custom gradient
-    CAGradientLayer *btnGradient = [CAGradientLayer layer];
-    btnGradient.frame = btn.bounds;
-    btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:207.0f / 255.0f green:69.0f / 255.0f blue:63.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:189.0f / 255.0f green:54.0f / 255.0f blue:47.0f / 255.0f alpha:1.0f] CGColor],
-                          nil];
-    [btn.layer insertSublayer:btnGradient atIndex:0];
+    // set background color
+    btn.backgroundColor = [UIColor colorWithRed:207.0f / 255.0f green:69.0f / 255.0f blue:63.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
     [btnLayer setMasksToBounds:YES];
     [btnLayer setCornerRadius:5.0f];
-    
-    // Apply a 1 pixel, black border around Buy Button
-    [btnLayer setBorderWidth:0.2f];
-    [btnLayer setBorderColor:[[UIColor redColor] CGColor]];
 }
 - (void)buildDefaultButton:(UlinkButton*)btn type:(int)type {
     if(type == kDefaultButtonTypeRegular) {
@@ -210,23 +176,13 @@ const int kDefaultButtonTypeSmall = 2;
     } else if (type == kDefaultButtonTypeSmall) {
         [self applyDefaultBlackSmallFontAttrs:btn];
     }
-    // Draw a custom gradient
-    CAGradientLayer *btnGradient = [CAGradientLayer layer];
-    btnGradient.frame = btn.bounds;
-    btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:250.0f / 255.0f green:250.0f / 255.0f blue:250.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:230.0f / 255.0f green:230.0f / 255.0f blue:230.0f / 255.0f alpha:1.0f] CGColor],
-                          nil];
-     [btn.layer insertSublayer:btnGradient atIndex:0];
+    // set the background color
+    btn.backgroundColor = [UIColor colorWithRed:250.0f / 255.0f green:250.0f / 255.0f blue:250.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
     [btnLayer setMasksToBounds:YES];
     [btnLayer setCornerRadius:5.0f];
-    
-    // Apply a 1 pixel, black border around Buy Button
-    [btnLayer setBorderWidth:0.2f];
-    [btnLayer setBorderColor:[[UIColor darkGrayColor] CGColor]];
 }
 
 - (void) createFlatBlackButton:(UlinkButton*)btn {
@@ -239,10 +195,6 @@ const int kDefaultButtonTypeSmall = 2;
     [btnLayer setShadowOpacity:0.8];
     [btnLayer setShadowRadius:3.0];
     [btnLayer setShadowOffset:CGSizeMake(2.0, 2.0)];
-    
-    // Apply a 1 pixel, black border around Buy Button
-   // [btnLayer setBorderWidth:0.2f];
-   // [btnLayer setBorderColor:[[UIColor darkGrayColor] CGColor]];
 }
 - (void) createDefaultButton:(UlinkButton*)btn {
     [self buildDefaultButton:btn type:kDefaultButtonTypeRegular];

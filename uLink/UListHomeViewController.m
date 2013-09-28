@@ -39,7 +39,7 @@
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     
 	// Do any additional setup after loading the view.
-    UIView *titleBG = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 75)];
+  /*  UIView *titleBG = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 75)];
     titleBG.backgroundColor = [UIColor blackColor];
     titleBG.alpha = ALPHA_MED;
     
@@ -63,7 +63,7 @@
     
     [self.view addSubview:titleBG];
     [self.view addSubview:uListTitle];
-    [self.view addSubview:uListCap];
+    [self.view addSubview:uListCap]; */
     
     [UDataCache.schoolSections removeObject:@""];
     sections = UDataCache.schoolSections;
