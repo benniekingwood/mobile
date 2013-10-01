@@ -37,6 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
+    
     // set the title of the navigation bar
     self.navigationItem.title = @"Search";
     

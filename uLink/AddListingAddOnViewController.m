@@ -48,6 +48,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
     // set the nav bar title
 	self.navigationItem.title = @"Add Ons";
     dateFormatter = [[NSDateFormatter alloc] init];

@@ -36,6 +36,8 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     NSLog(@"ViewDidLoad MyListings");
     
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self applyUlinkTableFooter];

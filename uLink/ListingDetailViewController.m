@@ -45,6 +45,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
+    
     // create the scroll view that has the listing detail information
     mainScrollView2 = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,435)];
     mainScrollView2.delegate = self;

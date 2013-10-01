@@ -37,6 +37,7 @@
     CGPathRef path = [UIBezierPath bezierPathWithRoundedRect:bPathFrame cornerRadius:cornerRadius].CGPath;
     CGContextAddPath(context, path);
     CGContextSetFillColorWithColor(context, [UIColor colorWithRed:210.0f/255.0f green:210.0f/255.0f blue:210.0f/255.0f alpha:0.0f].CGColor);
+    //CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:1.0f alpha:0.5f].CGColor);
     CGContextSetShadowWithColor(context, CGSizeMake(0.0f, 1.0f), 6.0f, [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:1.0f].CGColor);
     CGContextDrawPath(context, kCGPathFill);
     CGContextSaveGState(context); //Save Context State Before Clipping To "path"

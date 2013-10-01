@@ -117,6 +117,9 @@ const int kPhotoButton_3 = 3;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
+    
     // set the default cell height
     defaultCellHeight = 75;
     NSString *btnTitle;

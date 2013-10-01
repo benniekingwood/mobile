@@ -43,6 +43,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
+    
     self.tableView.showsVerticalScrollIndicator = NO;
     loader = [[DataLoader alloc] init];
     mapMarkerList = [NSMutableArray arrayWithCapacity:ULIST_MAX_MAP_MARKERS];

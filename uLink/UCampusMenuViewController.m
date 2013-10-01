@@ -168,6 +168,7 @@
             ((UListMenuCell*)cell).mainCat = categoryKey;
             ((UListMenuCell*)cell).subCat = category.name;
             ((UListMenuCell*)cell).iconImage = nil;
+            //((UListMenuCell*)cell).textLabel.
             ((UListMenuCell*)cell).textLabel.text = category.name;
             [((UListMenuCell*)cell) initialize];
             [(UListMenuCell*)cell layoutSubviews];

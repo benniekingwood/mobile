@@ -69,6 +69,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
     self.view.backgroundColor = [UIColor blackColor];
     hotCategoryClick = FALSE;
     trendingTagClick = FALSE;

@@ -33,6 +33,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:YES];
 
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     self.tableView.dataSource = self;
