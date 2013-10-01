@@ -30,6 +30,8 @@
     self.clipsToBounds = YES;
     self.imageView.layer.cornerRadius = 5;
     self.imageView.layer.masksToBounds = YES;
+    self.imageView.layer.cornerRadius = 25;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [eventTitle removeFromSuperview];
     eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(80, -5, 200, 50)];
     eventTitle.numberOfLines = 2;

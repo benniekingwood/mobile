@@ -33,6 +33,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:NO];
     self.tabBarController.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = nil;
     proPicFrame = CGRectMake(0, 70, 320, 320);

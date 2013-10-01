@@ -43,6 +43,8 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:NO];
     featuredEventScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,28,320,146)];
     featuredEventScroll.delegate = self;
     featuredEventScroll.pagingEnabled = YES;

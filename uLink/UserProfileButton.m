@@ -55,7 +55,7 @@
 - (void) initialize {
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self setImage:self.user.profileImage forState:UIControlStateNormal];
-    self.layer.cornerRadius = 5;
+    self.layer.cornerRadius = self.frame.size.width/2;
     self.userInteractionEnabled = YES;
     self.layer.masksToBounds = YES;
     // grab the user's image from the user cache

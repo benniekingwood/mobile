@@ -71,8 +71,8 @@
     profilePicThumb.layer.cornerRadius = 40;
     profilePicThumb.layer.masksToBounds = YES;
     profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
-    profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
-    profilePicThumb.layer.borderWidth = 3.0f;
+   // profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
+   // profilePicThumb.layer.borderWidth = 3.0f;
     [profilePicView addSubview:profilePicThumb];
     // create the user's full name label
     CGRect labelFrame = CGRectMake( 0, 105, 320, 30 );

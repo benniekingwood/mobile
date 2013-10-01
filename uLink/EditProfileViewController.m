@@ -75,6 +75,8 @@
 - (void)viewDidLoad
 { 
     [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:NO];
 	CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, screenHeight)];

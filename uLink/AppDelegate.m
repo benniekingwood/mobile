@@ -69,22 +69,10 @@
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
                                                            UITextAttributeTextShadowOffset,
                                                            [UIFont fontWithName:FONT_GLOBAL size:20.0], UITextAttributeFont, nil]];*/
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
     
-    // Change the appearance of back button
-   //[[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
-                                                        // forBarMetrics:UIBarMetricsDefault];
-   /* UIImage* backButtonImage = [UIImage imageNamed:@"10-dark-back-button.png"];
-    backButtonImage = [backButtonImage  resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, 0)];
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];*/
-    
-    // Change the appearance of other navigation button
-   // UIImage *barButtonImage = [[UIImage imageNamed:@"ulink-mobile-button-normal-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-   // [[UIBarButtonItem appearance] setBackgroundImage:barButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    
-    // style the search bars
-    //[[UISearchBar appearance] setBackgroundImage:navBackgroundImage];
+    // Move the title of the back button out of the view
+   [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
+                                                        forBarMetrics:UIBarMetricsDefault];
     return YES;
 }
 

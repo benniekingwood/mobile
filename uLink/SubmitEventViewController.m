@@ -59,8 +59,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    [self setExtendedLayoutIncludesOpaqueBars:NO];
     self.overlayPosition = CameraActive;
-   // self.navBar = @"Submit Event";
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
   

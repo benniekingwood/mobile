@@ -69,7 +69,7 @@
     profilePicView.frame = profilePicFrame;
     CGRect proThumbFrame = CGRectMake(30, 20, 80, 80);
     profilePicThumb = [[UIImageView alloc] initWithFrame:proThumbFrame];
-    profilePicThumb.layer.cornerRadius = 5;
+    profilePicThumb.layer.cornerRadius = 40;
     profilePicThumb.layer.masksToBounds = YES;
     profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
     [profilePicView addSubview:profilePicThumb];
