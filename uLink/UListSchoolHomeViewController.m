@@ -43,6 +43,7 @@
     BOOL trendingTagClick;
     UIImageView *schoolImageView;
     BOOL activeTagButtons;
+    UILabel *listingHeader;
 }
 - (void) buildCategorySection;
 - (void) retreiveTopCategories;
@@ -97,6 +98,10 @@
     screenHeight = screenRect.size.height;
     isIPhone4 = screenHeight < 568;
     
+    
+    // build the school image background
+    [self buildSchoolImageView];
+    
     // build the "hot" or "featured" category section
     [self buildCategorySection];
     // build the recent listing section
@@ -105,7 +110,6 @@
     [self buildTrendingTagsSection];
     // build button to navigate back to uList home
     [self buildUListHomeButton];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -128,34 +132,31 @@
     [categoryViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
     categoryViewButton.backgroundColor = [UIColor blackColor];
     if(isIPhone4) {
-        categoryViewButton.frame = CGRectMake(0, 0, 320, 150);
+        categoryViewButton.frame = CGRectMake(15, 20, 290, 50);
     } else {
-        categoryViewButton.frame = CGRectMake(0, 0, 320, 200);
+        categoryViewButton.frame = CGRectMake(15, 20, 290, 100);
     }
     // build header view
-    UIView *categoryHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    categoryHeaderBg.backgroundColor = [UIColor colorWithHexString:@"#990000"];
     categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
-    categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
+    categoryHeader.font = [UIFont fontWithName:FONT_GLOBAL size:17];
     categoryHeader.backgroundColor = [UIColor clearColor];
     categoryHeader.textColor = [UIColor whiteColor];
     categoryHeader.textAlignment = NSTextAlignmentLeft;
-    [categoryHeaderBg addSubview:categoryHeader];
+    [categoryViewButton addSubview:categoryHeader];
     
     // build category name view label
     hotCategoryName = [[UILabel alloc] init];
     if(isIPhone4) {
-        hotCategoryName.frame = CGRectMake(10,30,300,120);
+        hotCategoryName.frame = CGRectMake(0,20,280,50);
     } else {
-        hotCategoryName.frame = CGRectMake(10,30,300,170);
+        hotCategoryName.frame = CGRectMake(0,20,280,100);
     }
-    hotCategoryName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
+    hotCategoryName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:36];
     hotCategoryName.backgroundColor = [UIColor clearColor];
     hotCategoryName.textColor = [UIColor whiteColor];
-    hotCategoryName.textAlignment = NSTextAlignmentCenter;
-    hotCategoryName.numberOfLines = 3;
+    hotCategoryName.textAlignment = NSTextAlignmentRight;
+    hotCategoryName.numberOfLines = 1;
     
-    [categoryViewButton addSubview:categoryHeaderBg];
     [categoryViewButton addSubview:hotCategoryName];
     [self.view addSubview:categoryViewButton];
     // send request for categories
@@ -167,36 +168,31 @@
     [listingViewButton addTarget:self action:@selector(recentListingClick) forControlEvents:UIControlEventTouchUpInside];
     listingViewButton.backgroundColor = [UIColor blackColor];
     if(isIPhone4) {
-        listingViewButton.frame = CGRectMake(0, 150, 320, 150);
+        listingViewButton.frame = CGRectMake(15, 175, 290, 100);
     } else {
-        listingViewButton.frame = CGRectMake(0, 200, 320, 200);
+        listingViewButton.frame = CGRectMake(15, 225, 290, 150);
     }
-    // build header view
-    UIView *listingHeaderBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    listingHeaderBg.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(146.0 / 255.0) blue:(23.0 / 255.0) alpha: 1];
-    UILabel *listingHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
-    listingHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
+    listingHeader = [[UILabel alloc] initWithFrame:CGRectMake(15,195,290,30)];
+    listingHeader.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:17];
     listingHeader.backgroundColor = [UIColor clearColor];
     listingHeader.textColor = [UIColor whiteColor];
-    listingHeader.textAlignment = NSTextAlignmentLeft;
-    listingHeader.text = @"Recent Listing";
-    [listingHeaderBg addSubview:listingHeader];
+    listingHeader.textAlignment = NSTextAlignmentRight;
+    listingHeader.text = @"Recent";
+    [self.view addSubview:listingHeader];
     
     // build category name view label
     listingName = [[UILabel alloc] init];
     if(isIPhone4) {
-        listingName.frame = CGRectMake(10,30,300,120);
+        listingName.frame = CGRectMake(0,0,280,100);
     } else {
-        listingName.frame = CGRectMake(10,30,300,170);
+        listingName.frame = CGRectMake(0,0,280,150);
     }
-    listingName.font = [UIFont fontWithName:FONT_GLOBAL size:40];
+    listingName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:36];
     listingName.backgroundColor = [UIColor clearColor];
     listingName.textColor = [UIColor whiteColor];
     listingName.textAlignment = NSTextAlignmentCenter;
-    //listingName.text = @"This is the listing title here";
-    listingName.numberOfLines = 3;
+    listingName.numberOfLines = 2;
     
-    [listingViewButton addSubview:listingHeaderBg];
     [listingViewButton addSubview:listingName];
     [self.view addSubview:listingViewButton];
     
@@ -205,15 +201,24 @@
 }
 - (void) buildTrendingTagsSection {
     trendingBg = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-172, 320, 60)];
-    trendingBg.backgroundColor = [UIColor darkGrayColor];
+    trendingBg.backgroundColor = [UIColor clearColor];
+    
+    // build the trending label bg view
+    UIView *trendingLabelBg = [[UIView alloc] initWithFrame:CGRectMake(0, 15, 100, 30)];
+    trendingLabelBg.backgroundColor = [UIColor blackColor];
+    // build the trending label hr view
+    UIView *trendingLabelHr = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 320, 1.5)];
+    trendingLabelHr.backgroundColor = [UIColor blackColor];
+    [trendingLabelBg addSubview:trendingLabelHr];
     
     // Build the trending label
-    UILabel *trendingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,100,40)];
+    UILabel *trendingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,0,70,30)];
     trendingLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15];
     trendingLabel.backgroundColor = [UIColor clearColor];
     trendingLabel.textColor = [UIColor whiteColor];
     trendingLabel.textAlignment = NSTextAlignmentLeft;
-    trendingLabel.text = @"Trending";
+    trendingLabel.text = @"#trending";
+    [trendingLabelBg addSubview:trendingLabel];
     
     // build the tags label
     UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0,50,40)];
@@ -222,15 +227,15 @@
     tagsLabel.textColor = [UIColor redColor];
     tagsLabel.textAlignment = NSTextAlignmentLeft;
     tagsLabel.text = @"Tags";
+  
     
-    [trendingBg addSubview:trendingLabel];
-    [trendingBg addSubview:tagsLabel];
+    [trendingBg addSubview:trendingLabelBg];
     [self.view addSubview:trendingBg];
 
     
     // scrolling tags view
-    scrollingTagsView = [[UIView alloc] initWithFrame:CGRectMake(100, screenHeight-172, 220, 60)];
-    scrollingTagsView.backgroundColor = [UIColor blueColor];
+    scrollingTagsView = [[UIView alloc] initWithFrame:CGRectMake(100, screenHeight-175, 220, 60)];
+    //scrollingTagsView.backgroundColor = [UIColor blueColor];
     scrollingTagsView.clipsToBounds = YES;
 
     // tag1
@@ -269,13 +274,13 @@
     // build main container button view
     UIButton *uListHomeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [uListHomeButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    uListHomeButton.backgroundColor = [UIColor whiteColor];
+    uListHomeButton.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
     uListHomeButton.frame = CGRectMake(0, trendingBg.frame.origin.y+trendingBg.frame.size.height, 320, 50);
     
     UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,uListHomeButton.frame.size.height)];
     backLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
     backLabel.backgroundColor = [UIColor clearColor];
-    backLabel.textColor = [UIColor blackColor];
+    backLabel.textColor = [UIColor whiteColor];
     backLabel.textAlignment = NSTextAlignmentCenter;
     backLabel.text = @"Browse More Universities";
     [uListHomeButton addSubview:backLabel];
@@ -446,11 +451,11 @@
 -(void) buildSchoolImageView {
     // add the campus image
     if(isIPhone4) {
-        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 150, 320, 150)];
+        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 320, 150)];
     } else {
-        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+        schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 70, 320, 200)];
     }
-    schoolImageView.contentMode = UIViewContentModeScaleAspectFit;
+    schoolImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:schoolImageView];
     [self loadSchoolImage];
 }
@@ -617,12 +622,22 @@
                         else {
                             // show the school image instead
                             [listingViewButton removeFromSuperview];
-                            [self buildSchoolImageView];
+                            [listingHeader removeFromSuperview];
+                            if(isIPhone4) {
+                                schoolImageView.frame = CGRectMake(0, 70, 320, 150);
+                            } else {
+                                schoolImageView.frame = CGRectMake(0, 120, 320, 200);
+                            }
                         }
                     } else {
                         // show the school image instead
                         [listingViewButton removeFromSuperview];
-                        [self buildSchoolImageView];
+                        [listingHeader removeFromSuperview];
+                        if(isIPhone4) {
+                            schoolImageView.frame = CGRectMake(0, 70, 320, 150);
+                        } else {
+                            schoolImageView.frame = CGRectMake(0, 120, 320, 200);
+                        }
                     }
                 }
             });
