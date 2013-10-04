@@ -235,7 +235,7 @@
             headerHeight = 0.0;
         }
         else {
-            headerHeight = 18.0;
+            headerHeight = 20.0;
         }
     }
     else {
@@ -260,9 +260,9 @@
  */
 
 - (UIView*)createSectionView:(NSString*)category {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 18)];
-    //view.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
-    view.backgroundColor = [UIColor grayColor];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+    view.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
+    //view.backgroundColor = [UIColor grayColor];
     UILabel *sectionLabel = [[UILabel alloc] init];
     sectionLabel.frame = CGRectMake(5, 0, 300, 18);
     sectionLabel.textColor = [UIColor whiteColor];

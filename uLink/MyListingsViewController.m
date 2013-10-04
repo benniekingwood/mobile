@@ -42,11 +42,21 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     self.tableView.delegate = self;
     [self applyUlinkTableFooter];
     // add the "Add Listing" button
+    UIImage *plusImg = [UIImage imageNamed:@"mobile-plus-sign"];
+    UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [addBtn setImage:plusImg forState:UIControlStateNormal];
+    addBtn.showsTouchWhenHighlighted = YES;
+    addBtn.frame = CGRectMake(0.0, 0.0, 25,25);
+    [addBtn addTarget:self action:@selector(addListingClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    /*
     UIBarButtonItem *btnSave = [[UIBarButtonItem alloc]
-                                initWithTitle:@"Add Listing"
+                                initWithImage:[UIImage imageNamed:@"mobile-plus-sign"]
                                 style:UIBarButtonItemStylePlain
                                 target:self
                                 action:@selector(addListingClick:)];
+    */
+    UIBarButtonItem *btnSave = [[UIBarButtonItem alloc] initWithCustomView:addBtn];
     self.navigationItem.rightBarButtonItem = btnSave;
     
     // register observer used when refreshing listings after deletion

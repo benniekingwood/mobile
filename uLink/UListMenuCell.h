@@ -24,4 +24,5 @@
 @property (nonatomic) ListingCategoryCellType type;
 
 - (void) initialize;
+- (void) initializeWithoutBG;
 @end

@@ -28,6 +28,8 @@
     UIView *trendingBg;
     UILabel *categoryHeader;
     UILabel *listingName;
+    UILabel *listingDescription;
+    UILabel *listingDate;
     CGFloat screenWidth;
     CGFloat screenHeight;
     BOOL isIPhone4;
@@ -183,17 +185,43 @@
     // build category name view label
     listingName = [[UILabel alloc] init];
     if(isIPhone4) {
-        listingName.frame = CGRectMake(0,0,280,100);
+        listingName.frame = CGRectMake(0,0,290,25);
     } else {
-        listingName.frame = CGRectMake(0,0,280,150);
+        listingName.frame = CGRectMake(0,0,290,50);
     }
-    listingName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:36];
+    listingName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:38];
     listingName.backgroundColor = [UIColor clearColor];
     listingName.textColor = [UIColor whiteColor];
-    listingName.textAlignment = NSTextAlignmentCenter;
+    listingName.textAlignment = NSTextAlignmentLeft;
     listingName.numberOfLines = 2;
     
+    // build listing description
+    listingDescription = [[UILabel alloc] init];
+    if (isIPhone4)
+        listingDescription.frame = CGRectMake(0, 50, 290, 30);
+    else
+        listingDescription.frame = CGRectMake(0, 100, 290, 30);
+    listingDescription.font = [UIFont fontWithName:FONT_GLOBAL size:22];
+    listingDescription.backgroundColor = [UIColor clearColor];
+    listingDescription.textColor = [UIColor whiteColor];
+    listingDescription.textAlignment = NSTextAlignmentLeft;
+    listingDescription.numberOfLines = 1;
+    
+    // build listing date
+    listingDate = [[UILabel alloc] init];
+    if (isIPhone4)
+        listingDate.frame = CGRectMake(0, 100, 290, 20);
+    else
+        listingDate.frame = CGRectMake(0, 125, 290, 20);
+    listingDate.font = [UIFont fontWithName:FONT_GLOBAL size:12];
+    listingDate.backgroundColor = [UIColor clearColor];
+    listingDate.textColor = [UIColor whiteColor];
+    listingDate.textAlignment = NSTextAlignmentLeft;
+    listingDate.numberOfLines = 1;
+    
     [listingViewButton addSubview:listingName];
+    [listingViewButton addSubview:listingDescription];
+    [listingViewButton addSubview:listingDate];
     [self.view addSubview:listingViewButton];
     
     // send request for recent listings
@@ -275,14 +303,14 @@
     UIButton *uListHomeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [uListHomeButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     uListHomeButton.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
-    uListHomeButton.frame = CGRectMake(0, trendingBg.frame.origin.y+trendingBg.frame.size.height, 320, 50);
+    uListHomeButton.frame = CGRectMake(10, trendingBg.frame.origin.y+trendingBg.frame.size.height, 300, 40);
     
-    UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,uListHomeButton.frame.size.height)];
+    UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,310,uListHomeButton.frame.size.height)];
     backLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
     backLabel.backgroundColor = [UIColor clearColor];
     backLabel.textColor = [UIColor whiteColor];
     backLabel.textAlignment = NSTextAlignmentCenter;
-    backLabel.text = @"Browse More Universities";
+    backLabel.text = @"Browse Another University";
     [uListHomeButton addSubview:backLabel];
     
     [self.view addSubview:uListHomeButton];
@@ -618,6 +646,16 @@
                             NSDictionary *listing = json[0];
                             current = [[Listing alloc] initWithDictionary:listing];
                             listingName.text = (NSString*)[listing objectForKey:@"title"];
+                            listingDescription.text = (NSString*)[listing objectForKey:@"short_description"];
+                            
+                            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                            [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
+                            
+                            NSDate *created = [NSDate date];
+                            created = [df dateFromString:(NSString*)[listing objectForKey:@"created"]];
+                            
+                            [df setDateFormat:@"yyyy MMM dd"];
+                            listingDate.text = [df stringFromDate:created];
                         }
                         else {
                             // show the school image instead

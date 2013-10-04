@@ -32,7 +32,7 @@
         self.imageView.contentMode = UIViewContentModeCenter;
         
         UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 265, 1)];
-        bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
+        bottomLine.backgroundColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
         [self.textLabel.superview addSubview:bottomLine];
     }
     return self;

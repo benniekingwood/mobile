@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
@@ -573,7 +573,7 @@
                                 <rect key="frame" x="0.0" y="266" width="320" height="214"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="22M-bh-v9J" userLabel="Events Button">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                                        <rect key="frame" x="13" y="7" width="294" height="60"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.59215686270000001" blue="0.078431372550000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal">
@@ -587,7 +587,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzD-9K-yaR" userLabel="Snaps Button">
-                                        <rect key="frame" x="0.0" y="60" width="320" height="60"/>
+                                        <rect key="frame" x="13" y="75" width="294" height="60"/>
                                         <color key="backgroundColor" red="0.0" green="0.20000000000000001" blue="0.80000000000000004" alpha="0.89000000000000001" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal">
@@ -602,7 +602,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jXp-th-w3x" userLabel="Listing Button">
-                                        <rect key="frame" x="0.0" y="120" width="320" height="60"/>
+                                        <rect key="frame" x="13" y="143" width="294" height="60"/>
                                         <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal">
@@ -617,13 +617,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWp-fe-mOg">
-                                        <rect key="frame" x="20" y="0.0" width="97" height="60"/>
+                                        <rect key="frame" x="20" y="7" width="97" height="60"/>
                                         <fontDescription key="fontDescription" name="LucidaGrande" family="Lucida Grande" pointSize="55"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GNY-MA-6R1">
-                                        <rect key="frame" x="143" y="0.0" width="50" height="60"/>
+                                        <rect key="frame" x="143" y="7" width="50" height="60"/>
                                         <attributedString key="attributedText">
                                             <fragment content="Events">
                                                 <attributes>
@@ -636,19 +636,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTY-JI-f8K">
-                                        <rect key="frame" x="20" y="57" width="97" height="65"/>
+                                        <rect key="frame" x="20" y="72" width="97" height="65"/>
                                         <fontDescription key="fontDescription" name="LucidaGrande" family="Lucida Grande" pointSize="55"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="---" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NLO-6h-vO0">
-                                        <rect key="frame" x="20" y="117" width="97" height="65"/>
+                                        <rect key="frame" x="20" y="138" width="97" height="65"/>
                                         <fontDescription key="fontDescription" name="LucidaGrande" family="Lucida Grande" pointSize="55"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DC9-Ka-LwF">
-                                        <rect key="frame" x="143" y="57" width="50" height="65"/>
+                                        <rect key="frame" x="143" y="72" width="50" height="65"/>
                                         <attributedString key="attributedText">
                                             <fragment content="Snaps">
                                                 <attributes>
@@ -661,7 +661,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nw2-rn-IK1">
-                                        <rect key="frame" x="143" y="117" width="50" height="65"/>
+                                        <rect key="frame" x="135" y="138" width="50" height="65"/>
                                         <attributedString key="attributedText">
                                             <fragment content="Listings">
                                                 <attributes>
@@ -1024,10 +1024,10 @@
                                     <segue destination="ZUI-9i-B0v" kind="push" identifier="ShowListingSearchViewController" id="vqS-Ul-2Mh"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999987" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mobile-ulist-school-home-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="JfM-lZ-VTL">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mobile-ulist-school-home-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="JfM-lZ-VTL">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="515"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -1516,30 +1516,30 @@
                         <viewControllerLayoutGuide type="bottom" id="lRE-yp-goP"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Kox-oX-W57">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS">
-                                <rect key="frame" x="0.0" y="209" width="320" height="27"/>
+                                <rect key="frame" x="0.0" y="179" width="320" height="27"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="S2B-0V-dOO">
-                                <rect key="frame" x="0.0" y="281" width="320" height="199"/>
+                                <rect key="frame" x="0.0" y="217" width="320" height="199"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="ulink_mobile_input_field.png" translatesAutoresizingMaskIntoConstraints="NO" id="TV9-Iw-DFH">
-                                <rect key="frame" x="37" y="10" width="245" height="47"/>
+                                <rect key="frame" x="37" y="7.9999999999999991" width="245" height="47"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Lbb-Ku-wdc">
-                                <rect key="frame" x="45" y="10" width="229" height="47"/>
+                                <rect key="frame" x="45" y="7.9999999999999991" width="229" height="47"/>
                                 <rect key="contentStretch" x="1.3877787807814457e-17" y="0.0" width="1" height="1"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="ulink_mobile_input_field_textarea.png" translatesAutoresizingMaskIntoConstraints="NO" id="tVw-dd-kRv">
-                                <rect key="frame" x="36" y="73" width="248" height="121"/>
+                                <rect key="frame" x="36" y="60" width="248" height="121"/>
                             </imageView>
                             <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vUP-HO-QxW">
-                                <rect key="frame" x="37" y="73" width="248" height="108"/>
+                                <rect key="frame" x="37" y="60" width="248" height="108"/>
                                 <attributedString key="attributedText">
                                     <fragment content="snap caption">
                                         <attributes>
@@ -1553,7 +1553,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                             </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="icon-camera-large.png" translatesAutoresizingMaskIntoConstraints="NO" id="UyE-XZ-aOx">
-                                <rect key="frame" x="97" y="273" width="126" height="90"/>
+                                <rect key="frame" x="97" y="228" width="126" height="90"/>
                             </imageView>
                             <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jwi-6h-0ho">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -5314,14 +5314,14 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                         <viewControllerLayoutGuide type="bottom" id="YjT-s8-zBZ"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4pm-lY-SFk">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="wNN-3i-qzU">
-                                <rect key="frame" x="0.0" y="82" width="320" height="411"/>
+                                <rect key="frame" x="0.0" y="23" width="320" height="411"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FtJ-75-nwV">
-                                <rect key="frame" x="0.0" y="151" width="320" height="211"/>
+                                <rect key="frame" x="0.0" y="123" width="320" height="211"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" image="nature.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="4C4-hE-Pl7">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="211"/>
