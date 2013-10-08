@@ -23,7 +23,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        defaultBgColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
+        if (defaultBgColor == nil) {
+            defaultBgColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
+        }
         [self initialize];
     }
     return self;

@@ -143,7 +143,7 @@ const int kPhotoButton_3 = 3;
     }
     
     // set the table view's background color to black
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     
     // determine if the listing has a price
     listingHasPrice = [self.listing.mainCategory isEqualToString:@"For Sale"];
@@ -356,26 +356,23 @@ const int kPhotoButton_3 = 3;
         case 0:
             // set the image on the preview image view and show the image view
             if (previewPhotoView1 == nil) {
-                previewPhotoView1 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton1.frame];
+                previewPhotoView1 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton1.frame];
             }
-            //previewPhotoView1.previewImageView.image = [self.listing.images objectAtIndex:idx];
             [previewPhotoView1 showPreviewPhoto:photoContainerView];
             break;
         case 1:
             // set the image on the preview image view and show the image view
             if (previewPhotoView2 == nil) {
-                previewPhotoView2 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton2.frame];
+                previewPhotoView2 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton2.frame];
                 previewPhotoView2.frame = photoButton2.frame;
             }
-            //previewPhotoView2.previewImageView.image = [self.listing.images objectAtIndex:idx];
             [previewPhotoView2 showPreviewPhoto:photoContainerView];
             break;
         case 2:
             // set the image on the preview image view and show the image view
             if (previewPhotoView3 == nil) {
-                previewPhotoView3 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton3.frame];
+                previewPhotoView3 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton3.frame];
             }
-            //previewPhotoView3.previewImageView.image = [self.listing.images objectAtIndex:idx];
             [previewPhotoView3 showPreviewPhoto:photoContainerView];
             break;
     }
@@ -385,37 +382,41 @@ const int kPhotoButton_3 = 3;
     // address text field
     addressBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 10, 245, 47)];
     addressBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field"];
-    addressTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 22, 229, 47)];
+    addressTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, 229, 47)];
     addressTextField.clearsOnBeginEditing = NO;
     addressTextField.delegate = self;
-    addressTextField.placeholder = @"Address";
+    addressTextField.placeholder = @"address";
+    addressTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     addressTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     addressTextField.tag = kAddListingLocationAddress;
     // city text field
     cityBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 65, 245, 47)];
     cityBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field"];
-    cityTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 77, 229, 47)];
+    cityTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 65, 229, 47)];
     cityTextField.clearsOnBeginEditing = NO;
     cityTextField.delegate = self;
-    cityTextField.placeholder = @"City";
+    cityTextField.placeholder = @"city";
+    cityTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     cityTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     cityTextField.tag = kAddListingLocationCity;
     // state text field
     stateBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 120, 245, 47)];
     stateBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field"];
-    stateTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 132, 229, 47)];
+    stateTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 120, 229, 47)];
     stateTextField.clearsOnBeginEditing = NO;
     stateTextField.delegate = self;
-    stateTextField.placeholder = @"State";
+    stateTextField.placeholder = @"state";
+    stateTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     stateTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     stateTextField.tag = kAddListingLocationState;
     // zip text field
     zipBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 175, 122, 47)];
     zipBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field_small"];
-    zipTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 187, 114, 47)];
+    zipTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 175, 114, 47)];
     zipTextField.clearsOnBeginEditing = NO;
     zipTextField.delegate = self;
-    zipTextField.placeholder = @"Zip";
+    zipTextField.placeholder = @"zip";
+    zipTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     zipTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     zipTextField.tag = kAddListingLocationZip;
     zipTextField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -423,7 +424,7 @@ const int kPhotoButton_3 = 3;
     discloseLocationSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(37, 230, 160, 50)];
     discloseLocationSwitch.on = FALSE;
     [discloseLocationSwitch addTarget:self action:@selector(discloseChanged:) forControlEvents:UIControlEventValueChanged];
-    
+    discloseLocationSwitch.tintColor = [UIColor colorWithHexString:@"#c1c6c7"];
     // build disclosure label
     disclosureLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 220, 160, 50)];
     disclosureLabel.backgroundColor = [UIColor clearColor];
@@ -443,9 +444,10 @@ const int kPhotoButton_3 = 3;
 -(void) buildTitleTextField {
     titleBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 10, 245, 47)];
     titleBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field"];
-    listingTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 22, 229, 47)];
+    listingTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, 229, 47)];
     listingTitleTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    listingTitleTextField.placeholder = @"Title";
+    listingTitleTextField.placeholder = @"title";
+    listingTitleTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     listingTitleTextField.tag = kTextFieldListingTitle;
     listingTitleTextField.clearsOnBeginEditing = NO;
     listingTitleTextField.delegate = self;
@@ -464,22 +466,23 @@ const int kPhotoButton_3 = 3;
     descriptionTextView.secureTextEntry = NO;
     descriptionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     descriptionTextView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    descriptionTextView.textColor = [UIColor blackColor];
+    descriptionTextView.textColor = [UIColor colorWithHexString:@"#444444"];
     descriptionTextView.backgroundColor = [UIColor clearColor];
     descriptionTextView.returnKeyType = UIReturnKeyDefault;
     
     if(self.listing.listDescription != nil && ![self.listing.listDescription isEqualToString:EMPTY_STRING]) {
         descriptionTextView.text = self.listing.listDescription;
     } else {
-        descriptionTextView.text = @"Description";
+        descriptionTextView.text = @"description";
     }
 }
 -(void) buildPriceTextField {
     priceBgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 10, 245, 47)];
     priceBgImageView.image = [UIImage imageNamed:@"ulink_mobile_input_field"];
-    listingPriceTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 22, 229, 47)];
+    listingPriceTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, 229, 47)];
     listingPriceTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    listingPriceTextField.placeholder = @"Price";
+    listingPriceTextField.placeholder = @"price";
+    listingPriceTextField.textColor = [UIColor colorWithHexString:@"#444444"];
     listingPriceTextField.tag = kTextFieldListingTitle;
     listingPriceTextField.clearsOnBeginEditing = NO;
     listingPriceTextField.delegate = self;
@@ -507,9 +510,10 @@ const int kPhotoButton_3 = 3;
     // tag 1
     tagImageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(17, 30, 245, 47)];
     tagImageView1.image = textBgImage;
-    tag1TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 42, 229, 47)];
+    tag1TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 30, 229, 47)];
     tag1TextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    tag1TextField.placeholder = @"Tag";
+    tag1TextField.placeholder = @"tag";
+    tag1TextField.textColor = [UIColor colorWithHexString:@"#444444"];
     tag1TextField.tag = kTextFieldListingTag;
     tag1TextField.clearsOnBeginEditing = NO;
     tag1TextField.delegate = self;
@@ -518,9 +522,10 @@ const int kPhotoButton_3 = 3;
     // tag 2
     tagImageView2 = [[UIImageView alloc] initWithFrame:CGRectMake(17, 90, 245, 47)];
     tagImageView2.image = textBgImage;
-    tag2TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 102, 229, 47)];
+    tag2TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 90, 229, 47)];
     tag2TextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    tag2TextField.placeholder = @"Tag";
+    tag2TextField.placeholder = @"tag";
+    tag2TextField.textColor = [UIColor colorWithHexString:@"#444444"];
     tag2TextField.tag = kTextFieldListingTag;
     tag2TextField.clearsOnBeginEditing = NO;
     tag2TextField.delegate = self;
@@ -541,9 +546,10 @@ const int kPhotoButton_3 = 3;
     // tag 3
     tagImageView3 = [[UIImageView alloc] initWithFrame:CGRectMake(17, 150, 245, 47)];
     tagImageView3.image = textBgImage;
-    tag3TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 162, 229, 47)];
+    tag3TextField = [[UITextField alloc] initWithFrame:CGRectMake(25, 150, 229, 47)];
     tag3TextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    tag3TextField.placeholder = @"Tag";
+    tag3TextField.placeholder = @"tag";
+    tag3TextField.textColor = [UIColor colorWithHexString:@"#444444"];
     tag3TextField.tag = kTextFieldListingTag;
     tag3TextField.clearsOnBeginEditing = NO;
     tag3TextField.delegate = self;
@@ -621,7 +627,7 @@ const int kPhotoButton_3 = 3;
 - (void)validateField:(int)tag {
     switch (tag) {
         case kTextViewListingDescription:
-            if (descriptionTextView.text.length < 2 || [descriptionTextView.text isEqualToString:@"Description"]) {
+            if (descriptionTextView.text.length < 2 || [descriptionTextView.text isEqualToString:@"description"]) {
                 [validationErrors addObject:@"\nPlease enter a description"];
             } else {
                 [validationErrors removeObject:@"\nPlease enter a description"];
@@ -692,7 +698,7 @@ const int kPhotoButton_3 = 3;
         case 1:
             // set the image on the preview image view and show the image view
             if (previewPhotoView1 == nil) {
-                previewPhotoView1 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton1.frame];
+                previewPhotoView1 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton1.frame];
             }
             previewPhotoView1.previewImageView.image = image;
             [previewPhotoView1 showPreviewPhoto:photoContainerView];
@@ -700,7 +706,7 @@ const int kPhotoButton_3 = 3;
         case 2:
             // set the image on the preview image view and show the image view
             if (previewPhotoView2 == nil) {
-                previewPhotoView2 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton2.frame];
+                previewPhotoView2 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton2.frame];
                 previewPhotoView2.frame = photoButton2.frame;
             }
             previewPhotoView2.previewImageView.image = image;
@@ -709,7 +715,7 @@ const int kPhotoButton_3 = 3;
         case 3:
             // set the image on the preview image view and show the image view
             if (previewPhotoView3 == nil) {
-                previewPhotoView3 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor blackColor] frame:photoButton3.frame];
+                previewPhotoView3 = [[PreviewPhotoView alloc] initWithBackgroundColor:[UIColor colorWithHexString:@"#878D8E"] frame:photoButton3.frame];
             }
             previewPhotoView3.previewImageView.image = image;
             [previewPhotoView3 showPreviewPhoto:photoContainerView];
@@ -763,7 +769,7 @@ const int kPhotoButton_3 = 3;
 #pragma mark -
 #pragma mark TextView delegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-    if ([descriptionTextView.text isEqualToString:@"Description"]) {
+    if ([descriptionTextView.text isEqualToString:@"description"]) {
         descriptionTextView.text = EMPTY_STRING;
     }
     return TRUE;
@@ -800,7 +806,7 @@ const int kPhotoButton_3 = 3;
     // clear any old subviews from the form since they are reused
     [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#EDB232"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#EFA154"];
     // add the text properties
     cell.textLabel.text = @"Title & Description";
     //[cell.textLabel.superview addSubview:bgColor];
@@ -813,7 +819,7 @@ const int kPhotoButton_3 = 3;
     // clear the text label since the cell is reused
     cell.textLabel.text = EMPTY_STRING;
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     // add the text and text view for title and description
     [cell.contentView addSubview:titleBgImageView];
     [cell.contentView addSubview:listingTitleTextField];
@@ -826,7 +832,7 @@ const int kPhotoButton_3 = 3;
     // clear any old subviews from the form since they are reused
     [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#1E98D9"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#778BD1"];
     // add the text properties
     cell.textLabel.text = @"Photos";
     return cell;
@@ -838,7 +844,7 @@ const int kPhotoButton_3 = 3;
     // clear the text label since the cell is reused
     cell.textLabel.text = EMPTY_STRING;
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     [cell.contentView addSubview:photoContainerView];
     // now check to see if there are already images on the listing, if so show them in preview mode
     [self loadListingImages];
@@ -849,7 +855,7 @@ const int kPhotoButton_3 = 3;
     // clear any old subviews from the form since they are reused
     [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#38A640"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#3FB35E"];
     // add the text properties
     cell.textLabel.text = @"Price";
     return cell;
@@ -860,7 +866,7 @@ const int kPhotoButton_3 = 3;
     // clear the text label since the cell is reused
     cell.textLabel.text = EMPTY_STRING;
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     // add the text and text view for title and description
     [cell.contentView addSubview:priceBgImageView];
     [cell.contentView addSubview:listingPriceTextField];
@@ -870,7 +876,7 @@ const int kPhotoButton_3 = 3;
     // clear any old subviews from the form since they are reused
     [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#975FC2"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#F7CB9F"];
     // add the text properties
     cell.textLabel.text = @"Location";
    return cell; 
@@ -881,7 +887,7 @@ const int kPhotoButton_3 = 3;
     // clear the text label since the cell is reused
     cell.textLabel.text = EMPTY_STRING;
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     // add the text properties
     [cell.contentView addSubview:zipBgImageView];
     [cell.contentView addSubview:zipTextField];
@@ -899,7 +905,7 @@ const int kPhotoButton_3 = 3;
     // clear any old subviews from the form since they are reused
     [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#6B64B0"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#6BB7CA"];
     // add the text properties
     cell.textLabel.text = @"Tags";
     return cell;
@@ -910,7 +916,7 @@ const int kPhotoButton_3 = 3;
     // clear the text label since the cell is reused
     cell.textLabel.text = EMPTY_STRING;
     // set the cell background color
-    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    cell.contentView.backgroundColor = [UIColor colorWithHexString:@"#878D8E"];
     [cell.contentView addSubview:addTagButton];
     [cell.contentView addSubview:tagImageView1];
     [cell.contentView addSubview:tag1TextField];
