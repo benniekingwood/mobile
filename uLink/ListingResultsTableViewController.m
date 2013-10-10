@@ -15,6 +15,7 @@
 #import "ListingDetailViewController.h"
 #import "MapOverlayView.h"
 #import "ColorConverterUtil.h"
+#import "ULinkColorPalette.h"
 #import <QuartzCore/QuartzCore.h>
 @interface ListingResultsTableViewController() {
     UIView *mapView;
@@ -46,7 +47,11 @@
     [self setEdgesForExtendedLayout:UIRectEdgeBottom];
     [self setExtendedLayoutIncludesOpaqueBars:YES];
     
+    //[self bot]
+    //[self setAutomaticallyAdjustsScrollViewInsets:NO];
+    
     self.tableView.showsVerticalScrollIndicator = NO;
+    //self.tableView.contentInset = UIEdgeInsetsMake(0, 0, -20, 0);
     loader = [[DataLoader alloc] init];
     mapMarkerList = [NSMutableArray arrayWithCapacity:ULIST_MAX_MAP_MARKERS];
     [self addPullToRefreshHeader];
@@ -59,7 +64,8 @@
     
     self.noMoreResultsAvail = YES;
     self.tableView.separatorColor = [UIColor clearColor];
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.9411 green:0.9372 blue:0.9215 alpha:1.0];
+    //self.tableView.backgroundColor = [UIColor colorWithRed:0.9411 green:0.9372 blue:0.9215 alpha:1.0];
+    self.tableView.backgroundColor = [UIColor uLinkLightGrayColor];
     mapFrame = CGRectMake(0, 70, 320, 120);
     CGRect mViewFrame;
     mViewFrame.origin.x = 0;
@@ -76,18 +82,14 @@
     self.moreResultsSpinner.hidesWhenStopped = YES;
     
     // create closeMap uibarbutton
-    closeMap = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 30, 30, 30)];
+    closeMap = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-38, 30, 40, 40)];
     [closeMap setHidden:YES];
     [closeMap addTarget:self action:@selector(shrinkMap:) forControlEvents:UIControlEventTouchUpInside];
     [closeMap setTitle:@"X" forState:UIControlStateNormal];
     [closeMap setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [closeMap setBackgroundColor:[UIColor orangeColor]];
+    [closeMap setBackgroundColor:[UIColor uLinkOrangeColor]];
     [closeMap.titleLabel setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:24.0f]];
     [closeMap.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [closeMap.layer setShadowOffset:CGSizeMake(.5f, .5f)];
-    [closeMap.layer setShadowColor:[[UIColor blackColor] CGColor]];
-    [closeMap.layer setShadowOpacity:0.5f];
-    [closeMap.layer setCornerRadius:5.0f];
     [self.tableView addSubview:closeMap];
     
     // set up spinner when loading initial data
@@ -368,7 +370,7 @@
                 NSLog(@"Row is %i and count condition is %i", indexPath.row, ((searchResultOfSets.count*2)/3));
                 loading = YES;
                 // loadRequest is the method that loads the next batch of data.
-                // This needs your implementation to load the data into searchResultOfSets
+                // implementation to load the data into searchResultOfSets
                 [self loadRequest];
             }
         }
@@ -472,8 +474,6 @@
     }
 }
 
-
-
 /* This message is sent to the receiver when the value at the specified key path relative to the given object has changed. (i.e user is walking with device) */
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -489,9 +489,10 @@
 /* display ulink logo when no more results */
 - (UITableViewCell*)getNoMoreResultsCell {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_SELECT_ULIST_LISTING_CELL];
-    UIImageView *endListing = [[UIImageView alloc] initWithFrame:CGRectMake(0, 5, 320, 56)];
+    UIImageView *endListing = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 61)];
     endListing.contentMode = UIViewContentModeScaleAspectFit;
     endListing.image = [UIImage imageNamed:@"ulink_short_logo.png"];
+    endListing.backgroundColor = [UIColor uLinkLightGrayColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [cell addSubview:endListing];
     return cell;

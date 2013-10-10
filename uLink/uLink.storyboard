@@ -716,9 +716,9 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Km-0q-ppB">
                                 <rect key="frame" x="-16" y="403" width="351" height="77"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.52941179275512695" green="0.55294120311737061" blue="0.55686277151107788" alpha="1" colorSpace="deviceRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.52941179275512695" green="0.55294120311737061" blue="0.55686277151107788" alpha="1" colorSpace="deviceRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tE5-j2-h3f" customClass="UlinkButton">
@@ -727,7 +727,7 @@
                                 <inset key="contentEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Contact Lister">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.52941179275512695" green="0.55294120311737061" blue="0.55686277151107788" alpha="1" colorSpace="deviceRGB"/>
                                 </state>
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -749,11 +749,12 @@
         <!--Listing Results Table View Controller-->
         <scene sceneID="Uy5-ii-xcR">
             <objects>
-                <tableViewController id="RND-Lb-DF8" customClass="ListingResultsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4At-hm-kin">
+                <tableViewController wantsFullScreenLayout="YES" id="RND-Lb-DF8" customClass="ListingResultsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="1" id="4At-hm-kin">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="sectionIndexTrackingBackgroundColor" red="0.94901961089999998" green="0.93725490570000003" blue="0.92549020049999997" alpha="1" colorSpace="deviceRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="selectUListListingCell" id="oeS-SU-ES0">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
@@ -762,6 +763,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.94901961089999998" green="0.93725490570000003" blue="0.92549020049999997" alpha="1" colorSpace="deviceRGB"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -5873,8 +5875,8 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="7AH-dB-mE2"/>
-        <segue reference="lxl-jK-95E"/>
         <segue reference="eaY-Kh-AON"/>
+        <segue reference="r3c-VB-sya"/>
         <segue reference="aW1-Y9-rEi"/>
         <segue reference="Dgb-YX-Oel"/>
     </inferredMetricsTieBreakers>

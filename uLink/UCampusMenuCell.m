@@ -62,7 +62,8 @@
     }
     
     // Reenable user interaction and selection ability
-    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+    //self.selectionStyle = UITableViewCellSelectionStyleBlue;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.userInteractionEnabled = YES;
     [self setNeedsDisplay];
 }

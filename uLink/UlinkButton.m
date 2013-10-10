@@ -7,6 +7,7 @@
 //
 
 #import "UlinkButton.h"
+#import "ULinkColorPalette.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface UlinkButton ()
@@ -129,7 +130,8 @@ const int kDefaultButtonTypeSmall = 2;
 }
 
 - (void) buildOrangeButton:(UlinkButton*)btn {
-    btn.backgroundColor = [UIColor colorWithRed:250.0f / 255.0f green:172.0f / 255.0f blue:62.0f / 255.0f alpha:1.0f];
+    btn.backgroundColor = [UIColor uLinkOrangeColor];
+    //[UIColor colorWithRed:250.0f / 255.0f green:172.0f / 255.0f blue:62.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];
@@ -151,7 +153,9 @@ const int kDefaultButtonTypeSmall = 2;
     [self applyDefaultWhiteFontAttrs:btn];
     
     // update the background color
-    btn.backgroundColor = [UIColor colorWithRed:0.0f / 255.0f green:130.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f];
+    btn.backgroundColor = [UIColor uLinkBlueColor];
+    
+    //[UIColor colorWithRed:0.0f / 255.0f green:130.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];

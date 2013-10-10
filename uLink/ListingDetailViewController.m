@@ -13,6 +13,7 @@
 #import "SuccessNotificationView.h"
 #import "AlertView.h"
 #import "ImageActivityIndicatorView.h"
+#import "ULinkColorPalette.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 @interface ListingDetailViewController () {
     UIScrollView *listingPhotosScrollView;
@@ -71,7 +72,7 @@
     
     // add the background view for the title
     UILabel *titleBg = [[UILabel alloc] initWithFrame:CGRectMake(0, 108, 320, 54)];
-    titleBg.backgroundColor = [UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(34.0 / 255.0) alpha: 1];
+    titleBg.backgroundColor = [UIColor uLinkDarkGrayColor];
     [mainScrollView2 addSubview:titleBg];
     
     // build the page control

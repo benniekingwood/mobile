@@ -102,7 +102,7 @@
     return [UIColor colorWithHexString:@"#E6E0DA"];
 }
 
-+ (UIColor *)ULinkWhiteColor {
++ (UIColor *)uLinkWhiteColor {
     return [UIColor colorWithHexString:@"#F2EFEC"];
 }
 @end

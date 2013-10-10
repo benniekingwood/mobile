@@ -54,4 +54,24 @@ NSString *letters;
     }
     return randomString;
 }
+
+-(UIImage *) resizeImageForTableViewCellWithName: (NSString*)name size:(CGSize)size {
+    UIImage *bigImage = [UIImage imageNamed:name];
+    UIImage *thumb = [self makeThumbnailOfSizeWithImage:bigImage size:size];
+    return thumb;
+}
+
+- (UIImage *) makeThumbnailOfSizeWithImage: (UIImage*)image size:(CGSize)size
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, UIScreen.mainScreen.scale);
+    //UIGraphicsBeginImageContextWithOptions(size, NO, 2.0);
+    // draw scaled image into thumbnail context
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *newThumbnail = UIGraphicsGetImageFromCurrentImageContext();
+    // pop the context
+    UIGraphicsEndImageContext();
+    if(newThumbnail == nil)
+        NSLog(@"could not scale image");
+    return newThumbnail;
+}
 @end

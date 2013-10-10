@@ -20,7 +20,7 @@
 #define AUTO_SCROLL_UCAMPUS_HOME_TIME 7
 #define IMAGE_MAX_CONCURRENT_DOWNLOADS 5
 #define IMAGE_MAX_FILE_SIZE 600
-#define ULIST_LISTING_BATCH_SIZE 10
+#define ULIST_LISTING_BATCH_SIZE 50 // this number should match the listings.js fetch size
 #define ULIST_MAX_MAP_MARKERS 20
 #define MIN_RETRIES 0
 #define EMPTY_STRING @""
@@ -30,7 +30,7 @@
 #define SCREEN_WIDTH 320.0f
 #define ULIST_HIGHLIGHT_HEIGHT 285.0f
 #define ULIST_LISTING_HEIGHT 140.0f
-#define ULIST_CACHE_ALLOWANCE 10
+#define ULIST_CACHE_ALLOWANCE 10    // allowable cache size for ulist (datacache)
 #define VERSION_NUMBER @"0.2.7"
 
 #pragma mark APPEARANCE CONSTANTS
