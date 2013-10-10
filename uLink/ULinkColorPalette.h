@@ -34,6 +34,6 @@
 + (UIColor *)uLinkDarkGrayColor;
 + (UIColor *)uLinkGrayColor;
 + (UIColor *)uLinkLightGrayColor;
-+ (UIColor *)ULinkWhiteColor;
++ (UIColor *)uLinkWhiteColor;
 @end
 

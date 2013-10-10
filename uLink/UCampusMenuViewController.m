@@ -16,6 +16,8 @@
 #import "UListMenuCell.h"
 #import "DataCache.h"
 #import "UListCategory.h"
+#import "ULinkColorPalette.h"
+//#import "ImageUtil.h"
 
 
 @interface UCampusMenuViewController () {
@@ -44,7 +46,7 @@
 {
     [super viewDidLoad];
     cellFont = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
-    cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
+    cellFontBold = [UIFont fontWithName:FONT_GLOBAL size:24.0f];
     
     CGRect overlayFrame;
     overlayFrame.origin.x = 0;
@@ -156,8 +158,9 @@
             ((UListMenuCell*)cell).tag = kListingCategoryTypeAddListingButton;
             ((UListMenuCell*)cell).iconImage = [UIImage imageNamed:@"mobile-plus-sign"];
             ((UListMenuCell*)cell).textLabel.text = BTN_ADD_LISTING;
-            [((UListMenuCell*)cell) initialize];
             [(UListMenuCell*)cell layoutSubviews];
+            [((UListMenuCell*)cell) initialize];
+            
             [(UListMenuCell*)cell setEnabled:YES];
         } else {
             NSString *categoryKey = [UDataCache.uListCategorySections objectAtIndex:section];
@@ -235,7 +238,7 @@
             headerHeight = 0.0;
         }
         else {
-            headerHeight = 20.0;
+            headerHeight = 30.0;
         }
     }
     else {
@@ -260,21 +263,16 @@
  */
 
 - (UIView*)createSectionView:(NSString*)category {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
-    view.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
-    //view.backgroundColor = [UIColor grayColor];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 30)];
+    view.backgroundColor = [UIColor uLinkDarkGrayColor];
     UILabel *sectionLabel = [[UILabel alloc] init];
-    sectionLabel.frame = CGRectMake(5, 0, 300, 18);
+    sectionLabel.frame = CGRectMake(5, 0, 250, 30);
     sectionLabel.textColor = [UIColor whiteColor];
     sectionLabel.font = cellFontBold;
     sectionLabel.backgroundColor = [UIColor clearColor];
-    sectionLabel.shadowColor = [UIColor blackColor];
-    sectionLabel.shadowOffset = CGSizeMake(0.0f, -0.5f);
     sectionLabel.text = category;
+    sectionLabel.textAlignment = NSTextAlignmentCenter;
     [view addSubview:sectionLabel];
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 320, 0.1)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8f];
-    [view addSubview:bottomLine];
     return view;
 }
 @end

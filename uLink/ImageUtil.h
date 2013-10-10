@@ -12,5 +12,7 @@
 + (ImageUtil*) instance;
 - (NSData*) compressImageToData:(UIImage*)image;
 - (UIImage*) compressImage:(UIImage*)image;
--(NSString *) generateRandomString: (int) length;
+- (NSString *) generateRandomString: (int) length;
+- (UIImage*) resizeImageForTableViewCellWithName: (NSString*)name size:(CGSize)size;
+- (UIImage *) makeThumbnailOfSizeWithImage: (UIImage*)image size:(CGSize)size;
 @end
