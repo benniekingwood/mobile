@@ -23,6 +23,7 @@
 }
 
 - (void) initialize {
+    self.imageView.backgroundColor = [UIColor clearColor];
     self.enabled = YES;
     self.clipsToBounds = YES;
     //self.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"side-menu-bg.png"]];
@@ -52,6 +53,7 @@
 }
 
 - (void) initializeWithoutBG {
+    self.imageView.backgroundColor = [UIColor clearColor];
     self.enabled = YES;
     self.clipsToBounds = YES;
     self.backgroundColor = [UIColor uLinkWhiteColor];

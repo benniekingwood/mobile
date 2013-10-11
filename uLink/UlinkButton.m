@@ -181,7 +181,7 @@ const int kDefaultButtonTypeSmall = 2;
         [self applyDefaultBlackSmallFontAttrs:btn];
     }
     // set the background color
-    btn.backgroundColor = [UIColor colorWithRed:250.0f / 255.0f green:250.0f / 255.0f blue:250.0f / 255.0f alpha:1.0f];
+    btn.backgroundColor = [UIColor uLinkGrayColor];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];

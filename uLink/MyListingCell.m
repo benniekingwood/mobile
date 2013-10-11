@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppMacros.h"
 #import "DataCache.h"
+#import "ULinkColorPalette.h"
 @interface MyListingCell() {
     UILabel *title;
     UIView *typeView;
@@ -60,10 +61,10 @@
     typeLabel.backgroundColor = [UIColor clearColor];
     // add the bold or headline label image if the listing is bolded or highlighted
     if([self.listing.type isEqualToString:@"bold"]) {
-        typeView.backgroundColor = [UIColor colorWithRed:(19.0 / 255.0) green:(122.0 / 255.0) blue:(188.0 / 255.0) alpha: 1];
+        typeView.backgroundColor = [UIColor uLinkLightBlueColor];
         typeLabel.text = @"B";
     } else if([self.listing.type isEqualToString:@"highlight"]) {
-        typeView.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(146.0 / 255.0) blue:(23.0 / 255.0) alpha: 1];
+        typeView.backgroundColor = [UIColor uLinkOrangeColor];
         typeLabel.text = @"H";
     }
     [typeView addSubview:typeLabel];
