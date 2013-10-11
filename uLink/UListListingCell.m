@@ -128,7 +128,7 @@
         [replyBtn setFrame:CGRectMake(0, 0, 310, 36)];
         [replyBtn setTitle:BTN_REPLY forState:UIControlStateNormal];
         [replyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [replyBtn setImage:[UIImage imageNamed:@"options.png"] forState:UIControlStateNormal];
+        [replyBtn setImage:[UIImage imageNamed:@"ulink-mobile-reply-icon.png"] forState:UIControlStateNormal];
         [replyBtn addTarget:self action:@selector(emailLister) forControlEvents:UIControlEventTouchUpInside];
         
         // add insets
@@ -231,7 +231,7 @@
         [replyBtn setFrame:CGRectMake(0, 0, 310, 36)];
         [replyBtn setTitle:BTN_REPLY forState:UIControlStateNormal];
         [replyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [replyBtn setImage:[UIImage imageNamed:@"options.png"] forState:UIControlStateNormal];
+        [replyBtn setImage:[UIImage imageNamed:@"ulink-mobile-reply-icon.png"] forState:UIControlStateNormal];
         [replyBtn addTarget:self action:@selector(emailLister) forControlEvents:UIControlEventTouchUpInside];
         
         // add insets
