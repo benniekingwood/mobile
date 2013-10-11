@@ -59,6 +59,8 @@
 	self.navigationItem.title = @"Add Ons";
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM d"];
+    // make sure the date is not dull
+    self.listing.created = (self.listing.created == nil) ? [NSDate date] : self.listing.created;
     // build up the scroll view
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
@@ -214,7 +216,7 @@
     [replyBtn setFrame:CGRectMake(0, 0, 310, 36)];
     [replyBtn setTitle:BTN_REPLY forState:UIControlStateNormal];
     [replyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [replyBtn setImage:[UIImage imageNamed:@"options.png"] forState:UIControlStateNormal];
+    [replyBtn setImage:[UIImage imageNamed:@"ulink-mobile-reply-icon.png"] forState:UIControlStateNormal];
     
     // add insets
     CGFloat spacing = 6.0;
@@ -326,7 +328,7 @@
     [replyBtn setFrame:CGRectMake(0, 0, 310, 36)];
     [replyBtn setTitle:BTN_REPLY forState:UIControlStateNormal];
     [replyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [replyBtn setImage:[UIImage imageNamed:@"options.png"] forState:UIControlStateNormal];
+    [replyBtn setImage:[UIImage imageNamed:@"ulink-mobile-reply-icon.png"] forState:UIControlStateNormal];
     
     // add insets
     CGFloat spacing = 6.0;

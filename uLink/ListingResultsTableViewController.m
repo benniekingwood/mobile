@@ -382,31 +382,29 @@
                 ((UListListingCell*)cell).uListListing = list;
                 [(UListListingCell*)cell initialize];
                 
-                // Creates a marker at the listing location (if available)
-                GMSMarker *marker = [[GMSMarker alloc] init];
-                marker.position = CLLocationCoordinate2DMake([list.location.latitude doubleValue], [list.location.longitude doubleValue]);
-                marker.animated = NO;
-                marker.tappable = NO;
-                marker.title = list.title;
-                marker.snippet = list.shortDescription;
-                marker.userData = indexPath; // use this property to store listing data
+                /* Creates a marker at the listing location (if available, and "disclose location" is set to true */
+                if(list.location != nil && [list.location.discloseLocation isEqualToString:@"TRUE"]) {
+                    GMSMarker *marker = [[GMSMarker alloc] init];
+                    marker.position = CLLocationCoordinate2DMake([list.location.latitude doubleValue], [list.location.longitude doubleValue]);
+                    marker.animated = NO;
+                    marker.tappable = NO;
+                    marker.title = list.title;
+                    marker.snippet = list.shortDescription;
+                    marker.userData = indexPath; // use this property to store listing data
+                    
+                    // set the marker images for bold and highlight..regular keeps the default
+                    if ([list.type isEqualToString:@"highlight"]) {
+                        marker.icon = [UIImage imageNamed:@"ulink-mobile-highlight-icon.png"];
+                    } else if ([list.type isEqualToString:@"bold"]) {
+                        marker.icon = [UIImage imageNamed:@"ulink-mobile-bold-icon.png"];
+                    }
+                    
+                    marker.map = uListMapView_;
                 
-                // ADD WHEN WE CREATE THE IMAGES
-                /*
-                if ([list.type isEqualToString:@"highlight"]) {
-                    marker.icon = [UIImage imageNamed:@""];
-                } else if ([list.type isEqualToString:@"bold"]) {
-                    marker.icon = [UIImage imageNamed:@""];
-                } else if ([list.type isEqualToString:@"regular"]) {
-                    marker.icon = [UIImage imageNamed:@""];
+                    // add map marker to list if it doesn't already exist
+                    if (![mapMarkerList containsObject:marker])
+                        [mapMarkerList addObject:marker];
                 }
-                */
-                
-                marker.map = uListMapView_;
-            
-                // add map marker to list if it doesn't already exist
-                if (![mapMarkerList containsObject:marker])
-                    [mapMarkerList addObject:marker];
                 
                 return cell;
             } else {
@@ -560,14 +558,14 @@
     NSString *query;
     if (self.queryType == kListingQueryTypeSearch) {
         // qt=s&mc=main_cat&c=sub_cat&sid=school_id&b=initial_batch&t=search_text
-        query = [[NSString alloc] initWithFormat:@"qt=s&sid=%@&b=%i&t=%@", self.school.schoolId, self.fetchBatch, self.searchText];
+        query = [[NSString alloc] initWithFormat:@"qt=s&d=1&sid=%@&b=%i&t=%@", self.school.schoolId, self.fetchBatch, self.searchText];
     } else if (self.queryType == kListingQueryTypeSubCategory) {
         /*
          * grab the next batch of listing data (if there is any...)
          */
-        query = [[NSString alloc] initWithFormat:@"qt=%@&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.school.schoolId, self.fetchBatch];
+        query = [[NSString alloc] initWithFormat:@"qt=%@&d=1&mc=%@&c=%@&sid=%@&b=%i", @"c", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.subCat, self.school.schoolId, self.fetchBatch];
     } else if (self.queryType == kListingQueryTypeSubCategorySearch) {
-        query = [[NSString alloc] initWithFormat:@"qt=s&mc=%@&c=%@&sid=%@&b=%i&t=%@", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [self.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.school.schoolId, self.fetchBatch, self.searchText];
+        query = [[NSString alloc] initWithFormat:@"qt=s&d=1&mc=%@&c=%@&sid=%@&b=%i&t=%@", [self.mainCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], [self.subCat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], self.school.schoolId, self.fetchBatch, self.searchText];
     }
 
     // now we grab the listings based on the query, while passing in the notification string 
