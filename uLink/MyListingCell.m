@@ -44,7 +44,12 @@
     [[self.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     // create the new label that will hold the listing title
-    title = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 50)];
+    if([self.listing.type isEqualToString:@"bold"] || [self.listing.type isEqualToString:@"highlight"]) {
+        title = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 50)];
+    } else {
+        title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 200, 50)];
+    }
+    
     title.numberOfLines = 2;
     title.font = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
     title.textColor = [UIColor blackColor];
@@ -52,27 +57,28 @@
     title.text = self.listing.title;
     
     // we need to remove the old title from the previous cell since the cell is reused in memory
-    typeView = [[UIView alloc] initWithFrame:CGRectMake(15, 7, 30, 30)];
-    typeView.layer.cornerRadius = 5;
-    typeView.layer.masksToBounds = YES;
-    typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 6, 20, 20)];
-    typeLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0f];
-    typeLabel.textColor = [UIColor whiteColor];
-    typeLabel.backgroundColor = [UIColor clearColor];
-    // add the bold or headline label image if the listing is bolded or highlighted
-    if([self.listing.type isEqualToString:@"bold"]) {
-        typeView.backgroundColor = [UIColor uLinkLightBlueColor];
-        typeLabel.text = @"B";
-    } else if([self.listing.type isEqualToString:@"highlight"]) {
-        typeView.backgroundColor = [UIColor uLinkOrangeColor];
-        typeLabel.text = @"H";
+    if([self.listing.type isEqualToString:@"bold"] || [self.listing.type isEqualToString:@"highlight"]) {
+        typeView = [[UIView alloc] initWithFrame:CGRectMake(15, 7, 30, 30)];
+        
+        typeView.layer.cornerRadius = 5;
+        typeView.layer.masksToBounds = YES;
+        typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 6, 20, 20)];
+        typeLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0f];
+        typeLabel.textColor = [UIColor whiteColor];
+        typeLabel.backgroundColor = [UIColor clearColor];
+        // add the bold or headline label image if the listing is bolded or highlighted
+        if([self.listing.type isEqualToString:@"bold"]) {
+            typeView.backgroundColor = [UIColor uLinkLightBlueColor];
+            typeLabel.text = @"B";
+        } else if([self.listing.type isEqualToString:@"highlight"]) {
+            typeView.backgroundColor = [UIColor uLinkOrangeColor];
+            typeLabel.text = @"H";
+        }
+        [typeView addSubview:typeLabel];
+        [self.contentView addSubview:typeView];
     }
-    [typeView addSubview:typeLabel];
-    [self.contentView addSubview:typeView];
-   
+    
     [self.contentView addSubview:title];
-    
-    
     self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 

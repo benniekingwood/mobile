@@ -27,8 +27,7 @@
     self.enabled = YES;
     self.clipsToBounds = YES;
     //self.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"side-menu-bg.png"]];
-    self.backgroundColor = [UIColor uLinkWhiteColor];
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+
     self.textLabel.font = [UIFont fontWithName:FONT_GLOBAL size:16.0f];
     self.textLabel.textColor = [UIColor blackColor];
     
@@ -43,21 +42,25 @@
         //bottomLine.backgroundColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
         //[self.textLabel.superview addSubview:bottomLine];
         
+        self.backgroundColor = [UIColor uLinkWhiteColor];
         self.textLabel.textColor = [UIColor blackColor];
     } else if (self.type == kListingCategoryTypeLight) {
+        self.backgroundColor = [UIColor whiteColor];
         self.textLabel.textColor = [UIColor blackColor];
     }
     
     // set the icon image on the image view (if there is one)
-    self.imageView.image = [UImageUtil makeThumbnailOfSizeWithImage:self.iconImage size:CGSizeMake(30, 30)];
+    if (self.iconImage != nil) {
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.imageView.image = [UImageUtil makeThumbnailOfSizeWithImage:self.iconImage size:CGSizeMake(30, 30)];
+    }
 }
 
 - (void) initializeWithoutBG {
     self.imageView.backgroundColor = [UIColor clearColor];
     self.enabled = YES;
     self.clipsToBounds = YES;
-    self.backgroundColor = [UIColor uLinkWhiteColor];
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
     self.textLabel.font = [UIFont fontWithName:FONT_GLOBAL size:16.0f];
     self.textLabel.textColor = [UIColor blackColor];
     
@@ -71,13 +74,18 @@
         //bottomLine.backgroundColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
         //[self.textLabel.superview addSubview:bottomLine];
         
+        self.backgroundColor = [UIColor uLinkWhiteColor];
         self.textLabel.textColor = [UIColor blackColor];
     } else if (self.type == kListingCategoryTypeLight) {
+        self.backgroundColor = [UIColor whiteColor];
         self.textLabel.textColor = [UIColor blackColor];
     }
     
     // set the icon image on the image view (if there is one)
-    self.imageView.image = [UImageUtil makeThumbnailOfSizeWithImage:self.iconImage size:CGSizeMake(30, 30)];
+    if (self.iconImage != nil) {
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.imageView.image = [UImageUtil makeThumbnailOfSizeWithImage:self.iconImage size:CGSizeMake(30, 30)];
+    }
 }
 
 - (void)layoutSubviews {

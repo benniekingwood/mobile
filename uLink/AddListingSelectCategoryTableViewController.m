@@ -37,6 +37,7 @@
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     if(UDataCache.uListCategorySections.count == 0) {
         // TODO: have notification on this..also have the activity indicator load here
         // until the notification comes back in ..initially just have timer to test the
@@ -108,7 +109,7 @@
     cell.type = kListingCategoryTypeLight;
     cell.mainCat = categoryKey;
     cell.subCat = category.name;
-    cell.iconImage = [[UIImage alloc] init];
+    cell.iconImage = nil;//[[UIImage alloc] init];
     cell.textLabel.text = category.name;
     [cell initializeWithoutBG];
     [cell layoutSubviews];

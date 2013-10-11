@@ -13,6 +13,7 @@
 #import "MyListingCell.h"
 #import "SaveListingViewController.h"
 #import "AddListingSelectCategoryTableViewController.h"
+#import "ULinkColorPalette.h"
 
 @interface MyListingsViewController ()
 - (void)applyUlinkTableFooter;
@@ -38,8 +39,10 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeBottom];
     [self setExtendedLayoutIncludesOpaqueBars:YES];
+    self.view.backgroundColor = [UIColor uLinkLightGrayColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self applyUlinkTableFooter];
     // add the "Add Listing" button
     UIImage *plusImg = [UIImage imageNamed:@"mobile-plus-sign"];
@@ -84,7 +87,7 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 
 - (void)applyUlinkTableFooter {
 	UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 55)];
-	footer.backgroundColor = [UIColor clearColor];
+	footer.backgroundColor = [UIColor uLinkLightGrayColor];
     UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(148, 5, 24, 56)];
     shortLogoImageView.image = [UIImage imageNamed:@"ulink_short_logo.png"];
     [footer addSubview:shortLogoImageView];

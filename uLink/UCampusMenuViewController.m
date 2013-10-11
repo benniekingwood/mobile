@@ -55,7 +55,8 @@
     overlay = [[UIView alloc] initWithFrame:overlayFrame];
     overlay.backgroundColor = [UIColor blackColor];
     self.view.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"side-menu-bg.png"]];
+    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"side-menu-bg.png"]];
+    self.view.backgroundColor = [UIColor uLinkWhiteColor];
     self.tableView.separatorColor = [UIColor clearColor];
     
     // next set the ulist categories to this local mutable array so we can add a cell for the "Add Listing" button
@@ -126,16 +127,19 @@
             case 0:
                 cell.textLabel.text = @"Events";
                 ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-campus-events-icon.png"];
+                ((UCampusMenuCell*)cell).imageView.backgroundColor = [UIColor uLinkBlueColor];
                 cell.tag = 0;
                 break;
             case 1:
                 cell.textLabel.text = @"Snapshots";
                 ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-snapshots-icon.png"];
+                ((UCampusMenuCell*)cell).imageView.backgroundColor = [UIColor uLinkOrangeColor];
                 cell.tag = 1;
                 break;
             case 2:
                 cell.textLabel.text = @"Social Media";
                 ((UCampusMenuCell*)cell).iconImage = [UIImage imageNamed:@"ulink-mobile-social-icon.png"];
+                ((UCampusMenuCell*)cell).imageView.backgroundColor = [UIColor uLinkDeepPurpleColor];
                 cell.tag = 2;
                 break;
             default:

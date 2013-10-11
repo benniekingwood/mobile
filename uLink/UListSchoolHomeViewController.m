@@ -17,6 +17,7 @@
 #import "Listing.h"
 #import "ListingSearchViewController.h"
 #import "ImageActivityIndicatorView.h"
+#import "ULinkColorPalette.h"
 #import "ColorConverterUtil.h"
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/SDWebImageDownloader.h>
@@ -132,11 +133,13 @@
     // build main container button view
     categoryViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [categoryViewButton addTarget:self action:@selector(categoryClick) forControlEvents:UIControlEventTouchUpInside];
-    categoryViewButton.backgroundColor = [UIColor blackColor];
+    //categoryViewButton.backgroundColor = [UIColor blackColor];
+    categoryViewButton.backgroundColor = [UIColor uLinkDarkGrayColor];
+    categoryViewButton.layer.cornerRadius = 2.0f;
     if(isIPhone4) {
-        categoryViewButton.frame = CGRectMake(15, 20, 290, 50);
+        categoryViewButton.frame = CGRectMake(15, 25, 290, 50);
     } else {
-        categoryViewButton.frame = CGRectMake(15, 20, 290, 100);
+        categoryViewButton.frame = CGRectMake(15, 25, 290, 100);
     }
     // build header view
     categoryHeader = [[UILabel alloc] initWithFrame:CGRectMake(10,0,320,30)];
@@ -168,9 +171,11 @@
     // build main container button view
     listingViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [listingViewButton addTarget:self action:@selector(recentListingClick) forControlEvents:UIControlEventTouchUpInside];
-    listingViewButton.backgroundColor = [UIColor blackColor];
+    //listingViewButton.backgroundColor = [UIColor blackColor];
+    listingViewButton.backgroundColor = [UIColor uLinkDarkGrayColor];
+    listingViewButton.layer.cornerRadius = 2.0f;
     if(isIPhone4) {
-        listingViewButton.frame = CGRectMake(15, 175, 290, 100);
+        listingViewButton.frame = CGRectMake(15, 225, 290, 100);
     } else {
         listingViewButton.frame = CGRectMake(15, 225, 290, 150);
     }
@@ -185,9 +190,9 @@
     // build category name view label
     listingName = [[UILabel alloc] init];
     if(isIPhone4) {
-        listingName.frame = CGRectMake(0,0,290,25);
+        listingName.frame = CGRectMake(10,0,290,25);
     } else {
-        listingName.frame = CGRectMake(0,0,290,50);
+        listingName.frame = CGRectMake(10,0,290,50);
     }
     listingName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:38];
     listingName.backgroundColor = [UIColor clearColor];
@@ -198,9 +203,9 @@
     // build listing description
     listingDescription = [[UILabel alloc] init];
     if (isIPhone4)
-        listingDescription.frame = CGRectMake(0, 50, 290, 30);
+        listingDescription.frame = CGRectMake(10, 100, 290, 30);
     else
-        listingDescription.frame = CGRectMake(0, 100, 290, 30);
+        listingDescription.frame = CGRectMake(10, 100, 290, 30);
     listingDescription.font = [UIFont fontWithName:FONT_GLOBAL size:22];
     listingDescription.backgroundColor = [UIColor clearColor];
     listingDescription.textColor = [UIColor whiteColor];
@@ -210,9 +215,9 @@
     // build listing date
     listingDate = [[UILabel alloc] init];
     if (isIPhone4)
-        listingDate.frame = CGRectMake(0, 100, 290, 20);
+        listingDate.frame = CGRectMake(10, 125, 290, 20);
     else
-        listingDate.frame = CGRectMake(0, 125, 290, 20);
+        listingDate.frame = CGRectMake(10, 125, 290, 20);
     listingDate.font = [UIFont fontWithName:FONT_GLOBAL size:12];
     listingDate.backgroundColor = [UIColor clearColor];
     listingDate.textColor = [UIColor whiteColor];
@@ -233,10 +238,12 @@
     
     // build the trending label bg view
     UIView *trendingLabelBg = [[UIView alloc] initWithFrame:CGRectMake(0, 15, 100, 30)];
-    trendingLabelBg.backgroundColor = [UIColor blackColor];
+    //trendingLabelBg.backgroundColor = [UIColor blackColor];
+    trendingLabelBg.backgroundColor = [UIColor uLinkGreenColor];
     // build the trending label hr view
     UIView *trendingLabelHr = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 320, 1.5)];
-    trendingLabelHr.backgroundColor = [UIColor blackColor];
+    //trendingLabelHr.backgroundColor = [UIColor blackColor];
+    trendingLabelHr.backgroundColor = [UIColor uLinkGreenColor];
     [trendingLabelBg addSubview:trendingLabelHr];
     
     // Build the trending label
@@ -302,8 +309,10 @@
     // build main container button view
     UIButton *uListHomeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [uListHomeButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    uListHomeButton.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
+    //uListHomeButton.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f green:129.0f / 255.0f blue:148.0f / 255.0f alpha:1.0f];
+    uListHomeButton.backgroundColor = [UIColor uLinkOrangeColor];
     uListHomeButton.frame = CGRectMake(10, trendingBg.frame.origin.y+trendingBg.frame.size.height, 300, 40);
+    uListHomeButton.layer.cornerRadius = 2.0f;
     
     UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,310,uListHomeButton.frame.size.height)];
     backLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:14];
