@@ -56,7 +56,7 @@
 #define URL_SCHOOL_IMAGE @"http://localhost:8888/img/files/schools/"
 #define URL_LISTING_IMAGE_THUMB @"http://localhost:3737/img/listings/thumbs/"
 #define URL_LISTING_IMAGE_MEDIUM @"http://localhost:3737/img/listings/medium/"
-#define URL_DEFAULT_LISTING_IMAGE @"http://localhost:8888/img/defaults/default_campus_event.png"
+#define URL_DEFAULT_LISTING_IMAGE @"http://localhost:8888/img/defaults/default_listing.png"
 
 /*
 #pragma mark PROD_URLS
@@ -74,7 +74,7 @@
 #define URL_SCHOOL_IMAGE @"https://s3.amazonaws.com/ulink_images/img/files/schools/"
 #define URL_LISTING_IMAGE_THUMB @"https://s3.amazonaws.com/ulink_images/img/listings/thumbs/"
 #define URL_LISTING_IMAGE_MEDIUM @"https://s3.amazonaws.com/ulink_images/img/listings/medium/"
-#define URL_DEFAULT_LISTING_IMAGE @"http://www.theulink.com/img/defaults/default_campus_event.png"
+#define URL_DEFAULT_LISTING_IMAGE @"http://www.theulink.com/img/defaults/default_listing.png"
 */
 #pragma mark IMAGE CACHE KEYS
 #define KEY_DEFAULT_USER_IMAGE @"KEY_DEFAULT_USER_IMAGE"

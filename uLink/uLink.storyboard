@@ -1516,30 +1516,30 @@
                         <viewControllerLayoutGuide type="bottom" id="hSz-s3-3m4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Kox-oX-W57">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="ulink-mobile-blk-hr-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-Sz-pKS">
-                                <rect key="frame" x="0.0" y="207" width="320" height="27"/>
+                                <rect key="frame" x="0.0" y="177" width="320" height="27"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="S2B-0V-dOO">
-                                <rect key="frame" x="0.0" y="281" width="320" height="199"/>
+                                <rect key="frame" x="0.0" y="217" width="320" height="199"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="ulink_mobile_input_field.png" translatesAutoresizingMaskIntoConstraints="NO" id="TV9-Iw-DFH">
-                                <rect key="frame" x="37" y="8" width="245" height="47"/>
+                                <rect key="frame" x="37" y="6" width="245" height="47"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Lbb-Ku-wdc">
-                                <rect key="frame" x="45" y="8" width="229" height="47"/>
+                                <rect key="frame" x="45" y="6" width="229" height="47"/>
                                 <rect key="contentStretch" x="1.3877787807814457e-17" y="0.0" width="1" height="1"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="ulink_mobile_input_field_textarea.png" translatesAutoresizingMaskIntoConstraints="NO" id="tVw-dd-kRv">
-                                <rect key="frame" x="36" y="73" width="248" height="121"/>
+                                <rect key="frame" x="36" y="60" width="248" height="121"/>
                             </imageView>
                             <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vUP-HO-QxW">
-                                <rect key="frame" x="37" y="71" width="248" height="108"/>
+                                <rect key="frame" x="37" y="58" width="248" height="108"/>
                                 <attributedString key="attributedText">
                                     <fragment content="snap caption">
                                         <attributes>
@@ -1553,7 +1553,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                             </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="icon-camera-large.png" translatesAutoresizingMaskIntoConstraints="NO" id="UyE-XZ-aOx">
-                                <rect key="frame" x="97" y="271" width="126" height="90"/>
+                                <rect key="frame" x="97" y="226" width="126" height="90"/>
                             </imageView>
                             <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jwi-6h-0ho">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -5316,14 +5316,14 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
                         <viewControllerLayoutGuide type="bottom" id="4p7-44-S3V"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4pm-lY-SFk">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="black-striped-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="wNN-3i-qzU">
-                                <rect key="frame" x="0.0" y="79" width="320" height="411"/>
+                                <rect key="frame" x="0.0" y="23" width="320" height="411"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FtJ-75-nwV">
-                                <rect key="frame" x="0.0" y="149" width="320" height="211"/>
+                                <rect key="frame" x="0.0" y="121" width="320" height="211"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" image="nature.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="4C4-hE-Pl7">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="211"/>
@@ -5774,21 +5774,62 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
     </scenes>
     <resources>
         <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
+        <image name="black-striped-bg.png" width="640" height="1136"/>
         <image name="camera-dark.png" width="36" height="27"/>
         <image name="clock-dark.png" width="40" height="40"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
+        <image name="home-bg-1.png" width="960" height="1136"/>
         <image name="home-bg-1.png" width="960" height="1136"/>
         <image name="icon-camera-large.png" width="140" height="103"/>
         <image name="location-dark.png" width="40" height="40"/>
         <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
+        <image name="logouLinkv2.png" width="82" height="36"/>
         <image name="mobile-ulist-home-bg.png" width="320" height="400"/>
         <image name="mobile-ulist-school-home-bg.png" width="320" height="568"/>
+        <image name="nature.jpg" width="700" height="525"/>
+        <image name="nature.jpg" width="700" height="525"/>
         <image name="nature.jpg" width="700" height="525"/>
         <image name="pushpin.png" width="22" height="31"/>
         <image name="select_your_school.png" width="200" height="41"/>
         <image name="submit-event-overlay.png" width="640" height="100"/>
         <image name="success-check.png" width="66" height="65"/>
+        <image name="success-check.png" width="66" height="65"/>
+        <image name="success-check.png" width="66" height="65"/>
+        <image name="success-check.png" width="66" height="65"/>
+        <image name="success-check.png" width="66" height="65"/>
+        <image name="success-check.png" width="66" height="65"/>
         <image name="summer-bg.jpg" width="1280" height="800"/>
         <image name="ucampus-icon.png" width="30" height="30"/>
+        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
+        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
+        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
         <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
         <image name="ulink-mobile-profile-edit-btn.png" width="97" height="53"/>
         <image name="ulink-mobile-profile-password-btn.png" width="97" height="53"/>
@@ -5796,7 +5837,28 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <image name="ulink-mobile-settings-icon.png" width="20" height="20"/>
         <image name="ulink-mobile-ucampus-bg.png" width="320" height="300"/>
         <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
+        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
         <image name="ulink_mobile_input_field_small.png" width="125" height="44"/>
+        <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
+        <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
         <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
         <image name="ulist-icon.png" width="33" height="25"/>
         <image name="user-icon.png" width="30" height="30"/>
