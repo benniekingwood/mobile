@@ -504,6 +504,7 @@ const double CACHE_AGE_LIMIT_LISTINGS = 1800;  // 30 minutes
     [self.images setValue:[UIImage imageNamed:@"default_snap.png"] forKey:KEY_DEFAULT_SNAP_IMAGE];
     [self.images setValue:[UIImage imageNamed:@"default_campus_event.png"] forKey:KEY_DEFAULT_EVENT_IMAGE];
     [self.images setValue:[UIImage imageNamed:@"default_featured_event.png"] forKey:KEY_DEFAULT_FEATURED_EVENT_IMAGE];
+    [self.images setValue:[UIImage imageNamed:@"default_listing.png"] forKey:KEY_DEFAULT_LISTING_IMAGE];
     NSDate *end = [NSDate date];
     NSLog(@"hydrateImageCache complete: %f ms", [end timeIntervalSinceDate:start] * 1000);
 }

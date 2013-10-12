@@ -125,14 +125,21 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+     [tableView beginUpdates];
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // call deletion on listing
         MyListingCell *cell = (MyListingCell*)[tableView cellForRowAtIndexPath:indexPath];
         if (cell != nil) {
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            // delete from the datasource in memory
+            [UDataCache.sessionUser.listings removeObjectAtIndex:indexPath.item];
+            // now delete from the server
             [self deleteListing:cell.listing];
         }
     }
+    [tableView endUpdates];
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

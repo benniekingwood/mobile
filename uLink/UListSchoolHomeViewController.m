@@ -190,9 +190,9 @@
     // build category name view label
     listingName = [[UILabel alloc] init];
     if(isIPhone4) {
-        listingName.frame = CGRectMake(10,0,290,25);
+        listingName.frame = CGRectMake(10,0,285,25);
     } else {
-        listingName.frame = CGRectMake(10,0,290,50);
+        listingName.frame = CGRectMake(10,0,285,50);
     }
     listingName.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:38];
     listingName.backgroundColor = [UIColor clearColor];
