@@ -35,5 +35,6 @@
 + (UIColor *)uLinkGrayColor;
 + (UIColor *)uLinkLightGrayColor;
 + (UIColor *)uLinkWhiteColor;
++ (UIColor *)uLinkFormTextDarkGrayColor;
 @end
 

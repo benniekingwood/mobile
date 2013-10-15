@@ -31,7 +31,6 @@ static NSString *cellId = CELL_MY_SNAP_CELL;
     [super viewDidLoad];
     [[self snapsCollection] setDataSource:self];
     [[self snapsCollection] setDelegate:self];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_cork.png"]];
     self.snapsCollection.backgroundColor = [UIColor clearColor];
 }
 

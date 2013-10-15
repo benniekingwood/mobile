@@ -104,11 +104,6 @@
                style:UIBarButtonItemStylePlain
                target:self
                action:@selector(doneClick:)];
-    
-    // register observer used when done adding listing
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                 selector:@selector(doneComplete) name:NOTIFICATION_LISTINGS_ADD_ON_DONE
-                   object:nil];
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -584,17 +579,12 @@
 }
 - (void) doneClick:(id)sender {
     [UDataCache rehydrateSessionUserListings:NO notification:NOTIFICATION_LISTINGS_ADD_ON_DONE];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    AddListingSelectCategoryTableViewController *rootViewController = (AddListingSelectCategoryTableViewController*)[viewControllers objectAtIndex:0];
+    rootViewController.dismissImmediately = TRUE;
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
-- (void) doneComplete {
-    NSLog(@"Done posting listing - Recieved notification, listing has been posted.");
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        AddListingSelectCategoryTableViewController *rootViewController = (AddListingSelectCategoryTableViewController*)[viewControllers objectAtIndex:0];
-        rootViewController.dismissImmediately = TRUE;
-        [self.navigationController popToRootViewControllerAnimated:NO];
-    });
-}
+
 #pragma mark -
 - (void)didReceiveMemoryWarning
 {

@@ -35,38 +35,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setEdgesForExtendedLayout:UIRectEdgeBottom];
-    [self setExtendedLayoutIncludesOpaqueBars:YES];
+    //[self setEdgesForExtendedLayout:UIRectEdgeBottom];
+    //[self setExtendedLayoutIncludesOpaqueBars:YES];
     
     cellFont = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
     cellFontBold = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0f];
-    
-	// Do any additional setup after loading the view.
-  /*  UIView *titleBG = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 75)];
-    titleBG.backgroundColor = [UIColor blackColor];
-    titleBG.alpha = ALPHA_MED;
-    
-    // add uList title
-    UILabel *uListTitle = [[UILabel alloc] initWithFrame:CGRectMake(25, 9, 320, 100)];
-    uListTitle.backgroundColor = [UIColor clearColor];
-    uListTitle.text = @"uList.";
-    uListTitle.textColor = [UIColor whiteColor];
-    uListTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
-    uListTitle.numberOfLines = 1;
-    uListTitle.textAlignment = NSTextAlignmentLeft;
-    
-    // add uList caption
-    UILabel *uListCap= [[UILabel alloc] initWithFrame:CGRectMake(25, 39, 320, 100)];
-    uListCap.backgroundColor = [UIColor clearColor];
-    uListCap.text = @"College classifieds done right.";
-    uListCap.textColor = [UIColor whiteColor];
-    uListCap.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
-    uListCap.numberOfLines = 1;
-    uListCap.textAlignment = NSTextAlignmentLeft;
-    
-    [self.view addSubview:titleBG];
-    [self.view addSubview:uListTitle];
-    [self.view addSubview:uListCap]; */
     
     [UDataCache.schoolSections removeObject:@""];
     sections = UDataCache.schoolSections;
