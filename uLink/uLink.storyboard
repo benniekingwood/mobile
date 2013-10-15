@@ -1069,8 +1069,6 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" fixedFrame="YES" image="mobile-ulist-home-bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="X6d-HS-zts">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qc7-j3-9fG">
-                                <rect key="frame" x="0.0" y="150" width="320" height="280"/>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qc7-j3-9fG">
                                 <rect key="frame" x="0.0" y="150" width="320" height="304"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
