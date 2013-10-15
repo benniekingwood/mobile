@@ -20,6 +20,7 @@
 - (void)addListingClick:(id)sender;
 - (void) rehydrateListingsAfterDelete;
 - (void)finishedDeletingListing;
+- (void)listingWasAdded;
 @end
 @implementation MyListingsViewController
 static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
@@ -71,6 +72,12 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(finishedDeletingListing) name:NOTIFICATION_MY_LISTINGS_CONTROLLER
                                                object:nil];
+    
+    // register observer used when done adding listing
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(listingWasAdded) name:NOTIFICATION_LISTINGS_ADD_ON_DONE
+                                               object:nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -93,6 +100,15 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     [footer addSubview:shortLogoImageView];
 	self.tableView.tableFooterView = footer;
 }
+
+- (void) listingWasAdded {
+    NSLog(@"A Listing was added. - Recieved notification, listing has been posted.");
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
 
 #pragma mark - Table view data source
 

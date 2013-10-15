@@ -105,4 +105,8 @@
 + (UIColor *)uLinkWhiteColor {
     return [UIColor colorWithHexString:@"#F2EFEC"];
 }
+
++ (UIColor *)uLinkFormTextDarkGrayColor {
+    return [UIColor colorWithHexString:@"#444444"];
+}
 @end
