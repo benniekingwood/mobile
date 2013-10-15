@@ -123,6 +123,9 @@
             cell = [[UCampusMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
+        // clear any old subviews from the form since they are reused
+        [[(UCampusMenuCell*)cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
         switch (indexPath.row) {
             case 0:
                 cell.textLabel.text = @"Events";
@@ -155,6 +158,10 @@
         if (cell == nil) {
             cell = [[UListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
+        
+        // clear any old subviews from the form since they are reused
+        [[(UListMenuCell*)cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
         if (section == 0) {
             ((UListMenuCell*)cell).mainCat = nil;
             ((UListMenuCell*)cell).subCat = nil;
@@ -175,7 +182,6 @@
             ((UListMenuCell*)cell).mainCat = categoryKey;
             ((UListMenuCell*)cell).subCat = category.name;
             ((UListMenuCell*)cell).iconImage = nil;
-            //((UListMenuCell*)cell).textLabel.
             ((UListMenuCell*)cell).textLabel.text = category.name;
             [((UListMenuCell*)cell) initialize];
             [(UListMenuCell*)cell layoutSubviews];

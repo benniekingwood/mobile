@@ -13,6 +13,7 @@
 #import "UListCategory.h"
 #import "MyListingsViewController.h"
 #import "SaveListingViewController.h"
+#import "UListSchoolHomeViewController.h"
 @interface AddListingSelectCategoryTableViewController () {
     UIFont *cellFontBold;
 }
@@ -64,6 +65,13 @@
             
             if (myListingsVC != nil) {
                 [myListingsVC.tableView reloadData];
+            }
+        } else if ([((UINavigationController*)self.presentingViewController).topViewController isKindOfClass:[UListSchoolHomeViewController class]]) {
+            UListSchoolHomeViewController *schoolHomeVC = (UListSchoolHomeViewController*)((UINavigationController*)self.presentingViewController).topViewController;
+            
+            if (schoolHomeVC != nil) {
+                [schoolHomeVC setReloadData:YES];
+                [schoolHomeVC viewWillAppear:NO];
             }
         }
         [self dismissViewControllerAnimated:YES completion:nil];

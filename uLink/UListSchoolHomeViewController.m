@@ -61,7 +61,7 @@
 @end
 
 @implementation UListSchoolHomeViewController
-@synthesize school;
+@synthesize school, reloadData;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -78,6 +78,7 @@
     self.view.backgroundColor = [UIColor blackColor];
     hotCategoryClick = FALSE;
     trendingTagClick = FALSE;
+    reloadData = FALSE;
     searchTxt = nil;
     //  use school short_name here
     self.navigationItem.title = self.school.shortName;
@@ -117,6 +118,15 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [self updateView];
+    
+    // reload the data in the view
+    if (reloadData) {
+        [self performSelectorInBackground:@selector(retreiveTopCategories) withObject:self];
+        [self performSelectorInBackground:@selector(retreiveRecentListings) withObject:self];
+        
+        // reset reload
+        reloadData = FALSE;
+    }
 }
 
 - (void)swipeHandler:(UISwipeGestureRecognizer *)swipe {
@@ -455,6 +465,10 @@
         if(hotCategoryClick) {
             categoryViewController.mainCat = mainHotCategoryName;
             categoryViewController.subCat = hotCategoryName.text;
+            
+            // [ccerwinski 2013.10.14] - have to reset hotCategoryClick
+            //  to avoid bug w/ using correct cat/sub cat
+            hotCategoryClick = NO;
         } else {
             categoryViewController.mainCat = menuCell.mainCat;
             categoryViewController.subCat = menuCell.subCat;

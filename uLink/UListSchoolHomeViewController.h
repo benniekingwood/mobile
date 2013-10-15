@@ -12,4 +12,5 @@
 @interface UListSchoolHomeViewController : UIViewController <UCampusMenuViewControllerDelegate>
 @property (strong, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) School *school;
+@property (nonatomic) BOOL reloadData;
 @end

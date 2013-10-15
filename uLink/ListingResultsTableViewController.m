@@ -256,7 +256,17 @@
                 marker.title = ((Listing*)listing).title;
                 marker.snippet = ((Listing*)listing).shortDescription;
                 marker.userData = [NSIndexPath indexPathForRow:listCounter inSection:1];
-                //marker.userData = (Listing*)listing; // use this property to store listing data
+                
+                // set the marker images for bold and highlight..regular keeps the default
+                if ([((Listing*)listing).type isEqualToString:@"highlight"]) {
+                    marker.icon = [UIImage imageNamed:@"ulink-mobile-highlight-icon.png"];
+                } else if ([((Listing*)listing).type isEqualToString:@"bold"]) {
+                    marker.icon = [UIImage imageNamed:@"ulink-mobile-bold-icon.png"];
+                }
+                
+                // use this property to store listing data
+                //marker.userData = (Listing*)listing;
+                
                 marker.map = uListMapView_;
                 
                 [mapMarkerList addObject:marker];
