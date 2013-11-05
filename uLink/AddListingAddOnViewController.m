@@ -30,6 +30,7 @@
     UIBarButtonItem *btnDone;
     NSDictionary *paymentConfirmation;
     UIImageView *listView;
+    BOOL successfulPayment;
 }
 -(void) buildHighlightSection;
 -(void) buildBoldSection;
@@ -55,6 +56,8 @@
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeBottom];
     [self setExtendedLayoutIncludesOpaqueBars:YES];
+    // set the successfulPayment property to TRUE
+    successfulPayment = TRUE;
     // set the nav bar title
 	self.navigationItem.title = @"Add Ons";
     dateFormatter = [[NSDateFormatter alloc] init];
@@ -406,7 +409,14 @@
     [self verifyCompletedPayment:completedPayment];
     
     // Dismiss the PayPalPaymentViewController.
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        // finalize the success view if necessary
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(successfulPayment) {
+              [self finalizePostListingSuccess];
+            }
+        });
+    }];
 }
 
 - (void)payPalPaymentDidCancel {
@@ -430,13 +440,12 @@
     
     // TODO: Send confirmation to your server; your server should verify the proof of payment,
     // and also post the Listing if the payment was good
-    BOOL validPayment = TRUE;
     // TEMP work, just verify here for now
     NSDictionary *payment = [paymentConfirmation objectForKey:@"payment"];
 
     NSString *currencyCode = [payment objectForKey:@"currency_code"];
     if(![currencyCode isEqualToString:@"USD"]) {
-        validPayment = FALSE;
+        successfulPayment = FALSE;
     }
     NSDictionary *proofOfPayment = [paymentConfirmation objectForKey:@"proof_of_payment"];
     NSDictionary *adaptive = [proofOfPayment objectForKey:@"adaptive_payment"];
@@ -445,22 +454,21 @@
     if(adaptive != nil) {
         NSString *execStatus = [adaptive objectForKey:@"payment_exec_status"];
         if(![execStatus isEqualToString:@"COMPLETED"]) {
-            validPayment = FALSE;
+            successfulPayment = FALSE;
         }
     } else if(rest != nil) { // else if credit card paymentb 
         NSString *state = [rest objectForKey:@"state"];
         if(![state isEqualToString:@"approved"]) {
-            validPayment = FALSE;
+            successfulPayment = FALSE;
         }
     }
     
-    // if the payment was good, show the successview
-    if(validPayment) {
-        [self finalizePostListingSuccess];
-    } else { // if it's not a valid payment, notify the user with error dialog, and delete listing
+    // if it's not a valid payment, notify the user with error dialog, and delete listing
+    if(!successfulPayment) {
         errorAlertView.message = @"There was a problem submitting the payment for your listing.  Please try again later or contact help@theulink.com.";
         [errorAlertView show];
     }
+   
 }
 #pragma mark -
 
