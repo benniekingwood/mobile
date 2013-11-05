@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4Sq-HH-Do6">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Main Navigation View Controller-->
@@ -955,7 +955,7 @@
                         <subviews>
                             <containerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LGY-MS-nFf">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.87843137979999997" blue="0.85490196939999996" alpha="1" colorSpace="deviceRGB"/>
                                 <connections>
                                     <segue destination="aFr-LY-jNj" kind="embed" id="dmH-QJ-OUF"/>
                                 </connections>
@@ -5784,62 +5784,21 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
     </scenes>
     <resources>
         <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
-        <image name="black-striped-bg.png" width="640" height="1136"/>
         <image name="camera-dark.png" width="36" height="27"/>
         <image name="clock-dark.png" width="40" height="40"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
-        <image name="home-bg-1.png" width="960" height="1136"/>
         <image name="home-bg-1.png" width="960" height="1136"/>
         <image name="icon-camera-large.png" width="140" height="103"/>
         <image name="location-dark.png" width="40" height="40"/>
         <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
-        <image name="logouLinkv2.png" width="82" height="36"/>
         <image name="mobile-ulist-home-bg.png" width="320" height="400"/>
         <image name="mobile-ulist-school-home-bg.png" width="320" height="568"/>
-        <image name="nature.jpg" width="700" height="525"/>
-        <image name="nature.jpg" width="700" height="525"/>
         <image name="nature.jpg" width="700" height="525"/>
         <image name="pushpin.png" width="22" height="31"/>
         <image name="select_your_school.png" width="200" height="41"/>
         <image name="submit-event-overlay.png" width="640" height="100"/>
         <image name="success-check.png" width="66" height="65"/>
-        <image name="success-check.png" width="66" height="65"/>
-        <image name="success-check.png" width="66" height="65"/>
-        <image name="success-check.png" width="66" height="65"/>
-        <image name="success-check.png" width="66" height="65"/>
-        <image name="success-check.png" width="66" height="65"/>
         <image name="summer-bg.jpg" width="1280" height="800"/>
         <image name="ucampus-icon.png" width="30" height="30"/>
-        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
-        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
-        <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
         <image name="ulink-mobile-blk-hr-bg.png" width="320" height="27"/>
         <image name="ulink-mobile-profile-edit-btn.png" width="97" height="53"/>
         <image name="ulink-mobile-profile-password-btn.png" width="97" height="53"/>
@@ -5847,28 +5806,7 @@ All you have to do is simply log back into uLink, and you're reactivated!</strin
         <image name="ulink-mobile-settings-icon.png" width="20" height="20"/>
         <image name="ulink-mobile-ucampus-bg.png" width="320" height="300"/>
         <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
-        <image name="ulink_mobile_input_field.png" width="245" height="47"/>
         <image name="ulink_mobile_input_field_small.png" width="125" height="44"/>
-        <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
-        <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
         <image name="ulink_mobile_input_field_textarea.png" width="248" height="122"/>
         <image name="ulist-icon.png" width="33" height="25"/>
         <image name="user-icon.png" width="30" height="30"/>
