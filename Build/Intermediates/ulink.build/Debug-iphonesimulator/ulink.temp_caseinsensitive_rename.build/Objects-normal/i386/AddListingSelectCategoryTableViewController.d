@@ -1,0 +1,26 @@
+dependencies: \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AddListingSelectCategoryTableViewController.m \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AddListingSelectCategoryTableViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MyListingsViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AddListingAddOnViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Listing.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Address.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Location.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/PayPal-iOS-SDK/PayPalMobile.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/PayPal-iOS-SDK/PayPalPaymentViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/PayPal-iOS-SDK/PayPalPayment.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/DataCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/User.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/School.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Queue.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AppMacros.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListMenuCell.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UlinkButton.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListCategory.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/SaveListingViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListSchoolHomeViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UCampusMenuViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MFSideMenu.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UINavigationController+MFSideMenu.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MainNavigationViewController.h

@@ -1,0 +1,27 @@
+PODS:
+  - AviarySDK (3.3.7)
+  - Google-Maps-iOS-SDK (1.6.0)
+  - PayPal-iOS-SDK (1.4.1)
+  - Pixate (2.0.1)
+  - Reachability (3.1.1)
+  - SDWebImage (3.5):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.5)
+
+DEPENDENCIES:
+  - AviarySDK (~> 3.3.7)
+  - Google-Maps-iOS-SDK (~> 1.6.0)
+  - PayPal-iOS-SDK (~> 1.4.1)
+  - Pixate (~> 2.0.1)
+  - Reachability (~> 3.1.1)
+  - SDWebImage (~> 3.5)
+
+SPEC CHECKSUMS:
+  AviarySDK: b5b441fe01f319ff92d2d073fdd1da0f846920c7
+  Google-Maps-iOS-SDK: 4f859a24fd79075696cfaaa3c7bb03aacc83e7e5
+  PayPal-iOS-SDK: cea3b2cedfd4d774564644fd986628a2f1723cd3
+  Pixate: 2cd396d29ad0d549e8ef625d3b6c3243cda7d03e
+  Reachability: be4883bb93f31e38266ae3365e5600a317aae735
+  SDWebImage: f1a72472f8a2d54445f1fedafe2090593d9caf7f
+
+COCOAPODS: 0.28.0

@@ -92,8 +92,6 @@ const int kDefaultButtonTypeSmall = 2;
     
     // Add Custom Font settings
     [[btn titleLabel] setFont:[UIFont fontWithName:FONT_GLOBAL_BOLD size:16.0f]];
-   // [[btn titleLabel] setShadowColor:[UIColor blackColor]];
-   // [[btn titleLabel] setShadowOffset:CGSizeMake(0.0f, -0.5f)];
 }
 
 - (void) applyDefaultWhiteSmallFontAttrs:(UlinkButton*)btn {
@@ -131,8 +129,6 @@ const int kDefaultButtonTypeSmall = 2;
 
 - (void) buildOrangeButton:(UlinkButton*)btn {
     btn.backgroundColor = [UIColor uLinkOrangeColor];
-    //[UIColor colorWithRed:250.0f / 255.0f green:172.0f / 255.0f blue:62.0f / 255.0f alpha:1.0f];
-    
     // Round button corners
     CALayer *btnLayer = [btn layer];
     [btnLayer setMasksToBounds:YES];
@@ -154,8 +150,6 @@ const int kDefaultButtonTypeSmall = 2;
     
     // update the background color
     btn.backgroundColor = [UIColor uLinkBlueColor];
-    
-    //[UIColor colorWithRed:0.0f / 255.0f green:130.0f / 255.0f blue:204.0f / 255.0f alpha:1.0f];
     
     // Round button corners
     CALayer *btnLayer = [btn layer];

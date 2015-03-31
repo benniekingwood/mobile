@@ -35,18 +35,13 @@ static NSString *ksnapCellId = CELL_SNAP_CELL;
     [super viewDidLoad];
     self.snapsCollectionView.dataSource = self;
     self.snapsCollectionView.delegate = self;
-    self.snapsCollectionView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor blackColor];
-    [self.category setFont:[UIFont fontWithName:FONT_GLOBAL size:13.0f]];
-    [self.category setShadowColor:[UIColor blackColor]];
-    [self.category setTextColor: [UIColor whiteColor]];
-    [self.category setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+
     if([[UDataCache.snapshots objectForKey:self.snapCategory.snapCategoryId] count] == 0) {
         UILabel *noSnaps = [[UILabel alloc] init];
         noSnaps.font = [UIFont fontWithName:FONT_GLOBAL size:17.0f];
         noSnaps.textColor = [UIColor blackColor];
         noSnaps.frame = CGRectMake(20, 150, 280, 100);
-        noSnaps.numberOfLines = 3;
+        noSnaps.numberOfLines = 0;
         noSnaps.textAlignment = NSTextAlignmentCenter;
         noSnaps.backgroundColor = [UIColor whiteColor];
         noSnaps.layer.cornerRadius = 5;

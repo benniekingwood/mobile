@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Pixate.h"
 #import "AppDelegate.h"
+#import "AppMacros.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
+        [Pixate licenseKey:PIXATE_LICENSE forUser:PIXATE_USER];
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }

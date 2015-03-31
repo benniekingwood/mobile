@@ -17,8 +17,6 @@
 #import "DataCache.h"
 #import "UListCategory.h"
 #import "ULinkColorPalette.h"
-//#import "ImageUtil.h"
-
 
 @interface UCampusMenuViewController () {
     UIView *overlay;
@@ -55,7 +53,6 @@
     overlay = [[UIView alloc] initWithFrame:overlayFrame];
     overlay.backgroundColor = [UIColor blackColor];
     self.view.backgroundColor = [UIColor clearColor];
-    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"side-menu-bg.png"]];
     self.view.backgroundColor = [UIColor uLinkWhiteColor];
     self.tableView.separatorColor = [UIColor clearColor];
     
@@ -69,7 +66,6 @@
     [self.view addSubview:overlay];
 }
 - (void)showMenu {
-    //NSLog(@"view will appear. mode is %@", self.mode);
     [overlay removeFromSuperview];
 }
 - (void)didReceiveMemoryWarning
@@ -97,7 +93,7 @@
     int retVal = 0;
     
     if ([mode isEqualToString:@"uCampus"]) {
-        retVal = 3;
+        retVal = 2;
     }
     else if ([mode isEqualToString:@"uList"]) {
         NSString *key = [sections objectAtIndex:section];

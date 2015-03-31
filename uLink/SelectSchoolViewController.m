@@ -43,6 +43,11 @@
     [sections insertObject:@"" atIndex:0];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    // show the navbar
+    self.navigationController.navigationBarHidden = NO;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

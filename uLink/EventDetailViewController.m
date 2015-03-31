@@ -17,6 +17,7 @@
 #import "ActivityIndicatorView.h"
 #import "SuccessNotificationView.h"
 #import "AlertView.h"
+#import <Pixate/Pixate.h>
 @interface EventDetailViewController () {
     UserProfileButton *eventUserImageButton;
     UIActionSheet *optionsActionSheet;
@@ -48,35 +49,10 @@
     [eventUserImageButton addTarget:self
                              action:@selector(viewUserProfileClick:)
                    forControlEvents:UIControlEventTouchDown];
-    eventUserImageButton.frame = CGRectMake(20, 210, 40, 40);
+    eventUserImageButton.frame = CGRectMake(20, 160, 50, 50);
+    eventUserImageButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    eventUserImageButton.layer.borderWidth = 1.0f;
     [self.view addSubview:eventUserImageButton];
-    self.eventImageView.layer.cornerRadius = 5;
-    self.eventImageView.layer.masksToBounds = YES;
-    self.eventUserPicView.layer.cornerRadius = 5;
-    self.eventUserPicView.layer.masksToBounds = YES;
-    self.eventInfoView.layer.cornerRadius = 5;
-    self.eventInfoView.textAlignment = NSTextAlignmentJustified;
-    self.eventInfoView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0];
-    self.eventInfoView.backgroundColor = [UIColor whiteColor];
-    self.eventInfoView.textColor = [UIColor blackColor];
-    self.eventInfoView.editable = NO;
-    self.eventTitle.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
-    self.eventTitle.numberOfLines = 2;
-    self.eventTitle.textAlignment = NSTextAlignmentLeft;
-    self.eventTitle.textColor = [UIColor blackColor];
-    self.eventTitle.backgroundColor = [UIColor clearColor];
-    self.eventUsername.font = [UIFont fontWithName:FONT_GLOBAL size:11.0];
-    self.eventUsername.backgroundColor = [UIColor clearColor];
-    self.eventUsername.textAlignment = NSTextAlignmentLeft;
-    self.eventUsername.textColor = [UIColor blueColor];
-    self.eventLocation.font = [UIFont fontWithName:FONT_GLOBAL size:12.0];
-    self.eventLocation.backgroundColor = [UIColor clearColor];
-    self.eventLocation.textAlignment = NSTextAlignmentLeft;
-    self.eventLocation.textColor = [UIColor blackColor];
-    self.eventDateTime.font = [UIFont fontWithName:FONT_GLOBAL size:12.0];
-    self.eventDateTime.backgroundColor = [UIColor clearColor];
-    self.eventDateTime.textAlignment = NSTextAlignmentLeft;
-    self.eventDateTime.textColor = [UIColor blackColor];
     errorAlertView = [[AlertView alloc] initWithTitle:@""
                                               message: @""
                                              delegate:self
@@ -84,8 +60,15 @@
                                     otherButtonTitles:nil];
     activityIndicator = [[ActivityIndicatorView alloc] init];
     successNotification = [[SuccessNotificationView alloc] init];
-    // setup the options button
-    optionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"mobile-options.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionSheet:)];
+    // add the "Options" button
+    UIButton *optionsBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    optionsBtn.frame = CGRectMake(0.0, 0.0, 40,40);
+    [optionsBtn setTitle:@"e" forState:UIControlStateNormal];
+    [optionsBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    optionsBtn.styleClass = @"icon icon-large";
+    [optionsBtn addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
+    
+    optionsButton = [[UIBarButtonItem alloc] initWithCustomView:optionsBtn];
     self.navigationItem.rightBarButtonItem = optionsButton;
     
     optionsActionSheet = [[UIActionSheet alloc]
@@ -106,7 +89,7 @@
     // grab the event image from the event cache
     UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
     if (eventImage == nil) {
-        if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""]) {
+        if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""] && ![self.event.imageURL isEqualToString:@"<null>"]) {
         // set the key in the cache to let other processes know that this key is in work
         [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:self.event.eventId];
         NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:self.event.imageURL]];

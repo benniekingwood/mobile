@@ -20,6 +20,7 @@
 @interface CampusEventsViewController () {
     UIScrollView *featuredEventScroll;
     NSTimer *scrollTimer;
+    int featuredEventPicFrameHeight;
 }
 - (void) applyUlinkTableFooter;
 - (void) buildFeaturedEventViews;
@@ -30,7 +31,7 @@
 
 @implementation CampusEventsViewController
 static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
-@synthesize upcomingHeader,eventsTableView, featuredEventsHeader;
+@synthesize eventsTableView, featuredEventsHeader;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -45,23 +46,15 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeBottom];
     [self setExtendedLayoutIncludesOpaqueBars:NO];
-    featuredEventScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,28,320,146)];
+    featuredEventPicFrameHeight = 174;
+    featuredEventScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,featuredEventPicFrameHeight)];
     featuredEventScroll.delegate = self;
     featuredEventScroll.pagingEnabled = YES;
     featuredEventScroll.showsHorizontalScrollIndicator = NO;
     featuredEventScroll.userInteractionEnabled = YES;
     
-    [self.upcomingHeader setText:@"Upcoming Events"];
-    [self.upcomingHeader setFont:[UIFont fontWithName:FONT_GLOBAL size:12.0f]];
-    [self.upcomingHeader setShadowColor:[UIColor whiteColor]];
-    [self.upcomingHeader setTextColor: [UIColor darkGrayColor]];
-    [self.upcomingHeader setShadowOffset:CGSizeMake(0.0f, 1.0f)];
     self.eventsTableView.dataSource = self;
     self.eventsTableView.delegate = self;
-    self.eventsTableView.layer.cornerRadius = 5;
-    self.eventsTableView.layer.masksToBounds = YES;
-    [self.eventsTableView.layer setBorderWidth:0.5f];
-    [self.eventsTableView.layer setBorderColor:[[UIColor grayColor] CGColor]];
     [self applyUlinkTableFooter];
     
     UIAlertView *noEventsAlert = [[AlertView alloc] initWithTitle:@""
@@ -108,7 +101,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
 - (void)applyUlinkTableFooter {
 	UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 55)];
 	footer.backgroundColor = [UIColor clearColor];
-    UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(135, 5, 24, 56)];
+    UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(145, 5, 24, 56)];
     shortLogoImageView.image = [UIImage imageNamed:@"ulink_short_logo.png"];
     [footer addSubview:shortLogoImageView];
 	self.eventsTableView.tableFooterView = footer;
@@ -125,7 +118,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     self.pageControl.numberOfPages = 0;
     float currentX = 0;
     // create the main view for the featured events
-    UIView *featuredEventsView = [[UIView alloc] initWithFrame:CGRectMake(currentX, 0, featuredEventScroll.frame.size.width, 146)];
+    UIView *featuredEventsView = [[UIView alloc] initWithFrame:CGRectMake(currentX, 0, featuredEventScroll.frame.size.width, featuredEventPicFrameHeight)];
     featuredEventsView.backgroundColor = [UIColor clearColor];
     featuredEventsView.userInteractionEnabled = YES;
     
@@ -190,13 +183,13 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
             [featuredEventsView addSubview:eventImageButton];
             
             // build black label background
-            UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(currentX, 95, featuredEventScroll.frame.size.width, 51)];
+            UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(currentX, featuredEventScroll.frame.size.height-51, 320, 51)];
             footerLabel.backgroundColor = [UIColor blackColor];
-            footerLabel.alpha = ALPHA_MED;
+            footerLabel.alpha = ALPHA_LOW;
             [featuredEventsView addSubview:footerLabel];
             
             // add event title label
-            UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(currentX+58, 100, 243, 40)];
+            UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(currentX+58, featuredEventScroll.frame.size.height-45, 243, 40)];
             eventTitle.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
             eventTitle.numberOfLines = 2;
             eventTitle.textAlignment = NSTextAlignmentLeft;
@@ -210,7 +203,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
             [eventUserImageButton addTarget:self
                                      action:@selector(viewUserProfileClick:)
              forControlEvents:UIControlEventTouchDown];
-            eventUserImageButton.frame = CGRectMake(currentX+10, 101, 40, 40);
+            eventUserImageButton.frame = CGRectMake(currentX+10, featuredEventScroll.frame.size.height-45, 40, 40);
             eventUserImageButton.user = featuredEvent.user;
             [eventUserImageButton initialize];
             [featuredEventsView addSubview:eventUserImageButton];
@@ -229,7 +222,7 @@ static NSString *kUpcomingEventCellId = CELL_EVENT_CELL;
     // add the featured events to scroll view
     [featuredEventScroll addSubview:featuredEventsView];
     // set this to be 320 x number of pages
-    featuredEventScroll.contentSize = CGSizeMake(320*self.pageControl.numberOfPages, 146);
+    featuredEventScroll.contentSize = CGSizeMake(320*self.pageControl.numberOfPages, featuredEventPicFrameHeight);
 
     
     self.pageControl.currentPage = 0;

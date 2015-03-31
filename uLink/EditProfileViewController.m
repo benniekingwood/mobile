@@ -16,8 +16,9 @@
 #import "DataCache.h"
 #import "ProfileViewController.h"
 #import "ImageActivityIndicatorView.h"
-#import <SDWebImage/SDWebImageDownloader.h>
+#import "SDWebImageDownloader.h"
 #import "ImageUtil.h"
+#import "ULinkColorPalette.h"
 @interface EditProfileViewController () {
     AlertView *errorAlertView;
     NSString *defaulValidationMsg;
@@ -42,6 +43,7 @@
     UIImageView *schoolStatusImageView;
     UITextField *yearTextField;
     UIImageView *yearImageView;
+    UIView *pickerView;
     UIPickerView *schoolStatusPickerView;
     
     UIButton *profilePictureButton;
@@ -79,7 +81,7 @@
     [self setExtendedLayoutIncludesOpaqueBars:NO];
 	CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, screenHeight)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, 320, screenHeight)];
     scrollView.delegate = self;
     scrollView.contentSize = CGSizeMake(320, 600);
     scrollView.showsHorizontalScrollIndicator = NO;
@@ -88,7 +90,7 @@
 
     // profile picture button
     profilePictureButton = [[UIButton alloc] initWithFrame:CGRectMake(37, 19, 72, 72)];
-    profilePictureButton.layer.cornerRadius = 5;
+    profilePictureButton.layer.cornerRadius = 36;
     profilePictureButton.layer.masksToBounds = YES;
     [profilePictureButton addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
     profilePictureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -113,33 +115,33 @@
     firstNameImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 99, 245, 47)];
     firstNameImageView.image = textFieldBg;
     [scrollView addSubview:firstNameImageView];
-    firstNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 108, 229, 47)];
+    firstNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 100, 229, 47)];
     firstNameTextField.placeholder = @"FirstName";
     firstNameTextField.delegate = self;
     firstNameTextField.tag = kTextFieldFirstname;
     firstNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     firstNameTextField.clearsOnBeginEditing = NO;
     firstNameTextField.font = textFieldFont;
-    firstNameTextField.textColor = [UIColor blackColor];
+    firstNameTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     [scrollView addSubview:firstNameTextField];
     
     lastNameImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 154, 245, 47)];
     lastNameImageView.image = textFieldBg;
     [scrollView addSubview:lastNameImageView];
-    lastNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 163, 229, 47)];
+    lastNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 155, 229, 47)];
     lastNameTextField.placeholder = @"LastName";
     lastNameTextField.delegate = self;
     lastNameTextField.tag = kTextFieldLastname;
     lastNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     lastNameTextField.clearsOnBeginEditing = NO;
     lastNameTextField.font = textFieldFont;
-    lastNameTextField.textColor = [UIColor blackColor];
+    lastNameTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     [scrollView addSubview:lastNameTextField];
 
     schoolStatusImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 209, 245, 47)];
     schoolStatusImageView.image = textFieldBg;
     [scrollView addSubview:schoolStatusImageView];
-    schoolStatusTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 218, 245, 47)];
+    schoolStatusTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 210, 245, 47)];
     schoolStatusTextField.placeholder = @"School Status";
     schoolStatusTextField.tag = kTextFieldSchoolStatus;
     schoolStatusTextField.delegate = self;
@@ -148,13 +150,13 @@
     schoolStatusTextField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
     schoolStatusTextField.clearsOnBeginEditing = NO;
     schoolStatusTextField.font = textFieldFont;
-    schoolStatusTextField.textColor = [UIColor blackColor];
+    schoolStatusTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     [scrollView addSubview:schoolStatusTextField];
     
     yearImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 264, 245, 47)];
     yearImageView.image = textFieldBg;
     [scrollView addSubview:yearImageView];
-    yearTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 273, 245, 47)];
+    yearTextField = [[UITextField alloc] initWithFrame:CGRectMake(45, 265, 245, 47)];
     yearTextField.placeholder = @"Year";
     yearTextField.tag = kTextFieldYear;
     yearTextField.delegate = self;
@@ -162,20 +164,20 @@
     yearTextField.userInteractionEnabled = YES;
     yearTextField.clearsOnBeginEditing = NO;
     yearTextField.font = textFieldFont;
-    yearTextField.textColor = [UIColor blackColor];
+    yearTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     [scrollView addSubview:yearTextField];
     
     UIImage *textViewBg = [UIImage imageNamed:@"ulink_mobile_input_field_textarea.png"];
     bioImageView = [[UIImageView alloc] initWithFrame:CGRectMake(37, 320, 248, 121)];
     bioImageView.image = textViewBg;
     [scrollView addSubview:bioImageView];
-    bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(37, 323, 248, 108)];
+    bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(40, 323, 245, 108)];
     bioTextView.tag = kTextViewBio;
     bioTextView.delegate = self;
     bioTextView.secureTextEntry = NO;
     bioTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     bioTextView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    bioTextView.textColor = [UIColor blackColor];
+    bioTextView.textColor = [UIColor uLinkFormTextDarkGrayColor];
     bioTextView.backgroundColor = [UIColor clearColor];
     bioTextView.returnKeyType = UIReturnKeyDone;
     bioTextView.text = @"Your Bio";
@@ -183,12 +185,16 @@
     [self.view addSubview:scrollView];
     
     schoolStatuses = [[NSArray alloc] initWithObjects:@"",SCHOOL_STATUS_CURRENT_STUDENT, SCHOOL_STATUS_ALUMNI, nil];
-    schoolStatusPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,screenHeight-216, 320, 216)];
+    schoolStatusPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,0, 320, 216)];
     schoolStatusPickerView.dataSource = self;
     schoolStatusPickerView.delegate = self;
     schoolStatusPickerView.showsSelectionIndicator = YES;
-    schoolStatusPickerView.alpha = ALPHA_ZERO;
-    [self.view addSubview:schoolStatusPickerView];
+    CGRect framePickerView = CGRectMake(0, screenHeight-216, SCREEN_WIDTH, 216);
+    pickerView = [[UIView alloc] initWithFrame:framePickerView];
+    pickerView.backgroundColor = [UIColor whiteColor];
+    pickerView.alpha = ALPHA_ZERO;
+    [self.view addSubview:pickerView];
+    [pickerView addSubview:schoolStatusPickerView];
     
     
     validationErrors = [[NSHashTable alloc] init];
@@ -299,11 +305,11 @@
 }
 - (void)hideSchoolStatusPickerView {
     pickListVisible = FALSE;
-    schoolStatusPickerView.alpha = ALPHA_ZERO;
+    pickerView.alpha = ALPHA_ZERO;
 }
 - (void)showSchoolStatusPickerView {
     pickListVisible = TRUE;
-    schoolStatusPickerView.alpha = ALPHA_HIGH;
+    pickerView.alpha = ALPHA_HIGH;
 }
 - (void)showActionSheet:(id)sender {
     [photoActionSheet showInView:self.view];

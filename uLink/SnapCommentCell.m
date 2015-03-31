@@ -37,15 +37,7 @@
 }
 
 -(void) initialize {
-    self.comment.font = [UIFont fontWithName:FONT_GLOBAL size:11.0f];
-    self.userName.font = [UIFont fontWithName:FONT_GLOBAL size:10.0f];
-    self.date.font = [UIFont fontWithName:FONT_GLOBAL size:10.0f];
-    self.date.textColor = [UIColor lightGrayColor];
-    self.date.backgroundColor = [UIColor clearColor];
-    self.userName.textColor = [UIColor lightGrayColor];
-    self.userName.backgroundColor = [UIColor clearColor];
-    self.comment.numberOfLines = 4;
-    self.comment.textColor = [UIColor blackColor];
+    self.comment.numberOfLines = 0;
     self.userName.textAlignment = NSTextAlignmentLeft;
     [snapUserImageButton removeFromSuperview];
     // build snap user image button
@@ -54,6 +46,7 @@
                             action:@selector(viewUserProfileClick)
                   forControlEvents:UIControlEventTouchDown];
     snapUserImageButton.frame = CGRectMake(10, 20, 40, 40);
+    snapUserImageButton.layer.cornerRadius = 20;
     snapUserImageButton.user = snapComment.user;
     [snapUserImageButton initialize];
     [self.contentView addSubview:snapUserImageButton];

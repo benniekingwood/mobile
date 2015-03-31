@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UlinkButton.h"
 #import "AFPhotoEditorController.h"
 typedef enum {
     CameraActive, 

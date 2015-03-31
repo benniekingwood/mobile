@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UlinkButton.h"
-
-@interface RootViewController : UIViewController {
-    IBOutlet UlinkButton *signUpButton;
-    IBOutlet UlinkButton *loginInButton;
+#import "ActivityIndicatorView.h"
+@interface RootViewController : UIViewController <UITextFieldDelegate> {
+    NSString *currentPassword;
+    NSString *username;
 }
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundView1;
+@property (nonatomic) NSString *currentPassword;
+@property (nonatomic) NSString *username;
+@property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (strong, nonatomic) IBOutlet UITextField *usernameTextField;
+- (IBAction)loginClick:(id)sender;
+- (void) login:(BOOL)relogin;
 @end

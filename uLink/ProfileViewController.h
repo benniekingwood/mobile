@@ -10,6 +10,7 @@
 #import "ProfilePictureViewController.h"
 #import "EditProfileViewController.h"
 @interface ProfileViewController : UIViewController <ProfilePictureViewControllerDelegate>
+- (IBAction)settingsClick:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *listingButton;
 @property (strong, nonatomic) IBOutlet UIButton *eventsButton;
 @property (strong, nonatomic) IBOutlet UIButton *snapsButton;

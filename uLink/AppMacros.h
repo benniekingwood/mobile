@@ -81,7 +81,7 @@
 #define KEY_DEFAULT_SNAP_IMAGE @"KEY_DEFAULT_SNAP_IMAGE"
 #define KEY_DEFAULT_EVENT_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
 #define KEY_DEFAULT_FEATURED_EVENT_IMAGE @"KEY_DEFAULT_FEATURED_EVENT_IMAGE"
-#define KEY_DEFAULT_LISTING_IMAGE @"KEY_DEFAULT_EVENT_IMAGE"
+#define KEY_DEFAULT_LISTING_IMAGE @"KEY_DEFAULT_LISTING_IMAGE"
 #define KEY_SESSION_USER_SCHOOL @"KEY_SESSION_USER_SCHOOL"
 #define KEY_SCHOOL_ID_PREPEND @"KEY_SCHOOL_ID_PREPEND"
 #define IMAGE_CACHE_EVENT_THUMBS @"IMAGE_CACHE_EVENT_THUMBS"
@@ -192,11 +192,11 @@
 #define CONTROLLER_PROFILE_VIEW_CONTROLLER_ID @"ProfileViewController"
 #define CONTROLLER_PROFILE_PICTURE_VIEW_CONTROLLER_ID @"ProfilePictureViewController"
 #define CONTROLLER_USER_PROFILE_VIEW_CONTROLLER_ID @"UserProfileViewController"
-#define CONTROLLER_LOGIN_VIEW_CONTROLLER_ID @"LoginViewController"
+#define CONTROLLER_ROOT_VIEW_CONTROLLER_ID @"RootViewController"
 #define CONTROLLER_TERMS_VIEW_CONTROLLER_ID @"TermsViewController"
 #define CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID @"AddListingNavigationViewController"
 #define CONTROLLER_ADD_LISTING_ADDON_VIEW_CONTROLLER_ID @"AddListingAddOnViewController"
-
+#define CONTROLLER_MAIN_TAB_BAR_VIEW_CONTROLLER_ID @"MainTabBarViewController"
 
 #pragma mark SEGUES
 #define SEGUE_SHOW_SIGN_UP_VIEW_CONTROLLER @"ShowSignUpViewController"
@@ -277,7 +277,7 @@
 #pragma mark ALERTS
 #define ALERT_NO_INTERNET_CONN @"There is no internet connection.  You will need to have a connection in order to access recent data."
 
-#pragma mark PAYPAL
+#pragma mark API KEYS/SECRETS
 #define PAYPAL_SANDBOX_CLIENT_ID @"ASee0xDSnauZi1fuP_XyN3aocl76BhdRbdSXtoUW8sn04pFVBrKyk6rryNzE"
 #define PAYPAL_SANDBOX_SECRET @"EK5iyhCsRGPQJNFtOCkCsxl9UXyJ5CpPFYu0FbGxvVBvw67JpSKSjB2SeCyX"
 #define PAYPAL_SANDBOX_RECEIVER_EMAIL @"bennie.kingwood-facilitator@theulink.com"
@@ -285,6 +285,9 @@
 #define PAYPAL_SECRET @"EK5iyhCsRGPQJNFtOCkCsxl9UXyJ5CpPFYu0FbGxvVBvw67JpSKSjB2SeCyX"
 // todo change this to payments@theulink.com?
 #define PAYPAL_RECEIVER_EMAIL @"bennie.kingwood@theulink.com"
+#define GOOGLE_MAPS_API @"AIzaSyAhCm2ePecMkeVRBMO2AJI9ltS8-Y0P5T4"
+#define PIXATE_LICENSE @"4M8C9-LRG19-ACN01-3I4H0-GHJQ6-8LM86-LLICH-CPM0T-E24MJ-N56RA-HVF1J-3HG60-T67KF-VIN0H-CH5CE-MK"
+#define PIXATE_USER @"bennie.kingwood@theulink.com"
 
 #pragma mark QUERY_PARAMS
 

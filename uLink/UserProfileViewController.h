@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "User.h"
-@interface UserProfileViewController : UIViewController <UIScrollViewDelegate>
-@property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
+@interface UserProfileViewController : UIViewController
 @property (weak, nonatomic) User *user;
-- (IBAction)closeClick:(UIBarButtonItem *)sender;
-- (IBAction)changePage:(UIPageControl *)sender;
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *bioLabel;
+@property (strong, nonatomic) IBOutlet UILabel *schoolLabel;
+@property (strong, nonatomic) IBOutlet UILabel *schoolStatusLabel;
+@property (strong, nonatomic) IBOutlet UILabel *gradYearLabel;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *closeButton;
+- (IBAction)closeClick:(id)sender;
 @end

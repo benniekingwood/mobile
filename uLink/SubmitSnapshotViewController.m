@@ -17,6 +17,8 @@
 #import "PreviewPhotoView.h"
 #import "SnapshotCategory.h"
 #import "ImageUtil.h"
+#import <Pixate/Pixate.h>
+#import "ULinkColorPalette.h"
 @interface SubmitSnapshotViewController () {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -28,12 +30,14 @@
     UIPickerView *categoryPickerView;
     UIImagePickerController *imagePicker;
     PreviewPhotoView *previewPhotoView;
-    UlinkButton *takePhotoButton;
-    UlinkButton *chooseButton;
-    AFPhotoEditorController *photoEditorController;
+    UIButton *takePhotoButton;
+    UIButton *chooseButton;
+  //  AFPhotoEditorController *photoEditorController;
     NSString *selectedCategoryId;
     NSMutableArray *categories;
     SnapshotCategory *blank;
+    UIView *oldView;
+    UIView *selectedView;
 }
 -(void)showValidationErrors;
 - (void)hideCategoryPickerView;
@@ -45,7 +49,7 @@
 @end
 
 @implementation SubmitSnapshotViewController
-@synthesize takePhotoButton,chooseButton, dismissImmediately, photoPlaceHolderView, captionTextView, categoryTextField, nextButton, cancelButton, submitSuccessView;
+@synthesize dismissImmediately, captionTextView, categoryTextField, nextButton, cancelButton, submitSuccessView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -77,28 +81,25 @@
     // initially keep the next button disabled until an image is uploaded
     self.nextButton.enabled = NO;
     self.navigationItem.title = @"Submit Snap";
-    self.view.backgroundColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
     
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
     
-    chooseButton = [UlinkButton buttonWithType:UIButtonTypeCustom];
+    chooseButton = [UIButton buttonWithType:UIButtonTypeCustom];
     //set the button's title
     [chooseButton setTitle:BTN_CHOOSE_PHOTO forState:UIControlStateNormal];
-    [chooseButton createDefaultSmallButton:chooseButton];
-    chooseButton.backgroundColor = [UIColor grayColor];
+    chooseButton.styleClass = @"btn-inverse default-button";
     
     [chooseButton addTarget:self action:@selector(choosePhoto:) forControlEvents:UIControlEventTouchUpInside];
     chooseButton.tag = kButtonChoosePhoto;
     
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-        takePhotoButton = [UlinkButton buttonWithType:UIButtonTypeCustom];
-        [takePhotoButton createDefaultSmallButton:takePhotoButton];
+        takePhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         takePhotoButton.tag = kButtonTakePhoto;
         [takePhotoButton addTarget:self action:@selector(takePhoto:) forControlEvents:UIControlEventTouchUpInside];
         [takePhotoButton setTitle:BTN_TAKE_PHOTO forState:UIControlStateNormal];
-        takePhotoButton.backgroundColor = [UIColor grayColor];
+        takePhotoButton.styleClass = @"btn-inverse default-button";
         takePhotoButton.frame = CGRectMake(45, 328, 230, 30);
         chooseButton.frame = CGRectMake(45, 365, 230, 30);
         [self.view addSubview:takePhotoButton];
@@ -126,21 +127,18 @@
     self.categoryTextField.userInteractionEnabled = YES;
     self.categoryTextField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
     self.categoryTextField.clearsOnBeginEditing = NO;
-    self.categoryTextField.font = [UIFont fontWithName:FONT_GLOBAL size:18.0f];
-    self.categoryTextField.textColor = [UIColor blackColor];
     
     // caption
     self.captionTextView.tag = kTextViewSnapCaption;
     self.captionTextView.delegate = self;
     self.captionTextView.secureTextEntry = NO;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.captionTextView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    self.captionTextView.textColor = [UIColor blackColor];
-    self.captionTextView.backgroundColor = [UIColor clearColor];
     self.captionTextView.returnKeyType = UIReturnKeyDone;
     self.captionTextView.text = @"Snap Caption";
     
-    categoryPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,self.view.frame.size.height-216, 320, 216)];
+    categoryPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,100, 320, 216)];
+    categoryPickerView.tintColor = [UIColor whiteColor];
+    categoryPickerView.backgroundColor = [UIColor colorWithRed:44.0f / 255.0f green:110.0f / 255.0f blue:130.0f / 255.0f alpha:0.4f];
     categoryPickerView.dataSource = self;
     categoryPickerView.delegate = self;
     categoryPickerView.showsSelectionIndicator = YES;
@@ -192,7 +190,7 @@
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     // set the image on the preview image view and show the image view
     if (previewPhotoView == nil) {
-        previewPhotoView = [[PreviewPhotoView alloc]initWithFrame:CGRectMake(42.5f, 223, 235, 190)];
+        previewPhotoView = [[PreviewPhotoView alloc] initWithFrame:CGRectMake(42.5f, 223, 245, 195)];
     }
     previewPhotoView.previewImageView.image = image;
     [previewPhotoView showPreviewPhoto:self.view];
@@ -219,6 +217,24 @@
     self.categoryTextField.text = category.name;
     selectedCategoryId = category.snapCategoryId;
 }
+
+
+- (UIView *)pickerView:(UIPickerView *)thePickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
+    if (oldView != nil) {
+        oldView.backgroundColor = [UIColor clearColor];
+    }
+    selectedView = [thePickerView viewForRow:row forComponent:component];
+    [selectedView setNeedsDisplay];
+    oldView = selectedView;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, thePickerView.frame.size.width, 50)];
+    label.textColor = [UIColor whiteColor];
+    label.styleCSS = @"font-size: 26px; text-align:center;";
+    SnapshotCategory *category = [categories objectAtIndex:row];
+    label.text = category.name;
+    return label;
+}
+
 #pragma mark
 
 -(void)showValidationErrors {
@@ -398,7 +414,7 @@
     [req setHTTPBody:postBody];
     return req;
 }
-
+/*
 - (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image {
    // previewPhotoView.previewImageView.image = image;
     [photoEditorController dismissViewControllerAnimated:NO completion:nil];
@@ -409,7 +425,7 @@
 
 - (void)photoEditorCanceled:(AFPhotoEditorController *)editor {
     [photoEditorController dismissViewControllerAnimated:YES completion:nil];
-}
+}*/
 
 - (void) submitSnap {
     [self.view endEditing:YES];
@@ -510,9 +526,9 @@
         return;
     }
     
-    photoEditorController = [[AFPhotoEditorController alloc] initWithImage:previewPhotoView.previewImageView.image];
-    [photoEditorController setDelegate:self];
-    [self presentViewController:photoEditorController animated:YES completion:nil];
+   // photoEditorController = [[AFPhotoEditorController alloc] initWithImage:previewPhotoView.previewImageView.image];
+   // [photoEditorController setDelegate:self];
+  //  [self presentViewController:photoEditorController animated:YES completion:nil];
 }
 #pragma mark
 @end

@@ -13,6 +13,8 @@
 #import "ImageActivityIndicatorView.h"
 #import "UserProfileViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
+#import "ULinkColorPalette.h"
+
 @interface UCampusViewController () {
     UIScrollView *scroll;
     UIButton *topSnapperProfileButton;
@@ -71,12 +73,7 @@
     
     // build the campus home page
     campusHome = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, screenHeight)];
-    
-    // build the bg image
-    UIImageView *bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, screenHeight)];
-    bgImage.contentMode = UIViewContentModeScaleAspectFill;
-    bgImage.image = [UIImage imageNamed:@"ucampus-bg.png"];
-    [campusHome addSubview:bgImage];
+    campusHome.backgroundColor = [UIColor uLinkDarkGrayColor];
     
     // add the campus image
     schoolImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
@@ -84,9 +81,8 @@
     [campusHome addSubview:schoolImageView];
     
     // build black label background
-    UILabel *campusHomeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 170, 320, 100)];
-    campusHomeLabel.backgroundColor = [UIColor blackColor];
-    campusHomeLabel.alpha = 0.4f;
+    UILabel *campusHomeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 160, 280, 100)];
+    campusHomeLabel.backgroundColor = [UIColor uLinkGreenColor];
     [campusHome addSubview:campusHomeLabel];
     
     [self buildView];
@@ -104,23 +100,17 @@
     campusImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     campusImageButton.userInteractionEnabled = YES;
     [splashPicView addSubview:campusImageButton];
-    
-    // build black label background
-    UILabel *campusFooterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (screenHeight*2)-212, 320, 100)];
-    campusFooterLabel.backgroundColor = [UIColor blackColor];
-    campusFooterLabel.alpha = ALPHA_MED;
-    [splashPicView addSubview:campusFooterLabel];
-    
+
     // add events title/sub title
-    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*2)-214, 320, 40)];
-    eventTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
+    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight)+50, 320, 40)];
+    eventTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:24.0];
     eventTitle.numberOfLines = 1;
     eventTitle.textAlignment = NSTextAlignmentLeft;
     eventTitle.textColor = [UIColor whiteColor];
     eventTitle.backgroundColor = [UIColor clearColor];
     eventTitle.text = @"Campus Events.";
     [splashPicView addSubview:eventTitle];
-    UILabel *eventSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*2)-180, 310, 40)];
+    UILabel *eventSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight)+95, 310, 40)];
     eventSubTitle.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
     eventSubTitle.numberOfLines = 2;
     eventSubTitle.textAlignment = NSTextAlignmentLeft;
@@ -139,22 +129,17 @@
     socialImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     socialImageButton.userInteractionEnabled = YES;
     [splashPicView addSubview:socialImageButton];
-    
-    // build black label background
-    UILabel *socialFooterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (screenHeight*3)-212, 320, 100)];
-    socialFooterLabel.backgroundColor = [UIColor blackColor];
-    socialFooterLabel.alpha = ALPHA_MED;
-    [splashPicView addSubview:socialFooterLabel];
+
     // add social title/sub title
-    UILabel *socialTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*3)-214, 320, 40)];
-    socialTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
+    UILabel *socialTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*2)+50, 320, 40)];
+    socialTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:24.0];
     socialTitle.numberOfLines = 1;
     socialTitle.textAlignment = NSTextAlignmentLeft;
     socialTitle.textColor = [UIColor whiteColor];
     socialTitle.backgroundColor = [UIColor clearColor];
     socialTitle.text = @"Social Media.";
     [splashPicView addSubview:socialTitle];
-    UILabel *socialSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*3)-180, 310, 40)];
+    UILabel *socialSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*2)+95, 310, 40)];
     socialSubTitle.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
     socialSubTitle.numberOfLines = 2;
     socialSubTitle.textAlignment = NSTextAlignmentLeft;
@@ -173,22 +158,17 @@
     snapImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     snapImageButton.userInteractionEnabled = YES;
     [splashPicView addSubview:snapImageButton];
-    
-    // build black label background
-    UILabel *snapFooterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (screenHeight*4)-212, 320, 100)];
-    snapFooterLabel.backgroundColor = [UIColor blackColor];
-    snapFooterLabel.alpha = ALPHA_MED;
-    [splashPicView addSubview:snapFooterLabel];
+
     // add snapshots title/sub title
-    UILabel *snapTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*4)-214, 320, 40)];
-    snapTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:20.0];
+    UILabel *snapTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*3)+50, 320, 40)];
+    snapTitle.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:24.0];
     snapTitle.numberOfLines = 1;
     snapTitle.textAlignment = NSTextAlignmentLeft;
     snapTitle.textColor = [UIColor whiteColor];
     snapTitle.backgroundColor = [UIColor clearColor];
     snapTitle.text = @"Snapshots.";
     [splashPicView addSubview:snapTitle];
-    UILabel *snapSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*4)-180, 310, 40)];
+    UILabel *snapSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, (screenHeight*3)+95, 310, 40)];
     snapSubTitle.font = [UIFont fontWithName:FONT_GLOBAL size:16.0];
     snapSubTitle.numberOfLines = 2;
     snapSubTitle.textAlignment = NSTextAlignmentLeft;
@@ -247,6 +227,12 @@
 }
 
 - (void) buildView {
+    
+    // build black label background for the school information
+    UILabel *schoolInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 290, 220, 100)];
+    schoolInfoLabel.backgroundColor = [UIColor uLinkOrangeColor];
+    [campusHome addSubview:schoolInfoLabel];
+    
     // if there is a top snapper we can show their data
     if(![UDataCache.topSnapper.firstname isKindOfClass:[NSNull class]] && UDataCache.topSnapper.firstname != nil && ![UDataCache.topSnapper.firstname isEqualToString:@""]) {
         noSnapperLabel.alpha = ALPHA_ZERO;
@@ -255,7 +241,7 @@
         [ulinkLogo removeFromSuperview];
         [self loadSchoolImage];
         if(!topSnapperLabel) {
-            topSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 180, 200, 50)];
+            topSnapperLabel = [[UILabel alloc] initWithFrame:CGRectMake(160, 170, 160, 50)];
             topSnapperLabel.backgroundColor = [UIColor clearColor];
             topSnapperLabel.text = @"Top Snapper";
             topSnapperLabel.textColor = [UIColor whiteColor];
@@ -266,7 +252,7 @@
         if(topSnapperUserNameLabel) {
             topSnapperUserNameLabel.text = UDataCache.topSnapper.username;
         } else {
-            topSnapperUserNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 210, 200, 50)];
+            topSnapperUserNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(160, 200, 160, 50)];
             topSnapperUserNameLabel.backgroundColor = [UIColor clearColor];
             topSnapperUserNameLabel.text = UDataCache.topSnapper.username;
             topSnapperUserNameLabel.textColor = [UIColor colorWithRed:255.0f / 255.0f green:255.0f / 255.0f blue:255.0f / 255.0f alpha:ALPHA_MED];
@@ -283,10 +269,10 @@
             [topSnapperProfileButton addTarget:self
                                         action:@selector(viewUserProfileClick:)
                               forControlEvents:UIControlEventTouchDown];
-            topSnapperProfileButton.frame = CGRectMake(200, 180, 80, 80);
+            topSnapperProfileButton.frame = CGRectMake(60, 170, 80, 80);
             topSnapperProfileButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             topSnapperProfileButton.userInteractionEnabled = YES;
-            topSnapperProfileButton.imageView.layer.cornerRadius = 5;
+            topSnapperProfileButton.imageView.layer.cornerRadius = 40;
             topSnapperProfileButton.imageView.layer.masksToBounds = YES;
             [topSnapperProfileButton setImage:UDataCache.topSnapper.profileImage forState:UIControlStateNormal];
             [campusHome addSubview:topSnapperProfileButton];
@@ -297,7 +283,7 @@
         if(schoolLabel) {
              schoolLabel.text = UDataCache.sessionUser.schoolName;
         } else {
-            schoolLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 265, 300, 50)];
+            schoolLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 285, 300, 50)];
             schoolLabel.backgroundColor = [UIColor clearColor];
             schoolLabel.text = UDataCache.sessionUser.schoolName;
             schoolLabel.textColor = [UIColor whiteColor];
@@ -333,7 +319,7 @@
         if (foundedLabel) {
             foundedLabel.text = [@"Founded in " stringByAppendingString:UDataCache.topSnapper.school.year];
         } else {
-            foundedLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 295, 200, 50)];
+            foundedLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 315, 200, 50)];
             foundedLabel.backgroundColor = [UIColor clearColor];
             foundedLabel.text = [@"Founded in " stringByAppendingString:UDataCache.topSnapper.school.year];
             foundedLabel.textColor = [UIColor whiteColor];
@@ -347,7 +333,7 @@
         if (studentsLabel) {
             studentsLabel.text = [UDataCache.topSnapper.school.attendance stringByAppendingString:@" Students"];
         } else {
-            studentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 325, 200, 50)];
+            studentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 345, 200, 50)];
             studentsLabel.backgroundColor = [UIColor clearColor];
             
             studentsLabel.text = [UDataCache.topSnapper.school.attendance stringByAppendingString:@" Students"];

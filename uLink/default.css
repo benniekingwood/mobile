@@ -1,0 +1,153 @@
+text-field, text-view {
+    color: #444444;
+}
+
+switch {
+    color: #378194;
+    -ios-tint-color:#378194;
+    border-width: 0;
+}
+
+toolbar {
+    background-color: #878d8e;
+}
+
+navigation-bar title {
+    font-family: "Helvetica Neue";
+    font-weight: light;
+    font-size: 24px;
+}
+
+navigation-bar button-appearance {
+    font-family: "Helvetica Neue";
+    font-weight: light;
+    font-size: 18px;
+}
+
+.picker-view-not-selected {
+    font-size: 20px;
+    color: #444444;
+}
+
+.picker-view-selected {
+    font-size: 26px;
+    color: #378194;
+}
+
+/* TAB BAR STYLES */
+tab-bar {
+    background-color: #555;
+    -ios-tint-color:#555;
+    opacity: 1;
+    color: #E6E0DA;
+}
+
+tab-bar selection {
+    background-color: #444;
+    shape: "rectangle";
+    background-size: 107;
+    background-top-padding: 29;
+}
+
+table-view.settings {
+    row-height: 100;
+}
+
+/* BUTTON STYLES */
+.btn { 
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    font-family: "Helvetica Neue";
+    font-weight: light;
+}
+
+.btn-inverse {
+    color: #000;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    font-family: "Helvetica Neue";
+    font-weight: light;
+}
+
+.red-button {
+    background-color: #d9534f;
+}
+
+.primary-button {
+    background-color: #378194;
+}
+
+.default-button {
+     background-color: #c1c6c7;
+}
+
+.profile-pic-view {
+    font-family: "Helvetica Neue";
+    font-weight: light;
+}
+
+.profile-pic-view .name {
+    color: #378194;
+    text-align:center;
+    font-size: 24px;
+    text-transform:uppercase;
+}
+
+.profile-pic-view .username {
+    color: #444444;
+    text-align:center;
+    font-size: 15px;
+}
+
+.profile-pic-view .bio {
+    color: #378194;
+    font-style:italic;
+    font-size: 17px;
+}
+
+.headline { 
+    text-transform:uppercase;
+}
+
+/* FONT STYLES */
+.icon {
+  font-family: "ulink-mobile" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-md { font-size: 20px; }
+
+.icon-large {
+    font-size: 30px;
+}
+
+.icon-xlarge {
+    font-size: 40px;
+}
+
+.icon-xxlarge {
+    font-size: 50px;
+}
+.icon-xxxlarge {
+    font-size: 60px;
+}
+ 

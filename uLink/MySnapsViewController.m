@@ -12,8 +12,6 @@
 #import "AppMacros.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "ImageActivityIndicatorView.h"
-@interface MySnapsViewController ()
-@end
 
 @implementation MySnapsViewController
 static NSString *cellId = CELL_MY_SNAP_CELL;
@@ -29,8 +27,8 @@ static NSString *cellId = CELL_MY_SNAP_CELL;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[self snapsCollection] setDataSource:self];
-    [[self snapsCollection] setDelegate:self];
+    self.snapsCollection.delegate = self;
+    self.snapsCollection.dataSource = self;
     self.snapsCollection.backgroundColor = [UIColor clearColor];
 }
 
@@ -113,21 +111,15 @@ static NSString *cellId = CELL_MY_SNAP_CELL;
 // 1
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGSize retval;
-    float oldWidth = 400;
-    float oldHeight = 400;
-    float newWidth = 0.0f;
-    float newHeight = 0.0f;
-    float scaleFactor = 60.0f / oldWidth;
-    newHeight = oldHeight * scaleFactor;
-    newWidth = oldWidth * scaleFactor;
-    retval = CGSizeMake(newWidth, newHeight);
-    retval.height += 35; retval.width += 35;
+    float width = 80.0f;
+    float height = 80.0f;
+    retval = CGSizeMake(width, height);
     return retval;
 }
 
 - (UIEdgeInsets)collectionView:
 (UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(10, 20, 10, 20);
+    return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 #pragma mark - UICollectionViewDelegate

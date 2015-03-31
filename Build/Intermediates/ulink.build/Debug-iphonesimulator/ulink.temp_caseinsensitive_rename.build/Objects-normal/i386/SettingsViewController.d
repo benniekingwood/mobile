@@ -1,0 +1,25 @@
+dependencies: \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/SettingsViewController.m \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/SettingsViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UlinkButton.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AppMacros.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/DataCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/User.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/School.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Queue.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Listing.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Address.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Location.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MainNavigationViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/Pixate.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/PXStylesheet.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/PixateConfiguration.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/PXStyleable.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/UIView+PXStyling.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/NSDictionary+PXCSSEncoding.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/UIBarButtonItem+PXStyling.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Pixate/Framework/iOS/Pixate.framework/PrivateHeaders/PXVirtualControl.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/UITabBarItem+PXStyling.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/UINavigationItem+PXStyling.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/Pods/Headers/Pixate/UIColor+PXColors.h

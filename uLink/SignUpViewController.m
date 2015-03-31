@@ -12,6 +12,8 @@
 #import "AppMacros.h"
 #import "TextUtil.h"
 #import "TermsViewController.h"
+#import "ULinkColorPalette.h"
+#import <Pixate/Pixate.h>
 
 @interface SignUpViewController (){
     AlertView *errorAlertView;
@@ -22,17 +24,16 @@
     BOOL pickListVisible;
     NSString *currentPassword;
     ActivityIndicatorView *activityIndicator;
-    UIButton *termsButton;
-    UIView *termsView;
-    UILabel *termsTextPart1;
+    UIView *oldView, *selectedView;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
 @end
 
 @implementation SignUpViewController
-@synthesize signUpSuccessView, backgroundView, schoolId, schoolName;
+@synthesize signUpSuccessView, schoolId, schoolName;
 @synthesize usernameTextField,passwordTextField,emailTextField, schoolStatusPickerView;
+@synthesize termsButton;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -47,7 +48,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     signUpSuccessView.alpha = ALPHA_ZERO;
-    [createMyAccountButton createBlueButton:createMyAccountButton];
     defaulValidationMsg = @"";
     errorAlertView = [[AlertView alloc] initWithTitle:@""
                                               message: defaulValidationMsg
@@ -74,87 +74,25 @@
     textUtil = [TextUtil instance];
     schoolStatuses = [[NSArray alloc] initWithObjects:@"",SCHOOL_STATUS_CURRENT_STUDENT, SCHOOL_STATUS_ALUMNI, nil];
     pickListVisible = FALSE;
+    schoolStatusPickerView.tintColor = [UIColor whiteColor];
+    schoolStatusPickerView.backgroundColor = [UIColor colorWithRed:44.0f / 255.0f green:110.0f / 255.0f blue:130.0f / 255.0f alpha:0.4f];
     schoolStatusPickerView.dataSource = self;
     schoolStatusPickerView.delegate = self;
     schoolStatusPickerView.showsSelectionIndicator = YES;
     [schoolStatusPickerView selectRow:0 inComponent:0 animated:NO];
     schoolStatusPickerView.alpha = ALPHA_ZERO;
+    
     activityIndicator = [[ActivityIndicatorView alloc] init];
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenHeight = screenRect.size.height;
-    CGFloat screenWidth = screenRect.size.width;
-    termsView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight-130, screenWidth, 70)];
-    termsView.alpha = ALPHA_MED;
-    termsView.backgroundColor = [UIColor blackColor];
-    [self.view insertSubview:termsView belowSubview:self.schoolStatusPickerView];
-    termsTextPart1 = [[UILabel alloc] initWithFrame:CGRectMake(30, screenHeight-150, 250, 100)];
-    termsTextPart1.text = @"By Pressing the \"Create My Account\" button you agree to the policies and conditions listed in the ";
-    termsTextPart1.font = [UIFont fontWithName:FONT_GLOBAL size:11];
-    termsTextPart1.backgroundColor = [UIColor clearColor];
-    termsTextPart1.textColor = [UIColor whiteColor];
-    termsTextPart1.numberOfLines = 2;
-    termsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [termsButton addTarget:self
-               action:@selector(termsClick)
-     forControlEvents:UIControlEventTouchDown];
-    [termsButton setTitle:@"Terms" forState:UIControlStateNormal];
-    termsButton.frame = CGRectMake(255, screenHeight-102.5, 50, 20.0);
-    termsButton.titleLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:12];
-    [self.view insertSubview:termsTextPart1 aboveSubview:termsView];
-    [self.view insertSubview:termsButton aboveSubview:termsView];
 }
 -(void)viewWillAppear:(BOOL)animated {
-     termsButton.titleLabel.textColor = [UIColor orangeColor];
-    backgroundView.alpha = 1;
-    [backgroundView sizeToFit];
-    [UIView animateWithDuration:1.0
-                          delay: 0.0
-                        options: UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         backgroundView.alpha = 1.0;
-                     }
-                     completion:^(BOOL finished){ //task after an animation ends
-                         [self performSelector:@selector(animateBackground) withObject:nil afterDelay:0.0];
-                     }];
+    // show the navbar
+    self.navigationController.navigationBarHidden = NO;
 }
--(void)animateBackground {
-    float newX = self.backgroundView.frame.origin.x-50;
-    float newY = self.backgroundView.frame.origin.y+5;
-    [UIView animateWithDuration:15.0
-                          delay: 0.0
-                        options: UIViewAnimationCurveLinear
-                     animations:^{
-                         CGRect frame = self.backgroundView.frame;
-                         frame.origin.x = newX;
-                         frame.origin.y = newY;
-                         self.backgroundView.frame = frame;
-                     }
-                     completion:nil];
-}
-
 - (void)hideSchoolStatusPickerView {
-   /* [UIView animateWithDuration:0.2
-                          delay: 0.0
-                        options:UIViewAnimationCurveLinear
-                     animations:^{
-                         CGRect frame = schoolStatusPickerView.frame;
-                         frame.origin.y += 226.0f;
-                         schoolStatusPickerView.frame = frame;
-                     }
-                     completion:nil];*/
     pickListVisible = FALSE;
     schoolStatusPickerView.alpha = ALPHA_ZERO;
 }
 - (void)showSchoolStatusPickerView {
-    /*[UIView animateWithDuration:0.2
-                          delay: 0.0
-                        options:UIViewAnimationCurveLinear
-                     animations:^{
-                         CGRect frame = schoolStatusPickerView.frame;
-                         frame.origin.y -= 226.0f;
-                         schoolStatusPickerView.frame = frame;
-                     }
-                     completion:nil];*/
     pickListVisible = TRUE;
     schoolStatusPickerView.alpha = ALPHA_HIGH;
 }
@@ -164,6 +102,20 @@
     // Dispose of any resources that can be recreated.
 }
 #pragma mark UIPickerView Section
+- (UIView *)pickerView:(UIPickerView *)thePickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
+    if (oldView != nil) {
+        oldView.backgroundColor = [UIColor clearColor];
+    }
+    selectedView = [thePickerView viewForRow:row forComponent:component];
+    [selectedView setNeedsDisplay];
+    oldView = selectedView;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, thePickerView.frame.size.width, 50)];
+    label.textColor = [UIColor whiteColor];
+    label.styleCSS = @"font-size: 26px; text-align:center;";
+    label.text = [schoolStatuses objectAtIndex:row];
+    return label;
+}
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
     return 1;
 }
@@ -300,12 +252,6 @@
     return retVal;
 }
 
--(void) termsClick {
-    TermsViewController *termsViewController = (TermsViewController*)[self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_TERMS_VIEW_CONTROLLER_ID];
-    termsViewController.view.backgroundColor = [UIColor blackColor];
-    [self.navigationController pushViewController:termsViewController animated:YES];
-}
-
 -(IBAction)createAccount {
     [self.view endEditing:YES];
     if(pickListVisible) {
@@ -352,11 +298,8 @@
                         NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
                         NSArray* result = [json objectForKey:JSON_KEY_RESULT];
                         if([(NSString*)result isEqualToString:@"true"]) {
-                            // hide the terms view related subviews
-                            termsTextPart1.alpha = ALPHA_ZERO;
-                            termsButton.alpha = ALPHA_ZERO;
-                            termsView.alpha  = ALPHA_ZERO;
                             self.signUpSuccessView.alpha = 1.0;
+                            self.view.backgroundColor = [UIColor uLinkLightGrayColor];
                         } else {
                             errorAlertView.message = response;
                             [errorAlertView show];
@@ -375,5 +318,10 @@
         // show alert to user
         [errorAlertView show];
     }
+}
+- (IBAction)termsClick:(id)sender {
+    TermsViewController *termsViewController = (TermsViewController*)[self.storyboard instantiateViewControllerWithIdentifier:CONTROLLER_TERMS_VIEW_CONTROLLER_ID];
+    termsViewController.view.backgroundColor = [UIColor uLinkDarkGrayColor];
+    [self.navigationController pushViewController:termsViewController animated:YES];
 }
 @end

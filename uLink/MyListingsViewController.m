@@ -14,6 +14,7 @@
 #import "SaveListingViewController.h"
 #import "AddListingSelectCategoryTableViewController.h"
 #import "ULinkColorPalette.h"
+#import <Pixate/Pixate.h>
 
 @interface MyListingsViewController ()
 - (void)applyUlinkTableFooter;
@@ -40,26 +41,18 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeBottom];
     [self setExtendedLayoutIncludesOpaqueBars:YES];
-    self.view.backgroundColor = [UIColor uLinkLightGrayColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self applyUlinkTableFooter];
-    // add the "Add Listing" button
-    UIImage *plusImg = [UIImage imageNamed:@"mobile-plus-sign"];
-    UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addBtn setImage:plusImg forState:UIControlStateNormal];
-    addBtn.showsTouchWhenHighlighted = YES;
-    addBtn.frame = CGRectMake(0.0, 0.0, 25,25);
-    [addBtn addTarget:self action:@selector(addListingClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    /*
-    UIBarButtonItem *btnSave = [[UIBarButtonItem alloc]
-                                initWithImage:[UIImage imageNamed:@"mobile-plus-sign"]
-                                style:UIBarButtonItemStylePlain
-                                target:self
-                                action:@selector(addListingClick:)];
-    */
+    // add the "Add Listing" button
+    UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    addBtn.frame = CGRectMake(0.0, 0.0, 40,40);
+    [addBtn setTitle:@"g" forState:UIControlStateNormal];
+    [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    addBtn.styleClass = @"icon icon-large";
+    [addBtn addTarget:self action:@selector(addListingClick:) forControlEvents:UIControlEventTouchUpInside];
+
     UIBarButtonItem *btnSave = [[UIBarButtonItem alloc] initWithCustomView:addBtn];
     self.navigationItem.rightBarButtonItem = btnSave;
     
@@ -81,7 +74,6 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"ViewWillAppear MyListings");
     [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
@@ -94,7 +86,6 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 
 - (void)applyUlinkTableFooter {
 	UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 55)];
-	footer.backgroundColor = [UIColor uLinkLightGrayColor];
     UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(148, 5, 24, 56)];
     shortLogoImageView.image = [UIImage imageNamed:@"ulink_short_logo.png"];
     [footer addSubview:shortLogoImageView];
@@ -102,8 +93,6 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 }
 
 - (void) listingWasAdded {
-    NSLog(@"A Listing was added. - Recieved notification, listing has been posted.");
-    
     dispatch_sync(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
@@ -175,13 +164,6 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
     UIViewController *svc = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_ADD_LISTING_NAVIGATION_CONTROLLER_ID];
 
     [self presentViewController:svc animated:YES completion:nil];
-    
-    /*
-    AddListingSelectCategoryTableViewController *addListVC = [[AddListingSelectCategoryTableViewController alloc] init];
-    addListVC.myListingDelegate = self;
-    UINavigationController *uiNav = [[UINavigationController alloc] initWithRootViewController:addListVC];
-    [self presentViewController:uiNav animated:YES completion:nil];
-     */
 }
 #pragma mark - endpoint calls
 
@@ -197,12 +179,10 @@ static NSString *kMyListingCellId = CELL_MY_LISTING_CELL;
 }
 
 - (void) rehydrateListingsAfterDelete {
-    NSLog(@"Rehydrate Session User Listings - Recieved notification, listing has been deleted.");
     [UDataCache rehydrateSessionUserListings:NO notification:NOTIFICATION_MY_LISTINGS_CONTROLLER];
 }
 
 - (void) finishedDeletingListing {
-    NSLog(@"Delete Listing - Recieved notification, session user listings rehydrated.");
     /*
      * Since this function gets called when we receive a notification, and since it is
      * possible that the notification comes in on a different sub thread, we

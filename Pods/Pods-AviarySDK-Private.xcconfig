@@ -1,0 +1,6 @@
+#include "Pods-AviarySDK.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/AviarySDK" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AviarySDK" "${PODS_ROOT}/Headers/Google-Maps-iOS-SDK" "${PODS_ROOT}/Headers/Google-Maps-iOS-SDK/GoogleMaps" "${PODS_ROOT}/Headers/PayPal-iOS-SDK" "${PODS_ROOT}/Headers/Pixate" "${PODS_ROOT}/Headers/Reachability" "${PODS_ROOT}/Headers/SDWebImage"
+LIBRARY_SEARCH_PATHS = ${PODS_AVIARYSDK_LIBRARY_SEARCH_PATHS}
+OTHER_LDFLAGS = -ObjC ${PODS_AVIARYSDK_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}

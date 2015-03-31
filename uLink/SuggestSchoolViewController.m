@@ -9,6 +9,7 @@
 #import "SuggestSchoolViewController.h"
 #import "AppMacros.h"
 #import "ActivityIndicatorView.h"
+#import "ULinkColorPalette.h"
 @interface SuggestSchoolViewController () {
     AlertView *errorAlertView;
     NSString *suggestFailMsg;
@@ -33,7 +34,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     suggestSuccessView.alpha = 0.0;
-    [submit createBlueButton:submit];
     suggestFailMsg = @"Your suggestion was not submitted. Please try again later.";
     suggestValidationMsg = @"Please enter a school name.";
     errorAlertView = [[AlertView alloc] initWithTitle:@""
@@ -126,6 +126,7 @@
                         NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                         if([responseString isEqualToString:@"true"]) {
                             self.suggestSuccessView.alpha = 1.00;
+                            self.view.backgroundColor = [UIColor uLinkLightGrayColor];
                         } else {
                             [errorAlertView show];
                         }

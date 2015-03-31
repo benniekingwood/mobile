@@ -18,6 +18,8 @@
 #import "ImageActivityIndicatorView.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "ImageUtil.h"
+#import "ULinkColorPalette.h"
+#import <Pixate/Pixate.h>
 @interface EditEventViewController () {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -74,7 +76,6 @@
                                     otherButtonTitles:nil];
     activityIndicator = [[ActivityIndicatorView alloc] init];
     successNotification = [[SuccessNotificationView alloc] init];
-    [deleteButton createRedButton:deleteButton];
     [successNotification setMessage:@"Event Updated."];
     self.saveButton.enabled = FALSE;
     [self hideTimePickerView];
@@ -84,8 +85,8 @@
     [dateFormatter setDateFormat:@"MM/d/yyyy"];
     
     // event picture
-    eventPictureButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 16, 106, 78)];
-    eventPictureButton.layer.cornerRadius = 5;
+    eventPictureButton = [[UIButton alloc] initWithFrame:CGRectMake(115, 5, 90, 90)];
+    eventPictureButton.layer.cornerRadius = 45;
     eventPictureButton.layer.masksToBounds = YES;
     eventPictureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [eventPictureButton addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
@@ -98,14 +99,12 @@
     [self.scrollView addSubview:formView];
     
     // event title
-    UIFont *textFieldFont = [UIFont fontWithName:FONT_GLOBAL size:18.0f];
     self.titleTextField.placeholder = @"Title";
     self.titleTextField.delegate = self;
     self.titleTextField.tag = kTextFieldEventTitle;
     self.titleTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.titleTextField.clearsOnBeginEditing = NO;
-    self.titleTextField.font = textFieldFont;
-    self.titleTextField.textColor = [UIColor blackColor];
+    self.titleTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     
     // location
     self.locationTextField.placeholder = @"Location";
@@ -113,8 +112,7 @@
     self.locationTextField.tag = kTextFieldEventLocation;
     self.locationTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.locationTextField.clearsOnBeginEditing = NO;
-    self.locationTextField.font = textFieldFont;
-    self.locationTextField.textColor = [UIColor blackColor];
+    self.locationTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     // date
     self.dateTextField.placeholder = @"MM/DD/YYYY";
     self.dateTextField.tag = kTextFieldEventDate;
@@ -122,8 +120,7 @@
     self.dateTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.dateTextField.userInteractionEnabled = YES;
     self.dateTextField.clearsOnBeginEditing = NO;
-    self.dateTextField.font = textFieldFont;
-    self.dateTextField.textColor = [UIColor blackColor];
+    self.dateTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     // time
     self.timeTextField.placeholder = @"Time";
     self.timeTextField.tag = kTextFieldEventTime;
@@ -132,16 +129,14 @@
     self.timeTextField.userInteractionEnabled = YES;
     self.timeTextField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
     self.timeTextField.clearsOnBeginEditing = NO;
-    self.timeTextField.font = textFieldFont;
-    self.timeTextField.textColor = [UIColor blackColor];
+    self.timeTextField.textColor = [UIColor uLinkFormTextDarkGrayColor];
     
     // info
     self.eventInfoTextView.tag = kTextViewEventInfo;
     self.eventInfoTextView.delegate = self;
     self.eventInfoTextView.secureTextEntry = NO;
     self.eventInfoTextView.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.eventInfoTextView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    self.eventInfoTextView.textColor = [UIColor blackColor];
+    self.eventInfoTextView.textColor = [UIColor uLinkFormTextDarkGrayColor];
     self.eventInfoTextView.backgroundColor = [UIColor clearColor];
     self.eventInfoTextView.returnKeyType = UIReturnKeyDone;
     
@@ -170,6 +165,9 @@
                        destructiveButtonTitle:nil
                        otherButtonTitles:BTN_CHOOSE_PHOTO, nil];
     }
+    
+    // set the styles
+    deleteButton.styleClass = @"btn red-button";
 }
 
 - (void)didReceiveMemoryWarning
@@ -187,7 +185,7 @@
     // grab the event image from the event cache
     UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_MEDIUM];
     if (eventImage == nil) {
-         if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""]) {
+         if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""] && ![self.event.imageURL isEqualToString:@"<null>"]) {
         // set the key in the cache to let other processes know that this key is in work
         [UDataCache.eventImageMedium setValue:[NSNull null]  forKey:self.event.eventId];
         NSURL *url = [NSURL URLWithString:[URL_EVENT_IMAGE_MEDIUM stringByAppendingString:self.event.imageURL]];

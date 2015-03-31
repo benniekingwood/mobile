@@ -12,6 +12,5 @@
 - (IBAction)changePage:(id)sender;
 @property (strong, nonatomic) IBOutlet UILabel *featuredEventsHeader;
 @property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UILabel *upcomingHeader;
 @property (strong, nonatomic) IBOutlet UITableView *eventsTableView;
 @end

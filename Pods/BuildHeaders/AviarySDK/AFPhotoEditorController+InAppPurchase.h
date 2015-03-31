@@ -1,0 +1,1 @@
+../../AviarySDK/3.3.7-master-basic/AviarySDK/Headers/AFPhotoEditorController+InAppPurchase.h

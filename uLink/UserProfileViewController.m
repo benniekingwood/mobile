@@ -13,21 +13,21 @@
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "DataCache.h"
 @interface UserProfileViewController () {
-    UIScrollView *scroll;
     UIImageView *profilePicThumb;
     UIImageView *profilePicLarge;
     UIView *profilePicViewLarge, *currentProfilePic;
     CGRect proPicFrame;
-    UILabel *bio;
-    UILabel* nameLabel;
-    UILabel* usernameLabel;
-    UILabel *schoolLabel;
-    UILabel *schoolStatusLabel;
-    UILabel *gradYearLabel;
 }
 @end
 @implementation UserProfileViewController
-@synthesize pageControl, user;
+@synthesize user;
+@synthesize bioLabel;
+@synthesize nameLabel;
+@synthesize usernameLabel;
+@synthesize schoolLabel;
+@synthesize schoolStatusLabel;
+@synthesize gradYearLabel;
+@synthesize closeButton;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -40,13 +40,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,44,320,100)];
-    scroll.delegate = self;
-    scroll.pagingEnabled = YES;
-    scroll.contentSize = CGSizeMake(640, 100);
-    scroll.showsHorizontalScrollIndicator = NO;
-    
     proPicFrame = CGRectMake(0, 70, 320, 320);
     profilePicLarge = [[UIImageView alloc] initWithFrame:proPicFrame];
     profilePicLarge.contentMode = UIViewContentModeScaleAspectFit;
@@ -57,83 +50,26 @@
     profilePicViewLarge = [[UIView alloc] initWithFrame:profilePicViewFrame];
     profilePicViewLarge.backgroundColor = [UIColor blackColor];
     profilePicViewLarge.frame = profilePicViewFrame;
-    profilePicViewLarge.userInteractionEnabled = YES;;
+    profilePicViewLarge.userInteractionEnabled = YES;
 
     // create and add the profile picture subview
-    CGRect profilePicFrame;
-    profilePicFrame.origin.x = 0;
-    profilePicFrame.origin.y = 0;
-    profilePicFrame.size = scroll.frame.size;
-    UIView *profilePicView = [[UIView alloc] initWithFrame:profilePicFrame];
+    UIView *profilePicView = [[UIView alloc] initWithFrame:CGRectMake(30, 180, 100, 100)];
     profilePicView.backgroundColor = [UIColor clearColor];
-    profilePicView.frame = profilePicFrame;
-    CGRect proThumbFrame = CGRectMake(30, 20, 80, 80);
-    profilePicThumb = [[UIImageView alloc] initWithFrame:proThumbFrame];
-    profilePicThumb.layer.cornerRadius = 40;
+    profilePicThumb = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    profilePicThumb.layer.cornerRadius = 50;
     profilePicThumb.layer.masksToBounds = YES;
     profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
+    profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
+    profilePicThumb.layer.borderWidth = 1.0f;
     [profilePicView addSubview:profilePicThumb];
     
-    // create the user's full name label
-    nameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 140, 25, 200, 30 )];
-    nameLabel.textColor = [UIColor whiteColor];
-    nameLabel.backgroundColor = [UIColor clearColor];
-    nameLabel.font = [UIFont fontWithName:FONT_GLOBAL size:(15.0)];
-    [profilePicView addSubview: nameLabel];
-    
-    // create the user's username label
-    usernameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 140, 50, 200, 30 )];
-    usernameLabel.backgroundColor = [UIColor clearColor];
-    usernameLabel.textColor = [UIColor whiteColor];
-    usernameLabel.font = [UIFont fontWithName:FONT_GLOBAL size:11.0f];
-    [profilePicView addSubview: usernameLabel];
-    
-    // add the bio
-    bio = [[UILabel alloc] initWithFrame:CGRectMake(340, 0, 280, 100)];
-    bio.textAlignment = NSTextAlignmentCenter;
-    bio.textColor = [UIColor whiteColor];
-    bio.backgroundColor = [UIColor clearColor];
-    bio.numberOfLines = 2;
-    bio.lineBreakMode = NSLineBreakByWordWrapping;
-    bio.font = [UIFont fontWithName:FONT_GLOBAL size:11.0f];
-    [profilePicView addSubview:bio];
-    
-    UIButton *button = [[UIButton alloc] initWithFrame:proThumbFrame];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     [profilePicView addSubview: button];
     [button addTarget: self
                action: @selector(showProfilePicture)
      forControlEvents: UIControlEventTouchDown];
     // add the profile pic view to the scroll view
-    [scroll addSubview:profilePicView];
-    
-    // add the scroll view to the main view
-    [self.view addSubview:scroll];
-    
-    // create the user's school  label
-    schoolLabel = [[UILabel alloc] initWithFrame: CGRectMake(50, 200, 200, 30 )];
-    schoolLabel.textColor = [UIColor whiteColor];
-    schoolLabel.backgroundColor = [UIColor clearColor];
-    schoolLabel.font = [UIFont fontWithName:FONT_GLOBAL size:(15.0)];
-    
-    // create the user's school status label
-    schoolStatusLabel = [[UILabel alloc] initWithFrame: CGRectMake( 50, 260, 200, 30 )];
-    schoolStatusLabel.textColor = [UIColor whiteColor];
-    schoolStatusLabel.backgroundColor = [UIColor clearColor];
-    schoolStatusLabel.font = [UIFont fontWithName:FONT_GLOBAL size:(15.0)];
-    
-    // create the user's grad year label
-    gradYearLabel = [[UILabel alloc] initWithFrame: CGRectMake( 50, 300, 200, 30 )];
-    gradYearLabel.textColor = [UIColor whiteColor];
-    gradYearLabel.backgroundColor = [UIColor clearColor];
-    gradYearLabel.font = [UIFont fontWithName:FONT_GLOBAL size:(15.0)];
-    
-   // [self.view addSubview:schoolLabel];
-    [self.view addSubview:schoolStatusLabel];
-    [self.view addSubview:gradYearLabel];
-    
-    // initialize the page control
-    pageControl.numberOfPages = 2;
-    pageControl.currentPage = 0;
+    [self.view addSubview:profilePicView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -178,19 +114,33 @@
         profilePicLarge.image = profileImage;
     }
 
+    // set the username text
+    self.usernameLabel.text = self.user.username;
     
-    usernameLabel.text = self.user.username;
+    // set the full name text
     if(![self.user.firstname isKindOfClass:[NSNull class]] && ![self.user.firstname isEqualToString:@""]) {
-        nameLabel.text = [self.user.firstname stringByAppendingFormat:@" %@", self.user.lastname];
+        self.nameLabel.text = [self.user.firstname stringByAppendingFormat:@" %@", self.user.lastname];
     } else {
-        nameLabel.text = @"uLink User";
+        self.nameLabel.text = @"uLink User";
     }
-    bio.text = (![self.user.bio isKindOfClass:[NSNull class]] && ![self.user.bio isEqualToString:@""]) ? self.user.bio : @"I haven't entered my bio yet, but rest assured when I do it will be amazing.";
-    schoolStatusLabel.text = [@"Status: " stringByAppendingFormat:@" %@", self.user.schoolStatus];
+    
+    // set the bio text
+    self.bioLabel.text = (![self.user.bio isKindOfClass:[NSNull class]] && ![self.user.bio isEqualToString:@""]) ? self.user.bio : @"I haven't entered my bio yet, but rest assured when I do it will be amazing.";
+    
+    // set the school status text
+    self.schoolStatusLabel.text = self.user.schoolStatus;
+    // set the graduation year text
     if(![self.user.year isKindOfClass:[NSNull class]] && ![self.user.year isEqualToString:@""]) {
-        gradYearLabel.text = [@"Graduation Year: " stringByAppendingFormat:@" %@", self.user.year];
+        self.gradYearLabel.text = self.user.year;
     } else {
-        gradYearLabel.text = @"Graduation Year: unknown";
+        self.gradYearLabel.text = @"";
+    }
+    
+    // set the school name label text
+    if(![self.user.schoolName isKindOfClass:[NSNull class]] && ![self.user.schoolName isEqualToString:@""]) {
+        self.schoolLabel.text = self.user.schoolName;
+    } else {
+        self.schoolLabel.text = @"";
     }
 }
 
@@ -198,26 +148,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)sender {
-    // Update the page when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = scroll.frame.size.width;
-    int page = floor((scroll.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    self.pageControl.currentPage = page;
-    
-}
-
-- (IBAction)closeClick:(UIBarButtonItem *)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)changePage:(UIPageControl *)sender {
-    int page = self.pageControl.currentPage;
-    CGRect frame = scroll.frame;
-    frame.origin.x = frame.size.width * page;
-    frame.origin.y = 0;
-    [scroll scrollRectToVisible:frame animated:YES];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -260,5 +190,7 @@
                      }
                      completion:nil];
 }
-
+- (IBAction)closeClick:(id)sender {
+     [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

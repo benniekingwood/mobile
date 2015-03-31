@@ -16,6 +16,4 @@
 -(void) deactivateSideMenu;
 -(UITabBarController*) getMainTabBarViewController;
 -(UIViewController*) getUListSchoolHomeViewController;
--(void) showActivityIndicator;
--(void) hideActivityIndicator;
 @end

@@ -18,6 +18,7 @@
 #import "AddListingAddOnViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "ULinkColorPalette.h"
+#import <Pixate/Pixate.h>
 
 @interface SaveListingViewController () {
     UIBarButtonItem *btnSave;
@@ -502,10 +503,11 @@ const int kPhotoButton_3 = 3;
     // create the text field bg image
     UIImage *textBgImage = [UIImage imageNamed:@"ulink_mobile_input_field"];
     // create the add tag button and add it to the view
-    UIImage *addTagButtonImage = [UIImage imageNamed:@"mobile-plus-sign"];
     addTagButton = [UIButton buttonWithType:UIButtonTypeCustom];
     addTagButton.frame = CGRectMake(275, 38, 30, 30);
-    [addTagButton setBackgroundImage:addTagButtonImage forState:UIControlStateNormal];
+    [addTagButton setTitle:@"g" forState:UIControlStateNormal];
+    [addTagButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    addTagButton.styleClass = @"icon icon-large";
     [addTagButton addTarget:self action:@selector(addTag) forControlEvents:UIControlEventTouchUpInside];
     
     // tag 1
@@ -535,11 +537,12 @@ const int kPhotoButton_3 = 3;
     tag2TextField.alpha = ALPHA_ZERO;
     tagImageView2.alpha = ALPHA_ZERO;
     // create the remove tag 2 button and add it to the view
-    UIImage *removeTagButtonImage = [UIImage imageNamed:@"mobile-minus-sign"];
     removeTag2Button = [UIButton buttonWithType:UIButtonTypeCustom];
     removeTag2Button.frame = CGRectMake(275, 98, 30, 30);
     removeTag2Button.tag = 2;
-    [removeTag2Button setBackgroundImage:removeTagButtonImage forState:UIControlStateNormal];
+    [removeTag2Button setTitle:@"f" forState:UIControlStateNormal];
+    [removeTag2Button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    removeTag2Button.styleClass = @"icon icon-large";
     [removeTag2Button addTarget:self action:@selector(removeTag2) forControlEvents:UIControlEventTouchUpInside];
     removeTag2Button.alpha = ALPHA_ZERO;
     
@@ -561,8 +564,10 @@ const int kPhotoButton_3 = 3;
     // create the remove tag 3 button and add it to the view
     removeTag3Button = [UIButton buttonWithType:UIButtonTypeCustom];
     removeTag3Button.frame = CGRectMake(275, 158, 30, 30);
-    removeTag2Button.tag = 3;
-    [removeTag3Button setBackgroundImage:removeTagButtonImage forState:UIControlStateNormal];
+    removeTag3Button.tag = 3;
+    [removeTag3Button setTitle:@"f" forState:UIControlStateNormal];
+    [removeTag3Button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    removeTag3Button.styleClass = @"icon icon-large";
     [removeTag3Button addTarget:self action:@selector(removeTag3) forControlEvents:UIControlEventTouchUpInside];
     removeTag3Button.alpha = ALPHA_ZERO;
     

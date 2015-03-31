@@ -11,6 +11,7 @@
 #import "ActivityIndicatorView.h"
 #import "AlertView.h"
 #import "TextUtil.h"
+#import "ULinkColorPalette.h"
 @interface ForgotPasswordViewController () {
     AlertView *errorAlertView;
     NSString *needEmailValidationMsg;
@@ -36,7 +37,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     forgotSuccessView.alpha  = 0.0;
-    [sendInstructions createBlueButton:sendInstructions];
     needEmailValidationMsg = @"Please enter your valid email address.";
     errorAlertView = [[AlertView alloc] initWithTitle:@""
                                               message: needEmailValidationMsg
@@ -48,6 +48,8 @@
     activityIndicator = [[ActivityIndicatorView alloc] init];
 }
 -(void)viewWillAppear:(BOOL)animated {
+    // show the navbar
+    self.navigationController.navigationBarHidden = NO;
     backgroundView.alpha = 1;
     [backgroundView sizeToFit];
     [UIView animateWithDuration:1.0
@@ -131,7 +133,8 @@
                         NSString *response = (NSString*)[json objectForKey:JSON_KEY_RESPONSE];
                         NSArray* result = [json objectForKey:JSON_KEY_RESULT];
                         if([(NSString*)result isEqualToString:@"true"]) {
-                           self.forgotSuccessView.alpha  = 1.00;
+                            self.forgotSuccessView.alpha  = 1.00;
+                            self.view.backgroundColor = [UIColor uLinkLightGrayColor];
                         } else {
                             errorAlertView.message = response;
                             [errorAlertView show];

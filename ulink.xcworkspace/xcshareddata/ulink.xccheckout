@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E377C3EC-9E79-4181-8FE6-01C2A6ABBE9E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ulink</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>99DC39E5-1AFA-4F13-81D0-E9F7BFD39C1A</key>
+		<string>ssh://github.com/ulinkinc/mobile.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ulink.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>99DC39E5-1AFA-4F13-81D0-E9F7BFD39C1A</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/ulinkinc/mobile.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>99DC39E5-1AFA-4F13-81D0-E9F7BFD39C1A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>99DC39E5-1AFA-4F13-81D0-E9F7BFD39C1A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ulink</string>
+		</dict>
+	</array>
+</dict>
+</plist>

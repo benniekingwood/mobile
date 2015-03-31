@@ -21,6 +21,8 @@
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "ModalImageView.h"
 #import "Snap.h"
+#import <Pixate/Pixate.h>
+#import "ULinkColorPalette.h"
 
 @interface SnapDetailViewController () {
     AlertView *customAlertView;
@@ -67,13 +69,17 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
     [snapUserImageButton addTarget:self
                             action:@selector(viewUserProfileClick:)
                   forControlEvents:UIControlEventTouchDown];
-    snapUserImageButton.frame = CGRectMake(15, 144, 40, 40);
+    snapUserImageButton.frame = CGRectMake(15, 129, 50, 50);
+    snapUserImageButton.layer.cornerRadius = 25;
+    snapUserImageButton.layer.masksToBounds = YES;
+    snapUserImageButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    snapUserImageButton.layer.borderWidth = 1.0f;
     snapUserImageButton.user = self.snap.user;
     [snapUserImageButton initialize];
     [self.view addSubview:snapUserImageButton];
     if(inUCampusMode) {
-        commentToolbarY = self.view.frame.size.height-94.0f;
-        commentFormY = self.view.frame.size.height-84.0f;
+        commentToolbarY = self.view.frame.size.height-114.0f;
+        commentFormY = self.view.frame.size.height-104.0f;
         // hide the delete button
         [self.navigationItem setRightBarButtonItem:nil animated:NO];
         
@@ -85,10 +91,9 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
         [self.view addSubview:commentToolbar];
 
         // create the comment text
-        commentTextField = [[UITextField alloc] initWithFrame:CGRectMake(5, 6, 300, 30)];
+        commentTextField = [[UITextField alloc] initWithFrame:CGRectMake(5, 1, 300, 30)];
         commentTextField.placeholder = @"Post Comment";
-        commentTextField.font = [UIFont fontWithName:FONT_GLOBAL size:13.0f];
-        commentTextField.textColor = [UIColor whiteColor];
+        commentTextField.textColor = [UIColor uLinkLightGrayColor];
         commentTextField.returnKeyType = UIReturnKeySend;
         commentTextField.delegate = self;
         commentTextField.tag = kTextFieldSnapComment;
@@ -96,17 +101,26 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
         [commentTextField setClearButtonMode:UITextFieldViewModeWhileEditing];
         commentForm = [[UIView alloc] init];
         commentForm.frame = CGRectMake(10, commentFormY, 300, 30);
-        commentForm.backgroundColor = [UIColor blackColor];
-        [commentForm.layer setBorderWidth:0.8f];
-        [commentForm.layer setBorderColor:[[UIColor grayColor] CGColor]];
+        commentForm.backgroundColor = [UIColor uLinkDarkGrayColor];
         commentForm.layer.cornerRadius = 5;
         [commentForm addSubview:commentTextField];
         validationErrors = [[NSHashTable alloc] init];
         [self.view addSubview:commentForm];
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMM d, yyyy"];
-        optionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"mobile-options.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionSheet:)];
+        
+        // add the "Options" button
+        UIButton *optionsBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        optionsBtn.frame = CGRectMake(0.0, 0.0, 40,40);
+        [optionsBtn setTitle:@"e" forState:UIControlStateNormal];
+        [optionsBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        optionsBtn.styleClass = @"icon icon-large";
+        [optionsBtn addTarget:self action:@selector(showActionSheet:) forControlEvents:UIControlEventTouchUpInside];
+        
+        optionsButton = [[UIBarButtonItem alloc] initWithCustomView:optionsBtn];
         self.navigationItem.rightBarButtonItem = optionsButton;
+        
+        
         optionsActionSheet = [[UIActionSheet alloc]
                             initWithTitle:nil
                             delegate:self
@@ -115,21 +129,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                             otherButtonTitles:nil, nil];
         
         
-    } 
-    
-    [self.commentHeader setFont:[UIFont fontWithName:FONT_GLOBAL size:12.0f]];
-    [self.commentHeader setShadowColor:[UIColor whiteColor]];
-    [self.commentHeader setTextColor: [UIColor darkGrayColor]];
-    [self.commentHeader setShadowOffset:CGSizeMake(0.0f, 1.0f)];
-    self.commentsTableView.layer.cornerRadius = 5;
-    self.commentsTableView.layer.masksToBounds = YES;
-    [self.commentsTableView.layer setBorderWidth:0.3f];
-    [self.commentsTableView.layer setBorderColor:[[UIColor darkGrayColor] CGColor]];
-    
-    self.snapCaptionLabel.font = [UIFont fontWithName:FONT_GLOBAL size:11.0f];
-    self.snapCaptionLabel.textColor = [UIColor whiteColor];
-    self.snapCaptionLabel.numberOfLines = 4;
-    self.snapCaptionLabel.textAlignment = NSTextAlignmentLeft;
+    }
     
     customAlertView = [[AlertView alloc] initWithTitle:@""
                                                message:@"Are you sure you would like delete this snap?  This action cannot be undone."
@@ -144,10 +144,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
                                     otherButtonTitles:nil];
     activityIndicator = [[ActivityIndicatorView alloc] init];
     successNotification = [[SuccessNotificationView alloc] init];
-    self.snapImageView.layer.cornerRadius = 5;
     self.snapImageView.layer.masksToBounds = YES;
-    self.snapUserImageView.layer.cornerRadius = 5;
-    self.snapUserImageView.layer.masksToBounds = YES;
     self.snapImageView.userInteractionEnabled = YES;
     [self applyUlinkTableFooter];
     
@@ -224,7 +221,7 @@ static NSString *kSnapCommentCellId = CELL_SNAP_COMMENT_CELL;
 - (void)applyUlinkTableFooter {
 	UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 55)];
 	footer.backgroundColor = [UIColor clearColor];
-    UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(135, 5, 24, 56)];
+    UIImageView *shortLogoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(145, 5, 24, 56)];
     shortLogoImageView.image = [UIImage imageNamed:@"ulink_short_logo.png"];
     [footer addSubview:shortLogoImageView];
 	self.commentsTableView.tableFooterView = footer;

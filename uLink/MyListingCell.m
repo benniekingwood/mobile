@@ -45,12 +45,12 @@
     
     // create the new label that will hold the listing title
     if([self.listing.type isEqualToString:@"bold"] || [self.listing.type isEqualToString:@"highlight"]) {
-        title = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 50)];
+        title = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 70)];
     } else {
-        title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 200, 50)];
+        title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 200, 70)];
     }
     
-    title.numberOfLines = 2;
+    title.numberOfLines = 0;
     title.font = [UIFont fontWithName:FONT_GLOBAL size:15.0f];
     title.textColor = [UIColor blackColor];
     title.backgroundColor = [UIColor clearColor];
@@ -58,7 +58,7 @@
     
     // we need to remove the old title from the previous cell since the cell is reused in memory
     if([self.listing.type isEqualToString:@"bold"] || [self.listing.type isEqualToString:@"highlight"]) {
-        typeView = [[UIView alloc] initWithFrame:CGRectMake(15, 7, 30, 30)];
+        typeView = [[UIView alloc] initWithFrame:CGRectMake(15, 20, 30, 30)];
         
         typeView.layer.cornerRadius = 5;
         typeView.layer.masksToBounds = YES;

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <GoogleMaps/GoogleMaps.h>
+#import "GoogleMaps.h"
 #import "School.h"
 @interface ListingResultsTableViewController : UITableViewController <GMSMapViewDelegate>
 {

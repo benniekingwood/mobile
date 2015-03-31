@@ -10,7 +10,6 @@
 #import "AppMacros.h"
 #import "DataCache.h"
 @interface ProfileViewController () {
-    UIBarButtonItem *settingsButton;
     UIView *profilePicView, *currentProfilePic;
     CGRect proPicFrame;
     ProfilePictureViewController *profilePictureViewController;
@@ -46,20 +45,10 @@
     profilePicView.backgroundColor = [UIColor blackColor];
     profilePicView.frame = profilePicViewFrame;
     profilePicView.userInteractionEnabled = YES;
-    settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ulink-mobile-settings-icon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettingsViewController)];
-    self.snapCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
-    self.snapCountLabel.textAlignment = NSTextAlignmentRight;
-    self.eventsCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
-    self.eventsCountLabel.textAlignment = NSTextAlignmentRight;
-    self.listingCountLabel.font = [UIFont fontWithName:FONT_GLOBAL size:45.0f];
-    self.listingCountLabel.textAlignment = NSTextAlignmentRight;
     // Register an observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(notificationViewUpdate:) name:NOTIFICATION_PROFILE_VIEW_CONTROLLER
                                                object:nil];
-    // style the buttons
-    self.snapsButton.backgroundColor = [UIColor colorWithRed:(19.0 / 255.0) green:(122.0 / 255.0) blue:(188.0 / 255.0) alpha: 1];
-    self.eventsButton.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(146.0 / 255.0) blue:(23.0 / 255.0) alpha: 1];
 }
 
 // Handle the notification
@@ -69,7 +58,6 @@
 
 - (void) updateView {
     self.tabBarController.navigationItem.title = @"Me";
-    self.tabBarController.navigationItem.rightBarButtonItem = settingsButton;
     self.snapCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.snaps count]];
     self.eventsCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.events count]];
     self.listingCountLabel.text = [NSString stringWithFormat:@"%i",[UDataCache.sessionUser.listings count]];
@@ -84,12 +72,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void) showSettingsViewController {
-    // change the nav bar to be black
-    //[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"ulink-mobile-nav-bar-blk-bg.png"] forBarMetrics:UIBarMetricsDefault];
-    [self performSegueWithIdentifier:SEGUE_SHOW_SETTINGS_VIEW_CONTROLLER sender:self];
-}
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	// We only support single touches, so anyObject retrieves just that one touch from touches
@@ -163,4 +145,7 @@
     }
 }
 
+- (IBAction)settingsClick:(id)sender {
+      [self performSegueWithIdentifier:SEGUE_SHOW_SETTINGS_VIEW_CONTROLLER sender:self];
+}
 @end

@@ -251,7 +251,6 @@
                 // Creates a marker at the listing location (if available)
                 GMSMarker *marker = [[GMSMarker alloc] init];
                 marker.position = CLLocationCoordinate2DMake([((Listing*)listing).location.latitude doubleValue], [((Listing*)listing).location.longitude doubleValue]);
-                marker.animated = YES;
                 marker.tappable = YES;
                 marker.title = ((Listing*)listing).title;
                 marker.snippet = ((Listing*)listing).shortDescription;
@@ -396,7 +395,6 @@
                 if(list.location != nil && [list.location.discloseLocation isEqualToString:@"TRUE"]) {
                     GMSMarker *marker = [[GMSMarker alloc] init];
                     marker.position = CLLocationCoordinate2DMake([list.location.latitude doubleValue], [list.location.longitude doubleValue]);
-                    marker.animated = NO;
                     marker.tappable = NO;
                     marker.title = list.title;
                     marker.snippet = list.shortDescription;

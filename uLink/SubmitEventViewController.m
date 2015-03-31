@@ -16,6 +16,7 @@
 #import "EventUtil.h"
 #import "PreviewPhotoView.h"
 #import "ImageUtil.h"
+#import <Pixate/Pixate.h>
 @interface SubmitEventViewController ()  {
     AlertView *errorAlertView;
     AlertView *customAlertView;
@@ -28,14 +29,16 @@
     UIPickerView *timePickerView;
     UIImagePickerController *imagePicker;
     PreviewPhotoView *previewPhotoView;
-    UlinkButton *takePhotoButton;
-    UlinkButton *chooseButton;
+    UIButton *takePhotoButton;
+    UIButton *chooseButton;
     CGRect floatLocFrame;
     UIImageView *locTextImageBg;
     UIView *modalOverlay;
     BOOL floatLocationVisible;
     UILabel *infoCounter;
     AFPhotoEditorController *photoEditorController;
+    UIView *oldView;
+    UIView *selectedView;
 }
 -(void)showValidationErrors;
 -(void)validateField:(int)tag;
@@ -65,23 +68,21 @@
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
   
-    chooseButton = [UlinkButton buttonWithType:UIButtonTypeCustom];
+    chooseButton = [UIButton buttonWithType:UIButtonTypeCustom];
     //set the button's title
     [chooseButton setTitle:BTN_CHOOSE_PHOTO forState:UIControlStateNormal];
-    [chooseButton createDefaultSmallButton:chooseButton];
-    chooseButton.backgroundColor = [UIColor grayColor];
+    chooseButton.styleClass = @"btn-inverse default-button";
 
     [chooseButton addTarget:self action:@selector(choosePhoto:) forControlEvents:UIControlEventTouchUpInside];
     chooseButton.tag = kButtonChoosePhoto;
     
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-        takePhotoButton = [UlinkButton buttonWithType:UIButtonTypeCustom];
-        [takePhotoButton createDefaultSmallButton:takePhotoButton];
+        takePhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        takePhotoButton.styleClass = @"btn-inverse default-button";
          takePhotoButton.tag = kButtonTakePhoto;
         [takePhotoButton addTarget:self action:@selector(takePhoto:) forControlEvents:UIControlEventTouchUpInside];
         [takePhotoButton setTitle:BTN_TAKE_PHOTO forState:UIControlStateNormal];
-        takePhotoButton.backgroundColor = [UIColor grayColor];
         takePhotoButton.frame = CGRectMake(685, 8, 230, 30);
         chooseButton.frame = CGRectMake(685, 45, 230, 30);
         [self.overlayFormView addSubview:takePhotoButton];
@@ -106,52 +107,29 @@
     [dateFormatter setDateFormat:@"MM/d/yyyy"];
     
     // event title
-    UIFont *textFieldFont = [UIFont fontWithName:FONT_GLOBAL size:18.0f];
     self.titleTextField.placeholder = @"Title";
     self.titleTextField.delegate = self;
     self.titleTextField.tag = kTextFieldEventTitle;
-    self.titleTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.titleTextField.clearsOnBeginEditing = NO;
-    self.titleTextField.font = textFieldFont;
-    self.titleTextField.textColor = [UIColor blackColor];
-    self.titleTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
     // location
     self.locationTextField.placeholder = @"Location";
     self.locationTextField.delegate = self;
     self.locationTextField.tag = kTextFieldEventLocation;
-    self.locationTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.locationTextField.clearsOnBeginEditing = NO;
-    self.locationTextField.font = textFieldFont;
-    self.locationTextField.textColor = [UIColor blackColor];
-    self.locationTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
     // date
     self.dateTextField.placeholder = @"MM/DD/YYYY";
     self.dateTextField.tag = kTextFieldEventDate;
     self.dateTextField.delegate = self;
-    self.dateTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.dateTextField.userInteractionEnabled = YES;
-    self.dateTextField.clearsOnBeginEditing = NO;
-    self.dateTextField.font = textFieldFont;
-    self.dateTextField.textColor = [UIColor blackColor];
+
     // time
     self.timeTextField.placeholder = @"Time";
     self.timeTextField.tag = kTextFieldEventTime;
     self.timeTextField.delegate = self;
-    self.timeTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.timeTextField.userInteractionEnabled = YES;
     self.timeTextField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.timeTextField.clearsOnBeginEditing = NO;
-    self.timeTextField.font = textFieldFont;
-    self.timeTextField.textColor = [UIColor blackColor];
     
     // info
     self.eventInfoTextView.tag = kTextViewEventInfo;
     self.eventInfoTextView.delegate = self;
-    self.eventInfoTextView.secureTextEntry = NO;
-    self.eventInfoTextView.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.eventInfoTextView.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    self.eventInfoTextView.textColor = [UIColor blackColor];
-    self.eventInfoTextView.backgroundColor = [UIColor clearColor];
     self.eventInfoTextView.returnKeyType = UIReturnKeyDone;
     self.eventInfoTextView.text = @"Event Information";
     
@@ -164,6 +142,8 @@
   //  [self.view addSubview:infoCounter];
     
     timePickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0,self.view.frame.size.height-216, 320, 216)];
+    timePickerView.tintColor = [UIColor whiteColor];
+    timePickerView.backgroundColor = [UIColor colorWithRed:44.0f / 255.0f green:110.0f / 255.0f blue:130.0f / 255.0f alpha:0.4f];
     timePickerView.dataSource = self;
     timePickerView.delegate = self;
     timePickerView.showsSelectionIndicator = YES;
@@ -244,6 +224,21 @@
 #pragma mark
 
 #pragma mark UIPickerView Section
+- (UIView *)pickerView:(UIPickerView *)thePickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
+    if (oldView != nil) {
+        oldView.backgroundColor = [UIColor clearColor];
+    }
+    selectedView = [thePickerView viewForRow:row forComponent:component];
+    [selectedView setNeedsDisplay];
+    oldView = selectedView;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, thePickerView.frame.size.width, 50)];
+    label.textColor = [UIColor whiteColor];
+    label.styleCSS = @"font-size: 26px; text-align:center;";
+    label.text = [UDataCache.times objectAtIndex:row];
+    return label;
+}
+
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
     return 1;
 }

@@ -12,6 +12,8 @@
 #import "DataCache.h"
 #import <SDWebImage/SDWebImageDownloader.h>
 #import "ImageActivityIndicatorView.h"
+#import "ULinkColorPalette.h"
+#import <Pixate/Pixate.h>
 
 @interface ProfilePictureViewController () {
     UIScrollView *scroll;
@@ -41,16 +43,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-   
     
+    // build the alert view
     customAlertView = [[AlertView alloc] initWithTitle:@""
-                                                                      message:@""
-                                                                     delegate:self
-                                                            cancelButtonTitle:@"Cancel"
-                                                            otherButtonTitles:@"View Profile Photo", @"Edit Profile",nil];
+                                              message:@""
+                                             delegate:self
+                                    cancelButtonTitle:@"Cancel"
+                                    otherButtonTitles:@"View Profile Photo", @"Edit Profile",nil];
 
-    
+    // build the scroll view
     scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,320,165)];
     scroll.delegate = self;
     scroll.pagingEnabled = YES;
@@ -66,41 +67,29 @@
     profilePicView.backgroundColor = [UIColor clearColor];
     profilePicView.frame = profilePicFrame;
     profilePicThumb = [[UIImageView alloc] init];
-    CGRect proThumbFrame = CGRectMake(120, 20, 80, 80);
+    CGRect proThumbFrame = CGRectMake(110, 20, 100, 100);
     profilePicThumb.frame = proThumbFrame;
-    profilePicThumb.layer.cornerRadius = 40;
+    profilePicThumb.layer.cornerRadius = 50;
     profilePicThumb.layer.masksToBounds = YES;
     profilePicThumb.contentMode = UIViewContentModeScaleAspectFill;
-   // profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
-   // profilePicThumb.layer.borderWidth = 3.0f;
+    profilePicThumb.layer.borderColor = [UIColor whiteColor].CGColor;
+    profilePicThumb.layer.borderWidth = 1.0f;
     [profilePicView addSubview:profilePicThumb];
-    // create the user's full name label
-    CGRect labelFrame = CGRectMake( 0, 105, 320, 30 );
-    nameLabel = [[UILabel alloc] initWithFrame: labelFrame];
-    [nameLabel setTextColor: [UIColor whiteColor]];
-    [nameLabel setBackgroundColor:[UIColor clearColor]];
-    nameLabel.textAlignment = NSTextAlignmentCenter;
-     nameLabel.font = [UIFont fontWithName:FONT_GLOBAL_BOLD size:15.0];
-    [profilePicView addSubview:nameLabel];
-    // create the user's username label
-    CGRect usernameFrame = CGRectMake( 0, 123, 320, 30 );
-    username = [[UILabel alloc] initWithFrame: usernameFrame];
-    [username setBackgroundColor:[UIColor clearColor]];
-    username.font = [UIFont fontWithName:FONT_GLOBAL size:12.0f];
-    username.textColor = [UIColor whiteColor];
-    username.textAlignment = NSTextAlignmentCenter;
     
+    // create the user's full name label
+    CGRect labelFrame = CGRectMake(0, 120, 320, 30 );
+    nameLabel = [[UILabel alloc] initWithFrame: labelFrame];
+    [profilePicView addSubview:nameLabel];
+    
+    // create the user's username label
+    CGRect usernameFrame = CGRectMake( 0, 142, 320, 30 );
+    username = [[UILabel alloc] initWithFrame: usernameFrame];
     [profilePicView addSubview: username];
     
     // add the bio
-    bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(340, 0, 280, 100)];
-    bioLabel.textAlignment = NSTextAlignmentCenter;
-    bioLabel.backgroundColor = [UIColor clearColor];
+    bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(340, 10, 280, 100)];
     bioLabel.numberOfLines = 0;
     bioLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    bioLabel.textColor = [UIColor whiteColor];
-    bioLabel.font = [UIFont fontWithName:FONT_GLOBAL size:11.0f];
-    
     [profilePicView addSubview:bioLabel];
     
     UIButton *button = [[UIButton alloc] initWithFrame: proThumbFrame];
@@ -117,6 +106,12 @@
     // initialize the page control
     pageControl.numberOfPages = 2;
     pageControl.currentPage = 0;
+    
+    // finally set the styles for this view
+    self.view.styleClass = @"profile-pic-view";
+    nameLabel.styleClass = @"name";
+    username.styleClass = @"username";
+    bioLabel.styleClass = @"bio";
 }
 
 - (void) viewWillAppear:(BOOL)animated {

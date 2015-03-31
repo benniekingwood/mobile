@@ -12,6 +12,7 @@
 #import "DataCache.h"
 #import "ImageActivityIndicatorView.h"
 #import <SDWebImage/SDWebImageDownloader.h>
+#import "ULinkColorPalette.h"
 @interface EventCell() {
     UILabel *eventTitle;
     UILabel *eventDate;
@@ -28,7 +29,6 @@
 }
 - (void)initialize {
     self.clipsToBounds = YES;
-    self.imageView.layer.cornerRadius = 5;
     self.imageView.layer.masksToBounds = YES;
     self.imageView.layer.cornerRadius = 25;
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -43,7 +43,7 @@
     [eventDate removeFromSuperview];
     eventDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 40, 100, 20)];
     eventDate.font = [UIFont fontWithName:FONT_GLOBAL size:10.0f];
-    eventDate.textColor = [UIColor grayColor];
+    eventDate.textColor = [UIColor uLinkFormTextDarkGrayColor];
     eventDate.backgroundColor = [UIColor clearColor];
     eventDate.text = self.event.clearDate;
     self.imageView.image  = self.event.image;
@@ -51,7 +51,7 @@
     // grab the event image from the event cache
     UIImage *eventImage = [UDataCache imageExists:self.event.eventId cacheModel:IMAGE_CACHE_EVENT_THUMBS];
     if (eventImage == nil) {
-        if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""]) {
+        if(![self.event.imageURL isKindOfClass:[NSNull class]] && self.event.imageURL != nil && ![self.event.imageURL isEqualToString:@""] && ![self.event.imageURL isEqualToString:@"<null>"]) {
             // set the key in the cache to let other processes know that this key is in work
             [UDataCache.eventImageThumbs setValue:[NSNull null]  forKey:self.event.eventId];
             
@@ -91,6 +91,6 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.imageView.frame = CGRectMake(20, 4, 50, 50);
+    self.imageView.frame = CGRectMake(20, 10, 50, 50);
 }
 @end

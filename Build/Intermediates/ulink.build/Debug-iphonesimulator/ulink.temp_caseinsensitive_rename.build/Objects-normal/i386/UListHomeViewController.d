@@ -1,0 +1,20 @@
+dependencies: \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListHomeViewController.m \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListHomeViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AppDelegate.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/AppMacros.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/DataCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/User.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/School.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListCache.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Queue.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Listing.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Address.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/Location.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/SelectSchoolCell.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UlinkButton.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UListSchoolHomeViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UCampusMenuViewController.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MFSideMenu.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/UINavigationController+MFSideMenu.h \
+  /Users/benniekingwood/Documents/uLink/dev/ios/ulink/uLink/MainNavigationViewController.h

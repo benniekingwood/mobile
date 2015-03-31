@@ -20,8 +20,8 @@
 #import "UListHomeViewController.h"
 #import "UListSchoolHomeMenuViewController.h"
 #import <SDWebImage/SDWebImageDownloader.h>
-#import "LoginViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import <Pixate/Pixate.h>
 
 @implementation AppDelegate {
     UIStoryboard* storyboard;
@@ -33,6 +33,7 @@
 @synthesize window = _window;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.window.styleMode = PXStylingNormal;
     [UDataCache hydrateSchoolCache];
     [self performSelectorInBackground:@selector(hydrateImages) withObject:self];
     [UDataCache hydrateSnapshotCategoriesCache:NO];
@@ -53,25 +54,10 @@
     initialLoad = TRUE;
     
     /* Google map services */
-    [GMSServices provideAPIKey:@"AIzaSyAhCm2ePecMkeVRBMO2AJI9ltS8-Y0P5T4"];
-    
-    /*
-     * Below we will set up the navigation bar styling
-     * We first set the background image for the navigation bar.
-     * Then we set the text font.
-     * Finally we set the defaults for the navigation back and other buttons.
-     */
-   // UIImage *navBackgroundImage = [UIImage imageNamed:@"ulink-mobile-nav-bar-bg.png"];
-   // [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
-   /* [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], UITextAttributeTextColor,
-                                                           [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],UITextAttributeTextShadowColor,
-                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
-                                                           UITextAttributeTextShadowOffset,
-                                                           [UIFont fontWithName:FONT_GLOBAL size:20.0], UITextAttributeFont, nil]];*/
+    [GMSServices provideAPIKey:GOOGLE_MAPS_API];
     
     // Move the title of the back button out of the view
-   [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0)
                                                         forBarMetrics:UIBarMetricsDefault];
     return YES;
 }
@@ -117,29 +103,11 @@
 
 }
 -(UITabBarController*)getMainTabBarViewController {
-    return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:2];
+    return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:1];
 }
 
 -(UIViewController*)getUListSchoolHomeViewController {
     return [[sideMenuController.sideMenu.navigationController viewControllers] objectAtIndex:3];
-}
-
--(void) showActivityIndicator {
-    /*
-     * NOTE: keeping commented out for now.  The main indicator
-     * is not functioning correctly so we will not show it when
-     * user's reopen our application.
-     */
-  /*  MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-
-    self.window.rootViewController.view.userInteractionEnabled = NO;
-    [[self.window.rootViewController.view subviews] makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:FALSE]];
-    [activityIndicator showActivityIndicator:mainTabBarController.selectedViewController.view];*/
-}
--(void) hideActivityIndicator {
-   /* MainTabBarViewController *mainTabBarController = [[((MainNavigationViewController*)self.window.rootViewController) viewControllers] objectAtIndex:2];
-       [[self.window subviews]makeObjectsPerformSelector:@selector(setUserInteractionEnabled:) withObject:[NSNumber numberWithBool:TRUE]];
-    [activityIndicator hideActivityIndicator:mainTabBarController.selectedViewController.view]; */
 }
 
 - (void) hydrateImages {
@@ -239,15 +207,17 @@
         */
        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
        if([UDataCache userIsLoggedIn]) {
+           MainNavigationViewController *navController = (MainNavigationViewController*)self.window.rootViewController;
            // pop back to the root, then to the login screen
-           [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
-            LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:CONTROLLER_LOGIN_VIEW_CONTROLLER_ID];
-            [((MainNavigationViewController*)self.window.rootViewController) pushViewController:loginViewController animated:NO];
+           [navController popToRootViewControllerAnimated:NO];
+      
+           // get the rootview controller
+           RootViewController *rootViewController = [navController.viewControllers objectAtIndex:0];
            // set the username and password from the user defaults
-           loginViewController.username = (NSString*)[defaults objectForKey:@"username"];
-           loginViewController.currentPassword = (NSString*)[defaults objectForKey:@"password"];
+           rootViewController.username = (NSString*)[defaults objectForKey:@"username"];
+           rootViewController.currentPassword = (NSString*)[defaults objectForKey:@"password"];
            // perform a login
-           [loginViewController login:YES];
+           [rootViewController login:YES];
        } else {
            // pop back to the login screen
            [((MainNavigationViewController*)self.window.rootViewController) popToRootViewControllerAnimated:NO];
@@ -259,16 +229,4 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-/*
-- (UIButton *)createUIButtonNoBorder:(NSString *)imageName method:(SEL)selMethod target:(id)selTarget {
-    //NSLog(@"%@", NSStringFromSelector(selMethod));
-    
-    UIButton *tmpButton = [[UIButton alloc] init];
-    [tmpButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-    [tmpButton addTarget:selTarget action:selMethod forControlEvents:UIControlEventTouchUpInside];
-    [tmpButton setFrame:CGRectMake(0, 0, 25, 25)];
-
-    return tmpButton;
-}
-*/
 @end

@@ -41,17 +41,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Walkway Bold.ttf</string>
-		<string>Casper.ttf</string>
-		<string>Cuprum.otf</string>
-		<string>Static Bold.otf</string>
-		<string>Static.otf</string>
-		<string>RPM45.ttf</string>
-		<string>Jura-Regular.ttf</string>
-		<string>NoticiaText-Regular.ttf</string>
-		<string>Baghdad.ttf</string>
-		<string>Khmer Sangam MN.ttf</string>
-		<string>BreeSerif_Reg.otf</string>
+		<string>ulink-mobile.ttf</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>uLink</string>

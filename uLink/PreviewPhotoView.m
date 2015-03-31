@@ -9,6 +9,7 @@
 #import "PreviewPhotoView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AppMacros.h"
+#import <Pixate/Pixate.h>
 @interface PreviewPhotoView() {
     UIButton *closeButton;
     UIView *parentView;
@@ -24,7 +25,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         if (defaultBgColor == nil) {
-            defaultBgColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:1.0f];
+            defaultBgColor = [UIColor colorWithRed:142.0f / 255.0f green:142.0f / 255.0f blue:142.0f / 255.0f alpha:0.0f];
         }
         [self initialize];
     }
@@ -56,9 +57,9 @@
     self.previewImageView.alpha = ALPHA_ZERO;
     self.previewImageView.contentMode = UIViewContentModeScaleAspectFill;
     closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width-30, -10, 40, 40)];
-    [closeButton setBackgroundColor:[UIColor clearColor]];
-    UIImage *resizableButton = [[UIImage imageNamed:@"close-button" ] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
-    [closeButton setImage:resizableButton forState:UIControlStateNormal];
+    [closeButton setTitle:@"j" forState:UIControlStateNormal];
+    closeButton.styleClass = @"icon icon-md";
+    closeButton.titleLabel.styleCSS = @"color: #378194";
     [closeButton addTarget:self action:@selector(hidePreviewPhoto) forControlEvents:UIControlEventTouchUpInside];
 }
 
